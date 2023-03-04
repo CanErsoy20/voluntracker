@@ -1,8 +1,6 @@
 import 'package:afet_takip/router.dart';
 import 'package:flutter/material.dart';
 
-import 'views/login_screen.dart';
-
 void main() {
   runApp(MyApp());
 }
