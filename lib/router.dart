@@ -1,6 +1,6 @@
-import 'package:afet_takip/view/login_screen.dart';
-import 'package:afet_takip/view/map_screen.dart';
-import 'package:afet_takip/view/undefined_screen.dart';
+import 'package:afet_takip/view/screens/login_screen.dart';
+import 'package:afet_takip/view/screens/map_screen.dart';
+import 'package:afet_takip/view/screens/undefined_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {

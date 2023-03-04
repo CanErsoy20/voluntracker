@@ -16,69 +16,74 @@ class CustomGoogleMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      initialCameraPosition: _kGooglePlex,
-      onMapCreated: (GoogleMapController controller) {
-        _controller.complete(controller);
-      },
-      markers: {
-        Marker(
-            markerId: const MarkerId("bilket"),
-            position: const LatLng(39.8753228063523, 32.74785369141424),
-            draggable: false,
-            onTap: () {
-              showModalBottomSheet(
-                  context: context,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                  builder: (BuildContext context) {
-                    return Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      "assets/images/bilkent.jpg",
+    return Stack(
+      children: [
+        GoogleMap(
+          initialCameraPosition: _kGooglePlex,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+          markers: {
+            Marker(
+                markerId: const MarkerId("bilket"),
+                position: const LatLng(39.8753228063523, 32.74785369141424),
+                draggable: false,
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                      builder: (BuildContext context) {
+                        return Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.asset(
+                                          "assets/images/bilkent.jpg",
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    const SizedBox(
+                                      width: 9,
+                                    ),
+                                    const Flexible(
+                                      child: Text(
+                                          "Bilkent Üniversitesi Daha Uzun Bir İsim Baya Uzun Hatta",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Color.fromRGBO(
+                                                  100, 100, 100, 1))),
+                                    )
+                                  ],
                                 ),
-                                const SizedBox(
-                                  width: 9,
+                              ),
+                              const Expanded(
+                                child: Text(
+                                  "Benim mah. benim cd. benim sk. bilmem ne apt. 06800 Cankaya/Ankara",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      color: Color.fromRGBO(100, 100, 100, 1)),
                                 ),
-                                const Flexible(
-                                  child: Text(
-                                      "Bilkent Üniversitesi Daha Uzun Bir İsim Baya Uzun Hatta",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          color: Color.fromRGBO(
-                                              100, 100, 100, 1))),
-                                )
-                              ],
-                            ),
+                              ),
+                              ElevatedButton(
+                                  onPressed: () {}, child: Text("Show Details"))
+                            ],
                           ),
-                          const Expanded(
-                            child: Text(
-                              "Benim mah. benim cd. benim sk. bilmem ne apt. 06800 Cankaya/Ankara",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  color: Color.fromRGBO(100, 100, 100, 1)),
-                            ),
-                          ),
-                          ElevatedButton(
-                              onPressed: () {}, child: Text("Show Details"))
-                        ],
-                      ),
-                    );
-                  });
-            })
-      },
+                        );
+                      });
+                })
+          },
+        ),
+      ],
     );
   }
 }

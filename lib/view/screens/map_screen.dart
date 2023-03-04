@@ -4,6 +4,8 @@ import 'package:afet_takip/view/widgets/custom_google_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../widgets/custom_search_bar.dart';
+
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
 
@@ -26,7 +28,17 @@ class _MapScreenState extends State<MapScreen> {
           title: Text("Help Center Map"),
           centerTitle: true,
         ),
-        body: CustomGoogleMap(
-            kGooglePlex: _kGooglePlex, controller: _controller));
+        body: Stack(
+          children: [
+            CustomGoogleMap(kGooglePlex: _kGooglePlex, controller: _controller),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: CustomSearchBar(),
+              ),
+            ),
+          ],
+        ));
   }
 }
