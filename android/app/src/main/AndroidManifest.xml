@@ -4,6 +4,8 @@
         android:label="afet_takip"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyBI40EBqIwqh2eHOXvF82srkQn0fcGNTC4"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
