@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
+import '../../router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +16,13 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: Text("Afet Takip"),
         centerTitle: true,
+      ),
+      body: Center(
+        child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.mapRoute);
+            },
+            child: Text("Go To Map")),
       ),
     );
   }

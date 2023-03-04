@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        debugShowCheckedModeBanner: false,
         onGenerateRoute: routeGenerator.getRoute,
         initialRoute: Routes.loginRoute);
   }
