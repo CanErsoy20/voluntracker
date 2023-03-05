@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
-export class UserService {
+export class UsersService {
+  constructor(private readonly prisma: PrismaService) {}
+
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
@@ -14,6 +18,10 @@ export class UserService {
 
   findOne(id: number) {
     return `This action returns a #${id} user`;
+  }
+
+  async findOneByEmail(email: string): Promise<UserEntity> {
+    return new UserEntity();
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

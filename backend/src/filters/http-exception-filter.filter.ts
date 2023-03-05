@@ -20,13 +20,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse();
 
     const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+      exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
     const message =
-      exception instanceof HttpException
-        ? exception.message
-        : 'Internal server error';
+      exception instanceof HttpException ? exception.message : 'Internal server error';
 
     const devErrorResponse = {
       status,
@@ -49,8 +45,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     response
       .status(status)
-      .json(
-        process.env.NODE_ENV === 'DEV' ? devErrorResponse : prodErrorResponse,
-      );
+      .json(process.env.NODE_ENV === 'DEV' ? devErrorResponse : prodErrorResponse);
   }
 }
