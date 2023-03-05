@@ -6,12 +6,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class CustomGoogleMap extends StatelessWidget {
   const CustomGoogleMap({
     super.key,
-    required CameraPosition kGooglePlex,
+    required CameraPosition initialCameraPosition,
     required Completer<GoogleMapController> controller,
-  })  : _kGooglePlex = kGooglePlex,
+  })  : initialCameraPosition = initialCameraPosition,
         _controller = controller;
 
-  final CameraPosition _kGooglePlex;
+  final CameraPosition initialCameraPosition;
   final Completer<GoogleMapController> _controller;
 
   @override
@@ -19,13 +19,13 @@ class CustomGoogleMap extends StatelessWidget {
     return Stack(
       children: [
         GoogleMap(
-          initialCameraPosition: _kGooglePlex,
+          initialCameraPosition: initialCameraPosition,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },
           markers: {
             Marker(
-                markerId: const MarkerId("bilket"),
+                markerId: const MarkerId("bilkent"),
                 position: const LatLng(39.8753228063523, 32.74785369141424),
                 draggable: false,
                 onTap: () {
@@ -78,19 +78,20 @@ class CustomGoogleMap extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     _buildBottomSheetNeedInfo(
-                                        Icon(Icons.person),
+                                        const Icon(Icons.person),
                                         "Workforce Need",
-                                        Icon(Icons.battery_2_bar_sharp)),
-                                    VerticalDivider(),
+                                        const Icon(Icons.battery_2_bar_sharp)),
+                                    const VerticalDivider(),
                                     _buildBottomSheetNeedInfo(
-                                        Icon(Icons.person),
+                                        const Icon(Icons.person),
                                         "Workforce Need",
-                                        Icon(Icons.battery_0_bar_sharp)),
+                                        const Icon(Icons.battery_0_bar_sharp)),
                                   ],
                                 ),
                               ),
                               ElevatedButton(
-                                  onPressed: () {}, child: Text("Show Details"))
+                                  onPressed: () {},
+                                  child: const Text("Show Details"))
                             ],
                           ),
                         );
