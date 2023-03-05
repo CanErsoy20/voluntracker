@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:afet_takip/view/widgets/custom_google_maps.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import '../../cubit/map_cubit.dart';
 import '../widgets/custom_search_bar.dart';
 
 class MapScreen extends StatefulWidget {
@@ -16,25 +17,25 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(39.8753228063523, 32.74785369141424),
-    zoom: 14.4746,
-  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Help Center Map"),
+          title: const Text("Help Center Map"),
           centerTitle: true,
         ),
         body: Stack(
           children: [
-            CustomGoogleMap(kGooglePlex: _kGooglePlex, controller: _controller),
-            Align(
+            CustomGoogleMap(
+                initialCameraPosition: CameraPosition(
+                    target: context.read<MapCubit>().initialCameraPosition,
+                    zoom: 14),
+                controller: _controller),
+            const Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: const EdgeInsets.only(top: 10),
+                padding: EdgeInsets.only(top: 10),
                 child: CustomSearchBar(),
               ),
             ),

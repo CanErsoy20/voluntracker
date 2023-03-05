@@ -2,16 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:simple_tags/simple_tags.dart';
 
 class CustomGoogleMap extends StatelessWidget {
   const CustomGoogleMap({
     super.key,
-    required CameraPosition kGooglePlex,
+    required CameraPosition initialCameraPosition,
     required Completer<GoogleMapController> controller,
-  })  : _kGooglePlex = kGooglePlex,
+  })  : initialCameraPosition = initialCameraPosition,
         _controller = controller;
 
-  final CameraPosition _kGooglePlex;
+  final CameraPosition initialCameraPosition;
   final Completer<GoogleMapController> _controller;
 
   @override
@@ -19,13 +20,13 @@ class CustomGoogleMap extends StatelessWidget {
     return Stack(
       children: [
         GoogleMap(
-          initialCameraPosition: _kGooglePlex,
+          initialCameraPosition: initialCameraPosition,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },
           markers: {
             Marker(
-                markerId: const MarkerId("bilket"),
+                markerId: const MarkerId("bilkent"),
                 position: const LatLng(39.8753228063523, 32.74785369141424),
                 draggable: false,
                 onTap: () {
@@ -40,6 +41,7 @@ class CustomGoogleMap extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
+                                flex: 3,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -74,8 +76,54 @@ class CustomGoogleMap extends StatelessWidget {
                                       color: Color.fromRGBO(100, 100, 100, 1)),
                                 ),
                               ),
+                              Expanded(
+                                flex: 2,
+                                child: Row(
+                                  children: [
+                                    _buildBottomSheetNeedInfo(
+                                        const Icon(Icons.person),
+                                        "Volunteer Need",
+                                        const Icon(Icons.battery_2_bar_sharp)),
+                                    const VerticalDivider(
+                                      thickness: 2,
+                                      endIndent: 40,
+                                    ),
+                                    _buildBottomSheetNeedInfo(
+                                        const Icon(Icons.person),
+                                        "Supply Need",
+                                        const Icon(Icons.battery_0_bar_sharp)),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: SimpleTags(
+                                  content: [
+                                    "Mont / Ceket",
+                                    "İlaç",
+                                    "Gıda",
+                                    "Mont / Ceket",
+                                    "İlaç",
+                                    "Gıda",
+                                    "Mont / Ceket",
+                                    "İlaç",
+                                    "Gıda"
+                                  ],
+                                  wrapSpacing: 4,
+                                  wrapRunSpacing: 4,
+                                  tagContainerPadding: EdgeInsets.all(6),
+                                  tagTextStyle: TextStyle(color: Colors.white),
+                                  tagContainerDecoration: BoxDecoration(
+                                    color: Colors.orange,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               ElevatedButton(
-                                  onPressed: () {}, child: Text("Show Details"))
+                                  onPressed: () {},
+                                  child: const Text("Show Details"))
                             ],
                           ),
                         );
@@ -84,6 +132,15 @@ class CustomGoogleMap extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+
+  Expanded _buildBottomSheetNeedInfo(
+      Icon iconTop, String need, Icon iconBottom) {
+    return Expanded(
+      child: Column(
+        children: [iconTop, Text(need), iconBottom],
+      ),
     );
   }
 }

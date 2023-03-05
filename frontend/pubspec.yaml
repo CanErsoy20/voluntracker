@@ -38,6 +38,8 @@ dependencies:
   bloc: ^8.1.1
   flutter_bloc: ^8.1.2
   google_maps_flutter: ^2.2.5
+  location: ^4.4.0
+  simple_tags: ^0.0.4
 
 dev_dependencies:
   flutter_test:

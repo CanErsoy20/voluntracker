@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../cubit/map_cubit.dart';
 import '../../router.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -12,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
+    context.read<MapCubit>().getLocation();
     return Scaffold(
       appBar: AppBar(
         title: Text("Afet Takip"),
