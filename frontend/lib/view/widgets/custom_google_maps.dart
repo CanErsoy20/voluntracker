@@ -74,6 +74,21 @@ class CustomGoogleMap extends StatelessWidget {
                                       color: Color.fromRGBO(100, 100, 100, 1)),
                                 ),
                               ),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    _buildBottomSheetNeedInfo(
+                                        Icon(Icons.person),
+                                        "Workforce Need",
+                                        Icon(Icons.battery_2_bar_sharp)),
+                                    VerticalDivider(),
+                                    _buildBottomSheetNeedInfo(
+                                        Icon(Icons.person),
+                                        "Workforce Need",
+                                        Icon(Icons.battery_0_bar_sharp)),
+                                  ],
+                                ),
+                              ),
                               ElevatedButton(
                                   onPressed: () {}, child: Text("Show Details"))
                             ],
@@ -84,6 +99,15 @@ class CustomGoogleMap extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+
+  Expanded _buildBottomSheetNeedInfo(
+      Icon iconTop, String need, Icon iconBottom) {
+    return Expanded(
+      child: Column(
+        children: [iconTop, Text(need), iconBottom],
+      ),
     );
   }
 }
