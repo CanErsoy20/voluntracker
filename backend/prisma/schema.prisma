@@ -83,6 +83,33 @@ model User {
   Volunteer Volunteer[]
 }
 
+model UserRole {
+  id        Int    @id @default(autoincrement())
+  role_name String // Volunteer, Admin, Superadmin, ...
+
+  users       User[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id Int @id @default(autoincrement())
+
+  roles RolePermission[]
+
+  permissionName String // User will see
+  permissionKey  String // Behind the scenes
+}
+
+model RolePermission {
+  id Int @id @default(autoincrement())
+
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  permissionId Int
+
+  role   UserRole @relation(fields: [roleId], references: [id])
+  roleId Int
+}
+
 
 model Volunteer {
   id     Int  @id @default(autoincrement())
@@ -121,31 +148,4 @@ model VolunteerType {
 
   volunteers       Volunteer[]
   neededVolunteers NeededVolunteer[]
-}
-
-model UserRole {
-  id        Int    @id @default(autoincrement())
-  role_name String // Volunteer, Admin, Superadmin, ...
-
-  users       User[]
-  permissions RolePermission[]
-}
-
-model Permission {
-  id Int @id @default(autoincrement())
-
-  roles RolePermission[]
-
-  permissionName String // User will see
-  permissionKey  String // Behind the scenes
-}
-
-model RolePermission {
-  id Int @id @default(autoincrement())
-
-  permission   Permission @relation(fields: [permissionId], references: [id])
-  permissionId Int
-
-  role   UserRole @relation(fields: [roleId], references: [id])
-  roleId Int
 }
