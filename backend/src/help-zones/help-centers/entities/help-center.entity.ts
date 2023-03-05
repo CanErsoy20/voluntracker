@@ -5,23 +5,26 @@ export class HelpCenterEntity implements HelpCenter {
   @ApiProperty()
   id: number;
 
+  @ApiProperty({ required: true, nullable: false })
+  name: string;
+
   @ApiProperty({ required: false })
-  maxVolunteers: number;
-
-  @ApiProperty({ required: true, nullable: true })
-  location: Prisma.JsonValue;
-
-  @ApiProperty({ required: false, nullable: true })
   busiestHours: Prisma.JsonValue;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false })
   openCloseInfo: Prisma.JsonValue;
 
-  @ApiProperty({ required: false, nullable: true })
+  @ApiProperty({ required: false })
+  location: Prisma.JsonValue;
+
+  @ApiProperty({ required: false })
   contactInfo: Prisma.JsonValue;
 
-  @ApiProperty({ required: false, nullable: true })
-  additionalInfo: string | null;
+  @ApiProperty({ required: false })
+  additionalInfo: string;
+
+  @ApiProperty({ required: false })
+  volunteerCapacity: number;
 
   @ApiProperty()
   createdAt: Date;
