@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:simple_tags/simple_tags.dart';
 
 class CustomGoogleMap extends StatelessWidget {
   const CustomGoogleMap({
@@ -40,6 +41,7 @@ class CustomGoogleMap extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
+                                flex: 3,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -75,18 +77,48 @@ class CustomGoogleMap extends StatelessWidget {
                                 ),
                               ),
                               Expanded(
+                                flex: 2,
                                 child: Row(
                                   children: [
                                     _buildBottomSheetNeedInfo(
                                         const Icon(Icons.person),
-                                        "Workforce Need",
+                                        "Volunteer Need",
                                         const Icon(Icons.battery_2_bar_sharp)),
-                                    const VerticalDivider(),
+                                    const VerticalDivider(
+                                      thickness: 2,
+                                      endIndent: 40,
+                                    ),
                                     _buildBottomSheetNeedInfo(
                                         const Icon(Icons.person),
-                                        "Workforce Need",
+                                        "Supply Need",
                                         const Icon(Icons.battery_0_bar_sharp)),
                                   ],
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: SimpleTags(
+                                  content: [
+                                    "Mont / Ceket",
+                                    "İlaç",
+                                    "Gıda",
+                                    "Mont / Ceket",
+                                    "İlaç",
+                                    "Gıda",
+                                    "Mont / Ceket",
+                                    "İlaç",
+                                    "Gıda"
+                                  ],
+                                  wrapSpacing: 4,
+                                  wrapRunSpacing: 4,
+                                  tagContainerPadding: EdgeInsets.all(6),
+                                  tagTextStyle: TextStyle(color: Colors.white),
+                                  tagContainerDecoration: BoxDecoration(
+                                    color: Colors.orange,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                  ),
                                 ),
                               ),
                               ElevatedButton(

@@ -240,6 +240,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
+  simple_tags:
+    dependency: "direct main"
+    description:
+      name: simple_tags
+      sha256: "16a2d99cea9a90625b697c87d8b2fdbd78126ee40f1ff2f1a10c66e103170fe8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   sky_engine:
     dependency: transitive
     description: flutter
