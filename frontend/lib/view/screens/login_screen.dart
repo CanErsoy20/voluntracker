@@ -14,7 +14,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    context.read<MapCubit>().getLocation();
     return Scaffold(
       appBar: AppBar(
         title: Text("Afet Takip"),
@@ -23,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: ElevatedButton(
             onPressed: () {
+              context.read<MapCubit>().getLocation();
               Navigator.pushNamed(context, Routes.mapRoute);
             },
             child: Text("Go To Map")),

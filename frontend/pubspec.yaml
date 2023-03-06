@@ -40,6 +40,7 @@ dependencies:
   google_maps_flutter: ^2.2.5
   location: ^4.4.0
   simple_tags: ^0.0.4
+  geolocator: ^9.0.2
 
 dev_dependencies:
   flutter_test:
