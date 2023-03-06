@@ -65,22 +65,28 @@ model SupplyType {
 
   supplyReferences       Supply[]
   neededSupplyReferences NeededSupply[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // User model and other user related models
 model User {
   id Int @id @default(autoincrement())
 
-  name     String
-  lastname String
-  email    String
-  phone    String
+  firstname String
+  surname String
+  email    String @unique
+  phone    String? @unique
   password String
 
-  userRole  UserRole    @relation(fields: [roleId], references: [id])
-  roleId    Int
+  userRole  UserRole?    @relation(fields: [roleId], references: [id])
+  roleId    Int?
 
-  Volunteer Volunteer[]
+  volunteer Volunteer?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model UserRole {
@@ -89,6 +95,9 @@ model UserRole {
 
   users       User[]
   permissions RolePermission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Permission {
@@ -98,6 +107,9 @@ model Permission {
 
   permissionName String // User will see
   permissionKey  String // Behind the scenes
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model RolePermission {
@@ -108,13 +120,16 @@ model RolePermission {
 
   role   UserRole @relation(fields: [roleId], references: [id])
   roleId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 
 model Volunteer {
   id     Int  @id @default(autoincrement())
   user   User @relation(fields: [userId], references: [id])
-  userId Int
+  userId Int @unique
 
   // one-to-many relationship between Volunteer and VolunteerType
   volunteerType   VolunteerType @relation(fields: [volunteerTypeId], references: [id])
@@ -123,6 +138,9 @@ model Volunteer {
   // one-to-many relationship between HelpCenter and Volunteer
   helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
   helpCenterId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model NeededVolunteer {
@@ -138,6 +156,9 @@ model NeededVolunteer {
   // one-to-many relationship between HelpCenter and NeededVolunteer
   helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
   helpCenterId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model VolunteerType {
@@ -148,4 +169,7 @@ model VolunteerType {
 
   volunteers       Volunteer[]
   neededVolunteers NeededVolunteer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

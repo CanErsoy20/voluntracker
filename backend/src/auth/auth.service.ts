@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UserEntity } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -19,10 +18,26 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { email: user.email, sub: user.userId };
+  async login(user: UserEntity) {
+    const payload = { email: user.email, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async register(createUserDto: CreateUserDto) {
+    const { email, phone } = createUserDto;
+
+    let user = await this.usersService.findOneByEmail(email);
+    if (user) {
+      throw new ConflictException('User with the given email already exists');
+    }
+
+    user = await this.usersService.findOneByPhone(phone);
+    if (user) {
+      throw new ConflictException('User with the given phone number already exists');
+    }
+
+    return this.usersService.create(createUserDto);
   }
 }
