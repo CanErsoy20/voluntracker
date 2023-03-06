@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
@@ -38,10 +30,7 @@ export class HelpCentersController {
 
   @Patch(':id')
   @ApiCreatedResponse({ type: HelpCenterEntity })
-  update(
-    @Param('id') id: string,
-    @Body() updateHelpCenterDto: UpdateHelpCenterDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateHelpCenterDto: UpdateHelpCenterDto) {
     return this.helpCentersService.update(+id, updateHelpCenterDto);
   }
 
