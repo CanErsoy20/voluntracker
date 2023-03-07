@@ -13,3 +13,7 @@ export type ContactInfo = {
   addres: string;
   email: string;
 };
+
+export type OrderBy = 'asc' | 'desc';
+
+export type SupplyType = '';

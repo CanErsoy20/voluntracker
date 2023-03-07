@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { HelpCenter, Prisma } from '@prisma/client';
-import { DateInterval } from 'src/common/types';
+import { DateInterval, OrderBy } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
+import { UpdateNeededSupplyDto } from '../needed-supply/dto/update-needed-supply.dto';
+import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-volunteer.dto';
+import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
-
 @Injectable()
 export class HelpCentersService {
   constructor(private readonly prisma: PrismaService) {}
@@ -21,22 +24,6 @@ export class HelpCentersService {
       data: updateHelpCenterDto,
     });
   }
-
-  async addVolunteer() {}
-
-  async addNeededVolunteer() {}
-
-  async addSupply() {}
-
-  async addNeededSupply() {}
-
-  async removeVolunteer() {}
-
-  async removeNeededVolunteer() {}
-
-  async removeSupply() {}
-
-  async removeNeededSupply() {}
 
   async remove(id: number): Promise<HelpCenter> {
     return await this.prisma.helpCenter.delete({ where: { id } });
@@ -62,13 +49,174 @@ export class HelpCentersService {
     return openCenters;
   }
 
-  async findAllCurrentVolunteers() {}
+  async addVolunteer() {}
 
-  async findAllNeededVolunteers() {}
+  async findAllNeededVolunteersAtHelpCenter(helpCenterId: number, orderBy?: OrderBy | null) {
+    return await this.prisma.helpCenter.findMany({
+      where: { id: helpCenterId },
+      include: { neededVolunteers: true },
+      orderBy: {
+        updatedAt: orderBy,
+      },
+    });
+  }
 
-  async findAllSupplies() {}
+  async addNeededVolunteersToHelpCenter(
+    helpCenterId: number,
+    createNeededVolunteerDto: CreateNeededVolunteerDto,
+  ) {
+    return await this.prisma.helpCenter.update({
+      where: { id: helpCenterId },
+      data: {
+        neededVolunteers: {
+          create: createNeededVolunteerDto,
+        },
+      },
+      include: {
+        neededVolunteers: true,
+      },
+    });
+  }
 
-  async findAllNeededSupplies() {}
+  async removeNeededVolunteersFromHelpCenter(helpCenterId: number, neededVolunteerId: number) {
+    return this.prisma.helpCenter.update({
+      where: { id: helpCenterId },
+      data: {
+        neededVolunteers: {
+          delete: {
+            id: neededVolunteerId,
+          },
+        },
+      },
+      include: {
+        neededVolunteers: true,
+      },
+    });
+  }
 
-  // TODO: Add to arrays, delete from arrays, reset arrays
+  async removeAllNeededVolunteersFromHelpCenter(helpCenterId: number) {
+    return this.prisma.helpCenter.update({
+      where: { id: helpCenterId },
+      data: {
+        neededVolunteers: {
+          deleteMany: {},
+        },
+      },
+      include: {
+        neededVolunteers: true,
+      },
+    });
+  }
+
+  async updateNeededVolunteerAtHelpCenter(
+    helpCenterId: number,
+    neededVolunteerId: number,
+    updateNeededVolunteerDto: UpdateNeededVolunteerDto,
+  ) {
+    return this.prisma.helpCenter.update({
+      where: { id: helpCenterId },
+      data: {
+        neededVolunteers: {
+          update: {
+            where: { id: neededVolunteerId },
+            data: updateNeededVolunteerDto,
+          },
+        },
+      },
+    });
+  }
+
+  async addSupply() {}
+
+  async findAllNeededSupplyAtHelpCenter(helpCenterId: number, orderBy: OrderBy | null) {
+    const neededSupplies = await this.prisma.helpCenter.findMany({
+      where: { id: helpCenterId },
+      include: { neededSupply: true },
+      orderBy: {
+        updatedAt: orderBy,
+      },
+    });
+    return neededSupplies;
+  }
+
+  async addNeededSupplyToHelpCenter(
+    helpCenterId: number,
+    createNeededSupplyDto: CreateNeededSupplyDto,
+  ) {
+    return await this.prisma.helpCenter.update({
+      where: { id: helpCenterId },
+      data: {
+        neededSupply: {
+          create: createNeededSupplyDto,
+        },
+      },
+    });
+  }
+
+  async removeNeededSupplyFromHelpCenter(helpCenterId: number, neededSupplyId: number) {
+    return this.prisma.helpCenter.update({
+      where: { id: helpCenterId },
+      data: {
+        neededSupply: {
+          delete: {
+            id: neededSupplyId,
+          },
+        },
+      },
+    });
+  }
+
+  async removeAllNeededSupplyFromHelpCenter(helpCenterId: number) {
+    return this.prisma.helpCenter.update({
+      where: { id: helpCenterId },
+      data: {
+        neededSupply: {
+          deleteMany: {},
+        },
+      },
+    });
+  }
+
+  async updateNeededSupplyAtHelpCenter(
+    helpCenterId: number,
+    neededSupplyId: number,
+    updateNeededSupplyDto: UpdateNeededSupplyDto,
+  ) {
+    return this.prisma.helpCenter.update({
+      where: { id: helpCenterId },
+      data: {
+        neededSupply: {
+          update: {
+            where: { id: neededSupplyId },
+            data: updateNeededSupplyDto,
+          },
+        },
+      },
+    });
+  }
+  async removeVolunteer() {}
+
+  async removeSupply() {}
+
+  async findAllCurrentVolunteersAtHelpCenter(helpCenterId: number, orderBy: OrderBy | null) {
+    const volunteers = await this.prisma.helpCenter.findMany({
+      where: { id: helpCenterId },
+      include: { volunteers: true },
+      orderBy: {
+        updatedAt: orderBy,
+      },
+    });
+    return volunteers;
+  }
+
+  async findAllSuppliesAtHelpCenter(helpCenterId: number, orderBy: OrderBy | null) {
+    const supplies = await this.prisma.helpCenter.findMany({
+      where: { id: helpCenterId },
+      include: { supply: true },
+      orderBy: {
+        updatedAt: orderBy,
+      },
+    });
+    return supplies;
+  }
 }
