@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: ElevatedButton(
             onPressed: () {
-              context.read<MapCubit>().getLocation();
+              context.read<MapCubit>().getCurrentLocation();
               Navigator.pushNamed(context, Routes.mapRoute);
             },
             child: Text("Go To Map")),
