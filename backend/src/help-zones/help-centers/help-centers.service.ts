@@ -128,7 +128,7 @@ export class HelpCentersService {
 
   async addSupply() {}
 
-  async findAllNeededSupplyAtHelpCenter(helpCenterId: number, orderBy: OrderBy | null) {
+  async findAllNeededSupplyAtHelpCenter(helpCenterId: number, orderBy?: OrderBy | null) {
     const neededSupplies = await this.prisma.helpCenter.findMany({
       where: { id: helpCenterId },
       include: { neededSupply: true },
@@ -198,7 +198,7 @@ export class HelpCentersService {
 
   async removeSupply() {}
 
-  async findAllCurrentVolunteersAtHelpCenter(helpCenterId: number, orderBy: OrderBy | null) {
+  async findAllCurrentVolunteersAtHelpCenter(helpCenterId: number, orderBy?: OrderBy | null) {
     const volunteers = await this.prisma.helpCenter.findMany({
       where: { id: helpCenterId },
       include: { volunteers: true },
