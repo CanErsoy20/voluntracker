@@ -139,10 +139,7 @@ export class HelpCentersService {
     return neededSupplies;
   }
 
-  async addNeededSupplyToHelpCenter(
-    helpCenterId: number,
-    createNeededSupplyDto: CreateNeededSupplyDto,
-  ) {
+  async addNeededSupplyToHelpCenter(helpCenterId: number, createNeededSupplyDto: CreateNeededSupplyDto) {
     return await this.prisma.helpCenter.update({
       where: { id: helpCenterId },
       data: {
