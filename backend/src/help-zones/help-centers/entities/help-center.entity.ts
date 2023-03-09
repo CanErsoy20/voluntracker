@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { HelpCenter, Prisma } from '@prisma/client';
+import {
+  HelpCenter,
+  NeededSupply,
+  NeededVolunteer,
+  Prisma,
+  Supply,
+  Volunteer,
+} from '@prisma/client';
 
 export class HelpCenterEntity implements HelpCenter {
   @ApiProperty()
@@ -25,6 +32,14 @@ export class HelpCenterEntity implements HelpCenter {
 
   @ApiProperty({ required: false })
   volunteerCapacity: number;
+
+  volunteers?: Volunteer[];
+
+  neededVolunteers?: NeededVolunteer[];
+
+  supply?: Supply[];
+
+  neededSupply?: NeededSupply[];
 
   @ApiProperty()
   createdAt: Date;

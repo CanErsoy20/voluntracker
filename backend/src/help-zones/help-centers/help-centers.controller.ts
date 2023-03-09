@@ -21,18 +21,23 @@ import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply
 import { UpdateNeededSupplyDto } from '../needed-supply/dto/update-needed-supply.dto';
 import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-volunteer.dto';
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
+import { NeededVolunteerEntity } from '../needed-volunteer/entities/needed-volunteer.entity';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
 import { HelpCenterEntity } from './entities/help-center.entity';
 import { HelpCentersService } from './help-centers.service';
 
-@Controller('helpCenters')
 @ApiTags('HelpCenters')
+@Controller('helpCenters')
 export class HelpCentersController {
   constructor(private readonly helpCentersService: HelpCentersService) {}
 
   @Post()
-  @ApiCreatedResponse({ status: 200, type: HelpCenterEntity, description: '' })
+  @ApiCreatedResponse({
+    status: 200,
+    type: HelpCenterEntity,
+    description: 'Successfully created the help center.',
+  })
   @ApiBadRequestResponse({
     description: 'Help center could not be created.',
   })
@@ -120,24 +125,73 @@ export class HelpCentersController {
 
   /* NeededVolunteers endpoints */
   @Get(':id/neededVolunteers')
+  @ApiCreatedResponse({
+    status: 200,
+    type: [HelpCenterEntity],
+    description: 'Successfully found the needed volunteers for the corresponding help center.',
+  })
+  @ApiNotFoundResponse({
+    description: 'Could not find the help center with given id.',
+  })
   async getNeededVolunteersAtHelpCenter(@Param('id') id: string) {
-    return this.helpCentersService.findAllNeededVolunteersAtHelpCenter(+id);
+    const neededVolunteers = await this.helpCentersService.findAllNeededVolunteersAtHelpCenter(+id);
+
+    if (!neededVolunteers) {
+      throw new NotFoundException(`Help center with id '${id}' could not be found.`);
+    }
+
+    return neededVolunteers;
   }
 
+  @ApiCreatedResponse({
+    status: 200,
+    type: [HelpCenterEntity],
+    description: 'Successfully found the needed volunteers for the corresponding help center.',
+  })
+  @ApiNotFoundResponse({
+    description: 'Could not find the help center with given id.',
+  })
   @Get(':id/neededVolunteers/:orderBy')
   async getNeededVolunteersAtHelpCenterByOrdering(
     @Param('id') id: string,
     @Param('orderBy') orderBy: OrderBy,
   ) {
-    return this.helpCentersService.findAllNeededVolunteersAtHelpCenter(+id, orderBy);
+    const neededVolunteers = await this.helpCentersService.findAllNeededVolunteersAtHelpCenter(
+      +id,
+      orderBy,
+    );
+
+    if (!neededVolunteers) {
+      throw new NotFoundException(`Help center with id '${id}' could not be found.`);
+    }
+
+    return neededVolunteers;
   }
 
+  @ApiCreatedResponse({
+    status: 200,
+    type: [HelpCenterEntity],
+    description:
+      'Successfully created a needed volunteer record for the corresponding help center.',
+  })
+  @ApiNotFoundResponse({
+    description: 'Could not find the help center with given id.',
+  })
   @Post(':id/neededVolunteers')
-  async postdNeededVolunteers(
+  async postNeededVolunteers(
     @Param('id') id: string,
     @Body() createNeededVolunteerDto: CreateNeededVolunteerDto,
   ) {
-    return this.helpCentersService.addNeededVolunteersToHelpCenter(+id, createNeededVolunteerDto);
+    const helpCenter = await this.helpCentersService.addNeededVolunteersToHelpCenter(
+      +id,
+      createNeededVolunteerDto,
+    );
+
+    if (!helpCenter) {
+      throw new NotFoundException(`Help center with id '${id}' could not be found.`);
+    }
+
+    return helpCenter;
   }
 
   @Delete(':helpCenterId/neededVolunteers')
