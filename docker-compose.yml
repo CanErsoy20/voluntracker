@@ -17,12 +17,15 @@ services:
       - db.env
   backend:
     image: afet_takip_backend
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     volumes:
-      - ./backend:/backend
+      - ./backend:/app
+      - node_modules:/app/node_modules
       - ./uploads:/uploads
     ports:
-      - "92.205.189.130:8080:8080"
+      - "92.205.189.130:3000:3000"
     depends_on:
       - db
     networks:
@@ -30,3 +33,6 @@ services:
 networks:
   container_network:
     driver: bridge
+
+volumes:
+  node_modules:
