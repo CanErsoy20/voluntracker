@@ -45,7 +45,7 @@ class _MapScreenState extends State<MapScreen> {
                         TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
-                              context.read<MapCubit>().getLocation();
+                              context.read<MapCubit>().getCurrentLocation();
                             },
                             child: Text("Try Again"))
                       ],
@@ -90,7 +90,7 @@ class _MapScreenState extends State<MapScreen> {
                           child: Text("Continue without my location")),
                       ElevatedButton(
                           onPressed: () {
-                            context.read<MapCubit>().getLocation();
+                            context.read<MapCubit>().getCurrentLocation();
                           },
                           child: Text("Try again")),
                     ],
