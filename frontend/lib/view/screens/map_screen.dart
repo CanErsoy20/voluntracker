@@ -64,14 +64,14 @@ class _MapScreenState extends State<MapScreen> {
             }
           },
           builder: (context, state) {
-            print(state);
+            print(state.toString());
             if (state is MapDisplay) {
               return Stack(
                 children: [
                   CustomGoogleMap(
                     initialCameraPosition: CameraPosition(
-                        target: context.read<MapCubit>().currentLocation,
-                        zoom: 10),
+                        target: context.read<MapCubit>().initialCameraLocation,
+                        zoom: 15),
                     controller: _controller,
                     markers: markers,
                   ),
@@ -139,7 +139,7 @@ class _MapScreenState extends State<MapScreen> {
     }
     markers.add(Marker(
         markerId: const MarkerId("current"),
-        visible: context.read<MapCubit>().serviceEnabled == true ? true : false,
+        visible: context.read<MapCubit>().serviceEnabled,
         position: LatLng(context.read<MapCubit>().currentLocation.latitude,
             context.read<MapCubit>().currentLocation.longitude),
         draggable: false,

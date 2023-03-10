@@ -9,6 +9,7 @@ part 'map_state.dart';
 class MapCubit extends Cubit<MapState> {
   MapCubit() : super(MapInitial());
   LatLng currentLocation = LatLng(39.87474230379135, 32.747585469014844);
+  LatLng initialCameraLocation = LatLng(39.87474230379135, 32.747585469014844);
   bool serviceEnabled = false;
   LocationPermission permissionGranted = LocationPermission.denied;
 

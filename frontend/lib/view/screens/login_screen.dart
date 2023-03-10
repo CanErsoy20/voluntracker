@@ -25,15 +25,11 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             ElevatedButton(
                 onPressed: () {
-                  context.read<MapCubit>().getCurrentLocation();
-                  Navigator.pushNamed(context, Routes.mapRoute);
+                  context.read<HelpCenterCubit>().getHelpCenters().then(
+                      (value) => Navigator.of(context)
+                          .pushNamed(Routes.helpCenterList));
                 },
-                child: Text("Go To Map")),
-            ElevatedButton(
-                onPressed: () {
-                  context.read<HelpCenterCubit>().getHelpCenters();
-                },
-                child: Text("Get Help Centers")),
+                child: Text("Go Help Center List")),
           ],
         ),
       ),
