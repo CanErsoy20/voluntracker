@@ -21,7 +21,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const status =
       exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
-    const message: string[] = [];
+    let message: string[] = [];
     message.push(exception instanceof HttpException ? exception.message : 'Internal server error');
 
     const devErrorResponse = {
@@ -34,7 +34,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
         timestamp: new Date().toISOString(),
       },
     };
-
     const prodErrorResponse = {
       error: {
         status,
@@ -42,11 +41,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
       },
     };
 
-    this.logger.log(
-      `request method: ${request.method} request url${request.url}`,
-      JSON.stringify(devErrorResponse),
+    const finalResponse = process.env.NODE_ENV === 'DEV' ? devErrorResponse : prodErrorResponse;
+
+    this.logger.error(
+      `Request method: ${request.method}.\n Request url: ${request.url}.\n Error response: ${JSON.stringify(
+        finalResponse,
+        null,
+        2,
+      )}`,
     );
 
-    response.status(status).json(process.env.NODE_ENV === 'DEV' ? devErrorResponse : prodErrorResponse);
   }
 }
