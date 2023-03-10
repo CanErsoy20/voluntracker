@@ -133,7 +133,7 @@ Duh. Throw them when necessary. Handle in controllers.
 {
   "status": 404,
   "name": "NotFoundException",
-  "message": "Cannot GET /",
+  "message": ["Cannot GET /", "Validation failed"],
   "method": "GET",
   "path": "/",
   "timestamp": "2023-02-28T10:57:34.281Z"
@@ -142,7 +142,7 @@ Duh. Throw them when necessary. Handle in controllers.
 // During production
 {
   "status": 404,
-  "message": "Cannot GET /",
+  "message": ["Cannot GET /", "Validation failed"],
 }
 ```
 
