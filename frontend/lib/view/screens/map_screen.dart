@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/models/help_center/help_center_model.dart';
+import 'package:afet_takip/router.dart';
 import 'package:afet_takip/view/widgets/custom_google_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -133,7 +134,7 @@ class _MapScreenState extends State<MapScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
                 builder: (BuildContext context) {
-                  return buildBottomSheetBody(centerList[i]);
+                  return buildBottomSheetBody(centerList[i], context);
                 });
           }));
     }
@@ -147,7 +148,7 @@ class _MapScreenState extends State<MapScreen> {
             BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)));
   }
 
-  Padding buildBottomSheetBody(HelpCenterModel center) {
+  Padding buildBottomSheetBody(HelpCenterModel center, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -227,7 +228,12 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ),
           ),
-          ElevatedButton(onPressed: () {}, child: const Text("Show Details"))
+          ElevatedButton(
+              onPressed: () {
+                context.read<HelpCenterCubit>().selectedCenter = center;
+                Navigator.pushNamed(context, Routes.helpCenterDetail);
+              },
+              child: const Text("Show Details"))
         ],
       ),
     );

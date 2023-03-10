@@ -56,6 +56,8 @@ class HelpCenterListScreen extends StatelessWidget {
                                       context
                                           .read<HelpCenterCubit>()
                                           .selectedCenter = currentCenter;
+                                      Navigator.pushNamed(
+                                          context, Routes.helpCenterDetail);
                                     },
                                     child: const Text("Show Details")),
                                 ElevatedButton(
