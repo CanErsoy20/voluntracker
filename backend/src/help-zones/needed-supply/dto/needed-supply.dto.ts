@@ -1,6 +1,4 @@
-import { HelpCenter, NeededSupply, SupplyType } from '@prisma/client';
-
-export class NeededSupplyEntity implements NeededSupply {
+export class NeededSupplyDto {
   id: number;
   quantity: number;
   urgency: number;

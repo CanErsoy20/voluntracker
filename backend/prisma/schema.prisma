@@ -10,12 +10,12 @@ datasource db {
 model HelpCenter {
   id                Int      @id @default(autoincrement())
   name              String
-  busiestHours      Json? // TODO: {start, end}
-  openCloseInfo     Json? // TODO: {start, end}
-  location          Json? // TODO: {lat, lon}
-  contactInfo       Json? // TODO: {phone, address, email}
-  additionalInfo    String?
-  volunteerCapacity Int?
+  busiestHours      Json // TODO: {start, end}
+  openCloseInfo     Json // TODO: {start, end}
+  location          Json // TODO: {lat, lon}
+  contactInfo       Json // TODO: {phone, address, email}
+  additionalInfo    String
+  volunteerCapacity Int
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
