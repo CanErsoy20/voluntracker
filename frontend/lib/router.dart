@@ -1,3 +1,4 @@
+import 'package:afet_takip/view/screens/help_center_list_screen.dart';
 import 'package:afet_takip/view/screens/login_screen.dart';
 import 'package:afet_takip/view/screens/map_screen.dart';
 import 'package:afet_takip/view/screens/undefined_screen.dart';
@@ -8,6 +9,7 @@ class Routes {
   static const String registerRoute = "/register";
   static const String landingRoute = "/landing";
   static const String mapRoute = "/map";
+  static const String helpCenterList = "/help-center-list";
   static const String helpCenterDetailsRoute = "/help-center-details";
 }
 
@@ -24,6 +26,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case Routes.mapRoute:
         return MaterialPageRoute(builder: (_) => MapScreen());
+      case Routes.helpCenterList:
+        return MaterialPageRoute(builder: (_) => HelpCenterListScreen());
       default:
         return MaterialPageRoute(builder: (_) => UndefinedScreen());
     }

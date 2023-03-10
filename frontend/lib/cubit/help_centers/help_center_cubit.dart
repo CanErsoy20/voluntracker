@@ -8,6 +8,7 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   HelpCenterCubit(this.service) : super(HelpCenterInitial());
   HelpCenterService service;
   List<HelpCenterModel>? helpCenterList;
+  HelpCenterModel? selectedCenter;
 
   Future<void> getHelpCenters() async {
     emit(HelpCenterLoading());
