@@ -35,10 +35,10 @@ class HelpCenterModel {
     volunteerCapacity = json['volunteerCapacity'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    contactInfo = json['contactInfo'];
-    location = json['location'];
-    busiestHours = json['busiestHours'];
-    openCloseInfo = json['openCloseInfo'];
+    contactInfo = ContactInfo.fromJson(json['contactInfo']);
+    location = Location.fromJson(json['location']);
+    busiestHours = BusiestHours.fromJson(json['busiestHours']);
+    openCloseInfo = OpenCloseInfo.fromJson(json['openCloseInfo']);
   }
 
   Map<String, dynamic> toJson() {

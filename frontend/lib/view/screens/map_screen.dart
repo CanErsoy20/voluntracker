@@ -21,6 +21,12 @@ class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   Set<Marker> markers = {};
+  @override
+  void initState() {
+    // TODO: implement initState
+    setMarkers(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
