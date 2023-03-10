@@ -277,7 +277,8 @@ export class HelpCentersController {
   })
   @Get(':id/neededSupply')
   async getAllNeededSupplyAtHelpCenter(@Param('id') id: string) {
-    return await this.helpCentersService.findAllNeededSupplyAtHelpCenter(+id);
+    const helpCenter = await this.helpCentersService.findAllNeededSupplyAtHelpCenter(+id);
+    return helpCenter.map((hc) => hc.neededSupply);
   }
 
   @ApiResponse({
@@ -293,7 +294,8 @@ export class HelpCentersController {
     @Param('id') id: string,
     @Param('orderBy') orderBy: OrderBy,
   ) {
-    return await this.helpCentersService.findAllNeededSupplyAtHelpCenter(+id, orderBy);
+    const helpCenter = await this.helpCentersService.findAllNeededSupplyAtHelpCenter(+id, orderBy);
+    return helpCenter.map((hc) => hc.neededSupply);
   }
 
   @ApiResponse({
@@ -306,12 +308,13 @@ export class HelpCentersController {
   })
   @Post(':id/neededSupply')
   async postNeededSupply(@Param('id') id: string, @Body() createNeededSupplyDto: CreateNeededSupplyDto) {
-    return await this.helpCentersService.addNeededSupplyToHelpCenter(+id, createNeededSupplyDto);
+    const helpCenter = await this.helpCentersService.addNeededSupplyToHelpCenter(+id, createNeededSupplyDto);
+    return helpCenter.neededSupply;
   }
 
   @ApiResponse({
     status: 200,
-    type: [NeededSupplyDto],
+    type: NeededSupplyDto,
     description: 'Successfully deleted all the needed supply record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -319,7 +322,8 @@ export class HelpCentersController {
   })
   @Delete(':helpCenterId/neededSupply')
   async deleteAllNeededSupply(@Param('id') id: string) {
-    return await this.helpCentersService.removeAllNeededSupplyFromHelpCenter(+id);
+    const helpCenter = await this.helpCentersService.removeAllNeededSupplyFromHelpCenter(+id);
+    return helpCenter.neededSupply;
   }
 
   @ApiResponse({
@@ -332,7 +336,8 @@ export class HelpCentersController {
   })
   @Delete(':helpCenterId/neededSupply/:neededSupplyId')
   async deleteNeededSupply(@Param('helpCenterId') hcId: string, @Param('neededSupplyId') nsId: string) {
-    return await this.helpCentersService.removeNeededSupplyFromHelpCenter(+hcId, +nsId);
+    const helpCenter = await this.helpCentersService.removeNeededSupplyFromHelpCenter(+hcId, +nsId);
+    return helpCenter.neededSupply;
   }
 
   @ApiResponse({
@@ -349,6 +354,11 @@ export class HelpCentersController {
     @Param('neededSupplyId') nsId: string,
     @Body() updateNeededSupplyDto: UpdateNeededSupplyDto,
   ) {
-    return await this.helpCentersService.updateNeededSupplyAtHelpCenter(+hcId, +nsId, updateNeededSupplyDto);
+    const helpCenter = await this.helpCentersService.updateNeededSupplyAtHelpCenter(
+      +hcId,
+      +nsId,
+      updateNeededSupplyDto,
+    );
+    return helpCenter.neededSupply;
   }
 }

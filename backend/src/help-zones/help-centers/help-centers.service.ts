@@ -123,6 +123,9 @@ export class HelpCentersService {
           },
         },
       },
+      include: {
+        neededVolunteers: true,
+      },
     });
   }
 
@@ -147,6 +150,7 @@ export class HelpCentersService {
           create: createNeededSupplyDto,
         },
       },
+      include: { neededSupply: true },
     });
   }
 
@@ -160,6 +164,7 @@ export class HelpCentersService {
           },
         },
       },
+      include: { neededSupply: true },
     });
   }
 
@@ -171,6 +176,7 @@ export class HelpCentersService {
           deleteMany: {},
         },
       },
+      include: { neededSupply: true },
     });
   }
 
@@ -189,6 +195,7 @@ export class HelpCentersService {
           },
         },
       },
+      include: { neededSupply: true },
     });
   }
   async removeVolunteer() {}
