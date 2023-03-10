@@ -12,7 +12,7 @@ class MapCubit extends Cubit<MapState> {
   bool serviceEnabled = false;
   LocationPermission permissionGranted = LocationPermission.denied;
 
-  Future<void> getLocation() async {
+  Future<void> getCurrentLocation() async {
     emit(MapLoading());
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();

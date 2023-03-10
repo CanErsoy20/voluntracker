@@ -1,0 +1,38 @@
+version: "3.9"
+   
+services:
+  db:
+    image: postgres
+    ports:
+      - "92.205.189.130:5432:5432"
+    volumes:
+      - ./database_folder/database_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - container_network
+    env_file:
+      - db.env
+  backend:
+    image: afet_takip_backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+      - node_modules:/app/node_modules
+      - ./uploads:/uploads
+    ports:
+      - "92.205.189.130:3000:3000"
+    depends_on:
+      - db
+    networks:
+      - container_network
+networks:
+  container_network:
+    driver: bridge
+
+volumes:
+  node_modules:

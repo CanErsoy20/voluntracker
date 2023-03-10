@@ -21,19 +21,24 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const status =
       exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
-    const message = exception instanceof HttpException ? exception.message : 'Internal server error';
+    let message: string[] = [];
+    message.push(exception instanceof HttpException ? exception.message : 'Internal server error');
 
     const devErrorResponse = {
-      status,
-      name: exception?.name,
-      message: exception?.message,
-      method: request.method,
-      path: request.url,
-      timestamp: new Date().toISOString(),
+      error: {
+        status,
+        name: exception?.name,
+        message: message,
+        method: request.method,
+        path: request.url,
+        timestamp: new Date().toISOString(),
+      },
     };
     const prodErrorResponse = {
-      status,
-      message,
+      error: {
+        status,
+        message,
+      },
     };
 
     const finalResponse = process.env.NODE_ENV === 'DEV' ? devErrorResponse : prodErrorResponse;
@@ -46,6 +51,5 @@ export class HttpExceptionFilter implements ExceptionFilter {
       )}`,
     );
 
-    response.status(status).json(finalResponse);
   }
 }
