@@ -123,6 +123,9 @@ export class HelpCentersService {
           },
         },
       },
+      include: {
+        neededVolunteers: true,
+      },
     });
   }
 
@@ -139,10 +142,7 @@ export class HelpCentersService {
     return neededSupplies;
   }
 
-  async addNeededSupplyToHelpCenter(
-    helpCenterId: number,
-    createNeededSupplyDto: CreateNeededSupplyDto,
-  ) {
+  async addNeededSupplyToHelpCenter(helpCenterId: number, createNeededSupplyDto: CreateNeededSupplyDto) {
     return await this.prisma.helpCenter.update({
       where: { id: helpCenterId },
       data: {
@@ -150,6 +150,7 @@ export class HelpCentersService {
           create: createNeededSupplyDto,
         },
       },
+      include: { neededSupply: true },
     });
   }
 
@@ -163,6 +164,7 @@ export class HelpCentersService {
           },
         },
       },
+      include: { neededSupply: true },
     });
   }
 
@@ -174,6 +176,7 @@ export class HelpCentersService {
           deleteMany: {},
         },
       },
+      include: { neededSupply: true },
     });
   }
 
@@ -192,6 +195,7 @@ export class HelpCentersService {
           },
         },
       },
+      include: { neededSupply: true },
     });
   }
   async removeVolunteer() {}

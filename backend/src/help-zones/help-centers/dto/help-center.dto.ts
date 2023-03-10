@@ -1,5 +1,5 @@
-import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
-import { HelpCenter, NeededSupply, NeededVolunteer, Prisma, Supply, Volunteer } from '@prisma/client';
+import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
+import { HelpCenter, Prisma } from '@prisma/client';
 import { NeededSupplyEntity } from 'src/help-zones/needed-supply/entities/needed-supply.entity';
 import { NeededVolunteerEntity } from 'src/help-zones/needed-volunteer/entities/needed-volunteer.entity';
 import { SupplyEntity } from 'src/help-zones/supply/entities/supply.entity';
@@ -9,7 +9,7 @@ import { VolunteerEntity } from 'src/help-zones/volunteer/entities/volunteer.ent
 @ApiExtraModels(VolunteerEntity)
 @ApiExtraModels(NeededSupplyEntity)
 @ApiExtraModels(NeededVolunteerEntity)
-export class HelpCenterEntity implements HelpCenter {
+export class HelpCenterDto implements HelpCenter {
   @ApiProperty({ type: Number, example: 125 })
   id: number;
 
@@ -92,46 +92,6 @@ export class HelpCenterEntity implements HelpCenter {
     type: Number,
   })
   volunteerCapacity: number;
-
-  @ApiProperty({
-    required: false,
-    description: 'Volunteers assigned to the help center.',
-    type: 'array',
-    items: {
-      $ref: getSchemaPath(VolunteerEntity),
-    },
-  })
-  volunteers?: Volunteer[];
-
-  @ApiProperty({
-    required: false,
-    description: 'Details of the volunteers that the help center needs.',
-    type: 'array',
-    items: {
-      $ref: getSchemaPath(NeededVolunteerEntity),
-    },
-  })
-  neededVolunteers?: NeededVolunteer[];
-
-  @ApiProperty({
-    required: false,
-    description: 'Supplies that are already stored at the help center',
-    type: 'array',
-    items: {
-      $ref: getSchemaPath(SupplyEntity),
-    },
-  })
-  supply?: Supply[];
-
-  @ApiProperty({
-    required: false,
-    description: 'Details of the supply that the help center needs.',
-    type: 'array',
-    items: {
-      $ref: getSchemaPath(NeededSupplyEntity),
-    },
-  })
-  neededSupply?: NeededSupply[];
 
   @ApiProperty()
   createdAt: Date;

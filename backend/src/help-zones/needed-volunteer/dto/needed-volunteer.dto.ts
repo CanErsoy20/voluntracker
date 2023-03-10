@@ -1,8 +1,7 @@
-import { Volunteer } from '@prisma/client';
-
-export class VolunteerEntity implements Volunteer {
+export class NeededVolunteerDto {
   id: number;
-  userId: number;
+  quantity: number;
+  urgency: number;
   volunteerTypeName: string;
   volunteerTypeCategory: string;
   helpCenterId: number;
