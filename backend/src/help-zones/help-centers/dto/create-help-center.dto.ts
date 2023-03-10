@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { NeededSupply, NeededVolunteer, Prisma, Supply, Volunteer } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 export class CreateHelpCenterDto {
   @ApiProperty({
     required: true,
     nullable: false,
     description: 'Name or the title of the help center',
-    examples: ['Bilkent Üniversitesi Spor Salonu'],
+    example: 'Bilkent Üniversitesi Spor Salonu',
     minLength: 1,
     type: String,
   })
@@ -17,59 +17,68 @@ export class CreateHelpCenterDto {
     nullable: false,
     description:
       'An object representing the location of the help center based on its latitude and longitude.',
-    examples: [{ lat: 39.9334, lon: 32.8597 }],
+    example: { lat: 39.9334, lon: 32.8597 },
     type: Object,
-    properties: { lat: { type: 'Date' }, lon: { type: 'Date' } },
+    properties: { lat: { type: 'Number' }, lon: { type: 'Number' } },
   })
   location: Prisma.JsonValue;
 
   @ApiProperty({
     required: false,
+    nullable: true,
     description: 'Contains the start and end hours for the busiests hours in a help center.',
-    examples: [{ start: new Date().getHours(), end: new Date().getHours() + 1 }],
+    example: {
+      start: new Date().getHours() + ':' + new Date().getMinutes(),
+      end: new Date().getHours() + ':' + new Date().getMinutes(),
+    },
     type: Object,
-    properties: { start: { type: 'Date' }, end: { type: 'Date' } },
+    properties: { start: { type: 'String' }, end: { type: 'String' } },
   })
-  busiestHours?: Prisma.JsonValue;
+  busiestHours: Prisma.JsonValue;
 
   @ApiProperty({
     required: false,
+    nullable: true,
     description: 'Contains the opening and closing hours of the help center.',
-    examples: [{ start: new Date().getHours(), end: new Date().getHours() + 1 }],
+    example: {
+      start: new Date().getHours() + ':' + new Date().getMinutes(),
+      end: new Date().getHours() + ':' + new Date().getMinutes(),
+    },
     type: Object,
-    properties: { start: { type: 'Date' }, end: { type: 'Date' } },
+    properties: { start: { type: 'String' }, end: { type: 'String' } },
   })
-  openCloseInfo?: Prisma.JsonValue;
+  openCloseInfo: Prisma.JsonValue;
 
   @ApiProperty({
     required: false,
+    nullable: true,
     description: 'Contains the opening and closing hours of the help center.',
-    examples: [
-      {
-        phone: '+901111111111',
-        address: 'Bilkent Üniversitesi 1598.Cadde 75.Yurt Kargo Merkezi',
-        email: 'help.center@gmail.com',
-      },
-    ],
+    example: {
+      phone: '+901111111111',
+      address: 'Bilkent Üniversitesi 1598.Cadde 75.Yurt Kargo Merkezi',
+      email: 'help.center@gmail.com',
+    },
     type: Object,
     properties: { phone: { type: 'String' }, address: { type: 'String' }, email: { type: 'String' } },
   })
-  contactInfo?: Prisma.JsonValue;
+  contactInfo: Prisma.JsonValue;
 
   @ApiProperty({
     required: false,
+    nullable: true,
     description:
       'Any additional info that is not already represented by other attributed. This might contain special information about the particular help center',
-    examples: ['The help center distributes food for the volunteers.'],
+    example: 'The help center distributes food for the volunteers.',
     type: String,
   })
-  additionalInfo?: string;
+  additionalInfo: string;
 
   @ApiProperty({
     required: false,
+    nullable: true,
     description: 'Represents the maximum number of volunteers this help center can have.',
-    examples: [250],
+    example: 250,
     type: Number,
   })
-  volunteerCapacity?: number;
+  volunteerCapacity: number;
 }

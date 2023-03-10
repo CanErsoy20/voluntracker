@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { NeededSupplyService } from './needed-supply.service';
+import { NeededSupplyEntity } from './entities/needed-supply.entity';
 import { NeededSupplyController } from './needed-supply.controller';
+import { NeededSupplyService } from './needed-supply.service';
 
 @Module({
   controllers: [NeededSupplyController],
-  providers: [NeededSupplyService]
+  providers: [NeededSupplyService],
 })
 export class NeededSupplyModule {}
