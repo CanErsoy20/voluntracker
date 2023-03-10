@@ -4,7 +4,7 @@ import 'package:afet_takip/view/widgets/custom_google_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../cubit/map_cubit.dart';
+import '../../cubit/map/map_cubit.dart';
 import '../widgets/custom_search_bar.dart';
 
 class MapScreen extends StatefulWidget {

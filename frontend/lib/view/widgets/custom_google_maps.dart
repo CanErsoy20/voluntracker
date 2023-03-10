@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:simple_tags/simple_tags.dart';
 
-import '../../cubit/map_cubit.dart';
+import '../../cubit/map/map_cubit.dart';
 
 class CustomGoogleMap extends StatelessWidget {
   const CustomGoogleMap({
