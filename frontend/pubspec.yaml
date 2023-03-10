@@ -41,6 +41,7 @@ dependencies:
   location: ^4.4.0
   simple_tags: ^0.0.4
   geolocator: ^9.0.2
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

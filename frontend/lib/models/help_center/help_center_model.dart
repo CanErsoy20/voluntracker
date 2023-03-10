@@ -4,7 +4,7 @@ import 'contact_info_model.dart';
 import 'location_model.dart';
 import 'open_close_info_model.dart';
 
-class HelpCenter {
+class HelpCenterModel {
   int? id;
   String? name;
   String? additionalInfo;
@@ -16,7 +16,7 @@ class HelpCenter {
   BusiestHours? busiestHours;
   OpenCloseInfo? openCloseInfo;
 
-  HelpCenter(
+  HelpCenterModel(
       {this.id,
       this.name,
       this.additionalInfo,
@@ -28,17 +28,17 @@ class HelpCenter {
       this.busiestHours,
       this.openCloseInfo});
 
-  HelpCenter.fromJson(Map<String, dynamic> json) {
+  HelpCenterModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     additionalInfo = json['additionalInfo'];
     volunteerCapacity = json['volunteerCapacity'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    contactInfo = json['contactInfo'];
-    location = json['location'];
-    busiestHours = json['busiestHours'];
-    openCloseInfo = json['openCloseInfo'];
+    contactInfo = ContactInfo.fromJson(json['contactInfo']);
+    location = Location.fromJson(json['location']);
+    busiestHours = BusiestHours.fromJson(json['busiestHours']);
+    openCloseInfo = OpenCloseInfo.fromJson(json['openCloseInfo']);
   }
 
   Map<String, dynamic> toJson() {
