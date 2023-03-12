@@ -1,8 +1,11 @@
-import { Body, Controller, Logger, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, ConflictException, Controller, Get, Logger, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guards/local-auth.guard';
+import { AuthDto } from './dto/auth.dto';
+import { LocalAuthGuard } from './guards/local.guard';
+import { Tokens } from './types';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -12,12 +15,24 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Body() authDto: AuthDto) {
+    return this.authService.login(authDto);
   }
 
-  @Post('register')
-  async register(@Body() createUserDto: CreateUserDto) {
-    this.authService.register(createUserDto);
+  @Post('signup')
+  async signup(@Body() createUserDto: CreateUserDto): Promise<Tokens> {
+    // Hash the password and register the user
+    const tokens = this.authService.signup(createUserDto);
+    if (!tokens) {
+      throw new ConflictException('A user with given specifications already exists');
+    }
+
+    return tokens;
   }
+
+  @Post('logout')
+  async logout(@Body() authDto: AuthDto) {}
+
+  @Get('refresh')
+  async refresh(@Request() req) {}
 }
