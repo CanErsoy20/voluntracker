@@ -30,6 +30,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           .pushNamed(Routes.helpCenterList));
                 },
                 child: Text("Go Help Center List")),
+            ElevatedButton(
+                onPressed: () {
+                  context.read<HelpCenterCubit>().getHelpCenters().then(
+                      (value) => Navigator.of(context)
+                          .pushNamed(Routes.createHelpCenter));
+                },
+                child: Text("Create Help Center Screen")),
           ],
         ),
       ),

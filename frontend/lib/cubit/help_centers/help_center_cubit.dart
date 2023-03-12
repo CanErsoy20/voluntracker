@@ -1,3 +1,4 @@
+import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 import 'package:bloc/bloc.dart';
 
 import '../../models/help_center/help_center_model.dart';
@@ -18,6 +19,17 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
       emit(HelpCenterDisplay());
     } else {
       emit(HelpCenterError("Not Found", "No Help Center Found"));
+    }
+  }
+
+  Future<void> createHelpCenter(CreateHelpCenter bodyModel) async {
+    emit(HelpCenterLoading());
+    HelpCenterModel? createdCenter = await service.createHelpCenter(bodyModel);
+    if (createdCenter == null) {
+      emit(HelpCenterError(
+          "Creation failed", "Couldnt't create a new help center"));
+    } else {
+      emit(HelpCenterDisplay());
     }
   }
 }

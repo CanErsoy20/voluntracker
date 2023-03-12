@@ -5,8 +5,8 @@ class Location {
   Location({this.lat, this.lon});
 
   Location.fromJson(Map<String, dynamic> json) {
-    lat = json['lat'];
-    lon = json['lon'];
+    lat = json['lat'].toDouble();
+    lon = json['lon'].toDouble();
   }
 
   Map<String, dynamic> toJson() {
