@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:afet_takip/constants/api_constants.dart';
+import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -25,6 +26,7 @@ class HelpCenterService {
             result.add(HelpCenterModel.fromJson(map));
           }
         }
+        print(result[0].name);
         return result;
       } else {
         debugPrint("Response failed${response.statusCode}");
@@ -32,6 +34,24 @@ class HelpCenterService {
       }
     } catch (e) {
       debugPrint("Error: $e");
+      return null;
+    }
+  }
+
+  Future<HelpCenterModel?> createHelpCenter(CreateHelpCenter bodyModel) async {
+    try {
+      Response? response;
+      response = await Api.instance.postRequest(ApiConstant.baseUrl,
+          ApiConstant.helpCenters, jsonEncode(bodyModel.toJson()));
+      print(response);
+      if (response.statusCode == 200) {
+        HelpCenterModel result = json.decode(response.body);
+        return result;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print(e);
       return null;
     }
   }
