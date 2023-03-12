@@ -29,6 +29,14 @@ export class UsersService {
     return await this.prisma.user.findUnique({ where: { phone } });
   }
 
+  async findOneByQuery(query: any[]): Promise<User> {
+    return await this.prisma.user.findFirst({
+      where: {
+        OR: [...query],
+      },
+    });
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     return await this.prisma.user.update({ where: { id }, data: updateUserDto });
   }

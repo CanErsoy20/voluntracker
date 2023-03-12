@@ -27,8 +27,10 @@ export class UserEntity implements User {
   userRole: UserRole | null;
 
   @ApiProperty({ required: false, nullable: true })
-  @ApiProperty()
   volunteer: Volunteer | null;
+
+  @ApiProperty({ required: false, nullable: true })
+  hashedRefreshToken: string;
 
   @ApiProperty({ required: true, nullable: false })
   createdAt: Date;
