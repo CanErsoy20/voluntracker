@@ -91,6 +91,16 @@ export class HelpCentersController {
     return helpCenter;
   }
 
+  @Get(':id/all')
+  @ApiResponse({
+    status: 200,
+    type: HelpCenterDto,
+    description: 'Successfully found the help center with given id.',
+  })
+  async findHelpCenterDetails(@Param('id') id: string) {
+    return await this.helpCentersService.findHelpCenterDetails(+id);
+  }
+
   @Patch(':id')
   @ApiResponse({
     status: 200,
