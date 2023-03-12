@@ -235,4 +235,16 @@ export class HelpCentersService {
       },
     });
   }
+
+  async findAllHelpCenterDetails() {
+    return await this.prisma.helpCenter.findMany({
+      where: {},
+      include: {
+        neededSupply: true,
+        neededVolunteers: true,
+        volunteers: true,
+        supply: true,
+      },
+    });
+  }
 }
