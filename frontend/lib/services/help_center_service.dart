@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 
 import '../api.dart';
 import '../models/help_center/help_center_model.dart';
+import '../models/response_model.dart';
 
 class HelpCenterService {
   HelpCenterService();
@@ -19,14 +20,13 @@ class HelpCenterService {
       );
       if (response.statusCode == 200) {
         List<HelpCenterModel> result = <HelpCenterModel>[];
-        List<dynamic> values = json.decode(response.body);
-        for (int i = 0; i < values.length; i++) {
-          if (values[i] != null) {
-            Map<String, dynamic> map = values[i];
-            result.add(HelpCenterModel.fromJson(map));
-          }
-        }
-        print(result[0].name);
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+
+        Map<String, dynamic> map = responseModel.data;
+        map.forEach((key, value) {
+          result.add(HelpCenterModel.fromJson(value));
+        });
         return result;
       } else {
         debugPrint("Response failed${response.statusCode}");
