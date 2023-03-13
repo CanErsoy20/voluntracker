@@ -1,50 +1,50 @@
-import { IsInt, IsDefined, IsString, IsOptional, IsDate } from "class-validator";
-import { UserRole, Volunteer } from "./";
+import { IsDate, IsDefined, IsInt, IsOptional, IsString } from 'class-validator';
+import { UserRole, Volunteer } from './';
 
 export class User {
-    @IsDefined()
-    @IsInt()
-    id!: number;
+  @IsDefined()
+  @IsInt()
+  id!: number;
 
-    @IsDefined()
-    @IsString()
-    firstname!: string;
+  @IsDefined()
+  @IsString()
+  firstname!: string;
 
-    @IsDefined()
-    @IsString()
-    surname!: string;
+  @IsDefined()
+  @IsString()
+  surname!: string;
 
-    @IsDefined()
-    @IsString()
-    email!: string;
+  @IsDefined()
+  @IsString()
+  email!: string;
 
-    @IsOptional()
-    @IsString()
-    phone?: string;
+  @IsOptional()
+  @IsString()
+  phone?: string;
 
-    @IsDefined()
-    @IsString()
-    password!: string;
+  @IsDefined()
+  @IsString()
+  password!: string;
 
-    @IsOptional()
-    userRole?: UserRole;
+  @IsOptional()
+  userRole?: UserRole;
 
-    @IsOptional()
-    @IsInt()
-    roleId?: number;
+  @IsOptional()
+  @IsInt()
+  roleId?: number;
 
-    @IsOptional()
-    volunteer?: Volunteer;
+  @IsOptional()
+  volunteer?: Volunteer;
 
-    @IsOptional()
-    @IsString()
-    hashedRefreshToken?: string;
+  @IsOptional()
+  @IsString()
+  hashedRefreshToken?: string;
 
-    @IsDefined()
-    @IsDate()
-    createdAt!: Date;
+  @IsDefined()
+  @IsDate()
+  createdAt!: Date;
 
-    @IsDefined()
-    @IsDate()
-    updatedAt!: Date;
+  @IsDefined()
+  @IsDate()
+  updatedAt!: Date;
 }

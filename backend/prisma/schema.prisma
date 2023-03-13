@@ -39,7 +39,6 @@ model Supply {
   supplyTypeName String
   supplyTypeCategory String
 
-
   helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
   helpCenterId Int
 

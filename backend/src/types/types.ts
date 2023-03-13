@@ -16,4 +16,8 @@ export type ContactInfo = {
 
 export type OrderBy = 'asc' | 'desc';
 
-export type SupplyType = '';
+export enum UrgencyEnum {
+  Low = 0,
+  Medium = 1,
+  High = 2,
+}

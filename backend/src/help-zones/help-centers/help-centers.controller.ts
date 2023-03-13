@@ -282,7 +282,6 @@ export class HelpCentersController {
         `Help center with id '${hcId}' or needed volunteers with '${nvId}' could not be found.`,
       );
     }
-
     return helpCenter;
   }
 

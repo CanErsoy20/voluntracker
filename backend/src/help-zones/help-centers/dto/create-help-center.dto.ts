@@ -1,5 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
+import { Type } from 'class-transformer';
+import {
+  IsDate,
+  IsDefined,
+  IsEmail,
+  IsLatLong,
+  IsLatitude,
+  IsLocale,
+  IsLongitude,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 
 export class CreateHelpCenterDto {
   @ApiProperty({
@@ -10,6 +28,8 @@ export class CreateHelpCenterDto {
     minLength: 1,
     type: String,
   })
+  @IsDefined()
+  @IsString()
   name: string;
 
   @ApiProperty({
@@ -21,7 +41,11 @@ export class CreateHelpCenterDto {
     type: Object,
     properties: { lat: { type: 'Number' }, lon: { type: 'Number' } },
   })
-  location: Prisma.JsonValue;
+  @IsDefined()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Location)
+  location: Location;
 
   @ApiProperty({
     required: false,
@@ -34,7 +58,11 @@ export class CreateHelpCenterDto {
     type: Object,
     properties: { start: { type: 'String' }, end: { type: 'String' } },
   })
-  busiestHours: Prisma.JsonValue;
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => StartEndDate)
+  busiestHours?: StartEndDate;
 
   @ApiProperty({
     required: false,
@@ -47,7 +75,11 @@ export class CreateHelpCenterDto {
     type: Object,
     properties: { start: { type: 'String' }, end: { type: 'String' } },
   })
-  openCloseInfo: Prisma.JsonValue;
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => StartEndDate)
+  openCloseInfo?: StartEndDate;
 
   @ApiProperty({
     required: false,
@@ -61,7 +93,24 @@ export class CreateHelpCenterDto {
     type: Object,
     properties: { phone: { type: 'String' }, address: { type: 'String' }, email: { type: 'String' } },
   })
-  contactInfo: Prisma.JsonValue;
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => ContactInfo)
+  contactInfo?: ContactInfo;
+
+  @ApiProperty({
+    required: false,
+    nullable: true,
+    description: 'Represents the maximum number of volunteers this help center can have.',
+    example: 250,
+    type: Number,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(10000)
+  volunteerCapacity?: number;
 
   @ApiProperty({
     required: false,
@@ -71,14 +120,41 @@ export class CreateHelpCenterDto {
     example: 'The help center distributes food for the volunteers.',
     type: String,
   })
-  additionalInfo: string;
+  @IsOptional()
+  @IsString()
+  additionalInfo?: string;
+}
 
-  @ApiProperty({
-    required: false,
-    nullable: true,
-    description: 'Represents the maximum number of volunteers this help center can have.',
-    example: 250,
-    type: Number,
-  })
-  volunteerCapacity: number;
+class ContactInfo {
+  @IsDefined()
+  @IsPhoneNumber('TR')
+  phone: string;
+
+  @IsDefined()
+  @IsString()
+  address: string;
+
+  @IsDefined()
+  @IsEmail()
+  email: string;
+}
+
+class StartEndDate {
+  @IsDefined()
+  @IsDate()
+  start: Date;
+
+  @IsDefined()
+  @IsDate()
+  end: Date;
+}
+
+class Location {
+  @IsDefined()
+  @IsLatitude()
+  lat: string;
+
+  @IsDefined()
+  @IsLongitude()
+  lon: string;
 }

@@ -1,44 +1,59 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { NeededSupply, NeededVolunteer, Supply, User, UserRole, Volunteer } from '@prisma/client';
-import { IsDate, IsDefined, IsInt, IsString } from 'class-validator';
+import { User, UserRole, Volunteer } from '@prisma/client';
+import {
+  IsDate,
+  IsDefined,
+  IsEmail,
+  IsInt,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 
 export class UserEntity implements User {
-  @ApiProperty({ required: true, nullable: false })
   @IsDefined()
   @IsInt()
   id: number;
 
-  @ApiProperty({ required: true, nullable: false })
+  @IsDefined()
+  @IsString()
+  @MaxLength(50)
   firstname: string;
 
-  @ApiProperty({ required: true, nullable: false })
+  @IsDefined()
+  @IsString()
+  @MaxLength(50)
   surname: string;
 
-  @ApiProperty({ required: true, nullable: false })
+  @IsEmail()
   email: string;
 
-  @ApiProperty({ required: true, nullable: false })
+  @IsDefined()
+  @IsString()
   password: string;
 
-  @ApiProperty({ required: false, nullable: true })
-  phone: string | null;
+  @IsDefined()
+  @IsPhoneNumber()
+  phone: string;
 
-  @ApiProperty({ required: false, nullable: false })
+  @IsOptional()
+  @IsInt()
   roleId: number;
 
-  @ApiProperty({ required: false, nullable: true })
-  userRole: UserRole | null;
+  @IsOptional()
+  userRole: UserRole;
 
-  @ApiProperty({ required: false, nullable: true })
-  volunteer: Volunteer | null;
+  @IsOptional()
+  volunteer: Volunteer;
 
-  @ApiProperty({ required: false, nullable: true })
+  @IsString()
   hashedRefreshToken: string;
 
-  @ApiProperty({ required: true, nullable: false })
+  @IsDefined()
+  @IsDate()
   createdAt: Date;
 
-  @ApiProperty({ required: true, nullable: false })
-  @ApiProperty()
+  @IsDefined()
+  @IsDate()
   updatedAt: Date;
 }

@@ -4,10 +4,6 @@ import { NeededSupply, NeededVolunteer, Supply, Volunteer } from './';
 
 export class HelpCenter {
   @IsDefined()
-  @IsInt()
-  id: number;
-
-  @IsDefined()
   @IsString()
   name: string;
 
