@@ -32,7 +32,7 @@ export class HelpCenterEntity implements HelpCenter {
     type: Object,
     properties: { lat: { type: 'Number' }, lon: { type: 'Number' } },
   })
-  location: Prisma.JsonValue;
+  location: Location;
 
   @ApiProperty({
     required: false,
@@ -45,7 +45,7 @@ export class HelpCenterEntity implements HelpCenter {
     type: Object,
     properties: { start: { type: 'String' }, end: { type: 'String' } },
   })
-  busiestHours: Prisma.JsonValue;
+  busiestHours: StartEndDate;
 
   @ApiProperty({
     required: false,
@@ -58,7 +58,7 @@ export class HelpCenterEntity implements HelpCenter {
     type: Object,
     properties: { start: { type: 'String' }, end: { type: 'String' } },
   })
-  openCloseInfo: Prisma.JsonValue;
+  openCloseInfo: StartEndDate;
 
   @ApiProperty({
     required: false,
@@ -72,7 +72,7 @@ export class HelpCenterEntity implements HelpCenter {
     type: Object,
     properties: { phone: { type: 'String' }, address: { type: 'String' }, email: { type: 'String' } },
   })
-  contactInfo: Prisma.JsonValue;
+  contactInfo: ContactInfo;
 
   @ApiProperty({
     required: false,
@@ -138,4 +138,20 @@ export class HelpCenterEntity implements HelpCenter {
 
   @ApiProperty()
   updatedAt: Date;
+}
+
+class ContactInfo {
+  phone: string;
+  address: string;
+  email: string;
+}
+
+class StartEndDate {
+  start: Date;
+  end: Date;
+}
+
+class Location {
+  lat: string;
+  lon: string;
 }
