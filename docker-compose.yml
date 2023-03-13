@@ -13,8 +13,6 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - container_network
-    env_file:
-      - db.env
   backend:
     image: afet_takip_backend
     build:
@@ -36,3 +34,8 @@ networks:
 
 volumes:
   node_modules:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./backend/node_modules
