@@ -1,3 +1,4 @@
+import 'package:afet_takip/models/help_center/help_center_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,10 +9,11 @@ part 'map_state.dart';
 class MapCubit extends Cubit<MapState> {
   MapCubit() : super(MapInitial());
   LatLng currentLocation = LatLng(39.87474230379135, 32.747585469014844);
-
+  LatLng initialCameraLocation = LatLng(39.87474230379135, 32.747585469014844);
   bool serviceEnabled = false;
   LocationPermission permissionGranted = LocationPermission.denied;
 
+  // Get current location methods
   Future<void> getCurrentLocation() async {
     emit(MapLoading());
     // Test if location services are enabled.

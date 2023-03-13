@@ -1,7 +1,8 @@
+import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../cubit/map_cubit.dart';
+import '../../cubit/map/map_cubit.dart';
 import '../../router.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,12 +21,24 @@ class _LoginScreenState extends State<LoginScreen> {
         centerTitle: true,
       ),
       body: Center(
-        child: ElevatedButton(
-            onPressed: () {
-              context.read<MapCubit>().getCurrentLocation();
-              Navigator.pushNamed(context, Routes.mapRoute);
-            },
-            child: Text("Go To Map")),
+        child: Column(
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  context.read<HelpCenterCubit>().getHelpCenters().then(
+                      (value) => Navigator.of(context)
+                          .pushNamed(Routes.helpCenterList));
+                },
+                child: Text("Go Help Center List")),
+            ElevatedButton(
+                onPressed: () {
+                  context.read<HelpCenterCubit>().getHelpCenters().then(
+                      (value) => Navigator.of(context)
+                          .pushNamed(Routes.createHelpCenter));
+                },
+                child: Text("Create Help Center Screen")),
+          ],
+        ),
       ),
     );
   }
