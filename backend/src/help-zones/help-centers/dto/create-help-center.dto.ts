@@ -17,6 +17,40 @@ import {
   ValidateNested,
 } from 'class-validator';
 
+class ContactInfo {
+  @IsDefined()
+  @IsPhoneNumber('TR')
+  phone: string;
+
+  @IsDefined()
+  @IsString()
+  address: string;
+
+  @IsDefined()
+  @IsEmail()
+  email: string;
+}
+
+class StartEndDate {
+  @IsDefined()
+  @IsDate()
+  start: Date;
+
+  @IsDefined()
+  @IsDate()
+  end: Date;
+}
+
+class Location {
+  @IsDefined()
+  @IsLatitude()
+  lat: string;
+
+  @IsDefined()
+  @IsLongitude()
+  lon: string;
+}
+
 export class CreateHelpCenterDto {
   @ApiProperty({
     required: true,
@@ -121,38 +155,4 @@ export class CreateHelpCenterDto {
   @IsOptional()
   @IsString()
   additionalInfo: string;
-}
-
-class ContactInfo {
-  @IsDefined()
-  @IsPhoneNumber('TR')
-  phone: string;
-
-  @IsDefined()
-  @IsString()
-  address: string;
-
-  @IsDefined()
-  @IsEmail()
-  email: string;
-}
-
-class StartEndDate {
-  @IsDefined()
-  @IsDate()
-  start: Date;
-
-  @IsDefined()
-  @IsDate()
-  end: Date;
-}
-
-class Location {
-  @IsDefined()
-  @IsLatitude()
-  lat: string;
-
-  @IsDefined()
-  @IsLongitude()
-  lon: string;
 }
