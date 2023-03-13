@@ -5,6 +5,22 @@ import { NeededVolunteerEntity } from 'src/help-zones/needed-volunteer/entities/
 import { SupplyEntity } from 'src/help-zones/supply/entities/supply.entity';
 import { VolunteerEntity } from 'src/help-zones/volunteer/entities/volunteer.entity';
 
+class ContactInfo {
+  phone: string;
+  address: string;
+  email: string;
+}
+
+class StartEndDate {
+  start: Date;
+  end: Date;
+}
+
+class Location {
+  lat: string;
+  lon: string;
+}
+
 @ApiExtraModels(SupplyEntity)
 @ApiExtraModels(VolunteerEntity)
 @ApiExtraModels(NeededSupplyEntity)
@@ -138,20 +154,4 @@ export class HelpCenterEntity implements HelpCenter {
 
   @ApiProperty()
   updatedAt: Date;
-}
-
-class ContactInfo {
-  phone: string;
-  address: string;
-  email: string;
-}
-
-class StartEndDate {
-  start: Date;
-  end: Date;
-}
-
-class Location {
-  lat: string;
-  lon: string;
 }
