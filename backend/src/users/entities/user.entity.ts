@@ -1,8 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User, UserRole, Volunteer } from '@prisma/client';
+import { NeededSupply, NeededVolunteer, Supply, User, UserRole, Volunteer } from '@prisma/client';
+import { IsDate, IsDefined, IsInt, IsString } from 'class-validator';
 
 export class UserEntity implements User {
   @ApiProperty({ required: true, nullable: false })
+  @IsDefined()
+  @IsInt()
   id: number;
 
   @ApiProperty({ required: true, nullable: false })

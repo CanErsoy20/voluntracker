@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HelpCenter, Prisma } from '@prisma/client';
-import { DateInterval, OrderBy } from 'src/common/types';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { DateInterval, OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
 import { UpdateNeededSupplyDto } from '../needed-supply/dto/update-needed-supply.dto';
 import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-volunteer.dto';

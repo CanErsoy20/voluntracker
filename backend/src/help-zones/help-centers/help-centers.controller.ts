@@ -17,7 +17,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { HelpCenter, NeededVolunteer } from '@prisma/client';
-import { OrderBy } from 'src/common/types';
+import { OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
 import { NeededSupplyDto } from '../needed-supply/dto/needed-supply.dto';
 import { UpdateNeededSupplyDto } from '../needed-supply/dto/update-needed-supply.dto';
