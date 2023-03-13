@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { SupplyCategoryEnum, SupplyTypeEnum, UrgencyEnum } from '@prisma/client';
 import { IsDefined, IsEnum, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
-import { SupplyCategory, SupplyType, UrgencyEnum } from 'src/types';
 
 export class CreateNeededSupplyDto {
   @ApiProperty({ required: true, nullable: false, minimum: 1 })
@@ -10,15 +10,15 @@ export class CreateNeededSupplyDto {
   @Max(10000) // TODO: Maybe a different limit would be better
   quantity: number;
 
-  @ApiProperty({ required: true, nullable: false, enum: SupplyType })
+  @ApiProperty({ required: true, nullable: false, enum: SupplyTypeEnum })
   @IsDefined()
   @IsString()
-  supplyTypeName: SupplyType;
+  supplyTypeName: SupplyTypeEnum;
 
-  @ApiProperty({ required: true, nullable: false, enum: SupplyCategory })
+  @ApiProperty({ required: true, nullable: false, enum: SupplyCategoryEnum })
   @IsDefined()
   @IsString()
-  supplyTypeCategory: SupplyCategory;
+  supplyTypeCategory: SupplyCategoryEnum;
 
   @ApiProperty({ required: true, nullable: false })
   @IsDefined()

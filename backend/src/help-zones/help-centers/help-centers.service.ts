@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { HelpCenter, Prisma } from '@prisma/client';
+import { HelpCenter } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { DateInterval, OrderBy } from 'src/types/types';
+import { OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
 import { UpdateNeededSupplyDto } from '../needed-supply/dto/update-needed-supply.dto';
 import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-volunteer.dto';
@@ -41,15 +41,13 @@ export class HelpCentersService {
     const helpCenters = await this.findAll();
     const now = Date.now();
     const openCenters = helpCenters.map((hc) => {
-      const openCloseObject = hc.openCloseInfo as Prisma.JsonObject;
-      const { start, end } = openCloseObject as unknown as DateInterval; // TODO: Surely, there must be another way to do this?
+      const openCloseObject = hc.openCloseInfo;
+      const { start, end } = openCloseObject; // TODO: Surely, there must be another way to do this?
       return now > start.getTime() && now < end.getTime();
     });
 
     return openCenters;
   }
-
-  async addVolunteer() {}
 
   async findAllNeededVolunteersAtHelpCenter(helpCenterId: number, orderBy?: OrderBy | null) {
     return await this.prisma.helpCenter.findMany({
@@ -69,7 +67,7 @@ export class HelpCentersService {
       where: { id: helpCenterId },
       data: {
         neededVolunteers: {
-          create: createNeededVolunteerDto,
+          create: { ...createNeededVolunteerDto },
         },
       },
       include: {
@@ -128,8 +126,6 @@ export class HelpCentersService {
       },
     });
   }
-
-  async addSupply() {}
 
   async findAllNeededSupplyAtHelpCenter(helpCenterId: number, orderBy?: OrderBy | null) {
     const neededSupplies = await this.prisma.helpCenter.findMany({
@@ -198,9 +194,6 @@ export class HelpCentersService {
       include: { neededSupply: true },
     });
   }
-  async removeVolunteer() {}
-
-  async removeSupply() {}
 
   async findAllCurrentVolunteersAtHelpCenter(helpCenterId: number, orderBy?: OrderBy | null) {
     const volunteers = await this.prisma.helpCenter.findMany({
@@ -225,7 +218,7 @@ export class HelpCentersService {
   }
 
   async findHelpCenterDetails(helpCenterId: number) {
-    return await this.prisma.helpCenter.findMany({
+    return await this.prisma.helpCenter.findUnique({
       where: { id: helpCenterId },
       include: {
         neededSupply: true,

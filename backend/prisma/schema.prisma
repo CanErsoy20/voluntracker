@@ -2,8 +2,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator class_validator {
-  provider = "prisma-class-validator-generator"
+generator json {
+  provider = "prisma-json-types-generator"
+  // namespace = "PrismaJson"
+  // clientOutput = "<finds it automatically>"
+  // (./ -> relative to schema, or an importable path to require() it)
 }
 
 datasource db {
@@ -11,13 +14,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum SupplyTypeEnum {
+  pasta
+}
+
+enum SupplyCategoryEnum {
+  food
+  drink
+}
+enum VolunteerTypeEnum {
+  carrier
+}
+
+enum VolunteerCategoryEnum {
+  managament
+  labor
+}
+
+enum UrgencyEnum {
+  low
+  medium
+  high
+}
+
 model HelpCenter {
   id                Int      @id @default(autoincrement())
   name              String
-  busiestHours      Json // TODO: {start, end}
-  openCloseInfo     Json // TODO: {start, end}
-  location          Json // TODO: {lat, lon}
-  contactInfo       Json // TODO: {phone, address, email}
+
+  /// [StartEndDate]
+  busiestHours      Json 
+
+  /// [StartEndDate]
+  openCloseInfo     Json 
+
+  /// [Location]
+  location          Json 
+
+  /// [ContactInfo]
+  contactInfo       Json 
+
   additionalInfo    String
   volunteerCapacity Int
   createdAt         DateTime @default(now())
@@ -31,13 +66,15 @@ model HelpCenter {
 
 // Supply model and supply related models
 
+
+
 model Supply {
   id       Int @id @default(autoincrement())
   quantity Int
 
   supplyType SupplyType @relation(fields: [supplyTypeName, supplyTypeCategory], references: [typeName, category])
-  supplyTypeName String
-  supplyTypeCategory String
+  supplyTypeName SupplyTypeEnum
+  supplyTypeCategory SupplyCategoryEnum
 
   helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
   helpCenterId Int
@@ -50,11 +87,11 @@ model NeededSupply {
   id Int @id @default(autoincrement())
 
   quantity Int
-  urgency  Int?
+  urgency  UrgencyEnum?
 
   supplyType SupplyType @relation(fields: [supplyTypeName, supplyTypeCategory], references: [typeName, category])
-  supplyTypeName String
-  supplyTypeCategory String
+  supplyTypeName SupplyTypeEnum
+  supplyTypeCategory SupplyCategoryEnum
 
   helpCenter HelpCenter @relation(fields: [helpCenterId], references: [id])
   helpCenterId Int
@@ -64,8 +101,8 @@ model NeededSupply {
 }
 
 model SupplyType {
-  typeName String
-  category String
+  typeName SupplyTypeEnum
+  category SupplyCategoryEnum
 
   @@id([typeName, category])
 
@@ -134,6 +171,8 @@ model RolePermission {
 }
 
 
+
+
 model Volunteer {
   id     Int  @id @default(autoincrement())
   user   User @relation(fields: [userId], references: [id])
@@ -141,8 +180,8 @@ model Volunteer {
 
   // one-to-many relationship between Volunteer and VolunteerType
   volunteerType   VolunteerType @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
-  volunteerTypeName String
-  volunteerTypeCategory String
+  volunteerTypeName VolunteerTypeEnum
+  volunteerTypeCategory VolunteerCategoryEnum
 
   // one-to-many relationship between HelpCenter and Volunteer
   helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
@@ -156,12 +195,12 @@ model NeededVolunteer {
   id Int @id @default(autoincrement())
 
   quantity Int
-  urgency  Int?
+  urgency  UrgencyEnum?
 
   // one-to-many relationship between NeededVolunteer and VolunteerType
   volunteerType   VolunteerType @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
-  volunteerTypeName String
-  volunteerTypeCategory String
+  volunteerTypeName VolunteerTypeEnum
+  volunteerTypeCategory VolunteerCategoryEnum
 
   // one-to-many relationship between HelpCenter and NeededVolunteer
   helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
@@ -172,8 +211,8 @@ model NeededVolunteer {
 }
 
 model VolunteerType {
-  typeName String
-  category String
+  typeName VolunteerTypeEnum
+  category VolunteerCategoryEnum
 
   @@id([typeName, category])
 

@@ -19,13 +19,12 @@ import {
 import { HelpCenter, NeededVolunteer } from '@prisma/client';
 import { OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
-import { NeededSupplyDto } from '../needed-supply/dto/needed-supply.dto';
 import { UpdateNeededSupplyDto } from '../needed-supply/dto/update-needed-supply.dto';
+import { NeededSupplyEntity } from '../needed-supply/entities/needed-supply.entity';
 import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-volunteer.dto';
-import { NeededVolunteerDto } from '../needed-volunteer/dto/needed-volunteer.dto';
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
+import { NeededVolunteerEntity } from '../needed-volunteer/entities/needed-volunteer.entity';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
-import { HelpCenterDto } from './dto/help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
 import { HelpCenterEntity } from './entities/help-center.entity';
 import { HelpCentersService } from './help-centers.service';
@@ -37,7 +36,7 @@ export class HelpCentersController {
 
   @Post()
   @ApiCreatedResponse({
-    type: HelpCenterDto,
+    type: HelpCenterEntity,
     description: 'Successfully created the help center.',
   })
   @ApiBadRequestResponse({
@@ -56,7 +55,7 @@ export class HelpCentersController {
   @Get()
   @ApiResponse({
     status: 200,
-    type: [HelpCenterDto],
+    type: [HelpCenterEntity],
     description: 'Successfully found all of the help centers',
   })
   @ApiBadRequestResponse({
@@ -75,13 +74,13 @@ export class HelpCentersController {
   @Get(':id')
   @ApiResponse({
     status: 200,
-    type: HelpCenterDto,
+    type: HelpCenterEntity,
     description: 'Successfully found the help center with given id.',
   })
   @ApiNotFoundResponse({
     description: 'Could not find the help center with given id.',
   })
-  async findOne(@Param('id') id: string): Promise<HelpCenterEntity> {
+  async findOne(@Param('id') id: string): Promise<HelpCenter> {
     const helpCenter = await this.helpCentersService.findOne(+id);
 
     if (!helpCenter) {
@@ -94,7 +93,7 @@ export class HelpCentersController {
   @Get(':id/all')
   @ApiResponse({
     status: 200,
-    type: HelpCenterDto,
+    type: HelpCenterEntity,
     description: 'Successfully found the help center with given id.',
   })
   async findHelpCenterDetails(@Param('id') id: string) {
@@ -104,7 +103,7 @@ export class HelpCentersController {
   @Get('all')
   @ApiResponse({
     status: 200,
-    type: HelpCenterDto,
+    type: HelpCenterEntity,
     description: 'Successfully found the help center with given id.',
   })
   async findAllHelpCenterDetails() {
@@ -114,7 +113,7 @@ export class HelpCentersController {
   @Patch(':id')
   @ApiResponse({
     status: 200,
-    type: HelpCenterDto,
+    type: HelpCenterEntity,
     description: 'Successfully updated the help center with given id.',
   })
   @ApiNotFoundResponse({
@@ -132,7 +131,7 @@ export class HelpCentersController {
 
   @Delete(':id')
   @ApiCreatedResponse({
-    type: HelpCenterDto,
+    type: HelpCenterEntity,
     description: 'Successfully deleted the help center with given id.',
   })
   @ApiNotFoundResponse({
@@ -152,7 +151,7 @@ export class HelpCentersController {
   @Get(':id/neededVolunteers')
   @ApiResponse({
     status: 200,
-    type: [NeededVolunteerDto],
+    type: [NeededVolunteerEntity],
     description: 'Successfully found the needed volunteers for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -170,7 +169,7 @@ export class HelpCentersController {
 
   @ApiResponse({
     status: 200,
-    type: [NeededVolunteerDto],
+    type: [NeededVolunteerEntity],
     description: 'Successfully found the needed volunteers for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -191,7 +190,7 @@ export class HelpCentersController {
   }
 
   @ApiCreatedResponse({
-    type: NeededVolunteerDto,
+    type: NeededVolunteerEntity,
     description: 'Successfully created a needed volunteer record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -216,7 +215,7 @@ export class HelpCentersController {
 
   @ApiResponse({
     status: 200,
-    type: NeededVolunteerDto,
+    type: NeededVolunteerEntity,
     description: 'Successfully deleted ALL the needed volunteers record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -235,7 +234,7 @@ export class HelpCentersController {
 
   @ApiResponse({
     status: 200,
-    type: NeededVolunteerDto,
+    type: NeededVolunteerEntity,
     description: 'Successfully deleted the needed volunteers record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -259,7 +258,7 @@ export class HelpCentersController {
 
   @ApiResponse({
     status: 200,
-    type: NeededVolunteerDto,
+    type: NeededVolunteerEntity,
     description: 'Successfully updated the needed volunteers record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -288,7 +287,7 @@ export class HelpCentersController {
   /* NeededSupply endpoints */
   @ApiResponse({
     status: 200,
-    type: [NeededSupplyDto],
+    type: [NeededSupplyEntity],
     description: 'Successfully found all the needed supply record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -302,7 +301,7 @@ export class HelpCentersController {
 
   @ApiResponse({
     status: 200,
-    type: [NeededSupplyDto],
+    type: [NeededSupplyEntity],
     description: 'Successfully found all the needed supply record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -319,7 +318,7 @@ export class HelpCentersController {
 
   @ApiResponse({
     status: 201,
-    type: NeededSupplyDto,
+    type: NeededSupplyEntity,
     description: 'Successfully created the needed supply record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -333,7 +332,7 @@ export class HelpCentersController {
 
   @ApiResponse({
     status: 200,
-    type: NeededSupplyDto,
+    type: NeededSupplyEntity,
     description: 'Successfully deleted all the needed supply record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -347,7 +346,7 @@ export class HelpCentersController {
 
   @ApiResponse({
     status: 200,
-    type: NeededSupplyDto,
+    type: NeededSupplyEntity,
     description: 'Successfully deleted the needed supply record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -361,7 +360,7 @@ export class HelpCentersController {
 
   @ApiResponse({
     status: 200,
-    type: NeededSupplyDto,
+    type: NeededSupplyEntity,
     description: 'Successfully updated the needed volunteers record for the corresponding help center.',
   })
   @ApiNotFoundResponse({

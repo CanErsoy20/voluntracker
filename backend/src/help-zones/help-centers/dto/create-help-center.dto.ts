@@ -5,9 +5,7 @@ import {
   IsDate,
   IsDefined,
   IsEmail,
-  IsLatLong,
   IsLatitude,
-  IsLocale,
   IsLongitude,
   IsNumber,
   IsObject,
@@ -62,7 +60,7 @@ export class CreateHelpCenterDto {
   @IsObject()
   @ValidateNested()
   @Type(() => StartEndDate)
-  busiestHours?: StartEndDate;
+  busiestHours: StartEndDate;
 
   @ApiProperty({
     required: false,
@@ -79,7 +77,7 @@ export class CreateHelpCenterDto {
   @IsObject()
   @ValidateNested()
   @Type(() => StartEndDate)
-  openCloseInfo?: StartEndDate;
+  openCloseInfo: StartEndDate;
 
   @ApiProperty({
     required: false,
@@ -97,7 +95,7 @@ export class CreateHelpCenterDto {
   @IsObject()
   @ValidateNested()
   @Type(() => ContactInfo)
-  contactInfo?: ContactInfo;
+  contactInfo: ContactInfo;
 
   @ApiProperty({
     required: false,
@@ -110,7 +108,7 @@ export class CreateHelpCenterDto {
   @IsNumber()
   @Min(1)
   @Max(10000)
-  volunteerCapacity?: number;
+  volunteerCapacity: number;
 
   @ApiProperty({
     required: false,
@@ -122,7 +120,7 @@ export class CreateHelpCenterDto {
   })
   @IsOptional()
   @IsString()
-  additionalInfo?: string;
+  additionalInfo: string;
 }
 
 class ContactInfo {
