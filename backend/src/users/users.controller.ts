@@ -1,17 +1,4 @@
-import {
-  Body,
-  ConflictException,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
-import { hash } from 'bcrypt';
-import { saltOrRounds } from 'src/auth/constants';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 

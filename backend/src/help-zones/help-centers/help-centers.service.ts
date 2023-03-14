@@ -8,17 +8,18 @@ import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
+import { HelpCenterEntity } from './entities/help-center.entity';
 @Injectable()
 export class HelpCentersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createHelpCenterDto: CreateHelpCenterDto): Promise<HelpCenter> {
+  async create(createHelpCenterDto: CreateHelpCenterDto): Promise<HelpCenterEntity> {
     return await this.prisma.helpCenter.create({
       data: createHelpCenterDto,
     });
   }
 
-  async update(id: number, updateHelpCenterDto: UpdateHelpCenterDto): Promise<HelpCenter> {
+  async update(id: number, updateHelpCenterDto: UpdateHelpCenterDto): Promise<HelpCenterEntity> {
     return await this.prisma.helpCenter.update({
       where: { id },
       data: updateHelpCenterDto,
