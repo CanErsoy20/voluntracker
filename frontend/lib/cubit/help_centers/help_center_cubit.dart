@@ -2,6 +2,7 @@ import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 import 'package:bloc/bloc.dart';
 
 import '../../models/help_center/help_center_model.dart';
+import '../../models/needed_volunteer/create_needed_volunteer_model.dart';
 import '../../services/help_center_service.dart';
 part 'help_center_state.dart';
 
@@ -28,6 +29,19 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
     if (createdCenter == null) {
       emit(HelpCenterError(
           "Creation failed", "Couldnt't create a new help center"));
+    } else {
+      emit(HelpCenterDisplay());
+    }
+  }
+
+  Future<void> createNeededVolunteer(
+      CreateNeededVolunteer bodyModel, int helpCenterID) async {
+    emit(HelpCenterLoading());
+    HelpCenterModel? createdVolunteer =
+        await service.createNeededVolunteer(bodyModel, helpCenterID);
+    if (createdVolunteer == null) {
+      emit(HelpCenterError(
+          "Creation failed", "Couldnt't create a new volunteer need"));
     } else {
       emit(HelpCenterDisplay());
     }

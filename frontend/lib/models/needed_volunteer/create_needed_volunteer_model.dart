@@ -1,6 +1,6 @@
 class CreateNeededVolunteer {
   int? quantity;
-  int? urgency;
+  String? urgency;
   String? volunteerTypeName;
   String? volunteerTypeCategory;
   int? helpCenterId;
