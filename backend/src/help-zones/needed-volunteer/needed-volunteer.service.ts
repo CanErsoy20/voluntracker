@@ -27,4 +27,13 @@ export class NeededVolunteerService {
   remove(id: number) {
     return `This action removes a #${id} neededVolunteer`;
   }
+
+  async findAllNeededFolunteersAtTheHelpCenter(helpCenterId: number, orderBy: OrderBy | null) {
+    return this.prisma.neededVolunteer.findMany({
+      where: { helpCenterId },
+      orderBy: {
+        updatedAt: orderBy,
+      },
+    });
+  }
 }

@@ -17,7 +17,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { HelpCenter } from '@prisma/client';
 import { HttpResponse } from 'src/common';
 import { OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
@@ -25,6 +24,7 @@ import { UpdateNeededSupplyDto } from '../needed-supply/dto/update-needed-supply
 import { NeededSupplyEntity } from '../needed-supply/entities/needed-supply.entity';
 import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-volunteer.dto';
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
+import { NeededVolunteerEntity } from '../needed-volunteer/entities/needed-volunteer.entity';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
 import { HelpCenterEntity } from './entities/help-center.entity';
@@ -44,7 +44,7 @@ export class HelpCentersController {
   @ApiBadRequestResponse({
     description: 'Help center could not be created.',
   })
-  async create(@Body() createHelpCenterDto: CreateHelpCenterDto): Promise<HttpResponse<HelpCenter>> {
+  async create(@Body() createHelpCenterDto: CreateHelpCenterDto): Promise<HttpResponse<HelpCenterEntity>> {
     this.logger.debug(createHelpCenterDto);
 
     const helpCenter = await this.helpCentersService.create(createHelpCenterDto);
@@ -53,7 +53,7 @@ export class HelpCentersController {
       throw new BadRequestException('Could not create the help center.');
     }
 
-    return new HttpResponse<HelpCenter>(helpCenter, 'Successfully created the help center', 201);
+    return new HttpResponse<HelpCenterEntity>(helpCenter, 'Successfully created the help center', 201);
   }
 
   @Get()
@@ -65,14 +65,14 @@ export class HelpCentersController {
   @ApiBadRequestResponse({
     description: 'Could not find all the help centers.',
   })
-  async findAll(): Promise<HttpResponse<HelpCenter[]>> {
+  async findAll(): Promise<HttpResponse<HelpCenterEntity[]>> {
     const helpCenters = await this.helpCentersService.findAll();
 
     if (!helpCenters) {
       throw new NotFoundException('Could not find help center listings.');
     }
 
-    return new HttpResponse<HelpCenter[]>(helpCenters, 'Successfully fetched all help centers', 200);
+    return new HttpResponse<HelpCenterEntity[]>(helpCenters, 'Successfully fetched all help centers', 200);
   }
 
   @Get(':id')
@@ -84,7 +84,7 @@ export class HelpCentersController {
   @ApiNotFoundResponse({
     description: 'Could not find the help center with given id.',
   })
-  async findOne(@Param('id') id: string): Promise<HttpResponse<HelpCenter>> {
+  async findOne(@Param('id') id: string): Promise<HttpResponse<HelpCenterEntity>> {
     const helpCenter = await this.helpCentersService.findOne(+id);
 
     if (!helpCenter) {
@@ -106,7 +106,7 @@ export class HelpCentersController {
   async update(
     @Param('id') id: string,
     @Body() updateHelpCenterDto: UpdateHelpCenterDto,
-  ): Promise<HttpResponse<HelpCenter>> {
+  ): Promise<HttpResponse<HelpCenterEntity>> {
     const helpCenter = await this.helpCentersService.update(+id, updateHelpCenterDto);
 
     if (!helpCenter) {
@@ -124,7 +124,7 @@ export class HelpCentersController {
   @ApiNotFoundResponse({
     description: 'Could not delete the help center with given id..',
   })
-  async remove(@Param('id') id: string): Promise<HttpResponse<HelpCenter>> {
+  async remove(@Param('id') id: string): Promise<HttpResponse<HelpCenterEntity>> {
     const helpCenter = await this.helpCentersService.remove(+id);
 
     if (!helpCenter) {
@@ -138,20 +138,22 @@ export class HelpCentersController {
   @Get(':id/neededVolunteers')
   @ApiResponse({
     status: 200,
-    type: [HelpCenterEntity],
+    type: [NeededVolunteerEntity],
     description: 'Successfully found the needed volunteers for the corresponding help center.',
   })
   @ApiNotFoundResponse({
     description: 'Could not find the help center with given id.',
   })
-  async getNeededVolunteersAtHelpCenter(@Param('id') id: string): Promise<HttpResponse<HelpCenter[]>> {
-    const helpCenters = await this.helpCentersService.findAllNeededVolunteersAtHelpCenter(+id);
+  async getNeededVolunteersAtHelpCenter(
+    @Param('id') id: string,
+  ): Promise<HttpResponse<NeededVolunteerEntity[]>> {
+    const neededVolunteers = await this.helpCentersService.findAllNeededVolunteersAtHelpCenter(+id);
 
-    if (!helpCenters) {
+    if (!neededVolunteers) {
       throw new NotFoundException(`Help center with id '${id}' could not be found.`);
     }
     return new HttpResponse(
-      helpCenters,
+      neededVolunteers,
       'Successfully fetched the needed volunteers for the help center.',
       200,
     );
@@ -159,7 +161,7 @@ export class HelpCentersController {
 
   @ApiResponse({
     status: 200,
-    type: [HelpCenterEntity],
+    type: [NeededVolunteerEntity],
     description: 'Successfully found the needed volunteers for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -169,14 +171,14 @@ export class HelpCentersController {
   async getNeededVolunteersAtHelpCenterByOrdering(
     @Param('id') id: string,
     @Param('orderBy') orderBy: OrderBy,
-  ): Promise<HttpResponse<HelpCenter[]>> {
-    const helpCenter = await this.helpCentersService.findAllNeededVolunteersAtHelpCenter(+id, orderBy);
+  ): Promise<HttpResponse<NeededVolunteerEntity[]>> {
+    const neededVolunteers = await this.helpCentersService.findAllNeededVolunteersAtHelpCenter(+id, orderBy);
 
-    if (!helpCenter) {
+    if (!neededVolunteers) {
       throw new NotFoundException(`Help center with id '${id}' could not be found.`);
     }
 
-    return new HttpResponse(helpCenter, 'Successfully fetched the needed volunteers by ordering', 200);
+    return new HttpResponse(neededVolunteers, 'Successfully fetched the needed volunteers by ordering', 200);
   }
 
   @ApiCreatedResponse({
@@ -187,10 +189,10 @@ export class HelpCentersController {
     description: 'Could not find the help center with given id.',
   })
   @Post(':id/neededVolunteers')
-  async postNeededVolunteers(
+  async postNeededVolunteersToHelpCenter(
     @Param('id') id: string,
     @Body() createNeededVolunteerDto: CreateNeededVolunteerDto,
-  ): Promise<HttpResponse<HelpCenter>> {
+  ): Promise<HttpResponse<HelpCenterEntity>> {
     const helpCenter = await this.helpCentersService.addNeededVolunteersToHelpCenter(
       +id,
       createNeededVolunteerDto,
@@ -212,7 +214,7 @@ export class HelpCentersController {
     description: 'Could not find the help center with given id.',
   })
   @Delete(':helpCenterId/neededVolunteers')
-  async deleteAllNeededVolunteers(@Param('id') id: string): Promise<HttpResponse<HelpCenter>> {
+  async deleteAllNeededVolunteers(@Param('id') id: string): Promise<HttpResponse<HelpCenterEntity>> {
     const helpCenter = await this.helpCentersService.removeAllNeededVolunteersFromHelpCenter(+id);
 
     if (!helpCenter) {
@@ -231,7 +233,7 @@ export class HelpCentersController {
     description: 'Could not find the help center or the needed volunteers with given id.',
   })
   @Delete(':helpCenterId/neededVolunteers/:neededVolunteersId')
-  async deleteNeededVolunteers(
+  async deleteNeededVolunteersAtHelpCenter(
     @Param('helpCenterId') hcId: string,
     @Param('neededVolunteersId') nvId: string,
   ) {
@@ -285,9 +287,13 @@ export class HelpCentersController {
     description: 'Could not find all the needed supply for given help center.',
   })
   @Get(':id/neededSupply')
-  async getAllNeededSupplyAtHelpCenter(@Param('id') id: string) {
-    const helpCenter = await this.helpCentersService.findAllNeededSupplyAtHelpCenter(+id);
-    return helpCenter.map((hc) => hc.neededSupply);
+  async getAllNeededSupplyAtHelpCenter(@Param('id') id: string): Promise<HttpResponse<NeededSupplyEntity[]>> {
+    const neededSupply = await this.helpCentersService.findAllNeededSupplyAtHelpCenter(+id);
+    return new HttpResponse(
+      neededSupply,
+      'Successfully fetched all needed supply entities at the help center.',
+      200,
+    );
   }
 
   @ApiResponse({
@@ -302,56 +308,73 @@ export class HelpCentersController {
   async getAllNeededSupplyAtHelpCenterByOrdering(
     @Param('id') id: string,
     @Param('orderBy') orderBy: OrderBy,
-  ) {
-    const helpCenter = await this.helpCentersService.findAllNeededSupplyAtHelpCenter(+id, orderBy);
-    return helpCenter.map((hc) => hc.neededSupply);
+  ): Promise<HttpResponse<NeededSupplyEntity[]>> {
+    const neededSupply = await this.helpCentersService.findAllNeededSupplyAtHelpCenter(+id, orderBy);
+    return new HttpResponse(
+      neededSupply,
+      'Successfully fetched all needed supply entities at the help center and ordered them.',
+      200,
+    );
   }
 
-  @ApiResponse({
-    status: 201,
-    type: NeededSupplyEntity,
+  @ApiCreatedResponse({
+    type: HelpCenterEntity,
     description: 'Successfully created the needed supply record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
     description: 'Could not create the needed supply for given help center.',
   })
   @Post(':id/neededSupply')
-  async postNeededSupply(@Param('id') id: string, @Body() createNeededSupplyDto: CreateNeededSupplyDto) {
+  async postNeededSupplyToHelpCenter(
+    @Param('id') id: string,
+    @Body() createNeededSupplyDto: CreateNeededSupplyDto,
+  ): Promise<HttpResponse<HelpCenterEntity>> {
     const helpCenter = await this.helpCentersService.addNeededSupplyToHelpCenter(+id, createNeededSupplyDto);
-    return helpCenter.neededSupply;
+    return new HttpResponse(helpCenter, 'Successfully posted the needed supply to the help center.', 201);
   }
 
   @ApiResponse({
     status: 200,
-    type: NeededSupplyEntity,
+    type: HelpCenterEntity,
     description: 'Successfully deleted all the needed supply record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
     description: 'Could not delete all the needed supply for given help center.',
   })
   @Delete(':helpCenterId/neededSupply')
-  async deleteAllNeededSupply(@Param('id') id: string) {
+  async deleteAllNeededSupply(@Param('id') id: string): Promise<HttpResponse<HelpCenterEntity>> {
     const helpCenter = await this.helpCentersService.removeAllNeededSupplyFromHelpCenter(+id);
-    return helpCenter.neededSupply;
+    return new HttpResponse(
+      helpCenter,
+      'Successfully deleted all the needed supply at the help center.',
+      200,
+    );
   }
 
   @ApiResponse({
     status: 200,
-    type: NeededSupplyEntity,
+    type: HelpCenterEntity,
     description: 'Successfully deleted the needed supply record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
     description: 'Could not delete the needed supply for given help center.',
   })
   @Delete(':helpCenterId/neededSupply/:neededSupplyId')
-  async deleteNeededSupply(@Param('helpCenterId') hcId: string, @Param('neededSupplyId') nsId: string) {
+  async deleteNeededSupply(
+    @Param('helpCenterId') hcId: string,
+    @Param('neededSupplyId') nsId: string,
+  ): Promise<HttpResponse<HelpCenterEntity>> {
     const helpCenter = await this.helpCentersService.removeNeededSupplyFromHelpCenter(+hcId, +nsId);
-    return helpCenter.neededSupply;
+    return new HttpResponse(
+      helpCenter,
+      'Successfully deleted the given needed supply at the help center.',
+      200,
+    );
   }
 
   @ApiResponse({
     status: 200,
-    type: NeededSupplyEntity,
+    type: HelpCenterEntity,
     description: 'Successfully updated the needed volunteers record for the corresponding help center.',
   })
   @ApiNotFoundResponse({
@@ -362,12 +385,16 @@ export class HelpCentersController {
     @Param('helpCenterId') hcId: string,
     @Param('neededSupplyId') nsId: string,
     @Body() updateNeededSupplyDto: UpdateNeededSupplyDto,
-  ) {
+  ): Promise<HttpResponse<HelpCenterEntity>> {
     const helpCenter = await this.helpCentersService.updateNeededSupplyAtHelpCenter(
       +hcId,
       +nsId,
       updateNeededSupplyDto,
     );
-    return helpCenter.neededSupply;
+    return new HttpResponse(
+      helpCenter,
+      'Successfully updated the given needed supply at the help center.',
+      200,
+    );
   }
 }

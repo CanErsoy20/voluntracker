@@ -12,12 +12,12 @@ export class CreateNeededSupplyDto {
 
   @ApiProperty({ required: true, nullable: false, enum: SupplyTypeEnum })
   @IsDefined()
-  @IsString()
+  @IsEnum(SupplyTypeEnum)
   supplyTypeName: SupplyTypeEnum;
 
   @ApiProperty({ required: true, nullable: false, enum: SupplyCategoryEnum })
   @IsDefined()
-  @IsString()
+  @IsEnum(SupplyCategoryEnum)
   supplyTypeCategory: SupplyCategoryEnum;
 
   @ApiProperty({ required: true, nullable: false })
