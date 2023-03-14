@@ -15,7 +15,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
         );
 
         return {
-          status: response?.status ? response.status : context.switchToHttp().getResponse().statusCode, // Overrides default status code
+          status: response?.status ? response.status : context.switchToHttp().getResponse().statusCode || 400, // Overrides default status code
           message: response.message,
           data: response.data,
         };
