@@ -1,7 +1,8 @@
-import { ValidationPipe } from '@nestjs/common';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder } from '@nestjs/swagger';
 import { SwaggerModule } from '@nestjs/swagger/dist';
+import { ValidationError } from 'class-validator';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './filters/http-exception-filter.filter';
@@ -16,7 +17,17 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   // ValidationPipeline setup
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      exceptionFactory: (errors: ValidationError[] = []) => {
+        return new BadRequestException(errors);
+      },
+      validationError: {
+        target: false,
+        value: true,
+      },
+    }),
+  );
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new TransformInterceptor());
 

@@ -30,11 +30,26 @@ export class HelpCentersService {
   }
 
   async findAll(): Promise<HelpCenter[]> {
-    return await this.prisma.helpCenter.findMany();
+    return await this.prisma.helpCenter.findMany({
+      include: {
+        neededSupply: true,
+        neededVolunteers: true,
+        volunteers: true,
+        supply: true,
+      },
+    });
   }
 
   async findOne(id: number): Promise<HelpCenter> {
-    return await this.prisma.helpCenter.findUnique({ where: { id } });
+    return await this.prisma.helpCenter.findUnique({
+      where: { id },
+      include: {
+        neededSupply: true,
+        neededVolunteers: true,
+        volunteers: true,
+        supply: true,
+      },
+    });
   }
 
   async findAllOpen() {

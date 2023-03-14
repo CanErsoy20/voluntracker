@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   NotFoundException,
   Param,
   Patch,
@@ -17,6 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { HelpCenter, NeededVolunteer } from '@prisma/client';
+import { HttpResponse } from 'src/common';
 import { OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
 import { UpdateNeededSupplyDto } from '../needed-supply/dto/update-needed-supply.dto';
@@ -34,6 +36,8 @@ import { HelpCentersService } from './help-centers.service';
 export class HelpCentersController {
   constructor(private readonly helpCentersService: HelpCentersService) {}
 
+  private readonly logger: Logger = new Logger(HelpCentersController.name);
+
   @Post()
   @ApiCreatedResponse({
     type: HelpCenterEntity,
@@ -42,14 +46,16 @@ export class HelpCentersController {
   @ApiBadRequestResponse({
     description: 'Help center could not be created.',
   })
-  async create(@Body() createHelpCenterDto: CreateHelpCenterDto): Promise<HelpCenter> {
+  async create(@Body() createHelpCenterDto: CreateHelpCenterDto): Promise<HttpResponse<HelpCenter>> {
+    this.logger.debug(createHelpCenterDto);
+
     const helpCenter = await this.helpCentersService.create(createHelpCenterDto);
 
     if (!helpCenter) {
       throw new BadRequestException('Could not create the help center.');
     }
 
-    return helpCenter;
+    return new HttpResponse<HelpCenter>(helpCenter, 'Successfully created the help center', 201);
   }
 
   @Get()
@@ -61,14 +67,14 @@ export class HelpCentersController {
   @ApiBadRequestResponse({
     description: 'Could not find all the help centers.',
   })
-  async findAll(): Promise<HelpCenter[]> {
+  async findAll(): Promise<HttpResponse<HelpCenter[]>> {
     const helpCenters = await this.helpCentersService.findAll();
 
     if (!helpCenters) {
       throw new NotFoundException('Could not find help center listings.');
     }
 
-    return helpCenters;
+    return new HttpResponse<HelpCenter[]>(helpCenters, 'Successfully fetched all help centers', 200);
   }
   
   @Get('all')
@@ -90,34 +96,14 @@ export class HelpCentersController {
   @ApiNotFoundResponse({
     description: 'Could not find the help center with given id.',
   })
-  async findOne(@Param('id') id: string): Promise<HelpCenter> {
+  async findOne(@Param('id') id: string): Promise<HttpResponse<HelpCenter>> {
     const helpCenter = await this.helpCentersService.findOne(+id);
 
     if (!helpCenter) {
       throw new NotFoundException(`Could not find a help center with id: ${id}`);
     }
 
-    return helpCenter;
-  }
-
-  @Get(':id/all')
-  @ApiResponse({
-    status: 200,
-    type: HelpCenterEntity,
-    description: 'Successfully found the help center with given id.',
-  })
-  async findHelpCenterDetails(@Param('id') id: string) {
-    return await this.helpCentersService.findHelpCenterDetails(+id);
-  }
-
-  @Get('all')
-  @ApiResponse({
-    status: 200,
-    type: HelpCenterEntity,
-    description: 'Successfully found the help center with given id.',
-  })
-  async findAllHelpCenterDetails() {
-    return await this.helpCentersService.findAllHelpCenterDetails();
+    return new HttpResponse(helpCenter, 'Successfully fetched the help center.', 200);
   }
   
   @Patch(':id')
@@ -129,14 +115,17 @@ export class HelpCentersController {
   @ApiNotFoundResponse({
     description: 'Could not update the help center with given id.',
   })
-  async update(@Param('id') id: string, @Body() updateHelpCenterDto: UpdateHelpCenterDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateHelpCenterDto: UpdateHelpCenterDto,
+  ): Promise<HttpResponse<HelpCenter>> {
     const helpCenter = await this.helpCentersService.update(+id, updateHelpCenterDto);
 
     if (!helpCenter) {
       throw new NotFoundException(`Update unsuccessfull: Could not find a help center with id: ${id}`);
     }
 
-    return helpCenter;
+    return new HttpResponse(helpCenter, 'Successfully updated the help center.', 200);
   }
 
   @Delete(':id')
@@ -147,14 +136,14 @@ export class HelpCentersController {
   @ApiNotFoundResponse({
     description: 'Could not delete the help center with given id..',
   })
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<HttpResponse<HelpCenter>> {
     const helpCenter = await this.helpCentersService.remove(+id);
 
     if (!helpCenter) {
-      throw new NotFoundException(`Update unsuccessfull: Could not find a help center with id: ${id}`);
+      throw new NotFoundException(`Deletion unsuccessfull: Could not find a help center with id: ${id}`);
     }
 
-    return helpCenter;
+    return new HttpResponse(helpCenter, 'Successfully deleted the help center.', 200);
   }
 
   /* NeededVolunteers endpoints */
@@ -174,7 +163,12 @@ export class HelpCentersController {
       throw new NotFoundException(`Help center with id '${id}' could not be found.`);
     }
 
-    return neededVolunteers.map((nv) => nv.neededVolunteers);
+    const neededVolunteersList = neededVolunteers.map((nv) => nv.neededVolunteers);
+    return new HttpResponse(
+      neededVolunteersList,
+      'Successfully fetched the needed volunteers for the help center.',
+      200,
+    );
   }
 
   @ApiResponse({
