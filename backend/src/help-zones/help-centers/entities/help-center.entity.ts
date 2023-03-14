@@ -5,6 +5,22 @@ import { NeededVolunteerEntity } from 'src/help-zones/needed-volunteer/entities/
 import { SupplyEntity } from 'src/help-zones/supply/entities/supply.entity';
 import { VolunteerEntity } from 'src/help-zones/volunteer/entities/volunteer.entity';
 
+class ContactInfo {
+  phone: string;
+  address: string;
+  email: string;
+}
+
+class StartEndDate {
+  start: Date;
+  end: Date;
+}
+
+class Location {
+  lat: number;
+  lon: number;
+}
+
 @ApiExtraModels(SupplyEntity)
 @ApiExtraModels(VolunteerEntity)
 @ApiExtraModels(NeededSupplyEntity)
@@ -32,47 +48,47 @@ export class HelpCenterEntity implements HelpCenter {
     type: Object,
     properties: { lat: { type: 'Number' }, lon: { type: 'Number' } },
   })
-  location: Prisma.JsonValue;
+  location: Location;
 
   @ApiProperty({
     required: false,
     nullable: true,
     description: 'Contains the start and end hours for the busiests hours in a help center.',
     example: {
-      start: new Date().getHours() + ':' + new Date().getMinutes(),
-      end: new Date().getHours() + ':' + new Date().getMinutes(),
+      start: new Date().toISOString(),
+      end: new Date().toISOString(),
     },
     type: Object,
     properties: { start: { type: 'String' }, end: { type: 'String' } },
   })
-  busiestHours: Prisma.JsonValue;
+  busiestHours: StartEndDate;
 
   @ApiProperty({
     required: false,
     nullable: true,
     description: 'Contains the opening and closing hours of the help center.',
     example: {
-      start: new Date().getHours() + ':' + new Date().getMinutes(),
-      end: new Date().getHours() + ':' + new Date().getMinutes(),
+      start: new Date().toISOString(),
+      end: new Date().toISOString(),
     },
     type: Object,
     properties: { start: { type: 'String' }, end: { type: 'String' } },
   })
-  openCloseInfo: Prisma.JsonValue;
+  openCloseInfo: StartEndDate;
 
   @ApiProperty({
     required: false,
     nullable: true,
     description: 'Contains the opening and closing hours of the help center.',
     example: {
-      phone: '+901111111111',
+      phone: '+905392576103',
       address: 'Bilkent Üniversitesi 1598.Cadde 75.Yurt Kargo Merkezi',
       email: 'help.center@gmail.com',
     },
     type: Object,
     properties: { phone: { type: 'String' }, address: { type: 'String' }, email: { type: 'String' } },
   })
-  contactInfo: Prisma.JsonValue;
+  contactInfo: ContactInfo;
 
   @ApiProperty({
     required: false,

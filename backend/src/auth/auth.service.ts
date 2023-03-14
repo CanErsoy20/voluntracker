@@ -12,7 +12,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
-import * as authConstants from './constants';
+import * as authConstants from '../config';
 import { AuthDto } from './dto/auth.dto';
 import { Tokens } from './types';
 

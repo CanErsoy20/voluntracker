@@ -8,6 +8,13 @@ import {
   Logger,
 } from '@nestjs/common';
 import 'dotenv/config';
+import { Request, Response } from 'express';
+
+type ErrorResponse = {
+  statusCode: number;
+  message: string | string[];
+  error: string;
+};
 
 @Injectable()
 @Catch(HttpException)
@@ -16,13 +23,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const request = ctx.getRequest();
-    const response = ctx.getResponse();
+    const request = ctx.getRequest<Request>();
+    const response = ctx.getResponse<Response>();
 
-    const status =
-      exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+    const status = exception.getStatus();
     const message: string[] = [];
-    message.push(exception instanceof HttpException ? exception.message : 'Internal server error');
+    const errorResponse = exception.getResponse() as unknown as ErrorResponse;
+    if (typeof errorResponse === 'object') {
+      if (Array.isArray(errorResponse.message)) {
+        message.push(...errorResponse.message);
+      } else if (typeof errorResponse.message === 'string') {
+        message.push(errorResponse.message);
+      } else {
+        message.push('Internal Server Error');
+      }
+    }
 
     const devErrorResponse = {
       error: {
@@ -44,13 +59,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const finalResponse = process.env.NODE_ENV === 'DEV' ? devErrorResponse : prodErrorResponse;
 
     this.logger.error(
-      `Request method: ${request.method}.\n Request url: ${request.url}.\n Error response: ${JSON.stringify(
+      `\nRequest method: ${request.method}.\n Request url: ${request.url}.\n Error response: ${JSON.stringify(
         finalResponse,
         null,
         2,
       )}`,
     );
 
-    return finalResponse;
+    response.status(status).json(finalResponse);
   }
 }

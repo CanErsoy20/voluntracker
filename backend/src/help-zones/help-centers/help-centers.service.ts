@@ -1,24 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { HelpCenter, Prisma } from '@prisma/client';
-import { DateInterval, OrderBy } from 'src/common/types';
+import { HelpCenter } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
 import { UpdateNeededSupplyDto } from '../needed-supply/dto/update-needed-supply.dto';
 import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-volunteer.dto';
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
+import { HelpCenterEntity } from './entities/help-center.entity';
 @Injectable()
 export class HelpCentersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createHelpCenterDto: CreateHelpCenterDto): Promise<HelpCenter> {
+  async create(createHelpCenterDto: CreateHelpCenterDto): Promise<HelpCenterEntity> {
     return await this.prisma.helpCenter.create({
       data: createHelpCenterDto,
     });
   }
 
-  async update(id: number, updateHelpCenterDto: UpdateHelpCenterDto): Promise<HelpCenter> {
+  async update(id: number, updateHelpCenterDto: UpdateHelpCenterDto): Promise<HelpCenterEntity> {
     return await this.prisma.helpCenter.update({
       where: { id },
       data: updateHelpCenterDto,
@@ -30,26 +31,39 @@ export class HelpCentersService {
   }
 
   async findAll(): Promise<HelpCenter[]> {
-    return await this.prisma.helpCenter.findMany();
+    return await this.prisma.helpCenter.findMany({
+      include: {
+        neededSupply: true,
+        neededVolunteers: true,
+        volunteers: true,
+        supply: true,
+      },
+    });
   }
 
   async findOne(id: number): Promise<HelpCenter> {
-    return await this.prisma.helpCenter.findUnique({ where: { id } });
+    return await this.prisma.helpCenter.findUnique({
+      where: { id },
+      include: {
+        neededSupply: true,
+        neededVolunteers: true,
+        volunteers: true,
+        supply: true,
+      },
+    });
   }
 
   async findAllOpen() {
     const helpCenters = await this.findAll();
     const now = Date.now();
     const openCenters = helpCenters.map((hc) => {
-      const openCloseObject = hc.openCloseInfo as Prisma.JsonObject;
-      const { start, end } = openCloseObject as unknown as DateInterval; // TODO: Surely, there must be another way to do this?
+      const openCloseObject = hc.openCloseInfo;
+      const { start, end } = openCloseObject; // TODO: Surely, there must be another way to do this?
       return now > start.getTime() && now < end.getTime();
     });
 
     return openCenters;
   }
-
-  async addVolunteer() {}
 
   async findAllNeededVolunteersAtHelpCenter(helpCenterId: number, orderBy?: OrderBy | null) {
     return await this.prisma.helpCenter.findMany({
@@ -69,7 +83,7 @@ export class HelpCentersService {
       where: { id: helpCenterId },
       data: {
         neededVolunteers: {
-          create: createNeededVolunteerDto,
+          create: { ...createNeededVolunteerDto },
         },
       },
       include: {
@@ -128,8 +142,6 @@ export class HelpCentersService {
       },
     });
   }
-
-  async addSupply() {}
 
   async findAllNeededSupplyAtHelpCenter(helpCenterId: number, orderBy?: OrderBy | null) {
     const neededSupplies = await this.prisma.helpCenter.findMany({
@@ -198,9 +210,6 @@ export class HelpCentersService {
       include: { neededSupply: true },
     });
   }
-  async removeVolunteer() {}
-
-  async removeSupply() {}
 
   async findAllCurrentVolunteersAtHelpCenter(helpCenterId: number, orderBy?: OrderBy | null) {
     const volunteers = await this.prisma.helpCenter.findMany({
@@ -225,7 +234,7 @@ export class HelpCentersService {
   }
 
   async findHelpCenterDetails(helpCenterId: number) {
-    return await this.prisma.helpCenter.findMany({
+    return await this.prisma.helpCenter.findUnique({
       where: { id: helpCenterId },
       include: {
         neededSupply: true,

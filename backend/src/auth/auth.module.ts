@@ -5,7 +5,6 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { UsersModule } from 'src/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { jwtConstants } from './constants';
 import { JwtRefreshStrategy } from './guards/jwt-refresh.strategy';
 import { JwtStrategy } from './guards/jwt.strategy';
 import { LocalStrategy } from './guards/local.strategy';

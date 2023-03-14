@@ -1,5 +1,56 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
+import { Type } from 'class-transformer';
+import {
+  IsDate,
+  IsDateString,
+  IsDefined,
+  IsEmail,
+  IsLatitude,
+  IsLongitude,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+
+class ContactInfo {
+  @IsDefined()
+  @IsPhoneNumber('TR')
+  phone: string;
+
+  @IsDefined()
+  @IsString()
+  address: string;
+
+  @IsDefined()
+  @IsEmail()
+  email: string;
+}
+
+class StartEndDate {
+  @IsDefined()
+  @IsDateString()
+  start: Date;
+
+  @IsDefined()
+  @IsDateString()
+  end: Date;
+}
+
+class Location {
+  @IsDefined()
+  @IsLatitude()
+  lat: number;
+
+  @IsDefined()
+  @IsLongitude()
+  lon: number;
+}
 
 export class CreateHelpCenterDto {
   @ApiProperty({
@@ -10,6 +61,8 @@ export class CreateHelpCenterDto {
     minLength: 1,
     type: String,
   })
+  @IsDefined()
+  @IsString()
   name: string;
 
   @ApiProperty({
@@ -21,47 +74,76 @@ export class CreateHelpCenterDto {
     type: Object,
     properties: { lat: { type: 'Number' }, lon: { type: 'Number' } },
   })
-  location: Prisma.JsonValue;
+  @IsDefined()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Location)
+  location: Location;
 
   @ApiProperty({
     required: false,
     nullable: true,
     description: 'Contains the start and end hours for the busiests hours in a help center.',
     example: {
-      start: new Date().getHours() + ':' + new Date().getMinutes(),
-      end: new Date().getHours() + ':' + new Date().getMinutes(),
+      start: new Date().toISOString(),
+      end: new Date().toISOString(),
     },
     type: Object,
     properties: { start: { type: 'String' }, end: { type: 'String' } },
   })
-  busiestHours: Prisma.JsonValue;
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => StartEndDate)
+  busiestHours: StartEndDate;
 
   @ApiProperty({
     required: false,
     nullable: true,
     description: 'Contains the opening and closing hours of the help center.',
     example: {
-      start: new Date().getHours() + ':' + new Date().getMinutes(),
-      end: new Date().getHours() + ':' + new Date().getMinutes(),
+      start: new Date().toISOString(),
+      end: new Date().toISOString(),
     },
     type: Object,
     properties: { start: { type: 'String' }, end: { type: 'String' } },
   })
-  openCloseInfo: Prisma.JsonValue;
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => StartEndDate)
+  openCloseInfo: StartEndDate;
 
   @ApiProperty({
     required: false,
     nullable: true,
     description: 'Contains the opening and closing hours of the help center.',
     example: {
-      phone: '+901111111111',
+      phone: '+905392576103',
       address: 'Bilkent Üniversitesi 1598.Cadde 75.Yurt Kargo Merkezi',
       email: 'help.center@gmail.com',
     },
     type: Object,
     properties: { phone: { type: 'String' }, address: { type: 'String' }, email: { type: 'String' } },
   })
-  contactInfo: Prisma.JsonValue;
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => ContactInfo)
+  contactInfo: ContactInfo;
+
+  @ApiProperty({
+    required: false,
+    nullable: true,
+    description: 'Represents the maximum number of volunteers this help center can have.',
+    example: 250,
+    type: Number,
+  })
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  @Max(10000)
+  volunteerCapacity: number;
 
   @ApiProperty({
     required: false,
@@ -71,14 +153,7 @@ export class CreateHelpCenterDto {
     example: 'The help center distributes food for the volunteers.',
     type: String,
   })
+  @IsOptional()
+  @IsString()
   additionalInfo: string;
-
-  @ApiProperty({
-    required: false,
-    nullable: true,
-    description: 'Represents the maximum number of volunteers this help center can have.',
-    example: 250,
-    type: Number,
-  })
-  volunteerCapacity: number;
 }
