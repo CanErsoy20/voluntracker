@@ -17,8 +17,8 @@ class StartEndDate {
 }
 
 class Location {
-  lat: string;
-  lon: string;
+  lat: number;
+  lon: number;
 }
 
 @ApiExtraModels(SupplyEntity)
@@ -55,8 +55,8 @@ export class HelpCenterEntity implements HelpCenter {
     nullable: true,
     description: 'Contains the start and end hours for the busiests hours in a help center.',
     example: {
-      start: new Date().getHours() + ':' + new Date().getMinutes(),
-      end: new Date().getHours() + ':' + new Date().getMinutes(),
+      start: new Date().toISOString(),
+      end: new Date().toISOString(),
     },
     type: Object,
     properties: { start: { type: 'String' }, end: { type: 'String' } },
@@ -68,8 +68,8 @@ export class HelpCenterEntity implements HelpCenter {
     nullable: true,
     description: 'Contains the opening and closing hours of the help center.',
     example: {
-      start: new Date().getHours() + ':' + new Date().getMinutes(),
-      end: new Date().getHours() + ':' + new Date().getMinutes(),
+      start: new Date().toISOString(),
+      end: new Date().toISOString(),
     },
     type: Object,
     properties: { start: { type: 'String' }, end: { type: 'String' } },
@@ -81,7 +81,7 @@ export class HelpCenterEntity implements HelpCenter {
     nullable: true,
     description: 'Contains the opening and closing hours of the help center.',
     example: {
-      phone: '+901111111111',
+      phone: '+905392576103',
       address: 'Bilkent Üniversitesi 1598.Cadde 75.Yurt Kargo Merkezi',
       email: 'help.center@gmail.com',
     },
