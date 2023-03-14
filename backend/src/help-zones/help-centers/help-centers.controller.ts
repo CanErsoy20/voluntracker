@@ -76,16 +76,6 @@ export class HelpCentersController {
 
     return new HttpResponse<HelpCenter[]>(helpCenters, 'Successfully fetched all help centers', 200);
   }
-  
-  @Get('all')
-  @ApiResponse({
-    status: 200,
-    type: HelpCenterDto,
-    description: 'Successfully found the help center with given id.',
-  })
-  async findAllHelpCenterDetails() {
-    return await this.helpCentersService.findAllHelpCenterDetails();
-  }
 
   @Get(':id')
   @ApiResponse({
@@ -105,7 +95,7 @@ export class HelpCentersController {
 
     return new HttpResponse(helpCenter, 'Successfully fetched the help center.', 200);
   }
-  
+
   @Patch(':id')
   @ApiResponse({
     status: 200,
