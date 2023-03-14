@@ -10,7 +10,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { hash } from 'bcrypt';
-import { saltOrRounds } from 'src/auth/constants';
+import { saltOrRounds } from 'src/config';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
