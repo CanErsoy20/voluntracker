@@ -1,10 +1,10 @@
-import { Supply } from '@prisma/client';
+import { Supply, SupplyCategoryEnum, SupplyTypeEnum } from '@prisma/client';
 
 export class SupplyEntity implements Supply {
   id: number;
   quantity: number;
-  supplyTypeName: string;
-  supplyTypeCategory: string;
+  supplyTypeName: SupplyTypeEnum;
+  supplyTypeCategory: SupplyCategoryEnum;
   helpCenterId: number;
   createdAt: Date;
   updatedAt: Date;

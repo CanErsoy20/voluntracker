@@ -1,11 +1,11 @@
-import { NeededVolunteer } from '@prisma/client';
+import { NeededVolunteer, UrgencyEnum, VolunteerCategoryEnum, VolunteerTypeEnum } from '@prisma/client';
 
 export class NeededVolunteerEntity implements NeededVolunteer {
   id: number;
   quantity: number;
-  urgency: number;
-  volunteerTypeName: string;
-  volunteerTypeCategory: string;
+  urgency: UrgencyEnum;
+  volunteerTypeName: VolunteerTypeEnum;
+  volunteerTypeCategory: VolunteerCategoryEnum;
   helpCenterId: number;
   createdAt: Date;
   updatedAt: Date;

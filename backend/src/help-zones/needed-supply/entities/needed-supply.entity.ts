@@ -1,11 +1,18 @@
-import { HelpCenter, NeededSupply, SupplyType } from '@prisma/client';
+import {
+  HelpCenter,
+  NeededSupply,
+  SupplyCategoryEnum,
+  SupplyType,
+  SupplyTypeEnum,
+  UrgencyEnum,
+} from '@prisma/client';
 
 export class NeededSupplyEntity implements NeededSupply {
   id: number;
   quantity: number;
-  urgency: number;
-  supplyTypeName: string;
-  supplyTypeCategory: string;
+  urgency: UrgencyEnum;
+  supplyTypeName: SupplyTypeEnum;
+  supplyTypeCategory: SupplyCategoryEnum;
   helpCenterId: number;
   createdAt: Date;
   updatedAt: Date;
