@@ -7,7 +7,7 @@ import { UpdateNeededVolunteerDto } from './dto/update-needed-volunteer.dto';
 import { NeededVolunteerEntity } from './entities/needed-volunteer.entity';
 import { NeededVolunteerService } from './needed-volunteer.service';
 
-@Controller('needed-volunteer')
+@Controller('neededVolunteers')
 export class NeededVolunteerController {
   constructor(private readonly neededVolunteerService: NeededVolunteerService) {}
 
