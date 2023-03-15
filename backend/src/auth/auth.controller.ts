@@ -26,8 +26,8 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body() createUserDto: CreateUserDto) {
-    const tokens = await this.authService.signup(createUserDto);
+  async login(@Body() authDto: AuthDto) {
+    const tokens = await this.authService.login(authDto);
     if (!tokens) {
       throw new InternalServerErrorException(
         'Something went wrong while we are trying to log you in. Please try again in a few moments.',
