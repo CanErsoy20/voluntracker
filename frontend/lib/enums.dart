@@ -2,6 +2,6 @@
 
 enum VolunteerTypeName { Carrier }
 
-enum VolunteerTypeCategory { Labor, Management }
+enum VolunteerTypeCategory { Labor }
 
 enum Urgency { Low, Medium, High }

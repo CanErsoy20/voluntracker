@@ -11,6 +11,7 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   HelpCenterService service;
   List<HelpCenterModel>? helpCenterList;
   HelpCenterModel? selectedCenter;
+  CreateNeededVolunteer newVolunteerNeed = CreateNeededVolunteer();
 
   Future<void> getHelpCenters() async {
     emit(HelpCenterLoading());
@@ -42,6 +43,19 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
     if (createdVolunteer == null) {
       emit(HelpCenterError(
           "Creation failed", "Couldnt't create a new volunteer need"));
+    } else {
+      emit(HelpCenterDisplay());
+    }
+  }
+
+  Future<void> updateNeededVolunteer(CreateNeededVolunteer bodyModel,
+      int helpCenterID, int neededVolunteerID) async {
+    emit(HelpCenterLoading());
+    HelpCenterModel? updatedModel = await service.updateNeededVolunteer(
+        bodyModel, helpCenterID, neededVolunteerID);
+    if (updatedModel == null) {
+      emit(HelpCenterError(
+          "Couldnt update", "Couldnt update the volunteer need"));
     } else {
       emit(HelpCenterDisplay());
     }

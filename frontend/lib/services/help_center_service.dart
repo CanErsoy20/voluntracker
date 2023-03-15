@@ -24,10 +24,13 @@ class HelpCenterService {
         dynamic body = json.decode(response.body);
         ResponseModel responseModel = ResponseModel.fromJson(body);
 
-        Map<String, dynamic> map = responseModel.data;
-        map.forEach((key, value) {
-          result.add(HelpCenterModel.fromJson(value));
-        });
+        List<dynamic> map = responseModel.data;
+        for (int i = 0; i < map.length; i++) {
+          result.add(HelpCenterModel.fromJson(map[i]));
+        }
+        // map.forEach((key, value) {
+        //   result.add(HelpCenterModel.fromJson(value));
+        // });
         return result;
       } else {
         debugPrint("Response failed${response.statusCode}");
@@ -86,7 +89,7 @@ class HelpCenterService {
       //TODO: change endpoint
       response = await Api.instance.patchRequest(
           ApiConstant.baseUrl,
-          "${ApiConstant.helpCenters}$helpCenterID/${ApiConstant.neededVolunteers}/$neededVolunteerID",
+          "${ApiConstant.helpCenters}$helpCenterID/${ApiConstant.neededVolunteers}$neededVolunteerID",
           jsonEncode(bodyModel.toJson()));
       if (response.statusCode == 200) {
         HelpCenterModel result = json.decode(response.body);

@@ -3,14 +3,12 @@ class CreateNeededVolunteer {
   String? urgency;
   String? volunteerTypeName;
   String? volunteerTypeCategory;
-  int? helpCenterId;
 
   CreateNeededVolunteer({
     this.quantity,
     this.urgency,
     this.volunteerTypeName,
     this.volunteerTypeCategory,
-    this.helpCenterId,
   });
 
   CreateNeededVolunteer.fromJson(Map<String, dynamic> json) {
@@ -18,7 +16,6 @@ class CreateNeededVolunteer {
     urgency = json['urgency'];
     volunteerTypeName = json['volunteerTypeName'];
     volunteerTypeCategory = json['volunteerTypeCategory'];
-    helpCenterId = json['helpCenterId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,7 +25,6 @@ class CreateNeededVolunteer {
     data['urgency'] = urgency;
     data['volunteerTypeName'] = volunteerTypeName;
     data['volunteerTypeCategory'] = volunteerTypeCategory;
-    data['helpCenterId'] = helpCenterId;
     return data;
   }
 }

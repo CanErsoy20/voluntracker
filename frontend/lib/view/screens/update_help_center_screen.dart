@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
 
 import '../../enums.dart';
+import '../../models/help_center/help_center_model.dart';
 import '../widgets/custom_dropdown_form_field.dart';
 import '../widgets/custom_need_card.dart';
 
@@ -54,9 +55,12 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               ),
               Expanded(
                 child: TabBarView(children: [
-                  _buildVolunteerNeeds(context),
-                  _buildVolunteerNeeds(context),
-                  _buildVolunteerNeeds(context)
+                  _buildVolunteerNeeds(
+                      context, context.read<HelpCenterCubit>().selectedCenter!),
+                  _buildVolunteerNeeds(
+                      context, context.read<HelpCenterCubit>().selectedCenter!),
+                  _buildVolunteerNeeds(
+                      context, context.read<HelpCenterCubit>().selectedCenter!)
                 ]),
               )
             ],
@@ -64,46 +68,57 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     );
   }
 
-  Widget _buildVolunteerNeeds(BuildContext context) {
+  Widget _buildVolunteerNeeds(
+      BuildContext context, HelpCenterModel currentCenter) {
     return Column(
       children: [
         Expanded(
-          child: ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return CustomNeedCard(
-                  needName: "Some example volunteer name",
-                  needCategory: "Some example volunteer category",
-                  needPercent: 0.8,
-                  lastUpdatedAt: "15:17",
-                  leading: Icon(
-                    Icons.warning_amber_sharp,
-                    color: index == 1
-                        ? Colors.green
-                        : index == 2
-                            ? Colors.orange
-                            : Colors.red,
-                  ),
-                  trailing: IconButton(
-                      onPressed: () {
-                        CreateNeededVolunteer newVolunteerNeed =
-                            CreateNeededVolunteer();
-                        newVolunteerNeed.helpCenterId = 2;
-                        // TODO: cubitten getir
-                        NeededVolunteer oldModelFromApi = NeededVolunteer();
-                        _showUpdateNeedDialog(
-                            context, newVolunteerNeed, oldModelFromApi);
-                      },
-                      iconSize: 20,
-                      icon: const Icon(Icons.edit)),
-                );
-              }),
+          child: BlocBuilder<HelpCenterCubit, HelpCenterState>(
+            builder: (context, state) {
+              return ListView.builder(
+                  itemCount: currentCenter.neededVolunteerList!.length,
+                  itemBuilder: (context, index) {
+                    return CustomNeedCard(
+                      needName: currentCenter
+                          .neededVolunteerList![index].volunteerTypeName!,
+                      needCategory: currentCenter
+                          .neededVolunteerList![index].volunteerTypeCategory!,
+                      needPercent: double.parse(currentCenter
+                          .neededVolunteerList![index].quantity!
+                          .toString()),
+                      // (currentCenter.volunteerCapacity! -
+                      //         currentCenter
+                      //             .neededVolunteerList![index].quantity!) /
+                      //     currentCenter.volunteerCapacity!,
+                      lastUpdatedAt:
+                          currentCenter.neededVolunteerList![index].updatedAt!,
+                      leading: Icon(
+                        Icons.warning_amber_sharp,
+                        color:
+                            currentCenter.neededVolunteerList![index].urgency ==
+                                    "Low"
+                                ? Colors.green
+                                : currentCenter.neededVolunteerList![index]
+                                            .urgency ==
+                                        "Medium"
+                                    ? Colors.orange
+                                    : Colors.red,
+                      ),
+                      trailing: IconButton(
+                          onPressed: () {
+                            _showUpdateNeedDialog(context,
+                                currentCenter.neededVolunteerList![index]);
+                          },
+                          iconSize: 20,
+                          icon: const Icon(Icons.edit)),
+                    );
+                  });
+            },
+          ),
         ),
         ElevatedButton(
           onPressed: () {
-            CreateNeededVolunteer newVolunteerNeed = CreateNeededVolunteer();
-            newVolunteerNeed.helpCenterId = 2;
-            _showNewVolunteerDialog(context, newVolunteerNeed);
+            _showNewVolunteerDialog(context);
           },
           child: const Text("Add New"),
         )
@@ -111,12 +126,11 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     );
   }
 
-  void _showUpdateNeedDialog(BuildContext context,
-      CreateNeededVolunteer newVolunteerNeed, NeededVolunteer oldModel) {
+  void _showUpdateNeedDialog(BuildContext context, NeededVolunteer oldModel) {
     showDialog(
         context: context,
         builder: (context) {
-          final _formKey = GlobalKey<FormState>();
+          final _formKey1 = GlobalKey<FormState>();
           return AlertDialog(
             actionsAlignment: MainAxisAlignment.end,
             actions: [
@@ -127,21 +141,24 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // TODO: sent request to API to update with the given parameters
+                    if (_formKey1.currentState!.validate()) {
+                      context.read<HelpCenterCubit>().updateNeededVolunteer(
+                          context.read<HelpCenterCubit>().newVolunteerNeed,
+                          1,
+                          oldModel.id!);
+                      context.read<HelpCenterCubit>().newVolunteerNeed =
+                          CreateNeededVolunteer();
+                      Navigator.pop(context);
                     }
-                    Navigator.pop(context);
                   },
                   child: const Text("Update"))
             ],
-            content:
-                _buildNeededVolunteerForm(_formKey, newVolunteerNeed, oldModel),
+            content: _buildNeededVolunteerForm(_formKey1, oldModel),
           );
         });
   }
 
-  void _showNewVolunteerDialog(
-      BuildContext context, CreateNeededVolunteer newVolunteerNeed) {
+  void _showNewVolunteerDialog(BuildContext context) {
     showDialog(
         context: context,
         builder: (context) {
@@ -157,28 +174,31 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               TextButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      context
-                          .read<HelpCenterCubit>()
-                          .createNeededVolunteer(newVolunteerNeed, 2);
+                      context.read<HelpCenterCubit>().createNeededVolunteer(
+                          context.read<HelpCenterCubit>().newVolunteerNeed, 1);
+                      context.read<HelpCenterCubit>().newVolunteerNeed =
+                          CreateNeededVolunteer();
                       Navigator.pop(context);
                     }
                   },
                   child: const Text("Add New Need"))
             ],
-            content: _buildNeededVolunteerForm(_formKey, newVolunteerNeed),
+            content: _buildNeededVolunteerForm(_formKey),
           );
         });
   }
 
-  Form _buildNeededVolunteerForm(
-      GlobalKey<FormState> formKey, CreateNeededVolunteer newVolunteerNeed,
+  Form _buildNeededVolunteerForm(GlobalKey<FormState> formKey,
       [NeededVolunteer? oldModel]) {
     List<String> volunteerTypeNames =
         VolunteerTypeName.values.map((e) => e.name).toList();
     List<String> volunteerTypeCategory =
         VolunteerTypeCategory.values.map((e) => e.name).toList();
     List<String> urgency = Urgency.values.map((e) => e.name).toList();
-    oldModel != null ? newVolunteerNeed = oldModel : null;
+
+    oldModel != null
+        ? context.read<HelpCenterCubit>().newVolunteerNeed = oldModel
+        : null;
 
     return Form(
       key: formKey,
@@ -192,28 +212,36 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               list: volunteerTypeCategory,
               label: "Category",
               onChanged: (value) {
-                newVolunteerNeed.volunteerTypeCategory = value;
+                context
+                    .read<HelpCenterCubit>()
+                    .newVolunteerNeed
+                    .volunteerTypeCategory = value;
               },
             ),
             CustomDropdownFormField(
               list: volunteerTypeNames,
               label: "Name",
               onChanged: (value) {
-                newVolunteerNeed.volunteerTypeName = value;
+                context
+                    .read<HelpCenterCubit>()
+                    .newVolunteerNeed
+                    .volunteerTypeName = value;
               },
             ),
             CustomDropdownFormField(
               list: urgency,
               label: "Urgency",
               onChanged: (value) {
-                newVolunteerNeed.urgency = value;
+                context.read<HelpCenterCubit>().newVolunteerNeed.urgency =
+                    value;
               },
             ),
             CustomFormField(
                 hint: "Ex: 50",
                 label: "Quantity",
                 onChanged: (value) {
-                  newVolunteerNeed.quantity = int.tryParse(value);
+                  context.read<HelpCenterCubit>().newVolunteerNeed.quantity =
+                      int.tryParse(value);
                 },
                 customValidator: (value) {
                   if (isInt(value!)) {

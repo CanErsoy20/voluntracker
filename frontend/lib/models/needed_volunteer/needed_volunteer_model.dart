@@ -13,7 +13,6 @@ class NeededVolunteer extends CreateNeededVolunteer {
     urgency = json['urgency'];
     volunteerTypeName = json['volunteerTypeName'];
     volunteerTypeCategory = json['volunteerTypeCategory'];
-    helpCenterId = json['helpCenterId'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -25,7 +24,6 @@ class NeededVolunteer extends CreateNeededVolunteer {
     data['urgency'] = urgency;
     data['volunteerTypeName'] = volunteerTypeName;
     data['volunteerTypeCategory'] = volunteerTypeCategory;
-    data['helpCenterId'] = helpCenterId;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     return data;
