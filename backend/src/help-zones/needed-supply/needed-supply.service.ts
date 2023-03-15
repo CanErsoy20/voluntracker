@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { OrderBy } from 'src/types';
 import { CreateNeededSupplyDto } from './dto/create-needed-supply.dto';
 import { UpdateNeededSupplyDto } from './dto/update-needed-supply.dto';
 
 @Injectable()
 export class NeededSupplyService {
+  constructor(private readonly prisma: PrismaService) {}
+
   create(createNeededSupplyDto: CreateNeededSupplyDto) {
     return 'This action adds a new neededSupply';
   }
@@ -22,5 +26,14 @@ export class NeededSupplyService {
 
   remove(id: number) {
     return `This action removes a #${id} neededSupply`;
+  }
+
+  async findAllNeededSupplyAtHelpCenter(helpCenterId: number, orderBy: OrderBy | null) {
+    return this.prisma.neededSupply.findMany({
+      where: { helpCenterId },
+      orderBy: {
+        updatedAt: orderBy,
+      },
+    });
   }
 }

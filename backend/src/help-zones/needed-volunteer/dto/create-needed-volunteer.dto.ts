@@ -12,18 +12,18 @@ export class CreateNeededVolunteerDto {
 
   @ApiProperty({ required: true, nullable: false, enum: VolunteerTypeEnum })
   @IsDefined()
-  @IsString()
+  @IsEnum(VolunteerTypeEnum)
   volunteerTypeName: VolunteerTypeEnum;
 
   @ApiProperty({ required: true, nullable: false, enum: VolunteerCategoryEnum })
   @IsDefined()
-  @IsString()
+  @IsEnum(VolunteerCategoryEnum)
   volunteerTypeCategory: VolunteerCategoryEnum;
 
-  @ApiProperty({ required: true, nullable: false })
-  @IsDefined()
-  @IsNumber()
-  helpCenterId: number;
+  // @ApiProperty({ required: true, nullable: false })
+  // @IsDefined()
+  // @IsNumber()
+  // helpCenterId: number;
 
   @ApiProperty({ required: false, nullable: true, enum: UrgencyEnum })
   @IsOptional()

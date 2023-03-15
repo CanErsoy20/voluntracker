@@ -15,26 +15,26 @@ datasource db {
 }
 
 enum SupplyTypeEnum {
-  pasta
+  Pasta
 }
 
 enum SupplyCategoryEnum {
-  food
-  drink
+  Food
+  Drink
 }
 enum VolunteerTypeEnum {
-  carrier
+  Carrier
 }
 
 enum VolunteerCategoryEnum {
-  managament
-  labor
+  Management
+  Labor
 }
 
 enum UrgencyEnum {
-  low
-  medium
-  high
+  Low
+  Medium
+  High
 }
 
 model HelpCenter {
@@ -72,12 +72,12 @@ model Supply {
   id       Int @id @default(autoincrement())
   quantity Int
 
-  supplyType SupplyType @relation(fields: [supplyTypeName, supplyTypeCategory], references: [typeName, category])
   supplyTypeName SupplyTypeEnum
   supplyTypeCategory SupplyCategoryEnum
+  supplyType SupplyType @relation(fields: [supplyTypeName, supplyTypeCategory], references: [typeName, category])
 
-  helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
   helpCenterId Int
+  helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -89,12 +89,12 @@ model NeededSupply {
   quantity Int
   urgency  UrgencyEnum?
 
-  supplyType SupplyType @relation(fields: [supplyTypeName, supplyTypeCategory], references: [typeName, category])
   supplyTypeName SupplyTypeEnum
   supplyTypeCategory SupplyCategoryEnum
+  supplyType SupplyType @relation(fields: [supplyTypeName, supplyTypeCategory], references: [typeName, category])
 
-  helpCenter HelpCenter @relation(fields: [helpCenterId], references: [id])
   helpCenterId Int
+  helpCenter HelpCenter @relation(fields: [helpCenterId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -123,8 +123,8 @@ model User {
   phone    String? @unique
   password String
 
-  userRole  UserRole?    @relation(fields: [roleId], references: [id])
   roleId    Int?
+  userRole  UserRole?    @relation(fields: [roleId], references: [id])
 
   volunteer Volunteer?
 
@@ -160,32 +160,29 @@ model Permission {
 model RolePermission {
   id Int @id @default(autoincrement())
 
-  permission   Permission @relation(fields: [permissionId], references: [id])
   permissionId Int
+  permission   Permission @relation(fields: [permissionId], references: [id])
 
-  role   UserRole @relation(fields: [roleId], references: [id])
   roleId Int
+  role   UserRole @relation(fields: [roleId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-
-
-
 model Volunteer {
   id     Int  @id @default(autoincrement())
-  user   User @relation(fields: [userId], references: [id])
   userId Int @unique
+  user   User @relation(fields: [userId], references: [id])
 
   // one-to-many relationship between Volunteer and VolunteerType
-  volunteerType   VolunteerType @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
   volunteerTypeName VolunteerTypeEnum
   volunteerTypeCategory VolunteerCategoryEnum
+  volunteerType   VolunteerType @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
 
   // one-to-many relationship between HelpCenter and Volunteer
-  helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
   helpCenterId Int
+  helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -198,13 +195,13 @@ model NeededVolunteer {
   urgency  UrgencyEnum?
 
   // one-to-many relationship between NeededVolunteer and VolunteerType
-  volunteerType   VolunteerType @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
   volunteerTypeName VolunteerTypeEnum
   volunteerTypeCategory VolunteerCategoryEnum
+  volunteerType   VolunteerType @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
 
   // one-to-many relationship between HelpCenter and NeededVolunteer
-  helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
   helpCenterId Int
+  helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
