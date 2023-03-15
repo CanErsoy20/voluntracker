@@ -1,6 +1,7 @@
 import { ArgumentsHost, Catch, HttpStatus, Logger } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Prisma } from '@prisma/client';
+import { error } from 'console';
 import { Request, Response } from 'express';
 
 @Catch(Prisma.PrismaClientKnownRequestError)
@@ -15,7 +16,7 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
 
     const errorResponse = {
       status: response.status,
-      name: exception?.name,
+      name: 'Prisma DB Exception',
       message,
       method: request.method,
       path: request.url,
@@ -29,5 +30,17 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
         2,
       )}`,
     );
+
+    switch (exception.code) {
+      case 'P2002':
+        response.json({
+          ...errorResponse,
+          message: `There is a unique constraint validation, the process couldn't be completed because of ${exception.meta.target}`,
+        });
+        break;
+
+      default:
+        break;
+    }
   }
 }
