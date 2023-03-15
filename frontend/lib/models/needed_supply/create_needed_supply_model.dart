@@ -1,16 +1,14 @@
 class CreateNeededSupply {
   int? quantity;
-  int? urgency;
+  String? urgency;
   String? supplyTypeName;
   String? supplyTypeCategory;
-  int? helpCenterId;
 
   CreateNeededSupply({
     this.quantity,
     this.urgency,
     this.supplyTypeName,
     this.supplyTypeCategory,
-    this.helpCenterId,
   });
 
   CreateNeededSupply.fromJson(Map<String, dynamic> json) {
@@ -18,7 +16,6 @@ class CreateNeededSupply {
     urgency = json['urgency'];
     supplyTypeName = json['supplyTypeName'];
     supplyTypeCategory = json['supplyTypeCategory'];
-    helpCenterId = json['helpCenterId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -27,7 +24,6 @@ class CreateNeededSupply {
     data['urgency'] = urgency;
     data['supplyTypeName'] = supplyTypeName;
     data['supplyTypeCategory'] = supplyTypeCategory;
-    data['helpCenterId'] = helpCenterId;
     return data;
   }
 }

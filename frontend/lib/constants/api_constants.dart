@@ -3,4 +3,5 @@ class ApiConstant {
   //static String baseUrl = "http://92.205.26.185/api/v1";
   static String helpCenters = "helpCenters/";
   static String neededVolunteers = "neededVolunteers/";
+  static String neededSupply = "neededSupply/";
 }

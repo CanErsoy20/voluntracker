@@ -5,3 +5,7 @@ enum VolunteerTypeName { Carrier }
 enum VolunteerTypeCategory { Labor }
 
 enum Urgency { Low, Medium, High }
+
+enum SupplyTypeName { Pasta }
+
+enum SupplyTypeCategory { Food, Drink }

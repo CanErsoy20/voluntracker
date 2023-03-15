@@ -1,4 +1,5 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
+import 'package:afet_takip/enums.dart';
 import 'package:afet_takip/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:afet_takip/models/needed_volunteer/needed_volunteer_model.dart';
 import 'package:afet_takip/view/widgets/custom_text_field.dart';
@@ -6,8 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
 
-import '../../enums.dart';
 import '../../models/help_center/help_center_model.dart';
+import '../../models/needed_supply/create_needed_supply_model.dart';
+import '../../models/needed_supply/needed_supply_model.dart';
 import '../widgets/custom_dropdown_form_field.dart';
 import '../widgets/custom_need_card.dart';
 
@@ -59,7 +61,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                       context,
                       context.read<HelpCenterCubit>().selectedCenter ??
                           context.read<HelpCenterCubit>().helpCenterList![1]),
-                  _buildVolunteerNeeds(
+                  _buildSupplyNeeds(
                       context,
                       context.read<HelpCenterCubit>().selectedCenter ??
                           context.read<HelpCenterCubit>().helpCenterList![1]),
@@ -112,7 +114,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                       ),
                       trailing: IconButton(
                           onPressed: () {
-                            _showUpdateNeedDialog(context,
+                            _showUpdateVolunteerNeedDialog(context,
                                 currentCenter.neededVolunteerList![index]);
                           },
                           iconSize: 20,
@@ -132,7 +134,9 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     );
   }
 
-  void _showUpdateNeedDialog(BuildContext context, NeededVolunteer oldModel) {
+  // Needed Volunteer methods
+  void _showUpdateVolunteerNeedDialog(
+      BuildContext context, NeededVolunteer oldModel) {
     showDialog(
         context: context,
         builder: (context) {
@@ -159,7 +163,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Update"))
             ],
-            content: _buildNeededVolunteerForm(_formKey1, oldModel),
+            content: _buildNeededVolunteerForm(
+                _formKey1, "Update Volunteer Need", oldModel),
           );
         });
   }
@@ -189,12 +194,13 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Add New Need"))
             ],
-            content: _buildNeededVolunteerForm(_formKey),
+            content: _buildNeededVolunteerForm(
+                _formKey, "Create New Volunteer Need"),
           );
         });
   }
 
-  Form _buildNeededVolunteerForm(GlobalKey<FormState> formKey,
+  Form _buildNeededVolunteerForm(GlobalKey<FormState> formKey, String title,
       [NeededVolunteer? oldModel]) {
     List<String> volunteerTypeNames =
         VolunteerTypeName.values.map((e) => e.name).toList();
@@ -211,8 +217,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const Center(
-              child: Text("Create New Needed Volunteer"),
+            Center(
+              child: Text(title),
             ),
             CustomDropdownFormField(
               list: volunteerTypeCategory,
@@ -243,7 +249,11 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomFormField(
-                hint: "Ex: 50",
+                hint: context
+                    .read<HelpCenterCubit>()
+                    .newVolunteerNeed
+                    .quantity
+                    .toString(),
                 label: "Quantity",
                 onChanged: (value) {
                   context.read<HelpCenterCubit>().newVolunteerNeed.quantity =
@@ -263,6 +273,200 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  // Needed supply methods
+  Form _buildNeededSupplyForm(GlobalKey<FormState> formKey, String title,
+      [NeededSupply? oldModel]) {
+    List<String> supplyTypeNames =
+        SupplyTypeName.values.map((e) => e.name).toList();
+    List<String> supplyTypeCategory =
+        SupplyTypeCategory.values.map((e) => e.name).toList();
+    List<String> urgency = Urgency.values.map((e) => e.name).toList();
+
+    oldModel != null
+        ? context.read<HelpCenterCubit>().newSupplyNeed = oldModel
+        : null;
+
+    return Form(
+      key: formKey,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Center(
+              child: Text(title),
+            ),
+            CustomDropdownFormField(
+              list: supplyTypeCategory,
+              label: "Category",
+              onChanged: (value) {
+                context
+                    .read<HelpCenterCubit>()
+                    .newSupplyNeed
+                    .supplyTypeCategory = value;
+              },
+            ),
+            CustomDropdownFormField(
+              list: supplyTypeNames,
+              label: "Name",
+              onChanged: (value) {
+                context.read<HelpCenterCubit>().newSupplyNeed.supplyTypeName =
+                    value;
+              },
+            ),
+            CustomDropdownFormField(
+              list: urgency,
+              label: "Urgency",
+              onChanged: (value) {
+                context.read<HelpCenterCubit>().newSupplyNeed.urgency = value;
+              },
+            ),
+            CustomFormField(
+                hint: context
+                    .read<HelpCenterCubit>()
+                    .newSupplyNeed
+                    .quantity
+                    .toString(),
+                label: "Quantity",
+                onChanged: (value) {
+                  context.read<HelpCenterCubit>().newSupplyNeed.quantity =
+                      int.tryParse(value);
+                },
+                customValidator: (value) {
+                  if (isInt(value!)) {
+                    if (int.parse(value) > 0) {
+                      return null;
+                    } else {
+                      return "Quantity must be a number >= 0";
+                    }
+                  } else {
+                    return "Quantity must be a number => 0";
+                  }
+                })
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showNewSupplyDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          final _formKey = GlobalKey<FormState>();
+          return AlertDialog(
+            actionsAlignment: MainAxisAlignment.end,
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Cancel")),
+              TextButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      context.read<HelpCenterCubit>().createNeededSupply(
+                          context.read<HelpCenterCubit>().newSupplyNeed, 1);
+                      context.read<HelpCenterCubit>().newSupplyNeed =
+                          CreateNeededSupply();
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text("Add New Need"))
+            ],
+            content: _buildNeededSupplyForm(_formKey, "Create New Supply Need"),
+          );
+        });
+  }
+
+  void _showUpdateSupplyNeedDialog(
+      BuildContext context, NeededSupply oldModel) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          final _formKey1 = GlobalKey<FormState>();
+          return AlertDialog(
+            actionsAlignment: MainAxisAlignment.end,
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Cancel")),
+              TextButton(
+                  onPressed: () {
+                    if (_formKey1.currentState!.validate()) {
+                      context.read<HelpCenterCubit>().updateNeededSupply(
+                          context.read<HelpCenterCubit>().newSupplyNeed,
+                          1,
+                          oldModel.id!);
+                      context.read<HelpCenterCubit>().newSupplyNeed =
+                          CreateNeededSupply();
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text("Update"))
+            ],
+            content: _buildNeededSupplyForm(
+                _formKey1, "Update Supply Need", oldModel),
+          );
+        });
+  }
+
+  Widget _buildSupplyNeeds(
+      BuildContext context, HelpCenterModel currentCenter) {
+    return Column(
+      children: [
+        Expanded(
+          child: BlocBuilder<HelpCenterCubit, HelpCenterState>(
+            builder: (context, state) {
+              return ListView.builder(
+                  itemCount: currentCenter.neededSupplyList!.length,
+                  itemBuilder: (context, index) {
+                    return CustomNeedCard(
+                      needName: currentCenter
+                          .neededSupplyList![index].supplyTypeName!,
+                      needCategory: currentCenter
+                          .neededSupplyList![index].supplyTypeCategory!,
+                      needPercent: double.parse(currentCenter
+                          .neededSupplyList![index].quantity!
+                          .toString()),
+                      // (currentCenter.volunteerCapacity! -
+                      //         currentCenter
+                      //             .neededVolunteerList![index].quantity!) /
+                      //     currentCenter.volunteerCapacity!,
+                      lastUpdatedAt:
+                          currentCenter.neededSupplyList![index].updatedAt!,
+                      leading: Icon(
+                        Icons.warning_amber_sharp,
+                        color: currentCenter.neededSupplyList![index].urgency ==
+                                "Low"
+                            ? Colors.green
+                            : currentCenter.neededSupplyList![index].urgency ==
+                                    "Medium"
+                                ? Colors.orange
+                                : Colors.red,
+                      ),
+                      trailing: IconButton(
+                          onPressed: () {
+                            _showUpdateSupplyNeedDialog(context,
+                                currentCenter.neededSupplyList![index]);
+                          },
+                          iconSize: 20,
+                          icon: const Icon(Icons.edit)),
+                    );
+                  });
+            },
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            _showNewSupplyDialog(context);
+          },
+          child: const Text("Add New"),
+        )
+      ],
     );
   }
 }
