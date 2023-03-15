@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
 
+import '../widgets/custom_text_field.dart';
+
 class CreateHelpCenterScreen extends StatefulWidget {
   const CreateHelpCenterScreen({Key? key}) : super(key: key);
 
@@ -39,21 +41,21 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                 children: [
                   CustomFormField(
                     label: "Name",
-                    hint: "Name",
+                    hint: "Ex: Ahmet Taner Kışlalı Spor Salonu",
                     onChanged: (value) {
                       newCenter.name = value;
                     },
                   ),
                   CustomFormField(
                     label: "Adress",
-                    hint: "Adress",
+                    hint: "Ex: Koru, 2580. Sk. No:2, 06810 Yenimahalle/Ankara",
                     onChanged: (value) {
                       newCenter.contactInfo!.address = value;
                     },
                   ),
                   CustomFormField(
                     label: "Latitude",
-                    hint: "Latitude",
+                    hint: "Ex: 39.88",
                     onChanged: (value) {
                       newCenter.location!.lat = double.tryParse(value);
                     },
@@ -61,7 +63,7 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                       if (value == null || value.isEmpty) {
                         return "Latitude cannot be blank";
                       } else if (!isFloat(value)) {
-                        return "Longitude should be a number";
+                        return "Latitude should be a number";
                       } else {
                         return null;
                       }
@@ -69,7 +71,7 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                   ),
                   CustomFormField(
                     label: "Longitude",
-                    hint: "Longitude",
+                    hint: "Ex: 32.68",
                     customValidator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Longitude cannot be blank";
@@ -85,35 +87,35 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                   ),
                   CustomFormField(
                     label: "Busiest Hours Start At",
-                    hint: "Busiest Hours Start At",
+                    hint: "Ex: 12:00",
                     onChanged: (value) {
                       newCenter.busiestHours!.start = value;
                     },
                   ),
                   CustomFormField(
                     label: "Busiest Hours End At",
-                    hint: "Busiest Hours End At",
+                    hint: "Ex: 16:00",
                     onChanged: (value) {
                       newCenter.busiestHours!.end = value;
                     },
                   ),
                   CustomFormField(
                     label: "Help Center Opens At",
-                    hint: "Help Center Opens At",
+                    hint: "Ex: 8:00",
                     onChanged: (value) {
                       newCenter.openCloseInfo!.start = value;
                     },
                   ),
                   CustomFormField(
                     label: "Help Center Closes At",
-                    hint: "Help Center Closes At",
+                    hint: "23:00",
                     onChanged: (value) {
                       newCenter.openCloseInfo!.end = value;
                     },
                   ),
                   CustomFormField(
                     label: "E-mail",
-                    hint: "E-mail",
+                    hint: "Ex: examle@gmail.com",
                     onChanged: (value) {
                       newCenter.contactInfo!.email = value;
                     },
@@ -136,14 +138,14 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                   ),
                   CustomFormField(
                     label: "Additional Info",
-                    hint: "Additional Info",
+                    hint: "Ex: This help center distributes...",
                     onChanged: (value) {
                       newCenter.additionalInfo = value;
                     },
                   ),
                   CustomFormField(
                     label: "Volunteer Capacity",
-                    hint: "Volunteer Capacity",
+                    hint: "Ex: 250",
                     onChanged: (value) {
                       newCenter.volunteerCapacity = int.tryParse(value);
                     },
@@ -151,52 +153,15 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                   ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          print("Sending");
                           context
                               .read<HelpCenterCubit>()
                               .createHelpCenter(newCenter);
-                          print("sent");
                         }
-                        print("not valid");
                       },
-                      child: Text("Submit"))
+                      child: const Text("Add New Help Center"))
                 ],
               ),
             )),
-      ),
-    );
-  }
-}
-
-class CustomFormField extends StatelessWidget {
-  const CustomFormField(
-      {super.key,
-      required this.hint,
-      required this.label,
-      this.customValidator,
-      this.onChanged});
-  final String hint;
-  final String label;
-  final String? Function(String?)? customValidator;
-  final void Function(String)? onChanged;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextFormField(
-        onChanged: onChanged,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        decoration: InputDecoration(
-            hintText: hint,
-            labelText: label,
-            border: const OutlineInputBorder()),
-        validator: customValidator ??
-            (value) {
-              if (value == null || value.isEmpty) {
-                return "$label cannot be blank";
-              }
-              return null;
-            },
       ),
     );
   }
