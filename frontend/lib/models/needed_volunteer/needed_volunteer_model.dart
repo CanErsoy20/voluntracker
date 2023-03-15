@@ -1,22 +1,11 @@
-class NeededVolunteer {
+import 'create_needed_volunteer_model.dart';
+
+class NeededVolunteer extends CreateNeededVolunteer {
   int? id;
-  int? quantity;
-  int? urgency;
-  String? volunteerTypeName;
-  String? volunteerTypeCategory;
-  int? helpCenterId;
   String? createdAt;
   String? updatedAt;
 
-  NeededVolunteer(
-      {this.id,
-      this.quantity,
-      this.urgency,
-      this.volunteerTypeName,
-      this.volunteerTypeCategory,
-      this.helpCenterId,
-      this.createdAt,
-      this.updatedAt});
+  NeededVolunteer({this.id, this.createdAt, this.updatedAt});
 
   NeededVolunteer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -24,7 +13,6 @@ class NeededVolunteer {
     urgency = json['urgency'];
     volunteerTypeName = json['volunteerTypeName'];
     volunteerTypeCategory = json['volunteerTypeCategory'];
-    helpCenterId = json['helpCenterId'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -36,7 +24,6 @@ class NeededVolunteer {
     data['urgency'] = urgency;
     data['volunteerTypeName'] = volunteerTypeName;
     data['volunteerTypeCategory'] = volunteerTypeCategory;
-    data['helpCenterId'] = helpCenterId;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     return data;

@@ -1,22 +1,11 @@
-class NeededSupply {
+import 'package:afet_takip/models/needed_supply/create_needed_supply_model.dart';
+
+class NeededSupply extends CreateNeededSupply {
   int? id;
-  int? quantity;
-  int? urgency;
-  String? supplyTypeName;
-  String? supplyTypeCategory;
-  int? helpCenterId;
   String? createdAt;
   String? updatedAt;
 
-  NeededSupply(
-      {this.id,
-      this.quantity,
-      this.urgency,
-      this.supplyTypeName,
-      this.supplyTypeCategory,
-      this.helpCenterId,
-      this.createdAt,
-      this.updatedAt});
+  NeededSupply({this.id, this.createdAt, this.updatedAt});
 
   NeededSupply.fromJson(Map<String, dynamic> json) {
     id = json['id'];
