@@ -15,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
+    context.read<HelpCenterCubit>().getHelpCenters();
     return Scaffold(
       appBar: AppBar(
         title: Text("Afet Takip"),
@@ -37,6 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           .pushNamed(Routes.createHelpCenter));
                 },
                 child: Text("Create Help Center Screen")),
+            ElevatedButton(
+                onPressed: () {
+                  context.read<HelpCenterCubit>().getHelpCenters().then(
+                      (value) => Navigator.of(context)
+                          .pushNamed(Routes.updateHelpCenter));
+                },
+                child: Text("Update Help Center Screen"))
           ],
         ),
       ),

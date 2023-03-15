@@ -1,4 +1,5 @@
 import 'package:afet_takip/models/help_center/busiest_hours_model.dart';
+import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 
 import '../needed_supply/needed_supply_model.dart';
 import '../needed_volunteer/needed_volunteer_model.dart';
@@ -6,31 +7,17 @@ import 'contact_info_model.dart';
 import 'location_model.dart';
 import 'open_close_info_model.dart';
 
-class HelpCenterModel {
+class HelpCenterModel extends CreateHelpCenter {
   int? id;
-  String? name;
-  String? additionalInfo;
-  int? volunteerCapacity;
   String? createdAt;
   String? updatedAt;
-  ContactInfo? contactInfo;
-  Location? location;
-  BusiestHours? busiestHours;
-  OpenCloseInfo? openCloseInfo;
   List<NeededVolunteer>? neededVolunteerList;
   List<NeededSupply>? neededSupplyList;
 
   HelpCenterModel(
       {this.id,
-      this.name,
-      this.additionalInfo,
-      this.volunteerCapacity,
       this.createdAt,
       this.updatedAt,
-      this.contactInfo,
-      this.location,
-      this.busiestHours,
-      this.openCloseInfo,
       this.neededVolunteerList,
       this.neededSupplyList});
 

@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
+import '../../helper_functions.dart';
 import '../../models/help_center/help_center_model.dart';
+import '../widgets/custom_need_card.dart';
 
 class HelpCenterDetailScreen extends StatelessWidget {
   const HelpCenterDetailScreen({super.key});
@@ -59,12 +60,9 @@ class HelpCenterDetailScreen extends StatelessWidget {
                   expandedCrossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                        "Help Center Opens At: ${currentCenter.openCloseInfo!.start}"),
+                        "Help Center Opens - Closes: ${HelperFunctions.formatDateToTime(currentCenter.openCloseInfo!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.openCloseInfo!.end!)}"),
                     Text(
-                        "Help Center Closes At: ${currentCenter.openCloseInfo!.end}"),
-                    Text(
-                        "Busy Hours Start: ${currentCenter.busiestHours!.start}"),
-                    Text("Busy Hours End: ${currentCenter.busiestHours!.end}"),
+                        "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.end!)}"),
                   ]),
               Container(
                 height: 50,
@@ -98,8 +96,8 @@ class HelpCenterDetailScreen extends StatelessWidget {
                 child: Container(
                   color: Colors.grey.shade400,
                   child: TabBarView(children: [
-                    _buildSupplyNeeds(context),
-                    _buildSupplyNeeds(context)
+                    _buildVolunteerNeeds(currentCenter),
+                    _buildSupplyNeeds(currentCenter)
                   ]),
                 ),
               )
@@ -108,31 +106,74 @@ class HelpCenterDetailScreen extends StatelessWidget {
         ));
   }
 
-  Widget _buildSupplyNeeds(BuildContext context) {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              color: Colors.white,
-              elevation: 10,
-              child: ListTile(
-                title: Text("Some example supply name"),
-                subtitle: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: LinearPercentIndicator(
-                    animation: true,
-                    lineHeight: 20.0,
-                    animationDuration: 2500,
-                    percent: 0.8,
-                    center: Text("80.0%"),
-                    barRadius: Radius.circular(20),
-                    progressColor: Colors.green,
-                  ),
+  Widget _buildVolunteerNeeds(HelpCenterModel currentCenter) {
+    return currentCenter.neededVolunteerList!.isNotEmpty
+        ? ListView.builder(
+            shrinkWrap: true,
+            itemCount: currentCenter.neededVolunteerList!.length,
+            itemBuilder: (context, index) {
+              return CustomNeedCard(
+                needName: currentCenter
+                    .neededVolunteerList![index].volunteerTypeName!,
+                needCategory: currentCenter
+                    .neededVolunteerList![index].volunteerTypeCategory!,
+                needPercent: double.parse(currentCenter
+                    .neededVolunteerList![index].quantity!
+                    .toString()),
+                // (currentCenter.volunteerCapacity! -
+                //         currentCenter
+                //             .neededVolunteerList![index].quantity!) /
+                //     currentCenter.volunteerCapacity!,
+                lastUpdatedAt:
+                    currentCenter.neededVolunteerList![index].updatedAt!,
+                leading: Icon(
+                  Icons.warning_amber_sharp,
+                  color:
+                      currentCenter.neededVolunteerList![index].urgency == "Low"
+                          ? Colors.green
+                          : currentCenter.neededVolunteerList![index].urgency ==
+                                  "Medium"
+                              ? Colors.orange
+                              : Colors.red,
                 ),
-              ));
+              );
+            })
+        : Text("No volunteer needed at the moment: ${currentCenter.updatedAt}");
+  }
+
+  Widget _buildSupplyNeeds(HelpCenterModel currentCenter) {
+    // return currentCenter.neededSupplyList!.isNotEmpty
+    //     ? ListView.builder(
+    //         shrinkWrap: true,
+    //         itemCount: currentCenter.neededSupplyList!.length,
+    //         itemBuilder: (context, index) {
+    //           return CustomNeedCard(
+    //             needName:
+    //                 currentCenter.neededSupplyList![index].supplyTypeCategory!,
+    //             needCategory:
+    //                 currentCenter.neededSupplyList![index].supplyTypeCategory!,
+    //             needPercent: 0.8,
+    //             lastUpdatedAt: currentCenter.neededSupplyList![index].updatedAt!
+    //           );
+    //         })
+    //     : Text("No supply needed at the moment: ${currentCenter.updatedAt}");
+    return ListView.builder(
+        itemCount: currentCenter.neededSupplyList!.length,
+        itemBuilder: (context, index) {
+          return CustomNeedCard(
+            needName: "Some example supply name",
+            needCategory: "Some example supply category",
+            needPercent: 0.8,
+            lastUpdatedAt: "15:17",
+            leading: Icon(
+              Icons.warning_amber_sharp,
+              color: index == 1
+                  ? Colors.green
+                  : index == 2
+                      ? Colors.orange
+                      : Colors.red,
+            ),
+          );
         });
   }
 }
