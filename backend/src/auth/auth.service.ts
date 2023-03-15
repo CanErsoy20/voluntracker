@@ -8,7 +8,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import * as argon from 'argon2';
-import { compare as comparePassword } from 'bcrypt';
 import { CreateUserDto } from 'src/auth/dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as authConstants from '../config';
@@ -24,12 +23,12 @@ export class AuthService {
       where: { email },
     });
     if (!user) {
-      throw new UnauthorizedException(`There is something wrong with the user credentials.`);
+      throw new UnauthorizedException(`There is something wrong with logincredentials.`);
     }
 
-    const isPasswordValid = await comparePassword(password, user.password);
+    const isPasswordValid = await argon.verify(user.password, password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException(`There is something wrong with the user credentials.`);
+      throw new UnauthorizedException(`There is something wrong with login credentials.`);
     }
 
     const { ...result } = user;
@@ -37,22 +36,10 @@ export class AuthService {
   }
 
   async login(authDto: AuthDto) {
-    const { email, password } = authDto;
+    const { email } = authDto;
     const user = await this.prisma.user.findUnique({
-      where: {
-        email,
-      },
+      where: { email },
     });
-
-    if (!user) {
-      throw new ForbiddenException('Login credentials are wrong');
-    }
-
-    const passwordMatches = await argon.verify(user.password, password);
-    if (!passwordMatches) {
-      throw new ForbiddenException('Login credentials are wrong');
-    }
-
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
