@@ -36,7 +36,7 @@ class CustomNeedCard extends StatelessWidget {
           subtitle: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // LinearPercentIndicator(
                 //   animation: true,

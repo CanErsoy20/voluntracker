@@ -6,6 +6,7 @@ import { ValidationError } from 'class-validator';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './filters/http-exception-filter.filter';
+import { PrismaClientExceptionFilter } from './filters/prisma-client-exception.filter';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
 
 async function bootstrap() {
@@ -28,6 +29,7 @@ async function bootstrap() {
   // }),
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new PrismaClientExceptionFilter());
   app.useGlobalInterceptors(new TransformInterceptor());
 
   // Swagger setup

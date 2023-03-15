@@ -56,11 +56,17 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               Expanded(
                 child: TabBarView(children: [
                   _buildVolunteerNeeds(
-                      context, context.read<HelpCenterCubit>().selectedCenter!),
+                      context,
+                      context.read<HelpCenterCubit>().selectedCenter ??
+                          context.read<HelpCenterCubit>().helpCenterList![1]),
                   _buildVolunteerNeeds(
-                      context, context.read<HelpCenterCubit>().selectedCenter!),
+                      context,
+                      context.read<HelpCenterCubit>().selectedCenter ??
+                          context.read<HelpCenterCubit>().helpCenterList![1]),
                   _buildVolunteerNeeds(
-                      context, context.read<HelpCenterCubit>().selectedCenter!)
+                      context,
+                      context.read<HelpCenterCubit>().selectedCenter ??
+                          context.read<HelpCenterCubit>().helpCenterList![1])
                 ]),
               )
             ],

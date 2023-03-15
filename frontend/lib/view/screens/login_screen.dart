@@ -15,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
+    context.read<HelpCenterCubit>().getHelpCenters();
     return Scaffold(
       appBar: AppBar(
         title: Text("Afet Takip"),
