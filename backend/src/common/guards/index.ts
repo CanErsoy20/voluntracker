@@ -1,4 +1,4 @@
-export * from './jwt-refresh.guard';
-export * from './jwt.guard';
+export * from './access-token.guard';
 export * from './local.guard';
+export * from './refresh-token.guard';
 
