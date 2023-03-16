@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { HttpResponse } from 'src/common';
-import { SupplyTypeDto } from './dto/create-supply-type.dto';
+import { SupplyTypeDto } from './dto/supply-type.dto';
 import { SupplyTypeEntity } from './entities/supply-type.entity';
 import { SupplyTypeService } from './supply-type.service';
 

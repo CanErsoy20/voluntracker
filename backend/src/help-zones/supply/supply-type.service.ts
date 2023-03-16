@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SupplyTypeDto } from './dto/create-supply-type.dto';
+import { SupplyTypeDto } from './dto/supply-type.dto';
 
 @Injectable()
 export class SupplyTypeService {
@@ -50,7 +50,7 @@ export class SupplyTypeService {
       });
       return supplyType;
     } catch (e) {
-      if (e instanceof PrismaClientKnownRequestError) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
           throw new BadRequestException('The supply type with given type and category already exists.');
         }
