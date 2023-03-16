@@ -6,15 +6,16 @@ import {
   InternalServerErrorException,
   Logger,
   Post,
-  Request,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { HttpResponse } from '../common';
 import { GetCurrentUser, GetCurrentUserId } from '../common/decorators';
-import { JwtAuthGuard, JwtRefreshAuthGuard, LocalAuthGuard } from '../common/guards';
+import { AccessTokenGuard, LocalAuthGuard, RefreshTokenGuard } from '../common/guards';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { Tokens } from './types';
@@ -25,7 +26,7 @@ export class AuthController {
   private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(AuthGuard('local'), LocalAuthGuard)
   @Post('login')
   async login(@Body() authDto: AuthDto) {
     const tokens = await this.authService.login(authDto);
@@ -52,14 +53,14 @@ export class AuthController {
   }
 
   @Post('logout')
-  @UseGuards(JwtAuthGuard)
-  async logout(@GetCurrentUserId() userId: number) {
-    const isSuccessful = await this.authService.logout(userId);
+  @UseGuards(AccessTokenGuard)
+  async logout(@GetCurrentUserId() id: number) {
+    const isSuccessful = await this.authService.logout(id);
     return new HttpResponse(null, 'Logout successful', 200);
   }
 
   @Post('refresh')
-  @UseGuards(JwtRefreshAuthGuard)
+  @UseGuards(RefreshTokenGuard)
   async refresh(@GetCurrentUserId() userId: number, @GetCurrentUser('refreshToken') refreshToken: string) {
     const tokens = await this.authService.refreshTokens(userId, refreshToken);
     return new HttpResponse(tokens, 'Refresh successful', 200);

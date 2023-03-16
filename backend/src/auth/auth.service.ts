@@ -23,12 +23,12 @@ export class AuthService {
       where: { email },
     });
     if (!user) {
-      throw new UnauthorizedException(`There is something wrong with logincredentials.`);
+      throw new ForbiddenException(`There is something wrong with logincredentials.`);
     }
 
     const isPasswordValid = await argon.verify(user.password, password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException(`There is something wrong with login credentials.`);
+      throw new ForbiddenException(`There is something wrong with login credentials.`);
     }
 
     const { ...result } = user;
@@ -40,6 +40,7 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { email },
     });
+
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
@@ -47,9 +48,12 @@ export class AuthService {
   }
 
   async logout(userId: number) {
-    await this.prisma.user.update({
+    await this.prisma.user.updateMany({
       where: {
         id: userId,
+        hashedRefreshToken: {
+          not: null,
+        },
       },
       data: {
         hashedRefreshToken: null,
