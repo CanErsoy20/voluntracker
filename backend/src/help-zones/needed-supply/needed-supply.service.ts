@@ -8,9 +8,7 @@ import { UpdateNeededSupplyDto } from './dto/update-needed-supply.dto';
 export class NeededSupplyService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createNeededSupplyDto: CreateNeededSupplyDto) {
-    return 'This action adds a new neededSupply';
-  }
+  create(createNeededSupplyDto: CreateNeededSupplyDto) {}
 
   findAll() {
     return `This action returns all neededSupply`;
