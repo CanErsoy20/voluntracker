@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { VolunteerCategoryEnum, VolunteerTypeEnum } from '@prisma/client';
+import { VolunteerCategoryEnum, VolunteerType, VolunteerTypeEnum } from '@prisma/client';
 
-export class VolunteerTypeDto {
+export class VolunteerTypeEntity implements VolunteerType {
   @ApiProperty({
     required: true,
     nullable: false,
@@ -21,4 +21,10 @@ export class VolunteerTypeDto {
     enum: VolunteerCategoryEnum,
   })
   category: VolunteerCategoryEnum;
+
+  @ApiProperty({ type: Date })
+  createdAt: Date;
+
+  @ApiProperty({ type: Date })
+  updatedAt: Date;
 }
