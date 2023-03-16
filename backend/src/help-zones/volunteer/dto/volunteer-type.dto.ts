@@ -1,6 +1,6 @@
 import { VolunteerCategoryEnum, VolunteerTypeEnum } from '@prisma/client';
 
-export class CreateVolunteerTypeDto {
+export class VolunteerTypeDto {
   typeName: VolunteerTypeEnum;
   category: VolunteerCategoryEnum;
 }

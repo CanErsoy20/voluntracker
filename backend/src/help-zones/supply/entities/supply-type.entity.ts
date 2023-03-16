@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SupplyCategoryEnum, SupplyTypeEnum } from '@prisma/client';
+import { SupplyCategoryEnum, SupplyType, SupplyTypeEnum } from '@prisma/client';
 
-export class SupplyTypeDto {
+export class SupplyTypeEntity implements SupplyType {
   @ApiProperty({
     required: true,
     nullable: false,
@@ -15,10 +15,16 @@ export class SupplyTypeDto {
   @ApiProperty({
     required: true,
     nullable: false,
-    description: 'Category name of the supply type.',
+    description: 'Type name of the supply type.',
     example: 'Food',
     type: SupplyCategoryEnum,
     enum: SupplyCategoryEnum,
   })
   category: SupplyCategoryEnum;
+
+  @ApiProperty({ type: Date })
+  createdAt: Date;
+
+  @ApiProperty({ type: Date })
+  updatedAt: Date;
 }
