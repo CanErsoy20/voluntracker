@@ -40,3 +40,4 @@ prisma/migrations/*
 /prisma/migrations/
 /prisma/migrations/*
 
+./data

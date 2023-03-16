@@ -330,7 +330,7 @@ export class HelpCentersController {
     @Body() createNeededSupplyDto: CreateNeededSupplyDto,
   ): Promise<HttpResponse<HelpCenterEntity>> {
     const helpCenter = await this.helpCentersService.addNeededSupplyToHelpCenter(+id, createNeededSupplyDto);
-    return new HttpResponse(helpCenter, 'Successfully posted the needed supply to the help center.', 201);
+    return new HttpResponse(helpCenter, 'Successfully added the needed supply to the help center.', 201);
   }
 
   @ApiResponse({

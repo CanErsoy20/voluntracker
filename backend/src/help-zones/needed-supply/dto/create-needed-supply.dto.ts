@@ -19,7 +19,7 @@ export class CreateNeededSupplyDto {
   @IsDefined()
   @IsEnum(SupplyCategoryEnum)
   supplyTypeCategory: SupplyCategoryEnum;
-  
+
   @ApiProperty({ required: false, nullable: true, enum: UrgencyEnum })
   @IsOptional()
   @IsEnum(UrgencyEnum)

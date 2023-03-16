@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { HelpCenter } from '@prisma/client';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { HelpCenter, Prisma } from '@prisma/client';
+import { HttpResponse } from 'src/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
@@ -156,15 +157,26 @@ export class HelpCentersService {
   }
 
   async addNeededSupplyToHelpCenter(helpCenterId: number, createNeededSupplyDto: CreateNeededSupplyDto) {
-    return await this.prisma.helpCenter.update({
-      where: { id: helpCenterId },
-      data: {
-        neededSupply: {
-          create: createNeededSupplyDto,
+    try {
+      const newSupply = await this.prisma.helpCenter.update({
+        where: { id: helpCenterId },
+        data: {
+          neededSupply: {
+            create: createNeededSupplyDto,
+          },
         },
-      },
-      include: { neededSupply: true },
-    });
+        include: { neededSupply: true },
+      });
+      return newSupply;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2003') {
+          throw new BadRequestException(
+            'The supply type you chose does not seem to exist in the system. Please make sure the given supply type and category are in the system by adding them',
+          );
+        }
+      }
+    }
   }
 
   async removeNeededSupplyFromHelpCenter(helpCenterId: number, neededSupplyId: number) {
