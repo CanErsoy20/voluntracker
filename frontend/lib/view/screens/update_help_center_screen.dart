@@ -3,6 +3,7 @@ import 'package:afet_takip/enums.dart';
 import 'package:afet_takip/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:afet_takip/models/needed_volunteer/needed_volunteer_model.dart';
 import 'package:afet_takip/view/widgets/custom_text_field.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
@@ -56,20 +57,29 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                 ),
               ),
               Expanded(
-                child: TabBarView(children: [
-                  _buildVolunteerNeeds(
-                      context,
-                      context.read<HelpCenterCubit>().selectedCenter ??
-                          context.read<HelpCenterCubit>().helpCenterList![1]),
-                  _buildSupplyNeeds(
-                      context,
-                      context.read<HelpCenterCubit>().selectedCenter ??
-                          context.read<HelpCenterCubit>().helpCenterList![1]),
-                  _buildVolunteerNeeds(
-                      context,
-                      context.read<HelpCenterCubit>().selectedCenter ??
-                          context.read<HelpCenterCubit>().helpCenterList![1])
-                ]),
+                child: BlocListener<HelpCenterCubit, HelpCenterState>(
+                  listener: (context, state) {
+                    if (state is HelpCenterError) {
+                      _errorSnackbar(context, state);
+                    } else if (state is HelpCenterSuccess) {
+                      _successSnackbar(context, state);
+                    }
+                  },
+                  child: TabBarView(children: [
+                    _buildVolunteerNeeds(
+                        context,
+                        context.read<HelpCenterCubit>().selectedCenter ??
+                            context.read<HelpCenterCubit>().helpCenterList![1]),
+                    _buildSupplyNeeds(
+                        context,
+                        context.read<HelpCenterCubit>().selectedCenter ??
+                            context.read<HelpCenterCubit>().helpCenterList![1]),
+                    _buildVolunteerNeeds(
+                        context,
+                        context.read<HelpCenterCubit>().selectedCenter ??
+                            context.read<HelpCenterCubit>().helpCenterList![1])
+                  ]),
+                ),
               )
             ],
           )),
@@ -91,13 +101,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                           .neededVolunteerList![index].volunteerTypeName!,
                       needCategory: currentCenter
                           .neededVolunteerList![index].volunteerTypeCategory!,
-                      needPercent: double.parse(currentCenter
-                          .neededVolunteerList![index].quantity!
-                          .toString()),
-                      // (currentCenter.volunteerCapacity! -
-                      //         currentCenter
-                      //             .neededVolunteerList![index].quantity!) /
-                      //     currentCenter.volunteerCapacity!,
+                      quantity:
+                          currentCenter.neededVolunteerList![index].quantity!,
                       lastUpdatedAt:
                           currentCenter.neededVolunteerList![index].updatedAt!,
                       leading: Icon(
@@ -132,6 +137,30 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
         )
       ],
     );
+  }
+
+  void _errorSnackbar(BuildContext context, HelpCenterError state) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          color: Colors.red,
+          title: state.title,
+          message: state.description,
+          contentType: ContentType.failure,
+        )));
+  }
+
+  void _successSnackbar(BuildContext context, HelpCenterSuccess state) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          color: Colors.green,
+          title: state.title,
+          message: state.description,
+          contentType: ContentType.success,
+        )));
   }
 
   // Needed Volunteer methods
@@ -429,13 +458,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                           .neededSupplyList![index].supplyTypeName!,
                       needCategory: currentCenter
                           .neededSupplyList![index].supplyTypeCategory!,
-                      needPercent: double.parse(currentCenter
-                          .neededSupplyList![index].quantity!
-                          .toString()),
-                      // (currentCenter.volunteerCapacity! -
-                      //         currentCenter
-                      //             .neededVolunteerList![index].quantity!) /
-                      //     currentCenter.volunteerCapacity!,
+                      quantity:
+                          currentCenter.neededSupplyList![index].quantity!,
                       lastUpdatedAt:
                           currentCenter.neededSupplyList![index].updatedAt!,
                       leading: Icon(

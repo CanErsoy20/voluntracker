@@ -117,9 +117,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
                     .neededVolunteerList![index].volunteerTypeName!,
                 needCategory: currentCenter
                     .neededVolunteerList![index].volunteerTypeCategory!,
-                needPercent: double.parse(currentCenter
-                    .neededVolunteerList![index].quantity!
-                    .toString()),
+                quantity: currentCenter.neededVolunteerList![index].quantity!,
                 // (currentCenter.volunteerCapacity! -
                 //         currentCenter
                 //             .neededVolunteerList![index].quantity!) /
@@ -142,38 +140,20 @@ class HelpCenterDetailScreen extends StatelessWidget {
   }
 
   Widget _buildSupplyNeeds(HelpCenterModel currentCenter) {
-    // return currentCenter.neededSupplyList!.isNotEmpty
-    //     ? ListView.builder(
-    //         shrinkWrap: true,
-    //         itemCount: currentCenter.neededSupplyList!.length,
-    //         itemBuilder: (context, index) {
-    //           return CustomNeedCard(
-    //             needName:
-    //                 currentCenter.neededSupplyList![index].supplyTypeCategory!,
-    //             needCategory:
-    //                 currentCenter.neededSupplyList![index].supplyTypeCategory!,
-    //             needPercent: 0.8,
-    //             lastUpdatedAt: currentCenter.neededSupplyList![index].updatedAt!
-    //           );
-    //         })
-    //     : Text("No supply needed at the moment: ${currentCenter.updatedAt}");
-    return ListView.builder(
-        itemCount: currentCenter.neededSupplyList!.length,
-        itemBuilder: (context, index) {
-          return CustomNeedCard(
-            needName: "Some example supply name",
-            needCategory: "Some example supply category",
-            needPercent: 0.8,
-            lastUpdatedAt: "15:17",
-            leading: Icon(
-              Icons.warning_amber_sharp,
-              color: index == 1
-                  ? Colors.green
-                  : index == 2
-                      ? Colors.orange
-                      : Colors.red,
-            ),
-          );
-        });
+    return currentCenter.neededSupplyList!.isNotEmpty
+        ? ListView.builder(
+            shrinkWrap: true,
+            itemCount: currentCenter.neededSupplyList!.length,
+            itemBuilder: (context, index) {
+              return CustomNeedCard(
+                  needName: currentCenter
+                      .neededSupplyList![index].supplyTypeCategory!,
+                  needCategory: currentCenter
+                      .neededSupplyList![index].supplyTypeCategory!,
+                  quantity: 8,
+                  lastUpdatedAt:
+                      currentCenter.neededSupplyList![index].updatedAt!);
+            })
+        : Text("No supply needed at the moment: ${currentCenter.updatedAt}");
   }
 }

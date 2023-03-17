@@ -25,13 +25,10 @@ class HelpCenterService {
         dynamic body = json.decode(response.body);
         ResponseModel responseModel = ResponseModel.fromJson(body);
 
-        List<dynamic> map = responseModel.data;
-        for (int i = 0; i < map.length; i++) {
-          result.add(HelpCenterModel.fromJson(map[i]));
+        List<dynamic> list = responseModel.data;
+        for (int i = 0; i < list.length; i++) {
+          result.add(HelpCenterModel.fromJson(list[i]));
         }
-        // map.forEach((key, value) {
-        //   result.add(HelpCenterModel.fromJson(value));
-        // });
         return result;
       } else {
         debugPrint("Response failed${response.statusCode}");
@@ -49,8 +46,9 @@ class HelpCenterService {
       response = await Api.instance.postRequest(ApiConstant.baseUrl,
           ApiConstant.helpCenters, jsonEncode(bodyModel.toJson()));
       if (response.statusCode == 200) {
-        HelpCenterModel result = json.decode(response.body);
-        return result;
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
       } else {
         return null;
       }
@@ -69,9 +67,10 @@ class HelpCenterService {
           ApiConstant.baseUrl,
           "${ApiConstant.helpCenters}$helpCenterID/${ApiConstant.neededVolunteers}",
           jsonEncode(bodyModel.toJson()));
-      if (response.statusCode == 200) {
-        HelpCenterModel result = json.decode(response.body);
-        return result;
+      if (response.statusCode == 201) {
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
       } else {
         return null;
       }
@@ -91,8 +90,9 @@ class HelpCenterService {
           "${ApiConstant.helpCenters}$helpCenterID/${ApiConstant.neededVolunteers}$neededVolunteerID",
           jsonEncode(bodyModel.toJson()));
       if (response.statusCode == 200) {
-        HelpCenterModel result = json.decode(response.body);
-        return result;
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
       } else {
         return null;
       }
@@ -109,9 +109,10 @@ class HelpCenterService {
           ApiConstant.baseUrl,
           "${ApiConstant.helpCenters}$helpCenterID/${ApiConstant.neededSupply}",
           jsonEncode(bodyModel.toJson()));
-      if (response.statusCode == 200) {
-        HelpCenterModel result = json.decode(response.body);
-        return result;
+      if (response.statusCode == 201) {
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
       } else {
         return null;
       }
@@ -129,8 +130,9 @@ class HelpCenterService {
           "${ApiConstant.helpCenters}$helpCenterID/${ApiConstant.neededSupply}$neededSupplyID",
           jsonEncode(bodyModel.toJson()));
       if (response.statusCode == 200) {
-        HelpCenterModel result = json.decode(response.body);
-        return result;
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
       } else {
         return null;
       }

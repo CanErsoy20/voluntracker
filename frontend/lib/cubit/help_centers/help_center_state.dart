@@ -14,3 +14,10 @@ class HelpCenterError extends HelpCenterState {
 
   HelpCenterError(this.title, this.description);
 }
+
+class HelpCenterSuccess extends HelpCenterState {
+  final String title;
+  final String description;
+
+  HelpCenterSuccess(this.title, this.description);
+}

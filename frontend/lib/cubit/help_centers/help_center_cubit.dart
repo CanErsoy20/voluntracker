@@ -33,7 +33,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
       emit(HelpCenterError(
           "Creation failed", "Couldnt't create a new help center"));
     } else {
-      emit(HelpCenterDisplay());
+      emit(HelpCenterSuccess(
+          "Successfully Created", "Successfully created a new help center"));
     }
   }
 
@@ -46,7 +47,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
       emit(HelpCenterError(
           "Creation failed", "Couldnt't create a new volunteer need"));
     } else {
-      emit(HelpCenterDisplay());
+      emit(HelpCenterSuccess(
+          "Successfully Created", "Sucessfully created a new help center"));
     }
   }
 
@@ -57,9 +59,10 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
         bodyModel, helpCenterID, neededVolunteerID);
     if (updatedModel == null) {
       emit(HelpCenterError(
-          "Couldnt update", "Couldnt update the volunteer need"));
+          "Couldn't update", "Couldnt update the volunteer need"));
     } else {
-      emit(HelpCenterDisplay());
+      emit(HelpCenterSuccess(
+          "Successfully Updated", "Successfully updated the volunteer need"));
     }
   }
 
@@ -72,7 +75,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
       emit(HelpCenterError(
           "Creation failed", "Couldnt't create a new supply need"));
     } else {
-      emit(HelpCenterDisplay());
+      emit(HelpCenterSuccess(
+          "Successfully Creation", "Successfully created a new supply need"));
     }
   }
 
@@ -82,9 +86,11 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
     HelpCenterModel? updatedModel = await service.updateNeededSupply(
         bodyModel, helpCenterID, neededSupplyID);
     if (updatedModel == null) {
-      emit(HelpCenterError("Couldnt update", "Couldnt update the supply need"));
+      emit(
+          HelpCenterError("Couldn't update", "Couldnt update the supply need"));
     } else {
-      emit(HelpCenterDisplay());
+      emit(HelpCenterSuccess(
+          "Successfully Updated", "Successfully updated the supply need"));
     }
   }
 }
