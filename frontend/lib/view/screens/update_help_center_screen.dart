@@ -13,6 +13,7 @@ import '../../models/needed_supply/create_needed_supply_model.dart';
 import '../../models/needed_supply/needed_supply_model.dart';
 import '../widgets/custom_dropdown_form_field.dart';
 import '../widgets/custom_need_card.dart';
+import '../widgets/custom_snackbars.dart';
 
 class UpdateHelpCenterScreen extends StatefulWidget {
   const UpdateHelpCenterScreen({super.key});
@@ -60,9 +61,9 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                 child: BlocListener<HelpCenterCubit, HelpCenterState>(
                   listener: (context, state) {
                     if (state is HelpCenterError) {
-                      _errorSnackbar(context, state);
+                      //_errorSnackbar(context, state);
                     } else if (state is HelpCenterSuccess) {
-                      _successSnackbar(context, state);
+                      CustomSnackbars.successSnackbar(context, ",", "");
                     }
                   },
                   child: TabBarView(children: [
@@ -84,6 +85,10 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ],
           )),
     );
+  }
+
+  void println() {
+    print("hello");
   }
 
   Widget _buildVolunteerNeeds(
@@ -137,30 +142,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
         )
       ],
     );
-  }
-
-  void _errorSnackbar(BuildContext context, HelpCenterError state) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        content: AwesomeSnackbarContent(
-          color: Colors.red,
-          title: state.title,
-          message: state.description,
-          contentType: ContentType.failure,
-        )));
-  }
-
-  void _successSnackbar(BuildContext context, HelpCenterSuccess state) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          color: Colors.green,
-          title: state.title,
-          message: state.description,
-          contentType: ContentType.success,
-        )));
   }
 
   // Needed Volunteer methods
