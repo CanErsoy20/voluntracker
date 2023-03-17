@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:afet_takip/constants/api_constants.dart';
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
+import 'package:afet_takip/models/needed_supply/create_needed_supply_model.dart';
 import 'package:afet_takip/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -24,13 +25,10 @@ class HelpCenterService {
         dynamic body = json.decode(response.body);
         ResponseModel responseModel = ResponseModel.fromJson(body);
 
-        List<dynamic> map = responseModel.data;
-        for (int i = 0; i < map.length; i++) {
-          result.add(HelpCenterModel.fromJson(map[i]));
+        List<dynamic> list = responseModel.data;
+        for (int i = 0; i < list.length; i++) {
+          result.add(HelpCenterModel.fromJson(list[i]));
         }
-        // map.forEach((key, value) {
-        //   result.add(HelpCenterModel.fromJson(value));
-        // });
         return result;
       } else {
         debugPrint("Response failed${response.statusCode}");
@@ -48,8 +46,9 @@ class HelpCenterService {
       response = await Api.instance.postRequest(ApiConstant.baseUrl,
           ApiConstant.helpCenters, jsonEncode(bodyModel.toJson()));
       if (response.statusCode == 200) {
-        HelpCenterModel result = json.decode(response.body);
-        return result;
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
       } else {
         return null;
       }
@@ -64,14 +63,14 @@ class HelpCenterService {
   ) async {
     try {
       Response? response;
-      //TODO: change endpoint
       response = await Api.instance.postRequest(
           ApiConstant.baseUrl,
           "${ApiConstant.helpCenters}$helpCenterID/${ApiConstant.neededVolunteers}",
           jsonEncode(bodyModel.toJson()));
-      if (response.statusCode == 200) {
-        HelpCenterModel result = json.decode(response.body);
-        return result;
+      if (response.statusCode == 201) {
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
       } else {
         return null;
       }
@@ -86,14 +85,54 @@ class HelpCenterService {
       int neededVolunteerID) async {
     try {
       Response? response;
-      //TODO: change endpoint
       response = await Api.instance.patchRequest(
           ApiConstant.baseUrl,
           "${ApiConstant.helpCenters}$helpCenterID/${ApiConstant.neededVolunteers}$neededVolunteerID",
           jsonEncode(bodyModel.toJson()));
       if (response.statusCode == 200) {
-        HelpCenterModel result = json.decode(response.body);
-        return result;
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<HelpCenterModel?> createNeededSupply(
+      CreateNeededSupply bodyModel, int helpCenterID) async {
+    try {
+      Response? response;
+      response = await Api.instance.postRequest(
+          ApiConstant.baseUrl,
+          "${ApiConstant.helpCenters}$helpCenterID/${ApiConstant.neededSupply}",
+          jsonEncode(bodyModel.toJson()));
+      if (response.statusCode == 201) {
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<HelpCenterModel?> updateNeededSupply(CreateNeededSupply bodyModel,
+      int helpCenterID, int neededSupplyID) async {
+    try {
+      Response? response;
+      response = await Api.instance.patchRequest(
+          ApiConstant.baseUrl,
+          "${ApiConstant.helpCenters}$helpCenterID/${ApiConstant.neededSupply}$neededSupplyID",
+          jsonEncode(bodyModel.toJson()));
+      if (response.statusCode == 200) {
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
       } else {
         return null;
       }

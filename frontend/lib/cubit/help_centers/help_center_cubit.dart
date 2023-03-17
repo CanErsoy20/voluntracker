@@ -1,4 +1,5 @@
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
+import 'package:afet_takip/models/needed_supply/create_needed_supply_model.dart';
 import 'package:bloc/bloc.dart';
 
 import '../../models/help_center/help_center_model.dart';
@@ -12,6 +13,7 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   List<HelpCenterModel>? helpCenterList;
   HelpCenterModel? selectedCenter;
   CreateNeededVolunteer newVolunteerNeed = CreateNeededVolunteer();
+  CreateNeededSupply newSupplyNeed = CreateNeededSupply();
 
   Future<void> getHelpCenters() async {
     emit(HelpCenterLoading());
@@ -31,7 +33,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
       emit(HelpCenterError(
           "Creation failed", "Couldnt't create a new help center"));
     } else {
-      emit(HelpCenterDisplay());
+      emit(HelpCenterSuccess(
+          "Successfully Created", "Successfully created a new help center"));
     }
   }
 
@@ -44,7 +47,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
       emit(HelpCenterError(
           "Creation failed", "Couldnt't create a new volunteer need"));
     } else {
-      emit(HelpCenterDisplay());
+      emit(HelpCenterSuccess(
+          "Successfully Created", "Sucessfully created a new help center"));
     }
   }
 
@@ -55,9 +59,38 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
         bodyModel, helpCenterID, neededVolunteerID);
     if (updatedModel == null) {
       emit(HelpCenterError(
-          "Couldnt update", "Couldnt update the volunteer need"));
+          "Couldn't update", "Couldnt update the volunteer need"));
     } else {
-      emit(HelpCenterDisplay());
+      emit(HelpCenterSuccess(
+          "Successfully Updated", "Successfully updated the volunteer need"));
+    }
+  }
+
+  Future<void> createNeededSupply(
+      CreateNeededSupply bodyModel, int helpCenterID) async {
+    emit(HelpCenterLoading());
+    HelpCenterModel? createdVolunteer =
+        await service.createNeededSupply(bodyModel, helpCenterID);
+    if (createdVolunteer == null) {
+      emit(HelpCenterError(
+          "Creation failed", "Couldnt't create a new supply need"));
+    } else {
+      emit(HelpCenterSuccess(
+          "Successfully Creation", "Successfully created a new supply need"));
+    }
+  }
+
+  Future<void> updateNeededSupply(CreateNeededSupply bodyModel,
+      int helpCenterID, int neededSupplyID) async {
+    emit(HelpCenterLoading());
+    HelpCenterModel? updatedModel = await service.updateNeededSupply(
+        bodyModel, helpCenterID, neededSupplyID);
+    if (updatedModel == null) {
+      emit(
+          HelpCenterError("Couldn't update", "Couldnt update the supply need"));
+    } else {
+      emit(HelpCenterSuccess(
+          "Successfully Updated", "Successfully updated the supply need"));
     }
   }
 }
