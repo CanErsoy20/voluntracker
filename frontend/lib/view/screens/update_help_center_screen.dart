@@ -61,9 +61,13 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                 child: BlocListener<HelpCenterCubit, HelpCenterState>(
                   listener: (context, state) {
                     if (state is HelpCenterError) {
-                      //_errorSnackbar(context, state);
+                      context.read<HelpCenterCubit>().getHelpCenters();
+                      CustomSnackbars.errorSnackbar(
+                          context, state.title, state.description);
                     } else if (state is HelpCenterSuccess) {
-                      CustomSnackbars.successSnackbar(context, ",", "");
+                      context.read<HelpCenterCubit>().getHelpCenters();
+                      CustomSnackbars.successSnackbar(
+                          context, state.title, state.description);
                     }
                   },
                   child: TabBarView(children: [
@@ -85,10 +89,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ],
           )),
     );
-  }
-
-  void println() {
-    print("hello");
   }
 
   Widget _buildVolunteerNeeds(
