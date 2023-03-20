@@ -13,11 +13,11 @@ class NeededSupply extends CreateNeededSupply {
     urgency = json['urgency'];
     supplyTypeName = json['supplyTypeName'];
     supplyTypeCategory = json['supplyTypeCategory'];
-    helpCenterId = json['helpCenterId'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
@@ -25,7 +25,6 @@ class NeededSupply extends CreateNeededSupply {
     data['urgency'] = urgency;
     data['supplyTypeName'] = supplyTypeName;
     data['supplyTypeCategory'] = supplyTypeCategory;
-    data['helpCenterId'] = helpCenterId;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     return data;

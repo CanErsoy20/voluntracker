@@ -45,6 +45,7 @@ dependencies:
   percent_indicator: ^4.2.3
   intl: ^0.18.0
   validators: ^3.0.0
+  awesome_snackbar_content: ^0.1.1
 
 dev_dependencies:
   flutter_test:

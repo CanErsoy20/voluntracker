@@ -7,14 +7,14 @@ class CustomNeedCard extends StatelessWidget {
     super.key,
     required this.needName,
     required this.needCategory,
-    required this.needPercent,
+    required this.quantity,
     required this.lastUpdatedAt,
     this.trailing,
     this.leading,
   });
   final String needName;
   final String needCategory;
-  final double needPercent;
+  final int quantity;
   final String lastUpdatedAt;
   final Widget? trailing;
   final Widget? leading;
@@ -47,7 +47,7 @@ class CustomNeedCard extends StatelessWidget {
                 //   barRadius: const Radius.circular(20),
                 //   progressColor: Colors.green,
                 // ),
-                Text("Needed Quantity: $needPercent"),
+                Text("Needed Quantity: $quantity"),
                 Text(
                     "Last Updated At: ${HelperFunctions.formatDateToTime(lastUpdatedAt)}")
               ],
