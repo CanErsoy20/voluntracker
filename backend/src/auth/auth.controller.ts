@@ -1,23 +1,13 @@
-import {
-  Body,
-  ConflictException,
-  Controller,
-  Get,
-  InternalServerErrorException,
-  Logger,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, InternalServerErrorException, Logger, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { HttpResponse } from '../common';
 import { GetCurrentUser, GetCurrentUserId } from '../common/decorators';
 import { AccessTokenGuard, LocalAuthGuard, RefreshTokenGuard } from '../common/guards';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
+import { JwtTokensDto } from './dto/jwt-tokens.dto';
 import { Tokens } from './types';
 
 @ApiTags('Authentication')
@@ -28,6 +18,7 @@ export class AuthController {
 
   @ApiOkResponse({
     description: 'Login is successful. A JWT Token is returned.',
+    type: JwtTokensDto,
   })
   @ApiInternalServerErrorResponse({
     description: 'Something went wrong while generating JWT tokens.',
@@ -47,6 +38,7 @@ export class AuthController {
 
   @ApiOkResponse({
     description: 'Login is successful. A JWT Token is returned.',
+    type: JwtTokensDto,
   })
   @ApiInternalServerErrorResponse({
     description: 'Something went wrong while generating JWT tokens.',
@@ -77,6 +69,7 @@ export class AuthController {
   @ApiOkResponse({
     description:
       'Returns a new set of access and refresh tokens. Needs to be used when the access token is expired to get new access and refresh tokens.',
+    type: JwtTokensDto,
   })
   @Post('refresh')
   @UseGuards(RefreshTokenGuard)
