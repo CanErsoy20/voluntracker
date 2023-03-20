@@ -493,34 +493,48 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    // FloatingActionButton(
-                    //     onPressed: () {
-                    //       context.read<HelpCenterCubit>().emitEditing();
-                    //     },
-                    //     child: Icon(Icons.edit)),
                     CustomTextFormField(
                         onChanged: (p0) {
                           context.read<HelpCenterCubit>().emitEditing();
                         },
-                        //enabled: state is HelpCenterEditing,
                         initialValue: HelperFunctions.formatDateToTime(
                             currentCenter.busiestHours!.start!),
                         label: "Busiest Hours Start At"),
                     CustomTextFormField(
-                        //enabled: state is HelpCenterEditing,
+                        onChanged: (p0) {
+                          context.read<HelpCenterCubit>().emitEditing();
+                        },
                         initialValue: HelperFunctions.formatDateToTime(
                             currentCenter.busiestHours!.end!),
                         label: "Busiest Hours End At"),
                     CustomTextFormField(
-                        //enabled: state is HelpCenterEditing,
+                        onChanged: (p0) {
+                          context.read<HelpCenterCubit>().emitEditing();
+                        },
                         initialValue: HelperFunctions.formatDateToTime(
                             currentCenter.openCloseInfo!.start!),
                         label: "Help Center Opens At"),
                     CustomTextFormField(
-                        //enabled: state is HelpCenterEditing,
+                        onChanged: (p0) {
+                          context.read<HelpCenterCubit>().emitEditing();
+                        },
                         initialValue: HelperFunctions.formatDateToTime(
                             currentCenter.openCloseInfo!.end!),
                         label: "Help Center Closes At"),
+                    CustomTextFormField(
+                      onChanged: (p0) {
+                        context.read<HelpCenterCubit>().emitEditing();
+                      },
+                      initialValue: currentCenter.additionalInfo!,
+                      label: "Additional Info",
+                    ),
+                    CustomTextFormField(
+                        onChanged: (p0) {
+                          context.read<HelpCenterCubit>().emitEditing();
+                        },
+                        initialValue:
+                            currentCenter.volunteerCapacity.toString(),
+                        label: "Volunteer Capacity"),
                     state is HelpCenterEditing
                         ? ElevatedButton(
                             onPressed: () {
