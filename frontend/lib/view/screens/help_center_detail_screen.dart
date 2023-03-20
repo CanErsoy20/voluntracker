@@ -67,7 +67,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
                     Text(
                         "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.end!)}"),
                   ]),
-              Container(
+              SizedBox(
                 height: 50,
                 child: TabBar(
                   indicatorColor: Colors.white,
@@ -83,12 +83,10 @@ class HelpCenterDetailScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Container(
-                  child: TabBarView(children: [
-                    _buildVolunteerNeeds(currentCenter),
-                    _buildSupplyNeeds(currentCenter)
-                  ]),
-                ),
+                child: TabBarView(children: [
+                  _buildVolunteerNeeds(currentCenter),
+                  _buildSupplyNeeds(currentCenter)
+                ]),
               )
             ],
           ),

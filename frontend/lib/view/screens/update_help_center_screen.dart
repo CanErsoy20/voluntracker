@@ -35,7 +35,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
           length: 3,
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 height: 50,
                 child: TabBar(
                   unselectedLabelColor: Colors.blue,
@@ -150,7 +150,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     showDialog(
         context: context,
         builder: (context) {
-          final _formKey1 = GlobalKey<FormState>();
+          final formKey = GlobalKey<FormState>();
           return AlertDialog(
             actionsAlignment: MainAxisAlignment.end,
             actions: [
@@ -161,7 +161,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    if (_formKey1.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().updateNeededVolunteer(
                           context.read<HelpCenterCubit>().newVolunteerNeed,
                           1,
@@ -174,7 +174,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Update"))
             ],
             content: _buildNeededVolunteerForm(
-                _formKey1, "Update Volunteer Need", oldModel),
+                formKey, "Update Volunteer Need", oldModel),
           );
         });
   }
@@ -183,7 +183,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     showDialog(
         context: context,
         builder: (context) {
-          final _formKey = GlobalKey<FormState>();
+          final formKey = GlobalKey<FormState>();
           return AlertDialog(
             actionsAlignment: MainAxisAlignment.end,
             actions: [
@@ -194,7 +194,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().createNeededVolunteer(
                           context.read<HelpCenterCubit>().newVolunteerNeed, 1);
                       context.read<HelpCenterCubit>().newVolunteerNeed =
@@ -204,8 +204,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Add New Need"))
             ],
-            content: _buildNeededVolunteerForm(
-                _formKey, "Create New Volunteer Need"),
+            content:
+                _buildNeededVolunteerForm(formKey, "Create New Volunteer Need"),
           );
         });
   }
@@ -364,7 +364,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     showDialog(
         context: context,
         builder: (context) {
-          final _formKey = GlobalKey<FormState>();
+          final formKey = GlobalKey<FormState>();
           return AlertDialog(
             actionsAlignment: MainAxisAlignment.end,
             actions: [
@@ -375,7 +375,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().createNeededSupply(
                           context.read<HelpCenterCubit>().newSupplyNeed, 1);
                       context.read<HelpCenterCubit>().newSupplyNeed =
@@ -385,7 +385,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Add New Need"))
             ],
-            content: _buildNeededSupplyForm(_formKey, "Create New Supply Need"),
+            content: _buildNeededSupplyForm(formKey, "Create New Supply Need"),
           );
         });
   }
@@ -395,7 +395,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     showDialog(
         context: context,
         builder: (context) {
-          final _formKey1 = GlobalKey<FormState>();
+          final formKey = GlobalKey<FormState>();
           return AlertDialog(
             actionsAlignment: MainAxisAlignment.end,
             actions: [
@@ -406,7 +406,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    if (_formKey1.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().updateNeededSupply(
                           context.read<HelpCenterCubit>().newSupplyNeed,
                           1,
@@ -418,8 +418,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Update"))
             ],
-            content: _buildNeededSupplyForm(
-                _formKey1, "Update Supply Need", oldModel),
+            content:
+                _buildNeededSupplyForm(formKey, "Update Supply Need", oldModel),
           );
         });
   }

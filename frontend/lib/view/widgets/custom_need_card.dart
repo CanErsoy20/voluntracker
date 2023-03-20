@@ -1,6 +1,5 @@
 import 'package:afet_takip/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class CustomNeedCard extends StatelessWidget {
   const CustomNeedCard({
