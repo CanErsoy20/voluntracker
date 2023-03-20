@@ -100,6 +100,13 @@ class HelpCenterDetailScreen extends StatelessWidget {
             itemCount: currentCenter.neededVolunteerList!.length,
             itemBuilder: (context, index) {
               return CustomNeedCard(
+                backgroundColor:
+                    currentCenter.neededVolunteerList![index].urgency == "Low"
+                        ? Colors.green
+                        : currentCenter.neededVolunteerList![index].urgency ==
+                                "Medium"
+                            ? Colors.orange
+                            : Colors.red,
                 needName: currentCenter
                     .neededVolunteerList![index].volunteerTypeName!,
                 needCategory: currentCenter

@@ -1,6 +1,7 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/enums.dart';
 import 'package:afet_takip/helper_functions.dart';
+import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 import 'package:afet_takip/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:afet_takip/models/needed_volunteer/needed_volunteer_model.dart';
 import 'package:afet_takip/view/widgets/custom_text_field.dart';
@@ -270,7 +271,10 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                       int.tryParse(value);
                 },
                 customValidator: (value) {
-                  if (isInt(value!)) {
+                  if (value == null || value.isEmpty) {
+                    return "Quantity cannot be blank";
+                  }
+                  if (isInt(value)) {
                     if (int.parse(value) > 0) {
                       return null;
                     } else {
@@ -344,7 +348,10 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                       int.tryParse(value);
                 },
                 customValidator: (value) {
-                  if (isInt(value!)) {
+                  if (value == null || value.isEmpty) {
+                    return "Quantity cannot be blank";
+                  }
+                  if (isInt(value)) {
                     if (int.parse(value) > 0) {
                       return null;
                     } else {
@@ -477,11 +484,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
 
   Widget _buildOtherDetails(
       BuildContext context, HelpCenterModel currentCenter) {
-    // BusiestHours? busiestHours;
-    // OpenCloseInfo? openCloseInfo;
-    // ContactInfo? contactInfo;
-    // String? additionalInfo;
-    // int? volunteerCapacity;
     final formKey = GlobalKey<FormState>();
     return BlocBuilder<HelpCenterCubit, HelpCenterState>(
       builder: (context, state) {
@@ -494,43 +496,85 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                 child: Column(
                   children: [
                     CustomTextFormField(
-                        onChanged: (p0) {
+                        onChanged: (value) {
                           context.read<HelpCenterCubit>().emitEditing();
+                          context
+                              .read<HelpCenterCubit>()
+                              .updateHelpCenter
+                              .busiestHours!
+                              .start = value;
                         },
                         initialValue: HelperFunctions.formatDateToTime(
                             currentCenter.busiestHours!.start!),
                         label: "Busiest Hours Start At"),
                     CustomTextFormField(
-                        onChanged: (p0) {
+                        onChanged: (value) {
                           context.read<HelpCenterCubit>().emitEditing();
+                          context
+                              .read<HelpCenterCubit>()
+                              .updateHelpCenter
+                              .busiestHours!
+                              .end = value;
                         },
                         initialValue: HelperFunctions.formatDateToTime(
                             currentCenter.busiestHours!.end!),
                         label: "Busiest Hours End At"),
                     CustomTextFormField(
-                        onChanged: (p0) {
+                        onChanged: (value) {
                           context.read<HelpCenterCubit>().emitEditing();
+                          context
+                              .read<HelpCenterCubit>()
+                              .updateHelpCenter
+                              .openCloseInfo!
+                              .start = value;
                         },
                         initialValue: HelperFunctions.formatDateToTime(
                             currentCenter.openCloseInfo!.start!),
                         label: "Help Center Opens At"),
                     CustomTextFormField(
-                        onChanged: (p0) {
+                        onChanged: (value) {
                           context.read<HelpCenterCubit>().emitEditing();
+                          context
+                              .read<HelpCenterCubit>()
+                              .updateHelpCenter
+                              .openCloseInfo!
+                              .end = value;
                         },
                         initialValue: HelperFunctions.formatDateToTime(
                             currentCenter.openCloseInfo!.end!),
                         label: "Help Center Closes At"),
                     CustomTextFormField(
-                      onChanged: (p0) {
+                      onChanged: (value) {
                         context.read<HelpCenterCubit>().emitEditing();
+                        context
+                            .read<HelpCenterCubit>()
+                            .updateHelpCenter
+                            .additionalInfo = value;
                       },
                       initialValue: currentCenter.additionalInfo!,
                       label: "Additional Info",
                     ),
                     CustomTextFormField(
-                        onChanged: (p0) {
+                        customValidator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Volunteer Capacity cannot be blank";
+                          }
+                          if (isInt(value)) {
+                            if (int.parse(value) > 0) {
+                              return null;
+                            } else {
+                              return "Volunteer Capacity must be a number >= 0";
+                            }
+                          } else {
+                            return "Volunteer Capacity must be a number => 0";
+                          }
+                        },
+                        onChanged: (value) {
                           context.read<HelpCenterCubit>().emitEditing();
+                          context
+                              .read<HelpCenterCubit>()
+                              .updateHelpCenter
+                              .volunteerCapacity = int.tryParse(value);
                         },
                         initialValue:
                             currentCenter.volunteerCapacity.toString(),
@@ -538,7 +582,18 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                     state is HelpCenterEditing
                         ? ElevatedButton(
                             onPressed: () {
-                              formKey.currentState!.validate();
+                              if (formKey.currentState!.validate()) {
+                                context
+                                    .read<HelpCenterCubit>()
+                                    .updateOtherDetails(
+                                        context
+                                            .read<HelpCenterCubit>()
+                                            .updateHelpCenter,
+                                        1);
+                                context
+                                    .read<HelpCenterCubit>()
+                                    .updateHelpCenter = CreateHelpCenter();
+                              }
                             },
                             child: const Text("Update"))
                         : const SizedBox.shrink()
