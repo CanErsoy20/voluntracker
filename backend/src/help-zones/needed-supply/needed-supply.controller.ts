@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { NeededSupplyService } from './needed-supply.service';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateNeededSupplyDto } from './dto/create-needed-supply.dto';
 import { UpdateNeededSupplyDto } from './dto/update-needed-supply.dto';
+import { NeededSupplyService } from './needed-supply.service';
 
-@Controller('needed-supply')
+@Controller('neededSupply')
 export class NeededSupplyController {
   constructor(private readonly neededSupplyService: NeededSupplyService) {}
 
