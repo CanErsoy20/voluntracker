@@ -93,4 +93,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
           "Successfully Updated", "Successfully updated the supply need"));
     }
   }
+
+  void emitEditing() {
+    emit(HelpCenterEditing());
+  }
 }

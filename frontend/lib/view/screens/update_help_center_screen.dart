@@ -1,9 +1,9 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/enums.dart';
+import 'package:afet_takip/helper_functions.dart';
 import 'package:afet_takip/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:afet_takip/models/needed_volunteer/needed_volunteer_model.dart';
 import 'package:afet_takip/view/widgets/custom_text_field.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
@@ -14,6 +14,7 @@ import '../../models/needed_supply/needed_supply_model.dart';
 import '../widgets/custom_dropdown_form_field.dart';
 import '../widgets/custom_need_card.dart';
 import '../widgets/custom_snackbars.dart';
+import '../widgets/custom_text_form_field.dart';
 
 class UpdateHelpCenterScreen extends StatefulWidget {
   const UpdateHelpCenterScreen({super.key});
@@ -36,10 +37,9 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             children: [
               Container(
                 height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade400,
-                ),
                 child: TabBar(
+                  unselectedLabelColor: Colors.blue,
+                  indicatorColor: Colors.white,
                   indicatorPadding: const EdgeInsets.all(5),
                   indicator: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
@@ -79,7 +79,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                         context,
                         context.read<HelpCenterCubit>().selectedCenter ??
                             context.read<HelpCenterCubit>().helpCenterList![1]),
-                    _buildVolunteerNeeds(
+                    _buildOtherDetails(
                         context,
                         context.read<HelpCenterCubit>().selectedCenter ??
                             context.read<HelpCenterCubit>().helpCenterList![1])
@@ -472,6 +472,67 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
           child: const Text("Add New"),
         )
       ],
+    );
+  }
+
+  Widget _buildOtherDetails(
+      BuildContext context, HelpCenterModel currentCenter) {
+    // BusiestHours? busiestHours;
+    // OpenCloseInfo? openCloseInfo;
+    // ContactInfo? contactInfo;
+    // String? additionalInfo;
+    // int? volunteerCapacity;
+    final formKey = GlobalKey<FormState>();
+    return BlocBuilder<HelpCenterCubit, HelpCenterState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // FloatingActionButton(
+                    //     onPressed: () {
+                    //       context.read<HelpCenterCubit>().emitEditing();
+                    //     },
+                    //     child: Icon(Icons.edit)),
+                    CustomTextFormField(
+                        onChanged: (p0) {
+                          context.read<HelpCenterCubit>().emitEditing();
+                        },
+                        //enabled: state is HelpCenterEditing,
+                        initialValue: HelperFunctions.formatDateToTime(
+                            currentCenter.busiestHours!.start!),
+                        label: "Busiest Hours Start At"),
+                    CustomTextFormField(
+                        //enabled: state is HelpCenterEditing,
+                        initialValue: HelperFunctions.formatDateToTime(
+                            currentCenter.busiestHours!.end!),
+                        label: "Busiest Hours End At"),
+                    CustomTextFormField(
+                        //enabled: state is HelpCenterEditing,
+                        initialValue: HelperFunctions.formatDateToTime(
+                            currentCenter.openCloseInfo!.start!),
+                        label: "Help Center Opens At"),
+                    CustomTextFormField(
+                        //enabled: state is HelpCenterEditing,
+                        initialValue: HelperFunctions.formatDateToTime(
+                            currentCenter.openCloseInfo!.end!),
+                        label: "Help Center Closes At"),
+                    state is HelpCenterEditing
+                        ? ElevatedButton(
+                            onPressed: () {
+                              formKey.currentState!.validate();
+                            },
+                            child: const Text("Update"))
+                        : const SizedBox.shrink()
+                  ],
+                ),
+              )),
+        );
+      },
     );
   }
 }
