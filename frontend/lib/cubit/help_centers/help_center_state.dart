@@ -21,3 +21,5 @@ class HelpCenterSuccess extends HelpCenterState {
 
   HelpCenterSuccess(this.title, this.description);
 }
+
+class HelpCenterEditing extends HelpCenterState {}

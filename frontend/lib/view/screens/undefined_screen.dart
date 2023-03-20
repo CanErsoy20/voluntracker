@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class UndefinedScreen extends StatelessWidget {
   const UndefinedScreen({super.key});
@@ -11,7 +9,7 @@ class UndefinedScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Undefined"),
       ),
-      body: Center(
+      body: const Center(
         child: Text("Page Not Found"),
       ),
     );

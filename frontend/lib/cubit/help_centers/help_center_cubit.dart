@@ -1,4 +1,8 @@
+import 'package:afet_takip/models/help_center/busiest_hours_model.dart';
+import 'package:afet_takip/models/help_center/contact_info_model.dart';
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
+import 'package:afet_takip/models/help_center/location_model.dart';
+import 'package:afet_takip/models/help_center/open_close_info_model.dart';
 import 'package:afet_takip/models/needed_supply/create_needed_supply_model.dart';
 import 'package:bloc/bloc.dart';
 
@@ -14,6 +18,11 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   HelpCenterModel? selectedCenter;
   CreateNeededVolunteer newVolunteerNeed = CreateNeededVolunteer();
   CreateNeededSupply newSupplyNeed = CreateNeededSupply();
+  CreateHelpCenter updateHelpCenter = CreateHelpCenter(
+      busiestHours: BusiestHours(),
+      openCloseInfo: OpenCloseInfo(),
+      contactInfo: ContactInfo(),
+      location: Location());
 
   Future<void> getHelpCenters() async {
     emit(HelpCenterLoading());
@@ -92,5 +101,22 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
       emit(HelpCenterSuccess(
           "Successfully Updated", "Successfully updated the supply need"));
     }
+  }
+
+  Future<void> updateOtherDetails(
+      CreateHelpCenter bodyModel, int helpCenterID) async {
+    emit(HelpCenterLoading());
+    HelpCenterModel? updatedModel =
+        await service.updateOtherDetails(bodyModel, helpCenterID);
+    if (updatedModel == null) {
+      emit(HelpCenterError("Couldn't update", "Couldn't update other details"));
+    } else {
+      emit(HelpCenterSuccess(
+          "Successfully Updated", "Successfully updated other details"));
+    }
+  }
+
+  void emitEditing() {
+    emit(HelpCenterEditing());
   }
 }
