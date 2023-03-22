@@ -2,7 +2,6 @@ import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../cubit/map/map_cubit.dart';
 import '../../router.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,7 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
     context.read<HelpCenterCubit>().getHelpCenters();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Afet Takip"),
+        title: const Text("Afet Takip"),
         centerTitle: true,
       ),
       body: Center(
@@ -30,21 +29,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       (value) => Navigator.of(context)
                           .pushNamed(Routes.helpCenterList));
                 },
-                child: Text("Go Help Center List")),
+                child: const Text("Go Help Center List")),
             ElevatedButton(
                 onPressed: () {
                   context.read<HelpCenterCubit>().getHelpCenters().then(
                       (value) => Navigator.of(context)
                           .pushNamed(Routes.createHelpCenter));
                 },
-                child: Text("Create Help Center Screen")),
+                child: const Text("Create Help Center Screen")),
             ElevatedButton(
                 onPressed: () {
                   context.read<HelpCenterCubit>().getHelpCenters().then(
                       (value) => Navigator.of(context)
                           .pushNamed(Routes.updateHelpCenter));
                 },
-                child: Text("Update Help Center Screen"))
+                child: const Text("Update Help Center Screen"))
           ],
         ),
       ),

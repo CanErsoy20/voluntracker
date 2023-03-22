@@ -1,6 +1,5 @@
 import 'package:afet_takip/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class CustomNeedCard extends StatelessWidget {
   const CustomNeedCard({
@@ -9,6 +8,7 @@ class CustomNeedCard extends StatelessWidget {
     required this.needCategory,
     required this.quantity,
     required this.lastUpdatedAt,
+    this.backgroundColor,
     this.trailing,
     this.leading,
   });
@@ -18,11 +18,12 @@ class CustomNeedCard extends StatelessWidget {
   final String lastUpdatedAt;
   final Widget? trailing;
   final Widget? leading;
+  final Color? backgroundColor;
   @override
   Widget build(BuildContext context) {
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white,
+        color: backgroundColor,
         margin: const EdgeInsets.all(5),
         elevation: 10,
         child: ListTile(

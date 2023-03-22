@@ -53,7 +53,10 @@ class HelpCenterDetailScreen extends StatelessWidget {
                           currentCenter.location!.lon!);
                       Navigator.pushNamed(context, Routes.mapRoute);
                     },
-                    child: const Text("See On Map")),
+                    child: const Text(
+                      "See On Map",
+                      style: TextStyle(color: Colors.green),
+                    )),
               ),
               ExpansionTile(
                   title: const Text("Time Details"),
@@ -64,42 +67,26 @@ class HelpCenterDetailScreen extends StatelessWidget {
                     Text(
                         "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.end!)}"),
                   ]),
-              Container(
+              SizedBox(
                 height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade400,
-                ),
                 child: TabBar(
+                  indicatorColor: Colors.white,
+                  unselectedLabelColor: Colors.blue,
                   indicatorPadding: const EdgeInsets.symmetric(horizontal: 5),
                   indicator: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
                       color: Colors.blue),
-                  tabs: [
-                    Row(
-                      children: const [
-                        Icon(Icons.person),
-                        Text(
-                          "Volunteer Needs",
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: const [
-                        Icon(Icons.archive_outlined),
-                        Text("Supply Needs")
-                      ],
-                    )
+                  tabs: const [
+                    Tab(text: "Volunteer Needs"),
+                    Tab(text: "Supply Needs")
                   ],
                 ),
               ),
               Expanded(
-                child: Container(
-                  color: Colors.grey.shade400,
-                  child: TabBarView(children: [
-                    _buildVolunteerNeeds(currentCenter),
-                    _buildSupplyNeeds(currentCenter)
-                  ]),
-                ),
+                child: TabBarView(children: [
+                  _buildVolunteerNeeds(currentCenter),
+                  _buildSupplyNeeds(currentCenter)
+                ]),
               )
             ],
           ),
@@ -113,6 +100,13 @@ class HelpCenterDetailScreen extends StatelessWidget {
             itemCount: currentCenter.neededVolunteerList!.length,
             itemBuilder: (context, index) {
               return CustomNeedCard(
+                backgroundColor:
+                    currentCenter.neededVolunteerList![index].urgency == "Low"
+                        ? Colors.green
+                        : currentCenter.neededVolunteerList![index].urgency ==
+                                "Medium"
+                            ? Colors.orange
+                            : Colors.red,
                 needName: currentCenter
                     .neededVolunteerList![index].volunteerTypeName!,
                 needCategory: currentCenter

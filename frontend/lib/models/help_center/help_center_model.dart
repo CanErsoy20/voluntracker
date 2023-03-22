@@ -42,6 +42,7 @@ class HelpCenterModel extends CreateHelpCenter {
             json['neededSupply'].map((x) => NeededSupply.fromJson(x)));
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;

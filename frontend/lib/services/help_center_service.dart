@@ -140,4 +140,24 @@ class HelpCenterService {
       return null;
     }
   }
+
+  Future<HelpCenterModel?> updateOtherDetails(
+      CreateHelpCenter bodyModel, int helpCenterID) async {
+    try {
+      Response? response;
+      response = await Api.instance.patchRequest(
+          ApiConstant.baseUrl,
+          "${ApiConstant.helpCenters}$helpCenterID",
+          jsonEncode(bodyModel.toJson()));
+      if (response.statusCode == 200) {
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
 }

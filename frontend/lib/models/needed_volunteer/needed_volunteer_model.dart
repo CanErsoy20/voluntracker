@@ -16,7 +16,7 @@ class NeededVolunteer extends CreateNeededVolunteer {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
-
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
