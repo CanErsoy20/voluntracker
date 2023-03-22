@@ -452,6 +452,4 @@ export class HelpCentersController {
       201,
     );
   }
-
-  // TODO: Carry delete, update, get single to volunteer-team.controller.ts
 }
