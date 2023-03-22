@@ -58,10 +58,12 @@ model HelpCenter {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  volunteers       Volunteer[]
-  neededVolunteers NeededVolunteer[]
-  supply           Supply[]
-  neededSupply     NeededSupply[]
+  coordinator HelpCenterCoordinator? // Might be unassigned
+
+  volunteerTeams    VolunteerTeam[]
+  neededVolunteers  NeededVolunteer[]
+  neededSupply      NeededSupply[]
+  supply            Supply[]
 }
 
 // Supply model and supply related models
@@ -111,81 +113,6 @@ model SupplyType {
   updatedAt DateTime @updatedAt
 }
 
-// User model and other user related models
-model User {
-  id Int @id @default(autoincrement())
-
-  firstname String
-  surname String
-  email    String @unique
-  phone    String? @unique
-  password String
-
-  roleId    Int?
-  userRole  UserRole?    @relation(fields: [roleId], references: [id])
-
-  volunteer Volunteer?
-
-  hashedRefreshToken String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model UserRole {
-  id        Int    @id @default(autoincrement())
-  role_name String // Volunteer, Admin, Superadmin, ...
-
-  users       User[]
-  permissions RolePermission[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Permission {
-  id Int @id @default(autoincrement())
-
-  roles RolePermission[]
-
-  permissionName String // User will see
-  permissionKey  String // Behind the scenes
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model RolePermission {
-  id Int @id @default(autoincrement())
-
-  permissionId Int
-  permission   Permission @relation(fields: [permissionId], references: [id])
-
-  roleId Int
-  role   UserRole @relation(fields: [roleId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Volunteer {
-  id     Int  @id @default(autoincrement())
-  userId Int @unique
-  user   User @relation(fields: [userId], references: [id])
-
-  // one-to-many relationship between Volunteer and VolunteerType
-  volunteerTypeName VolunteerTypeEnum
-  volunteerTypeCategory VolunteerCategoryEnum
-  volunteerType   VolunteerType @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
-
-  // one-to-many relationship between HelpCenter and Volunteer
-  helpCenterId Int
-  helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model NeededVolunteer {
   id Int @id @default(autoincrement())
 
@@ -205,6 +132,106 @@ model NeededVolunteer {
   updatedAt DateTime @updatedAt
 }
 
+// User model and other user related models
+model User {
+  id Int @id @default(autoincrement())
+
+  firstname String
+  surname String
+  email    String @unique
+  phone    String? @unique
+  password String
+
+  roleId    Int?
+  userRole  UserRole?    @relation(fields: [roleId], references: [id])
+
+  volunteer Volunteer?
+  volunteerTeamLeader VolunteerTeamLeader?
+  helpCenterCoordinator HelpCenterCoordinator?
+  admin Admin?
+
+  hashedRefreshToken String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model UserRole {
+  id        Int    @id @default(autoincrement())
+  role_name String // Volunteer, Admin, Superadmin, ...
+
+  users       User[]
+  permissions RolePermission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// For many-to many relation between UserRole and Permission
+model RolePermission {
+  id Int @id @default(autoincrement())
+
+  permissionId Int
+  permission   Permission @relation(fields: [permissionId], references: [id])
+
+  roleId Int
+  role   UserRole @relation(fields: [roleId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Permission {
+  id Int @id @default(autoincrement())
+
+  roles RolePermission[]
+
+  permissionName String // User will see
+  permissionKey  String // Behind the scenes
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+// User Roles
+model Volunteer {
+  id     Int  @id @default(autoincrement())
+  userId Int @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  // one-to-many relationship between Volunteer and VolunteerType
+  volunteerTypeName VolunteerTypeEnum
+  volunteerTypeCategory VolunteerCategoryEnum
+  volunteerType   VolunteerType @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
+
+  // Volunteers will be assigned to teams, but they might be unassigned.
+  volunteerTeamId Int? @unique
+  volunteerTeam VolunteerTeam? @relation(fields: [volunteerTeamId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Identitifed by type, category, and help center so that there won't be separate types of volunteers at each help center
+model GuestVolunteer {
+  id Int @id @default(autoincrement())
+
+  quantity Int
+
+  volunteerTypeName VolunteerTypeEnum
+  volunteerTypeCategory VolunteerCategoryEnum
+  volunteerType   VolunteerType @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
+
+    // one-to-many relationship between HelpCenter and Volunteer
+  volunteerTeamId Int @unique
+  volunteerTeam VolunteerTeam @relation(fields: [volunteerTeamId], references: [id])
+
+  // Each volunteer team will have a type-category pairing once
+  @@unique([volunteerTypeName, volunteerTypeCategory, volunteerTeamId])
+}
+
 model VolunteerType {
   typeName VolunteerTypeEnum
   category VolunteerCategoryEnum
@@ -213,7 +240,50 @@ model VolunteerType {
 
   volunteers       Volunteer[]
   neededVolunteers NeededVolunteer[]
+  guestVolunteers GuestVolunteer[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model VolunteerTeamLeader {
+  id Int @id @default(autoincrement())
+
+  userId Int @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  volunteerTeam VolunteerTeam @relation(fields: [volunteerTeamId], references: [id])
+  volunteerTeamId Int @unique
+}
+
+
+model VolunteerTeam {
+  id Int @id @default(autoincrement())
+
+    // one-to-many relationship between HelpCenter and Volunteer
+  helpCenterId Int
+  helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
+
+  teamLeader VolunteerTeamLeader? // Might be unassigned
+  guestVolunteer GuestVolunteer[] 
+  volunteers Volunteer[]
+
+}
+
+
+model HelpCenterCoordinator {
+  id Int @id @default(autoincrement())
+
+  userId Int @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  // one-to-many relationship between HelpCenter and NeededVolunteer
+  helpCenterId Int @unique
+  helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
+
+}
+
+model Admin {
+  userId Int @unique
+  user   User @relation(fields: [userId], references: [id])
 }
