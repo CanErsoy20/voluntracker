@@ -10,6 +10,7 @@ import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
 import { NeededVolunteerEntity } from '../needed-volunteer/entities/needed-volunteer.entity';
 import { NeededVolunteerService } from '../needed-volunteer/needed-volunteer.service';
+import { CreateVolunteerTeamDto } from '../volunteer/dto/create-volunteer-team.dto';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
 import { HelpCenterEntity } from './entities/help-center.entity';
@@ -273,5 +274,41 @@ export class HelpCentersService {
         volunteerTeams: true,
       },
     });
+  }
+
+  // VolunteerTeam CRUD
+
+  async getAllVolunteerTeams(helpCenterId: number) {
+    return await this.prisma.helpCenter.findUnique({
+      where: {
+        id: helpCenterId,
+      },
+      include: {
+        volunteerTeams: true,
+      },
+    });
+  }
+
+  async createVolunteerTeam(helpCenterId: number, createVolunteerTeamDto: CreateVolunteerTeamDto) {
+    try {
+      return await this.prisma.helpCenter.update({
+        where: { id: helpCenterId },
+        data: {
+          volunteerTeams: {
+            create: createVolunteerTeamDto,
+          },
+        },
+        include: {
+          volunteerTeams: true,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2002') {
+          throw new BadRequestException(`A volunteer team with the given name already exists in this help 
+                                        center. Please try to use another name`);
+        }
+      }
+    }
   }
 }

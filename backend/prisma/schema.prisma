@@ -64,6 +64,7 @@ model HelpCenter {
   neededVolunteers  NeededVolunteer[]
   neededSupply      NeededSupply[]
   supply            Supply[]
+  volunteers        Volunteer[]
 }
 
 // Supply model and supply related models
@@ -210,6 +211,9 @@ model Volunteer {
   volunteerTeamId Int? @unique
   volunteerTeam VolunteerTeam? @relation(fields: [volunteerTeamId], references: [id])
 
+  helpCenterId Int?
+  helpCenter HelpCenter? @relation(fields: [helpCenterId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -260,6 +264,8 @@ model VolunteerTeamLeader {
 model VolunteerTeam {
   id Int @id @default(autoincrement())
 
+  teamName String?
+
     // one-to-many relationship between HelpCenter and Volunteer
   helpCenterId Int
   helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
@@ -268,6 +274,7 @@ model VolunteerTeam {
   guestVolunteer GuestVolunteer[] 
   volunteers Volunteer[]
 
+  @@unique([helpCenterId, teamName])
 }
 
 
@@ -287,3 +294,4 @@ model Admin {
   userId Int @unique
   user   User @relation(fields: [userId], references: [id])
 }
+
