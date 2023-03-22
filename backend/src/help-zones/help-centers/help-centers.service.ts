@@ -43,8 +43,9 @@ export class HelpCentersService {
       include: {
         neededSupply: true,
         neededVolunteers: true,
-        volunteers: true,
         supply: true,
+        coordinator: true,
+        volunteerTeams: true,
       },
     });
   }
@@ -55,8 +56,9 @@ export class HelpCentersService {
       include: {
         neededSupply: true,
         neededVolunteers: true,
-        volunteers: true,
         supply: true,
+        coordinator: true,
+        volunteerTeams: true,
       },
     });
   }
@@ -225,14 +227,15 @@ export class HelpCentersService {
   }
 
   async findAllCurrentVolunteersAtHelpCenter(helpCenterId: number, orderBy?: OrderBy | null) {
-    const volunteers = await this.prisma.helpCenter.findMany({
-      where: { id: helpCenterId },
-      include: { volunteers: true },
-      orderBy: {
-        updatedAt: orderBy,
-      },
-    });
-    return volunteers;
+    // TODO: Change this to finding all teams at the help center
+    // const volunteers = await this.prisma.helpCenter.findMany({
+    //   where: { id: helpCenterId },
+    //   include: { volunteers: true },
+    //   orderBy: {
+    //     updatedAt: orderBy,
+    //   },
+    // });
+    // return volunteers;
   }
 
   async findAllSuppliesAtHelpCenter(helpCenterId: number, orderBy: OrderBy | null) {
@@ -252,8 +255,9 @@ export class HelpCentersService {
       include: {
         neededSupply: true,
         neededVolunteers: true,
-        volunteers: true,
         supply: true,
+        coordinator: true,
+        volunteerTeams: true,
       },
     });
   }
@@ -264,8 +268,9 @@ export class HelpCentersService {
       include: {
         neededSupply: true,
         neededVolunteers: true,
-        volunteers: true,
         supply: true,
+        coordinator: true,
+        volunteerTeams: true,
       },
     });
   }
