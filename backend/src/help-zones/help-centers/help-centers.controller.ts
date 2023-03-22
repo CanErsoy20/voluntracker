@@ -397,4 +397,21 @@ export class HelpCentersController {
       200,
     );
   }
+
+  // Create volunteer teams that are assigned to help centers
+  @Get('/:hcId/volunteerTeam')
+  async getAllVolunteerTeams() {}
+
+  @Get('/:hcId/volunteerTeam/:id')
+  async getVolunteerTeam() {}
+
+  // Volunteer teams
+  @Post('/:hcId/volunteerTeam')
+  async createVolunteerTeam() {}
+
+  @Delete('/:hcId/volunteerTeam/:vtId')
+  async deleteVolunterTeam() {}
+
+  @Post('/:hcId/volunteerTeam/:vtId')
+  async updateVolunteerTeam() {}
 }
