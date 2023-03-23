@@ -409,8 +409,8 @@ export class HelpCentersController {
   @ApiBadRequestResponse({
     description: 'Could not fetch the volunteer teams for given help center.',
   })
-  @Get('/:hcId/volunteerTeam')
-  async getAllVolunteerTeams(@Param('hcId') hcId) {
+  @Get('/:helpCenterId/volunteerTeam')
+  async getAllVolunteerTeams(@Param('helpCenterId') hcId) {
     const hcWithVolunteerTeams = await this.helpCentersService.getAllVolunteerTeams(hcId);
 
     if (!hcWithVolunteerTeams) {
@@ -434,8 +434,11 @@ export class HelpCentersController {
   @ApiBadRequestResponse({
     description: 'Could not create the volunteer team for given help center.',
   })
-  @Post('/:hcId/volunteerTeam')
-  async createVolunteerTeam(@Param('hcId') hcId, @Body() createVolunteerTeamDto: CreateVolunteerTeamDto) {
+  @Post('/:helpCenterId/volunteerTeam')
+  async createVolunteerTeam(
+    @Param('helpCenterId') hcId,
+    @Body() createVolunteerTeamDto: CreateVolunteerTeamDto,
+  ) {
     const hcWithVolunteerTeams = await this.helpCentersService.createVolunteerTeam(
       hcId,
       createVolunteerTeamDto,
@@ -453,11 +456,29 @@ export class HelpCentersController {
     );
   }
 
+  @ApiResponse({
+    status: 201,
+    type: [VolunteerTeamEntity],
+    description:
+      'Updated the help center so that the volunteer team with given id is assigned to the help center.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Could not assign the volunteer team to the given help center.',
+  })
   @Patch('/:helpCenterId/volunteerTeam/:volunteerTeamId')
   async assigntVolunteerTeamToHelpCenter(
     @Param('helpCenterId') hcId: number,
     @Param('volunteerTeamId') vtId: number,
   ) {
-    return await this.helpCentersService.assignVolunteerTeamToHelpCenter(hcId, vtId);
+    const helpCenterWithVolunteerTeam = await this.helpCentersService.assignVolunteerTeamToHelpCenter(
+      hcId,
+      vtId,
+    );
+    const volunteerTeams = helpCenterWithVolunteerTeam.volunteerTeams;
+    return new HttpResponse(
+      volunteerTeams,
+      'Sucessfully assigned the volunteer team to the help center',
+      200,
+    );
   }
 }

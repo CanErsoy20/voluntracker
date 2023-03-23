@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { HelpCenter, Prisma } from '@prisma/client';
 import { HttpResponse } from 'src/common';
+import { UniqueEntityNotFoundException } from 'src/exceptions/unique-entity-not-found-exception.exception';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
@@ -29,14 +30,35 @@ export class HelpCentersService {
   }
 
   async update(id: number, updateHelpCenterDto: UpdateHelpCenterDto): Promise<HelpCenterEntity> {
-    return await this.prisma.helpCenter.update({
-      where: { id },
-      data: updateHelpCenterDto,
-    });
+    try {
+      const helpCenter = await this.prisma.helpCenter.update({
+        where: { id },
+        data: updateHelpCenterDto,
+      });
+      return helpCenter;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new UniqueEntityNotFoundException(
+            'Help center you are trying to update cannot be found in the system.',
+          );
+        }
+      }
+    }
   }
 
   async remove(id: number): Promise<HelpCenterEntity> {
-    return await this.prisma.helpCenter.delete({ where: { id } });
+    try {
+      return await this.prisma.helpCenter.delete({ where: { id } });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new UniqueEntityNotFoundException(
+            'Help center you are trying to remove cannot be found in the system.',
+          );
+        }
+      }
+    }
   }
 
   async findAll(): Promise<HelpCenterEntity[]> {
@@ -53,21 +75,38 @@ export class HelpCentersService {
   }
 
   async findOne(id: number): Promise<HelpCenterEntity> {
-    return await this.prisma.helpCenter.findUnique({
-      where: { id },
-      include: {
-        neededSupply: true,
-        neededVolunteers: true,
-        supply: true,
-        coordinator: true,
-        volunteerTeams: true,
-        volunteers: true,
-      },
-    });
+    try {
+      return await this.prisma.helpCenter.findUnique({
+        where: { id },
+        include: {
+          neededSupply: true,
+          neededVolunteers: true,
+          supply: true,
+          coordinator: true,
+          volunteerTeams: true,
+          volunteers: true,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new UniqueEntityNotFoundException(
+            'Help center you are trying to access cannot be found in the system.',
+          );
+        }
+      }
+    }
   }
 
   async findAllOpen() {
     const helpCenters = await this.findAll();
+
+    if (helpCenters.length === 0) {
+      throw new UniqueEntityNotFoundException(
+        'Help center you are trying to remove cannot be found in the system.',
+      );
+    }
+
     const now = Date.now();
     const openCenters = helpCenters.map((hc) => {
       const openCloseObject = hc.openCloseInfo;
@@ -280,7 +319,6 @@ export class HelpCentersService {
   }
 
   // VolunteerTeam CRUD
-
   async getAllVolunteerTeams(helpCenterId: number) {
     return await this.prisma.helpCenter.findUnique({
       where: {
