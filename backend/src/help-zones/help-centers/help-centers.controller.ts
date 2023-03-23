@@ -452,4 +452,12 @@ export class HelpCentersController {
       201,
     );
   }
+
+  @Patch('/:helpCenterId/volunteerTeam/:volunteerTeamId')
+  async assigntVolunteerTeamToHelpCenter(
+    @Param('helpCenterId') hcId: number,
+    @Param('volunteerTeamId') vtId: number,
+  ) {
+    return await this.helpCentersService.assignVolunteerTeamToHelpCenter(hcId, vtId);
+  }
 }

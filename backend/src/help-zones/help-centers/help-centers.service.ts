@@ -47,6 +47,7 @@ export class HelpCentersService {
         supply: true,
         coordinator: true,
         volunteerTeams: true,
+        volunteers: true,
       },
     });
   }
@@ -60,6 +61,7 @@ export class HelpCentersService {
         supply: true,
         coordinator: true,
         volunteerTeams: true,
+        volunteers: true,
       },
     });
   }
@@ -259,19 +261,20 @@ export class HelpCentersService {
         supply: true,
         coordinator: true,
         volunteerTeams: true,
+        volunteers: true,
       },
     });
   }
 
   async findAllHelpCenterDetails() {
     return await this.prisma.helpCenter.findMany({
-      where: {},
       include: {
         neededSupply: true,
         neededVolunteers: true,
         supply: true,
         coordinator: true,
         volunteerTeams: true,
+        volunteers: true,
       },
     });
   }
@@ -307,6 +310,37 @@ export class HelpCentersService {
         if (e.code === 'P2002') {
           throw new BadRequestException(`A volunteer team with the given name already exists in this help 
                                         center. Please try to use another name`);
+        }
+      }
+    }
+  }
+
+  async assignVolunteerTeamToHelpCenter(hcId: number, vtId: number) {
+    try {
+      return await this.prisma.helpCenter.update({
+        where: {
+          id: hcId,
+        },
+        data: {
+          volunteerTeams: {
+            connect: { id: vtId },
+          },
+        },
+        include: {
+          volunteerTeams: true,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new BadRequestException(`This help center does not exists in the system.`);
+        } else if (e.code === 'P2002') {
+          throw new BadRequestException(`A volunteer team with the given name already exists in this help 
+                                        center. Please try to use another name.`);
+        } else if (e.code === 'P2003') {
+          throw new BadRequestException(
+            'The volunteer team you are trying to connect does not seem to exist in the system.',
+          );
         }
       }
     }
