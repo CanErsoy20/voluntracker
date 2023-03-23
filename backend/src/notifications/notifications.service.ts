@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import * as admin from 'firebase-admin';
 import * as dotenv from 'dotenv';
+import * as admin from 'firebase-admin';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { NotificationDto } from './dto/NotificationDto';
 
 @Injectable()

@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { VolunteerTypeDto } from './dto/volunteer-type.dto';
 
+// TODO: ONLY ADMINS
 @Injectable()
 export class VolunteerTypeService {
   constructor(private readonly prisma: PrismaService) {}

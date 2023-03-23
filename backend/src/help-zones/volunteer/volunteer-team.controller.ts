@@ -1,11 +1,13 @@
 import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { HttpResponse } from 'src/common';
+import { CreateVolunteerLeaderDto } from './dto/create-volunteer-leader.dto';
 import { CreateVolunteerTeamDto } from './dto/create-volunteer-team.dto';
 import { UpdateVolunteerTeamDto } from './dto/update-volunteer-team.dto';
 import { VolunteerTeamEntity } from './entities/volunteer-team.entity';
 import { VolunteerTeamService } from './volunteer-team.service';
 
+// TODO: MODIFY REQUESTS CAN ONLY BE DONE BY ADMINS OR COORDINATORS OF THE HELP CENTER OR THE TEAM LEADER OF THE SPECIFIC TEAM THAT IS BEING MODIFIED
 @ApiTags('volunteerTeams')
 @Controller('volunteerTeams')
 export class VolunteerTeamController {
@@ -93,6 +95,39 @@ export class VolunteerTeamController {
   @Get('unassigned')
   async getUnassignedVolunteerTeams() {
     const vt = await this.volunteerTeamService.getUnassignedVolunteerTeams();
+
+    if (!vt) {
+      throw new BadRequestException('Something went wrong while fetching unassigned volunteer teams.');
+    }
+
+    return new HttpResponse(vt, 'Successfully fetched the unassigned volunteer teams', 200);
+  }
+
+  @ApiOkResponse({
+    description: `Volunteer is assigned as team leader and the volunteer entity is removed (because it 
+      is converted to volunteer team leader).`,
+    type: VolunteerTeamEntity,
+  })
+  @ApiNotFoundResponse({
+    description: `Either the volunteer team or the volunteer object cannot be found.`,
+  })
+  @ApiBadRequestResponse({
+    description: `Possible fail scenarios: The team already has a leader; team is not related to a 
+                help center; volunteer is not related to a help center; the team's and volunteers help 
+                center's do not match; the volunteer is not in the same team that it is being assigned 
+                to as a team leader.`,
+  })
+  @Post(':volunteerTeamId/volunteerLeader/:volunteerId')
+  async assignVolunteerAsLeaderToTeam(
+    @Param('volunteerTeamId') vtid,
+    @Param('volunteerId') vid,
+    @Body() createVolunteerLeaderDto: CreateVolunteerLeaderDto,
+  ) {
+    const vt = await this.volunteerTeamService.assignVolunteerAsLeaderToTeam(
+      vtid,
+      vid,
+      createVolunteerLeaderDto,
+    );
 
     if (!vt) {
       throw new BadRequestException('Something went wrong while fetching unassigned volunteer teams.');

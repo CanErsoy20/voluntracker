@@ -12,7 +12,7 @@ export class VolunteerService {
     });
 
     if (!volunteer) {
-      throw new UserNotFoundException('User with given ID cannot be found.');
+      throw new UserNotFoundException('Volunteer with given ID cannot be found.');
     }
 
     return volunteer;
@@ -28,5 +28,19 @@ export class VolunteerService {
     }
 
     return user;
+  }
+
+  async deleteVolunteer(volunteerId: number) {
+    const volunteer = await this.prisma.volunteer.delete({
+      where: {
+        id: volunteerId,
+      },
+    });
+
+    if (!volunteer) {
+      throw new UserNotFoundException('Volunteer with given ID cannot be found.');
+    }
+
+    return volunteer;
   }
 }
