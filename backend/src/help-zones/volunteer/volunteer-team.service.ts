@@ -44,21 +44,6 @@ export class VolunteerTeamService {
     });
   }
 
-  // Be careful with unique constraints
-  async connectVolunteerTeamToHelpCenter(vtId: number, hcId: number) {
-    return await this.prisma.volunteerTeam.update({
-      where: { id: vtId },
-      data: {
-        helpCenter: {
-          connect: {
-            id: vtId,
-          },
-        },
-        helpCenterId: hcId,
-      },
-    });
-  }
-
   async getUnassignedVolunteerTeams() {
     return await this.prisma.volunteerTeam.findMany({
       where: {
