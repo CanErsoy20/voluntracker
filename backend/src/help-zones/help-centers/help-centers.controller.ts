@@ -25,6 +25,8 @@ import { NeededSupplyEntity } from '../needed-supply/entities/needed-supply.enti
 import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-volunteer.dto';
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
 import { NeededVolunteerEntity } from '../needed-volunteer/entities/needed-volunteer.entity';
+import { CreateVolunteerTeamDto } from '../volunteer/dto/create-volunteer-team.dto';
+import { VolunteerTeamEntity } from '../volunteer/entities/volunteer-team.entity';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
 import { HelpCenterEntity } from './entities/help-center.entity';
@@ -399,19 +401,128 @@ export class HelpCentersController {
   }
 
   // Create volunteer teams that are assigned to help centers
-  @Get('/:hcId/volunteerTeam')
-  async getAllVolunteerTeams() {}
+  @ApiResponse({
+    status: 200,
+    type: [VolunteerTeamEntity],
+    description: 'Successfully fetched the volunteer teams for the corresponding help center.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Could not fetch the volunteer teams for given help center.',
+  })
+  @Get('/:helpCenterId/volunteerTeam')
+  async getAllVolunteerTeams(@Param('helpCenterId') hcId) {
+    const hcWithVolunteerTeams = await this.helpCentersService.getAllVolunteerTeamsAtHelpCenter(hcId);
 
-  @Get('/:hcId/volunteerTeam/:id')
-  async getVolunteerTeam() {}
+    if (!hcWithVolunteerTeams) {
+      throw new BadRequestException('Could not find the requested resources');
+    }
+
+    const volunteerTeams = hcWithVolunteerTeams.volunteerTeams;
+    return new HttpResponse(
+      volunteerTeams,
+      'Sucessfulyl fetched all volunteer teams in the help center',
+      200,
+    );
+  }
 
   // Volunteer teams
-  @Post('/:hcId/volunteerTeam')
-  async createVolunteerTeam() {}
+  @ApiResponse({
+    status: 201,
+    type: [VolunteerTeamEntity],
+    description: 'Successfully created the volunteer team for the corresponding help center.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Could not create the volunteer team for given help center.',
+  })
+  @Post('/:helpCenterId/volunteerTeam')
+  async createVolunteerTeam(
+    @Param('helpCenterId') hcId,
+    @Body() createVolunteerTeamDto: CreateVolunteerTeamDto,
+  ) {
+    const hcWithVolunteerTeams = await this.helpCentersService.createVolunteerTeamAtHelpCenter(
+      hcId,
+      createVolunteerTeamDto,
+    );
 
-  @Delete('/:hcId/volunteerTeam/:vtId')
-  async deleteVolunterTeam() {}
+    if (!hcWithVolunteerTeams) {
+      throw new BadRequestException('Could not find the requested resources');
+    }
 
-  @Post('/:hcId/volunteerTeam/:vtId')
-  async updateVolunteerTeam() {}
+    const volunteerTeams = hcWithVolunteerTeams.volunteerTeams;
+    return new HttpResponse(
+      volunteerTeams,
+      'Sucessfulyl created the volunteer team inside the help center',
+      201,
+    );
+  }
+
+  @ApiResponse({
+    status: 201,
+    type: [VolunteerTeamEntity],
+    description:
+      'Updated the help center so that the volunteer team with given id is assigned to the help center.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Could not assign the volunteer team to the given help center.',
+  })
+  @Patch('/:helpCenterId/volunteerTeam/:volunteerTeamId')
+  async assigntVolunteerTeamToHelpCenter(
+    @Param('helpCenterId') hcId: number,
+    @Param('volunteerTeamId') vtId: number,
+  ) {
+    const helpCenterWithVolunteerTeam = await this.helpCentersService.assignVolunteerTeamToHelpCenter(
+      hcId,
+      vtId,
+    );
+    const volunteerTeams = helpCenterWithVolunteerTeam.volunteerTeams;
+    return new HttpResponse(
+      volunteerTeams,
+      'Sucessfully assigned the volunteer team to the help center',
+      200,
+    );
+  }
+
+  // Volunteer endpoints
+  // TODO: Assign volunteer to help center
+  @Patch('/:helpCenterId/volunteer/:volunteerId')
+  async assignVolunteerToHelpCenter(@Param('helpCenterId') hcid, @Param('volunteerId') vid) {
+    const updatedHelpCenter = await this.helpCentersService.assignVolunteerToHelpCenter(hcid, vid);
+
+    if (!updatedHelpCenter) {
+      throw new BadRequestException(
+        'Something went wrong while trying to assign the volunteer to the help center.',
+      );
+    }
+
+    return new HttpResponse(
+      updatedHelpCenter,
+      'Successfully assigned the volunteer to the help center.',
+      200,
+    );
+  }
+
+  @Patch('/:helpCenterId/volunteerTeam/:volunteerTeamId/volunteer/:volunteerId')
+  async assignVolunteerToVolunteerTeamInHelpCenter(
+    @Param('helpCenterId') hcid,
+    @Param('volunteerTeamId') vtid,
+    @Param('volunteerId') vid,
+  ) {
+    const updatedHelpCenter = await this.helpCentersService.assignVolunteerToVolunteerTeamAtHelpCenter(
+      hcid,
+      vtid,
+      vid,
+    );
+
+    if (!updatedHelpCenter) {
+      throw new BadRequestException(
+        'Something went wrong while trying to assign the volunteer to the volunteer team.',
+      );
+    }
+
+    return new HttpResponse(
+      updatedHelpCenter,
+      'Successfully assigned the volunteer to the help center.',
+      200,
+    );
+  }
 }
