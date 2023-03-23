@@ -411,7 +411,7 @@ export class HelpCentersController {
   })
   @Get('/:helpCenterId/volunteerTeam')
   async getAllVolunteerTeams(@Param('helpCenterId') hcId) {
-    const hcWithVolunteerTeams = await this.helpCentersService.getAllVolunteerTeams(hcId);
+    const hcWithVolunteerTeams = await this.helpCentersService.getAllVolunteerTeamsAtHelpCenter(hcId);
 
     if (!hcWithVolunteerTeams) {
       throw new BadRequestException('Could not find the requested resources');
@@ -439,7 +439,7 @@ export class HelpCentersController {
     @Param('helpCenterId') hcId,
     @Body() createVolunteerTeamDto: CreateVolunteerTeamDto,
   ) {
-    const hcWithVolunteerTeams = await this.helpCentersService.createVolunteerTeam(
+    const hcWithVolunteerTeams = await this.helpCentersService.createVolunteerTeamAtHelpCenter(
       hcId,
       createVolunteerTeamDto,
     );
@@ -480,5 +480,17 @@ export class HelpCentersController {
       'Sucessfully assigned the volunteer team to the help center',
       200,
     );
+  }
+
+  // Volunteer endpoints
+  // TODO: Assign volunteer to help center
+
+  @Patch('/:helpCenterId/volunteerTeam/:volunteerTeamId/volunteer/:volunteerId')
+  async addVolunteerToVolunteerTeamInHelpCenter(
+    @Param('helpCenterId') hcid,
+    @Param('volunteerTeamId') vtid,
+    @Param('volunteerId') vid,
+  ) {
+    return await this.helpCentersService.addVolunteerToVolunteerTeamInHelpCenter(hcid, vtid, vid);
   }
 }

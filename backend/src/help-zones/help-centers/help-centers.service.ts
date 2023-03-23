@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { HelpCenter, Prisma } from '@prisma/client';
 import { HttpResponse } from 'src/common';
+import { NotRelatedToHelpCenterException } from 'src/exceptions/not-related-to-help-center-exception.exception';
+import { NotRelatedToTeamException } from 'src/exceptions/not-related-to-team.exception';
 import { UniqueEntityNotFoundException } from 'src/exceptions/unique-entity-not-found-exception.exception';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OrderBy } from 'src/types/types';
@@ -12,6 +14,8 @@ import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-
 import { NeededVolunteerEntity } from '../needed-volunteer/entities/needed-volunteer.entity';
 import { NeededVolunteerService } from '../needed-volunteer/needed-volunteer.service';
 import { CreateVolunteerTeamDto } from '../volunteer/dto/create-volunteer-team.dto';
+import { VolunteerTeamService } from '../volunteer/volunteer-team.service';
+import { VolunteerService } from '../volunteer/volunteer.service';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
 import { HelpCenterEntity } from './entities/help-center.entity';
@@ -21,6 +25,8 @@ export class HelpCentersService {
     private readonly prisma: PrismaService,
     private readonly neededVolunteerService: NeededVolunteerService,
     private readonly neededSupplyService: NeededSupplyService,
+    private readonly volunteerTeamService: VolunteerTeamService,
+    private readonly volunteerService: VolunteerService,
   ) {}
 
   async create(createHelpCenterDto: CreateHelpCenterDto): Promise<HelpCenterEntity> {
@@ -319,7 +325,7 @@ export class HelpCentersService {
   }
 
   // VolunteerTeam CRUD
-  async getAllVolunteerTeams(helpCenterId: number) {
+  async getAllVolunteerTeamsAtHelpCenter(helpCenterId: number) {
     return await this.prisma.helpCenter.findUnique({
       where: {
         id: helpCenterId,
@@ -330,7 +336,10 @@ export class HelpCentersService {
     });
   }
 
-  async createVolunteerTeam(helpCenterId: number, createVolunteerTeamDto: CreateVolunteerTeamDto) {
+  async createVolunteerTeamAtHelpCenter(
+    helpCenterId: number,
+    createVolunteerTeamDto: CreateVolunteerTeamDto,
+  ) {
     try {
       return await this.prisma.helpCenter.update({
         where: { id: helpCenterId },
@@ -382,5 +391,59 @@ export class HelpCentersService {
         }
       }
     }
+  }
+
+  async addVolunteerToVolunteerTeamInHelpCenter(
+    helpCenterId: number,
+    volunteerTeamId: number,
+    volunteerId: number,
+  ) {
+    const helpCenter = await this.prisma.helpCenter.findUnique({
+      where: {
+        id: helpCenterId,
+      },
+    });
+    if (!helpCenter) {
+      throw new UniqueEntityNotFoundException('Help center with given id cannot be found.');
+    }
+
+    const volunteerTeam = await this.volunteerTeamService.getVolunteerTeam(volunteerTeamId);
+    if (!volunteerTeam) {
+      throw new UniqueEntityNotFoundException('Volunteer team with given ID cannot be found.');
+    }
+
+    if (volunteerTeam.helpCenterId !== helpCenterId) {
+      throw new NotRelatedToHelpCenterException(
+        'Volunteer team is not related to the specified help center. Make sure the help center has the volunteer team you are trying to use.',
+      );
+    }
+
+    // We trust that service handles exceptions related to this call
+    const volunteer = await this.volunteerService.getVolunteer(volunteerId);
+
+    if (volunteer.helpCenterId !== helpCenterId) {
+      throw new NotRelatedToHelpCenterException(
+        'This volunteer is not registered to the specified help center. Make sure the user is registered to the help center before assigning them to a team.',
+      );
+    }
+
+    const updatedHelpCenter = await this.prisma.helpCenter.update({
+      where: {
+        id: helpCenterId,
+      },
+      data: {
+        volunteers: {
+          connect: {
+            id: volunteerId,
+          },
+        },
+      },
+      include: {
+        volunteers: true,
+        volunteerTeams: true,
+      },
+    });
+
+    return updatedHelpCenter;
   }
 }
