@@ -324,7 +324,7 @@ export class HelpCentersService {
     });
   }
 
-  // VolunteerTeam CRUD
+  // VolunteerTeam resource endpoints
   async getAllVolunteerTeamsAtHelpCenter(helpCenterId: number) {
     return await this.prisma.helpCenter.findUnique({
       where: {
@@ -393,7 +393,52 @@ export class HelpCentersService {
     }
   }
 
-  async addVolunteerToVolunteerTeamInHelpCenter(
+  async assignVolunteerToHelpCenter(helpCenterId: number, volunteerId: number) {
+    const helpCenter = await this.prisma.helpCenter.findUnique({
+      where: {
+        id: helpCenterId,
+      },
+    });
+    if (!helpCenter) {
+      throw new UniqueEntityNotFoundException('Help center with given id cannot be found.');
+    }
+
+    const volunteer = await this.volunteerService.getVolunteer(volunteerId);
+    if (volunteer.helpCenterId === null || volunteer.helpCenterId === undefined) {
+      throw new NotRelatedToHelpCenterException(
+        `This volunteer is not registered to any help center. Make sure the volunteer is registered to the 
+        help center before assigning them to a team.`,
+      );
+    }
+    if (volunteer.helpCenterId !== helpCenterId) {
+      throw new NotRelatedToHelpCenterException(
+        `This volunteer is registered to a different help center. Make sure the user is registered to the
+         help center you are trying to access before assigning them to a team.`,
+      );
+    }
+
+    // Volunteer and help center connection is verified
+    const updatedHelpCenter = await this.prisma.helpCenter.update({
+      where: {
+        id: helpCenterId,
+      },
+      data: {
+        volunteers: {
+          connect: {
+            id: volunteerId,
+          },
+        },
+      },
+      include: {
+        volunteers: true,
+      },
+    });
+
+    return updatedHelpCenter;
+  }
+
+  // Volunteer resource endpoints
+  async assignVolunteerToVolunteerTeamAtHelpCenter(
     helpCenterId: number,
     volunteerTeamId: number,
     volunteerId: number,
@@ -406,24 +451,37 @@ export class HelpCentersService {
     if (!helpCenter) {
       throw new UniqueEntityNotFoundException('Help center with given id cannot be found.');
     }
-
+    // We trust that volunteer team service handles exceptions related to this call
     const volunteerTeam = await this.volunteerTeamService.getVolunteerTeam(volunteerTeamId);
-    if (!volunteerTeam) {
-      throw new UniqueEntityNotFoundException('Volunteer team with given ID cannot be found.');
+
+    if (volunteerTeam.helpCenterId === null || volunteerTeam.helpCenterId === undefined) {
+      throw new NotRelatedToHelpCenterException(
+        `Volunteer team is not related to any help center. Make sure the volunteer team is contained in the
+        help center you are trying to assign a volunteer.`,
+      );
     }
 
     if (volunteerTeam.helpCenterId !== helpCenterId) {
       throw new NotRelatedToHelpCenterException(
-        'Volunteer team is not related to the specified help center. Make sure the help center has the volunteer team you are trying to use.',
+        `Volunteer team iS related to a different help center. Make sure the volunteer team is contained in the
+        help center you are trying to assign a volunteer.`,
       );
     }
 
-    // We trust that service handles exceptions related to this call
+    // We trust that volunteer service handles exceptions related to this call
     const volunteer = await this.volunteerService.getVolunteer(volunteerId);
+
+    if (volunteer.helpCenterId === null || volunteer.helpCenterId === undefined) {
+      throw new NotRelatedToHelpCenterException(
+        `This volunteer is not registered to any help center. Make sure the volunteer is registered to the 
+        help center before assigning them to a team.`,
+      );
+    }
 
     if (volunteer.helpCenterId !== helpCenterId) {
       throw new NotRelatedToHelpCenterException(
-        'This volunteer is not registered to the specified help center. Make sure the user is registered to the help center before assigning them to a team.',
+        `This volunteer is registered to a different help center. Make sure the user is registered to the
+         help center you are trying to access before assigning them to a team.`,
       );
     }
 

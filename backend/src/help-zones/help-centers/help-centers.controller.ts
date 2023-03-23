@@ -484,13 +484,45 @@ export class HelpCentersController {
 
   // Volunteer endpoints
   // TODO: Assign volunteer to help center
+  @Patch('/:helpCenterId/volunteer/:volunteerId')
+  async assignVolunteerToHelpCenter(@Param('helpCenterId') hcid, @Param('volunteerId') vid) {
+    const updatedHelpCenter = await this.helpCentersService.assignVolunteerToHelpCenter(hcid, vid);
+
+    if (!updatedHelpCenter) {
+      throw new BadRequestException(
+        'Something went wrong while trying to assign the volunteer to the help center.',
+      );
+    }
+
+    return new HttpResponse(
+      updatedHelpCenter,
+      'Successfully assigned the volunteer to the help center.',
+      200,
+    );
+  }
 
   @Patch('/:helpCenterId/volunteerTeam/:volunteerTeamId/volunteer/:volunteerId')
-  async addVolunteerToVolunteerTeamInHelpCenter(
+  async assignVolunteerToVolunteerTeamInHelpCenter(
     @Param('helpCenterId') hcid,
     @Param('volunteerTeamId') vtid,
     @Param('volunteerId') vid,
   ) {
-    return await this.helpCentersService.addVolunteerToVolunteerTeamInHelpCenter(hcid, vtid, vid);
+    const updatedHelpCenter = await this.helpCentersService.assignVolunteerToVolunteerTeamAtHelpCenter(
+      hcid,
+      vtid,
+      vid,
+    );
+
+    if (!updatedHelpCenter) {
+      throw new BadRequestException(
+        'Something went wrong while trying to assign the volunteer to the volunteer team.',
+      );
+    }
+
+    return new HttpResponse(
+      updatedHelpCenter,
+      'Successfully assigned the volunteer to the help center.',
+      200,
+    );
   }
 }
