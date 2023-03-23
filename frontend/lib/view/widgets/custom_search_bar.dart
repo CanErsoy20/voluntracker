@@ -7,11 +7,11 @@ class CustomSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width / 2,
       child: Card(
           child: TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.search), border: InputBorder.none))),
     );
   }

@@ -37,6 +37,13 @@ enum UrgencyEnum {
   High
 }
 
+model Notification {
+  id        Int     @id @default(autoincrement())
+  title     String
+  body      String
+  recipient String
+}
+
 model HelpCenter {
   id                Int      @id @default(autoincrement())
   name              String

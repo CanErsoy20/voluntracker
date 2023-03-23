@@ -31,7 +31,7 @@ class HelpCenterListScreen extends StatelessWidget {
                           context.read<MapCubit>().initialCameraLocation =
                               context.read<MapCubit>().currentLocation;
                         },
-                        child: Text("Go To Map")),
+                        child: const Text("Go To Map")),
                   ),
                   ListView.builder(
                       shrinkWrap: true,
@@ -97,9 +97,9 @@ class HelpCenterListScreen extends StatelessWidget {
               ),
             );
           } else if (state is HelpCenterLoading) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else {
-            return Text("Error");
+            return const Text("Error");
           }
         },
       ),

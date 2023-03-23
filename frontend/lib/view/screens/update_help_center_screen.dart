@@ -1,9 +1,10 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/enums.dart';
+import 'package:afet_takip/helper_functions.dart';
+import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 import 'package:afet_takip/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:afet_takip/models/needed_volunteer/needed_volunteer_model.dart';
 import 'package:afet_takip/view/widgets/custom_text_field.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
@@ -13,6 +14,8 @@ import '../../models/needed_supply/create_needed_supply_model.dart';
 import '../../models/needed_supply/needed_supply_model.dart';
 import '../widgets/custom_dropdown_form_field.dart';
 import '../widgets/custom_need_card.dart';
+import '../widgets/custom_snackbars.dart';
+import '../widgets/custom_text_form_field.dart';
 
 class UpdateHelpCenterScreen extends StatefulWidget {
   const UpdateHelpCenterScreen({super.key});
@@ -33,12 +36,11 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
           length: 3,
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade400,
-                ),
                 child: TabBar(
+                  unselectedLabelColor: Colors.blue,
+                  indicatorColor: Colors.white,
                   indicatorPadding: const EdgeInsets.all(5),
                   indicator: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
@@ -60,9 +62,13 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                 child: BlocListener<HelpCenterCubit, HelpCenterState>(
                   listener: (context, state) {
                     if (state is HelpCenterError) {
-                      _errorSnackbar(context, state);
+                      context.read<HelpCenterCubit>().getHelpCenters();
+                      CustomSnackbars.errorSnackbar(
+                          context, state.title, state.description);
                     } else if (state is HelpCenterSuccess) {
-                      _successSnackbar(context, state);
+                      context.read<HelpCenterCubit>().getHelpCenters();
+                      CustomSnackbars.successSnackbar(
+                          context, state.title, state.description);
                     }
                   },
                   child: TabBarView(children: [
@@ -74,7 +80,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                         context,
                         context.read<HelpCenterCubit>().selectedCenter ??
                             context.read<HelpCenterCubit>().helpCenterList![1]),
-                    _buildVolunteerNeeds(
+                    _buildOtherDetails(
                         context,
                         context.read<HelpCenterCubit>().selectedCenter ??
                             context.read<HelpCenterCubit>().helpCenterList![1])
@@ -139,37 +145,13 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     );
   }
 
-  void _errorSnackbar(BuildContext context, HelpCenterError state) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        content: AwesomeSnackbarContent(
-          color: Colors.red,
-          title: state.title,
-          message: state.description,
-          contentType: ContentType.failure,
-        )));
-  }
-
-  void _successSnackbar(BuildContext context, HelpCenterSuccess state) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          color: Colors.green,
-          title: state.title,
-          message: state.description,
-          contentType: ContentType.success,
-        )));
-  }
-
   // Needed Volunteer methods
   void _showUpdateVolunteerNeedDialog(
       BuildContext context, NeededVolunteer oldModel) {
     showDialog(
         context: context,
         builder: (context) {
-          final _formKey1 = GlobalKey<FormState>();
+          final formKey = GlobalKey<FormState>();
           return AlertDialog(
             actionsAlignment: MainAxisAlignment.end,
             actions: [
@@ -180,7 +162,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    if (_formKey1.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().updateNeededVolunteer(
                           context.read<HelpCenterCubit>().newVolunteerNeed,
                           1,
@@ -193,7 +175,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Update"))
             ],
             content: _buildNeededVolunteerForm(
-                _formKey1, "Update Volunteer Need", oldModel),
+                formKey, "Update Volunteer Need", oldModel),
           );
         });
   }
@@ -202,7 +184,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     showDialog(
         context: context,
         builder: (context) {
-          final _formKey = GlobalKey<FormState>();
+          final formKey = GlobalKey<FormState>();
           return AlertDialog(
             actionsAlignment: MainAxisAlignment.end,
             actions: [
@@ -213,7 +195,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().createNeededVolunteer(
                           context.read<HelpCenterCubit>().newVolunteerNeed, 1);
                       context.read<HelpCenterCubit>().newVolunteerNeed =
@@ -223,8 +205,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Add New Need"))
             ],
-            content: _buildNeededVolunteerForm(
-                _formKey, "Create New Volunteer Need"),
+            content:
+                _buildNeededVolunteerForm(formKey, "Create New Volunteer Need"),
           );
         });
   }
@@ -289,7 +271,10 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                       int.tryParse(value);
                 },
                 customValidator: (value) {
-                  if (isInt(value!)) {
+                  if (value == null || value.isEmpty) {
+                    return "Quantity cannot be blank";
+                  }
+                  if (isInt(value)) {
                     if (int.parse(value) > 0) {
                       return null;
                     } else {
@@ -363,7 +348,10 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                       int.tryParse(value);
                 },
                 customValidator: (value) {
-                  if (isInt(value!)) {
+                  if (value == null || value.isEmpty) {
+                    return "Quantity cannot be blank";
+                  }
+                  if (isInt(value)) {
                     if (int.parse(value) > 0) {
                       return null;
                     } else {
@@ -383,7 +371,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     showDialog(
         context: context,
         builder: (context) {
-          final _formKey = GlobalKey<FormState>();
+          final formKey = GlobalKey<FormState>();
           return AlertDialog(
             actionsAlignment: MainAxisAlignment.end,
             actions: [
@@ -394,7 +382,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().createNeededSupply(
                           context.read<HelpCenterCubit>().newSupplyNeed, 1);
                       context.read<HelpCenterCubit>().newSupplyNeed =
@@ -404,7 +392,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Add New Need"))
             ],
-            content: _buildNeededSupplyForm(_formKey, "Create New Supply Need"),
+            content: _buildNeededSupplyForm(formKey, "Create New Supply Need"),
           );
         });
   }
@@ -414,7 +402,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     showDialog(
         context: context,
         builder: (context) {
-          final _formKey1 = GlobalKey<FormState>();
+          final formKey = GlobalKey<FormState>();
           return AlertDialog(
             actionsAlignment: MainAxisAlignment.end,
             actions: [
@@ -425,7 +413,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Cancel")),
               TextButton(
                   onPressed: () {
-                    if (_formKey1.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().updateNeededSupply(
                           context.read<HelpCenterCubit>().newSupplyNeed,
                           1,
@@ -437,8 +425,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Update"))
             ],
-            content: _buildNeededSupplyForm(
-                _formKey1, "Update Supply Need", oldModel),
+            content:
+                _buildNeededSupplyForm(formKey, "Update Supply Need", oldModel),
           );
         });
   }
@@ -491,6 +479,129 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
           child: const Text("Add New"),
         )
       ],
+    );
+  }
+
+  Widget _buildOtherDetails(
+      BuildContext context, HelpCenterModel currentCenter) {
+    final formKey = GlobalKey<FormState>();
+    return BlocBuilder<HelpCenterCubit, HelpCenterState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CustomTextFormField(
+                        onChanged: (value) {
+                          context.read<HelpCenterCubit>().emitEditing();
+                          context
+                              .read<HelpCenterCubit>()
+                              .updateHelpCenter
+                              .busiestHours!
+                              .start = value;
+                        },
+                        initialValue: HelperFunctions.formatDateToTime(
+                            currentCenter.busiestHours!.start!),
+                        label: "Busiest Hours Start At"),
+                    CustomTextFormField(
+                        onChanged: (value) {
+                          context.read<HelpCenterCubit>().emitEditing();
+                          context
+                              .read<HelpCenterCubit>()
+                              .updateHelpCenter
+                              .busiestHours!
+                              .end = value;
+                        },
+                        initialValue: HelperFunctions.formatDateToTime(
+                            currentCenter.busiestHours!.end!),
+                        label: "Busiest Hours End At"),
+                    CustomTextFormField(
+                        onChanged: (value) {
+                          context.read<HelpCenterCubit>().emitEditing();
+                          context
+                              .read<HelpCenterCubit>()
+                              .updateHelpCenter
+                              .openCloseInfo!
+                              .start = value;
+                        },
+                        initialValue: HelperFunctions.formatDateToTime(
+                            currentCenter.openCloseInfo!.start!),
+                        label: "Help Center Opens At"),
+                    CustomTextFormField(
+                        onChanged: (value) {
+                          context.read<HelpCenterCubit>().emitEditing();
+                          context
+                              .read<HelpCenterCubit>()
+                              .updateHelpCenter
+                              .openCloseInfo!
+                              .end = value;
+                        },
+                        initialValue: HelperFunctions.formatDateToTime(
+                            currentCenter.openCloseInfo!.end!),
+                        label: "Help Center Closes At"),
+                    CustomTextFormField(
+                      onChanged: (value) {
+                        context.read<HelpCenterCubit>().emitEditing();
+                        context
+                            .read<HelpCenterCubit>()
+                            .updateHelpCenter
+                            .additionalInfo = value;
+                      },
+                      initialValue: currentCenter.additionalInfo!,
+                      label: "Additional Info",
+                    ),
+                    CustomTextFormField(
+                        customValidator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Volunteer Capacity cannot be blank";
+                          }
+                          if (isInt(value)) {
+                            if (int.parse(value) > 0) {
+                              return null;
+                            } else {
+                              return "Volunteer Capacity must be a number >= 0";
+                            }
+                          } else {
+                            return "Volunteer Capacity must be a number => 0";
+                          }
+                        },
+                        onChanged: (value) {
+                          context.read<HelpCenterCubit>().emitEditing();
+                          context
+                              .read<HelpCenterCubit>()
+                              .updateHelpCenter
+                              .volunteerCapacity = int.tryParse(value);
+                        },
+                        initialValue:
+                            currentCenter.volunteerCapacity.toString(),
+                        label: "Volunteer Capacity"),
+                    state is HelpCenterEditing
+                        ? ElevatedButton(
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                context
+                                    .read<HelpCenterCubit>()
+                                    .updateOtherDetails(
+                                        context
+                                            .read<HelpCenterCubit>()
+                                            .updateHelpCenter,
+                                        1);
+                                context
+                                    .read<HelpCenterCubit>()
+                                    .updateHelpCenter = CreateHelpCenter();
+                              }
+                            },
+                            child: const Text("Update"))
+                        : const SizedBox.shrink()
+                  ],
+                ),
+              )),
+        );
+      },
     );
   }
 }

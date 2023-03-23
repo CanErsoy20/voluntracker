@@ -24,7 +24,6 @@ class _MapScreenState extends State<MapScreen> {
   Set<Marker> markers = {};
   @override
   void initState() {
-    // TODO: implement initState
     setMarkers(context);
     super.initState();
   }
@@ -43,8 +42,8 @@ class _MapScreenState extends State<MapScreen> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: Text("GPS Service is disabled"),
-                      content: Text(
+                      title: const Text("GPS Service is disabled"),
+                      content: const Text(
                           "Please try again after you enable the location of your device."),
                       actions: [
                         TextButton(
@@ -52,20 +51,19 @@ class _MapScreenState extends State<MapScreen> {
                               Navigator.of(context).pop();
                               context.read<MapCubit>().continueWithoutGPS();
                             },
-                            child: Text("Continue without my location")),
+                            child: const Text("Continue without my location")),
                         TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                               context.read<MapCubit>().getCurrentLocation();
                             },
-                            child: Text("Try Again"))
+                            child: const Text("Try Again"))
                       ],
                     );
                   });
             }
           },
           builder: (context, state) {
-            print(state.toString());
             if (state is MapDisplay) {
               return Stack(
                 children: [
@@ -100,12 +98,12 @@ class _MapScreenState extends State<MapScreen> {
                           onPressed: () {
                             context.read<MapCubit>().continueWithoutGPS();
                           },
-                          child: Text("Continue without my location")),
+                          child: const Text("Continue without my location")),
                       ElevatedButton(
                           onPressed: () {
                             context.read<MapCubit>().getCurrentLocation();
                           },
-                          child: Text("Try again")),
+                          child: const Text("Try again")),
                     ],
                   )
                 ],
