@@ -110,7 +110,8 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text("Starts"),
+                                const Text("Starts",
+                                    style: TextStyle(color: Colors.white)),
                                 ElevatedButton(
                                     onPressed: () {
                                       _selectBHstart(context, newCenter);

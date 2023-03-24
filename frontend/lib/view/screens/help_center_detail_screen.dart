@@ -67,16 +67,11 @@ class HelpCenterDetailScreen extends StatelessWidget {
                     Text(
                         "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.end!)}"),
                   ]),
-              SizedBox(
+              const SizedBox(
                 height: 50,
                 child: TabBar(
-                  indicatorColor: Colors.white,
-                  unselectedLabelColor: Colors.blue,
-                  indicatorPadding: const EdgeInsets.symmetric(horizontal: 5),
-                  indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      color: Colors.blue),
-                  tabs: const [
+                  indicatorPadding: EdgeInsets.symmetric(horizontal: 5),
+                  tabs: [
                     Tab(text: "Volunteer Needs"),
                     Tab(text: "Supply Needs")
                   ],
