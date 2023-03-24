@@ -36,16 +36,11 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
           length: 3,
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 50,
                 child: TabBar(
-                  unselectedLabelColor: Colors.blue,
-                  indicatorColor: Colors.white,
-                  indicatorPadding: const EdgeInsets.all(5),
-                  indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      color: Colors.blue),
-                  tabs: const [
+                  indicatorPadding: EdgeInsets.all(5),
+                  tabs: [
                     Tab(
                       text: "Volunteer",
                     ),

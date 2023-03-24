@@ -27,8 +27,16 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+              textTheme: TextTheme(bodyMedium: TextStyle(color: Colors.white)),
+              scaffoldBackgroundColor: const Color.fromARGB(225, 16, 24, 33),
+              tabBarTheme: TabBarTheme(
+                unselectedLabelColor: Colors.white,
+                indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    color: Color.fromARGB(225, 75, 142, 178)),
+              ),
+              appBarTheme: const AppBarTheme(
+                  backgroundColor: Color.fromARGB(225, 27, 40, 55))),
           debugShowCheckedModeBanner: false,
           onGenerateRoute: routeGenerator.getRoute,
           initialRoute: Routes.loginRoute),

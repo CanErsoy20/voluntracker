@@ -20,21 +20,35 @@ class CustomTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextFormField(
-        onChanged: onChanged,
-        validator: customValidator ??
-            (value) {
-              if (value == null || value.isEmpty) {
-                return "$label cannot be blank";
-              }
-              return null;
-            },
-        enabled: enabled,
-        initialValue: initialValue,
-        decoration: InputDecoration(
-          labelText: label,
-          border: const OutlineInputBorder(),
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(color: Colors.white),
+          ),
+          SizedBox(
+            height: 2,
+          ),
+          TextFormField(
+            onChanged: onChanged,
+            validator: customValidator ??
+                (value) {
+                  if (value == null || value.isEmpty) {
+                    return "$label cannot be blank";
+                  }
+                  return null;
+                },
+            enabled: enabled,
+            initialValue: initialValue,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              // labelText: label,
+              border: const OutlineInputBorder(),
+            ),
+          ),
+        ],
       ),
     );
   }
