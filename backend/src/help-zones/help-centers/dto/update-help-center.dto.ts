@@ -3,6 +3,6 @@ import { NeededSupply, NeededVolunteer } from '@prisma/client';
 import { CreateHelpCenterDto } from './create-help-center.dto';
 
 export class UpdateHelpCenterDto extends PartialType(CreateHelpCenterDto) {
-  neededVolunteers: NeededVolunteer;
-  neededSupply: NeededSupply;
+  neededVolunteers: NeededVolunteer[];
+  neededSupply: NeededSupply[];
 }
