@@ -5,6 +5,7 @@ import { VolunteerTypeDto } from './dto/volunteer-type.dto';
 import { VolunteerTypeEntity } from './entities/volunteer-type.entity';
 import { VolunteerTypeService } from './volunteer-type.service';
 
+// TODO: POST/DELETE/PATCH CAN ONLY BE DONE BY ADMINS
 @ApiTags('VolunteerTypes')
 @Controller('volunteer/types')
 export class VolunteerTypeController {

@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { NotificationsService } from './notifications.service';
 import { NotificationDto } from './dto/NotificationDto';
-
+import { NotificationsService } from './notifications.service';
 
 @Controller('notifications')
 export class NotificationsController {
@@ -11,7 +10,6 @@ export class NotificationsController {
   async sendNotification(@Body() notificationDto: NotificationDto) {
     await this.notificationsService.sendNotification(notificationDto);
   }
-
 
   @Get()
   async getNotifications() {
