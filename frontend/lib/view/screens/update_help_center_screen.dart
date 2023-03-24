@@ -485,6 +485,20 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
   Widget _buildOtherDetails(
       BuildContext context, HelpCenterModel currentCenter) {
     final formKey = GlobalKey<FormState>();
+    context.read<HelpCenterCubit>().updateHelpCenter.name =
+        context.read<HelpCenterCubit>().helpCenterList![0].name;
+    context.read<HelpCenterCubit>().updateHelpCenter.additionalInfo =
+        context.read<HelpCenterCubit>().helpCenterList![0].additionalInfo;
+    context.read<HelpCenterCubit>().updateHelpCenter.busiestHours =
+        context.read<HelpCenterCubit>().helpCenterList![0].busiestHours;
+    context.read<HelpCenterCubit>().updateHelpCenter.contactInfo =
+        context.read<HelpCenterCubit>().helpCenterList![0].contactInfo;
+    context.read<HelpCenterCubit>().updateHelpCenter.location =
+        context.read<HelpCenterCubit>().helpCenterList![0].location;
+    context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo =
+        context.read<HelpCenterCubit>().helpCenterList![0].openCloseInfo;
+    context.read<HelpCenterCubit>().updateHelpCenter.volunteerCapacity =
+        context.read<HelpCenterCubit>().helpCenterList![0].volunteerCapacity;
     return BlocBuilder<HelpCenterCubit, HelpCenterState>(
       builder: (context, state) {
         return Padding(
