@@ -54,7 +54,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                 ),
               ),
               Expanded(
-                child: BlocListener<HelpCenterCubit, HelpCenterState>(
+                child: BlocConsumer<HelpCenterCubit, HelpCenterState>(
                   listener: (context, state) {
                     if (state is HelpCenterError) {
                       context.read<HelpCenterCubit>().getHelpCenters();
@@ -66,30 +66,19 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                           context, state.title, state.description);
                     }
                   },
-                  child: BlocBuilder<HelpCenterCubit, HelpCenterState>(
-                    builder: (context, state) {
-                      return TabBarView(children: [
-                        _buildVolunteerNeeds(
-                            context,
-                            context.read<HelpCenterCubit>().selectedCenter ??
-                                context
-                                    .read<HelpCenterCubit>()
-                                    .helpCenterList![1]),
-                        _buildSupplyNeeds(
-                            context,
-                            context.read<HelpCenterCubit>().selectedCenter ??
-                                context
-                                    .read<HelpCenterCubit>()
-                                    .helpCenterList![1]),
-                        _buildOtherDetails(
-                            context,
-                            context.read<HelpCenterCubit>().selectedCenter ??
-                                context
-                                    .read<HelpCenterCubit>()
-                                    .helpCenterList![1])
-                      ]);
-                    },
-                  ),
+                  builder: (context, state) {
+                    if (state is HelpCenterLoading) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return TabBarView(children: [
+                      _buildVolunteerNeeds(context,
+                          context.read<HelpCenterCubit>().helpCenterList![1]),
+                      _buildSupplyNeeds(context,
+                          context.read<HelpCenterCubit>().helpCenterList![1]),
+                      _buildOtherDetails(context,
+                          context.read<HelpCenterCubit>().helpCenterList![1])
+                    ]);
+                  },
                 ),
               )
             ],
@@ -333,6 +322,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               child: Text(title),
             ),
             CustomDropdownFormField(
+              value: oldModel?.supplyTypeCategory,
               list: supplyTypeCategory,
               label: "Category",
               onChanged: (value) {
@@ -343,6 +333,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomDropdownFormField(
+              value: oldModel?.supplyTypeName,
               list: supplyTypeNames,
               label: "Name",
               onChanged: (value) {
@@ -351,6 +342,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomDropdownFormField(
+              value: oldModel?.urgency,
               list: urgency,
               label: "Urgency",
               onChanged: (value) {
@@ -358,11 +350,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomFormField(
-                hint: context
-                    .read<HelpCenterCubit>()
-                    .newSupplyNeed
-                    .quantity
-                    .toString(),
+                value: oldModel?.quantity.toString(),
+                hint: oldModel?.quantity.toString() ?? "Ex: 50",
                 label: "Quantity",
                 onChanged: (value) {
                   context.read<HelpCenterCubit>().newSupplyNeed.quantity =
