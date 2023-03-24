@@ -66,20 +66,30 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                           context, state.title, state.description);
                     }
                   },
-                  child: TabBarView(children: [
-                    _buildVolunteerNeeds(
-                        context,
-                        context.read<HelpCenterCubit>().selectedCenter ??
-                            context.read<HelpCenterCubit>().helpCenterList![1]),
-                    _buildSupplyNeeds(
-                        context,
-                        context.read<HelpCenterCubit>().selectedCenter ??
-                            context.read<HelpCenterCubit>().helpCenterList![1]),
-                    _buildOtherDetails(
-                        context,
-                        context.read<HelpCenterCubit>().selectedCenter ??
-                            context.read<HelpCenterCubit>().helpCenterList![1])
-                  ]),
+                  child: BlocBuilder<HelpCenterCubit, HelpCenterState>(
+                    builder: (context, state) {
+                      return TabBarView(children: [
+                        _buildVolunteerNeeds(
+                            context,
+                            context.read<HelpCenterCubit>().selectedCenter ??
+                                context
+                                    .read<HelpCenterCubit>()
+                                    .helpCenterList![1]),
+                        _buildSupplyNeeds(
+                            context,
+                            context.read<HelpCenterCubit>().selectedCenter ??
+                                context
+                                    .read<HelpCenterCubit>()
+                                    .helpCenterList![1]),
+                        _buildOtherDetails(
+                            context,
+                            context.read<HelpCenterCubit>().selectedCenter ??
+                                context
+                                    .read<HelpCenterCubit>()
+                                    .helpCenterList![1])
+                      ]);
+                    },
+                  ),
                 ),
               )
             ],
@@ -170,7 +180,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Update"))
             ],
             content: _buildNeededVolunteerForm(
-                formKey, "Update Volunteer Need", oldModel),
+                formKey, "Update Volunteer Need", context, oldModel),
           );
         });
   }
@@ -200,19 +210,27 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Add New Need"))
             ],
-            content:
-                _buildNeededVolunteerForm(formKey, "Create New Volunteer Need"),
+            content: _buildNeededVolunteerForm(
+                formKey, "Create New Volunteer Need", context),
           );
         });
   }
 
-  Form _buildNeededVolunteerForm(GlobalKey<FormState> formKey, String title,
+  Form _buildNeededVolunteerForm(
+      GlobalKey<FormState> formKey, String title, BuildContext context,
       [NeededVolunteer? oldModel]) {
-    List<String> volunteerTypeNames =
-        VolunteerTypeName.values.map((e) => e.name).toList();
-    List<String> volunteerTypeCategory =
-        VolunteerTypeCategory.values.map((e) => e.name).toList();
+    List<String> volunteerTypeNames = [];
+    List<String> volunteerTypeCategory = [];
     List<String> urgency = Urgency.values.map((e) => e.name).toList();
+    context.read<HelpCenterCubit>().getVolunteerTypes();
+    for (var i = 0;
+        i < context.read<HelpCenterCubit>().volunteerTypes!.length;
+        i++) {
+      volunteerTypeNames
+          .add(context.read<HelpCenterCubit>().volunteerTypes![i].typeName!);
+      volunteerTypeCategory
+          .add(context.read<HelpCenterCubit>().volunteerTypes![i].category!);
+    }
 
     oldModel != null
         ? context.read<HelpCenterCubit>().newVolunteerNeed = oldModel
@@ -227,6 +245,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               child: Text(title),
             ),
             CustomDropdownFormField(
+              value: oldModel?.volunteerTypeCategory,
               list: volunteerTypeCategory,
               label: "Category",
               onChanged: (value) {
@@ -237,6 +256,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomDropdownFormField(
+              value: oldModel?.volunteerTypeName,
               list: volunteerTypeNames,
               label: "Name",
               onChanged: (value) {
@@ -247,6 +267,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomDropdownFormField(
+              value: oldModel?.urgency,
               list: urgency,
               label: "Urgency",
               onChanged: (value) {
@@ -255,11 +276,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomFormField(
-                hint: context
-                    .read<HelpCenterCubit>()
-                    .newVolunteerNeed
-                    .quantity
-                    .toString(),
+                value: oldModel?.quantity.toString(),
+                hint: oldModel?.quantity.toString() ?? "Ex: 50",
                 label: "Quantity",
                 onChanged: (value) {
                   context.read<HelpCenterCubit>().newVolunteerNeed.quantity =
@@ -286,13 +304,21 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
   }
 
   // Needed supply methods
-  Form _buildNeededSupplyForm(GlobalKey<FormState> formKey, String title,
+  Form _buildNeededSupplyForm(
+      GlobalKey<FormState> formKey, String title, BuildContext context,
       [NeededSupply? oldModel]) {
-    List<String> supplyTypeNames =
-        SupplyTypeName.values.map((e) => e.name).toList();
-    List<String> supplyTypeCategory =
-        SupplyTypeCategory.values.map((e) => e.name).toList();
+    List<String> supplyTypeNames = [];
+    List<String> supplyTypeCategory = [];
     List<String> urgency = Urgency.values.map((e) => e.name).toList();
+    context.read<HelpCenterCubit>().getSupplyTypes();
+    for (var i = 0;
+        i < context.read<HelpCenterCubit>().supplyTypes!.length;
+        i++) {
+      supplyTypeNames
+          .add(context.read<HelpCenterCubit>().supplyTypes![i].typeName!);
+      supplyTypeCategory
+          .add(context.read<HelpCenterCubit>().supplyTypes![i].category!);
+    }
 
     oldModel != null
         ? context.read<HelpCenterCubit>().newSupplyNeed = oldModel
@@ -387,7 +413,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Add New Need"))
             ],
-            content: _buildNeededSupplyForm(formKey, "Create New Supply Need"),
+            content: _buildNeededSupplyForm(
+                formKey, "Create New Supply Need", context),
           );
         });
   }
@@ -420,8 +447,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Update"))
             ],
-            content:
-                _buildNeededSupplyForm(formKey, "Update Supply Need", oldModel),
+            content: _buildNeededSupplyForm(
+                formKey, "Update Supply Need", context, oldModel),
           );
         });
   }

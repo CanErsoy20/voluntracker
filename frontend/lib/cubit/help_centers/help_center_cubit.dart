@@ -4,10 +4,12 @@ import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 import 'package:afet_takip/models/help_center/location_model.dart';
 import 'package:afet_takip/models/help_center/open_close_info_model.dart';
 import 'package:afet_takip/models/needed_supply/create_needed_supply_model.dart';
+import 'package:afet_takip/models/types/supply_types_model.dart';
 import 'package:bloc/bloc.dart';
 
 import '../../models/help_center/help_center_model.dart';
 import '../../models/needed_volunteer/create_needed_volunteer_model.dart';
+import '../../models/types/volunteer_types_model.dart';
 import '../../services/help_center_service.dart';
 part 'help_center_state.dart';
 
@@ -23,6 +25,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
       openCloseInfo: OpenCloseInfo(),
       contactInfo: ContactInfo(),
       location: Location());
+  List<SupplyTypeModel>? supplyTypes = [];
+  List<VolunteerTypeModel>? volunteerTypes = [];
 
   Future<void> getHelpCenters() async {
     emit(HelpCenterLoading());
@@ -114,6 +118,18 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
       emit(HelpCenterSuccess(
           "Successfully Updated", "Successfully updated other details"));
     }
+  }
+
+  Future<void> getSupplyTypes() async {
+    emit(HelpCenterLoading());
+    supplyTypes = await service.getSupplyTypes();
+    emit(HelpCenterInitial());
+  }
+
+  Future<void> getVolunteerTypes() async {
+    emit(HelpCenterLoading());
+    volunteerTypes = await service.getVolunteerTypes();
+    emit(HelpCenterInitial());
   }
 
   void emitEditing() {
