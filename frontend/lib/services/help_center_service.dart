@@ -10,6 +10,8 @@ import 'package:http/http.dart';
 import '../api.dart';
 import '../models/help_center/help_center_model.dart';
 import '../models/response_model.dart';
+import '../models/types/supply_types_model.dart';
+import '../models/types/volunteer_types_model.dart';
 
 class HelpCenterService {
   HelpCenterService();
@@ -155,6 +157,50 @@ class HelpCenterService {
         return HelpCenterModel.fromJson(responseModel.data);
       } else {
         return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<SupplyTypeModel>?> getSupplyTypes() async {
+    try {
+      Response? response;
+      response = await Api.instance
+          .getRequest(ApiConstant.baseUrl, ApiConstant.supplyTypes);
+      if (response.statusCode == 200) {
+        List<SupplyTypeModel> result = <SupplyTypeModel>[];
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+
+        List<dynamic> list = responseModel.data;
+        for (int i = 0; i < list.length; i++) {
+          result.add(SupplyTypeModel.fromJson(list[i]));
+        }
+        return result;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<VolunteerTypeModel>?> getVolunteerTypes() async {
+    try {
+      Response? response;
+      response = await Api.instance
+          .getRequest(ApiConstant.baseUrl, ApiConstant.volunteerTypes);
+      if (response.statusCode == 200) {
+        List<VolunteerTypeModel> result = <VolunteerTypeModel>[];
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+
+        List<dynamic> list = responseModel.data;
+        for (int i = 0; i < list.length; i++) {
+          result.add(VolunteerTypeModel.fromJson(list[i]));
+        }
+        return result;
       }
     } catch (e) {
       return null;
