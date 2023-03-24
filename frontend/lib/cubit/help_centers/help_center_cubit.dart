@@ -119,4 +119,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   void emitEditing() {
     emit(HelpCenterEditing());
   }
+
+  void emitDisplay() {
+    emit(HelpCenterDisplay());
+  }
 }

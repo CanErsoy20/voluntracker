@@ -17,7 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
     context.read<HelpCenterCubit>().getHelpCenters();
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Afet Takip"),
+        title: const Text("Voluntracker"),
         centerTitle: true,
       ),
       body: Center(
