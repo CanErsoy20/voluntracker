@@ -1,6 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { HelpCenter, Prisma } from '@prisma/client';
 import { HttpResponse } from 'src/common';
+import { NotRelatedToHelpCenterException } from 'src/exceptions/not-related-to-help-center-exception.exception';
+import { NotRelatedToTeamException } from 'src/exceptions/not-related-to-team.exception';
+import { UniqueEntityNotFoundException } from 'src/exceptions/unique-entity-not-found-exception.exception';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
@@ -10,6 +13,9 @@ import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
 import { NeededVolunteerEntity } from '../needed-volunteer/entities/needed-volunteer.entity';
 import { NeededVolunteerService } from '../needed-volunteer/needed-volunteer.service';
+import { CreateVolunteerTeamDto } from '../volunteer/dto/create-volunteer-team.dto';
+import { VolunteerTeamService } from '../volunteer/volunteer-team.service';
+import { VolunteerService } from '../volunteer/volunteer.service';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
 import { HelpCenterEntity } from './entities/help-center.entity';
@@ -19,6 +25,8 @@ export class HelpCentersService {
     private readonly prisma: PrismaService,
     private readonly neededVolunteerService: NeededVolunteerService,
     private readonly neededSupplyService: NeededSupplyService,
+    private readonly volunteerTeamService: VolunteerTeamService,
+    private readonly volunteerService: VolunteerService,
   ) {}
 
   async create(createHelpCenterDto: CreateHelpCenterDto): Promise<HelpCenterEntity> {
@@ -28,14 +36,35 @@ export class HelpCentersService {
   }
 
   async update(id: number, updateHelpCenterDto: UpdateHelpCenterDto): Promise<HelpCenterEntity> {
-    return await this.prisma.helpCenter.update({
-      where: { id },
-      data: updateHelpCenterDto,
-    });
+    try {
+      const helpCenter = await this.prisma.helpCenter.update({
+        where: { id },
+        data: updateHelpCenterDto,
+      });
+      return helpCenter;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new UniqueEntityNotFoundException(
+            'Help center you are trying to update cannot be found in the system.',
+          );
+        }
+      }
+    }
   }
 
   async remove(id: number): Promise<HelpCenterEntity> {
-    return await this.prisma.helpCenter.delete({ where: { id } });
+    try {
+      return await this.prisma.helpCenter.delete({ where: { id } });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new UniqueEntityNotFoundException(
+            'Help center you are trying to remove cannot be found in the system.',
+          );
+        }
+      }
+    }
   }
 
   async findAll(): Promise<HelpCenterEntity[]> {
@@ -46,25 +75,44 @@ export class HelpCentersService {
         supply: true,
         coordinator: true,
         volunteerTeams: true,
+        volunteers: true,
       },
     });
   }
 
   async findOne(id: number): Promise<HelpCenterEntity> {
-    return await this.prisma.helpCenter.findUnique({
-      where: { id },
-      include: {
-        neededSupply: true,
-        neededVolunteers: true,
-        supply: true,
-        coordinator: true,
-        volunteerTeams: true,
-      },
-    });
+    try {
+      return await this.prisma.helpCenter.findUnique({
+        where: { id },
+        include: {
+          neededSupply: true,
+          neededVolunteers: true,
+          supply: true,
+          coordinator: true,
+          volunteerTeams: true,
+          volunteers: true,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new UniqueEntityNotFoundException(
+            'Help center you are trying to access cannot be found in the system.',
+          );
+        }
+      }
+    }
   }
 
   async findAllOpen() {
     const helpCenters = await this.findAll();
+
+    if (helpCenters.length === 0) {
+      throw new UniqueEntityNotFoundException(
+        'Help center you are trying to remove cannot be found in the system.',
+      );
+    }
+
     const now = Date.now();
     const openCenters = helpCenters.map((hc) => {
       const openCloseObject = hc.openCloseInfo;
@@ -258,20 +306,202 @@ export class HelpCentersService {
         supply: true,
         coordinator: true,
         volunteerTeams: true,
+        volunteers: true,
       },
     });
   }
 
   async findAllHelpCenterDetails() {
     return await this.prisma.helpCenter.findMany({
-      where: {},
       include: {
         neededSupply: true,
         neededVolunteers: true,
         supply: true,
         coordinator: true,
         volunteerTeams: true,
+        volunteers: true,
       },
     });
+  }
+
+  // VolunteerTeam resource endpoints
+  async getAllVolunteerTeamsAtHelpCenter(helpCenterId: number) {
+    return await this.prisma.helpCenter.findUnique({
+      where: {
+        id: helpCenterId,
+      },
+      include: {
+        volunteerTeams: true,
+      },
+    });
+  }
+
+  async createVolunteerTeamAtHelpCenter(
+    helpCenterId: number,
+    createVolunteerTeamDto: CreateVolunteerTeamDto,
+  ) {
+    try {
+      return await this.prisma.helpCenter.update({
+        where: { id: helpCenterId },
+        data: {
+          volunteerTeams: {
+            create: createVolunteerTeamDto,
+          },
+        },
+        include: {
+          volunteerTeams: true,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2002') {
+          throw new BadRequestException(`A volunteer team with the given name already exists in this help 
+                                        center. Please try to use another name`);
+        }
+      }
+    }
+  }
+
+  async assignVolunteerTeamToHelpCenter(hcId: number, vtId: number) {
+    try {
+      return await this.prisma.helpCenter.update({
+        where: {
+          id: hcId,
+        },
+        data: {
+          volunteerTeams: {
+            connect: { id: vtId },
+          },
+        },
+        include: {
+          volunteerTeams: true,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2001') {
+          throw new BadRequestException(`This help center does not exists in the system.`);
+        } else if (e.code === 'P2002') {
+          throw new BadRequestException(`A volunteer team with the given name already exists in this help 
+                                        center. Please try to use another name.`);
+        } else if (e.code === 'P2003') {
+          throw new BadRequestException(
+            'The volunteer team you are trying to connect does not seem to exist in the system.',
+          );
+        }
+      }
+    }
+  }
+
+  async assignVolunteerToHelpCenter(helpCenterId: number, volunteerId: number) {
+    const helpCenter = await this.prisma.helpCenter.findUnique({
+      where: {
+        id: helpCenterId,
+      },
+    });
+    if (!helpCenter) {
+      throw new UniqueEntityNotFoundException('Help center with given id cannot be found.');
+    }
+
+    const volunteer = await this.volunteerService.getVolunteer(volunteerId);
+    if (volunteer.helpCenterId === null || volunteer.helpCenterId === undefined) {
+      throw new NotRelatedToHelpCenterException(
+        `This volunteer is not registered to any help center. Make sure the volunteer is registered to the 
+        help center before assigning them to a team.`,
+      );
+    }
+    if (volunteer.helpCenterId !== helpCenterId) {
+      throw new NotRelatedToHelpCenterException(
+        `This volunteer is registered to a different help center. Make sure the user is registered to the
+         help center you are trying to access before assigning them to a team.`,
+      );
+    }
+
+    // Volunteer and help center connection is verified
+    const updatedHelpCenter = await this.prisma.helpCenter.update({
+      where: {
+        id: helpCenterId,
+      },
+      data: {
+        volunteers: {
+          connect: {
+            id: volunteerId,
+          },
+        },
+      },
+      include: {
+        volunteers: true,
+      },
+    });
+
+    return updatedHelpCenter;
+  }
+
+  // Volunteer resource endpoints
+  async assignVolunteerToVolunteerTeamAtHelpCenter(
+    helpCenterId: number,
+    volunteerTeamId: number,
+    volunteerId: number,
+  ) {
+    const helpCenter = await this.prisma.helpCenter.findUnique({
+      where: {
+        id: helpCenterId,
+      },
+    });
+    if (!helpCenter) {
+      throw new UniqueEntityNotFoundException('Help center with given id cannot be found.');
+    }
+    // We trust that volunteer team service handles exceptions related to this call
+    const volunteerTeam = await this.volunteerTeamService.getVolunteerTeam(volunteerTeamId);
+
+    if (volunteerTeam.helpCenterId === null || volunteerTeam.helpCenterId === undefined) {
+      throw new NotRelatedToHelpCenterException(
+        `Volunteer team is not related to any help center. Make sure the volunteer team is contained in the
+        help center you are trying to assign a volunteer.`,
+      );
+    }
+
+    if (volunteerTeam.helpCenterId !== helpCenterId) {
+      throw new NotRelatedToHelpCenterException(
+        `Volunteer team iS related to a different help center. Make sure the volunteer team is contained in the
+        help center you are trying to assign a volunteer.`,
+      );
+    }
+
+    // We trust that volunteer service handles exceptions related to this call
+    const volunteer = await this.volunteerService.getVolunteer(volunteerId);
+
+    if (volunteer.helpCenterId === null || volunteer.helpCenterId === undefined) {
+      throw new NotRelatedToHelpCenterException(
+        `This volunteer is not registered to any help center. Make sure the volunteer is registered to the 
+        help center before assigning them to a team.`,
+      );
+    }
+
+    if (volunteer.helpCenterId !== helpCenterId) {
+      throw new NotRelatedToHelpCenterException(
+        `This volunteer is registered to a different help center. Make sure the user is registered to the
+         help center you are trying to access before assigning them to a team.`,
+      );
+    }
+
+    const updatedHelpCenter = await this.prisma.helpCenter.update({
+      where: {
+        id: helpCenterId,
+      },
+      data: {
+        volunteers: {
+          connect: {
+            id: volunteerId,
+          },
+        },
+      },
+      include: {
+        volunteers: true,
+        volunteerTeams: true,
+      },
+    });
+
+    return updatedHelpCenter;
   }
 }

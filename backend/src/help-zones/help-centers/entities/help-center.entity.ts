@@ -112,7 +112,7 @@ export class HelpCenterEntity implements HelpCenter {
   @ApiProperty({
     required: false,
     description: 'Volunteers assigned to the help center.',
-    type: 'array',
+    type: Array,
     items: {
       $ref: getSchemaPath(VolunteerEntity),
     },
@@ -122,7 +122,7 @@ export class HelpCenterEntity implements HelpCenter {
   @ApiProperty({
     required: false,
     description: 'Details of the volunteers that the help center needs.',
-    type: 'array',
+    type: Array,
     items: {
       $ref: getSchemaPath(NeededVolunteerEntity),
     },
@@ -132,7 +132,7 @@ export class HelpCenterEntity implements HelpCenter {
   @ApiProperty({
     required: false,
     description: 'Supplies that are already stored at the help center',
-    type: 'array',
+    type: Array,
     items: {
       $ref: getSchemaPath(SupplyEntity),
     },
@@ -142,7 +142,7 @@ export class HelpCenterEntity implements HelpCenter {
   @ApiProperty({
     required: false,
     description: 'Details of the supply that the help center needs.',
-    type: 'array',
+    type: Array,
     items: {
       $ref: getSchemaPath(NeededSupplyEntity),
     },
