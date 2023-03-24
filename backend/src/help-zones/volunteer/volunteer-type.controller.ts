@@ -31,7 +31,8 @@ export class VolunteerTypeController {
   })
   @Post()
   async postVolunteerType(@Body() volunteerTypeDto: VolunteerTypeDto) {
-    return this.volunteerTypeService.addVolunteerType(volunteerTypeDto);
+    const volunteerType = await this.volunteerTypeService.addVolunteerType(volunteerTypeDto);
+    return new HttpResponse(volunteerType, 'Successfully added the volunteer type.', 200);
   }
 
   @ApiOkResponse({
