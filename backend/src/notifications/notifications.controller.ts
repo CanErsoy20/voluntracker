@@ -15,4 +15,5 @@ export class NotificationsController {
   async getNotifications() {
     return await this.notificationsService.getNotifications();
   }
+
 }
