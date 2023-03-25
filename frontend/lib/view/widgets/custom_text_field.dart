@@ -32,7 +32,7 @@ class CustomFormField extends StatelessWidget {
             onChanged: onChanged,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: InputDecoration(
-                labelText: label,
+                // labelText: label,
                 hintText: hint,
                 filled: true,
                 fillColor: Colors.white,
