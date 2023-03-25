@@ -43,7 +43,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       (value) => Navigator.of(context)
                           .pushNamed(Routes.updateHelpCenter));
                 },
-                child: const Text("Update Help Center Screen"))
+                child: const Text("Update Help Center Screen")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.registerRoute);
+                },
+                child: const Text("Sign Up Screen"))
           ],
         ),
       ),
