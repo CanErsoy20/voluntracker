@@ -1,4 +1,6 @@
+import 'package:afet_takip/cubit/sign_up/sign_up_cubit.dart';
 import 'package:afet_takip/router.dart';
+import 'package:afet_takip/services/auth_service.dart';
 import 'package:afet_takip/services/help_center_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +25,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => HelpCenterCubit(HelpCenterService()),
         ),
+        BlocProvider(create: (context) => SignUpCubit(AuthService()))
       ],
       child: MaterialApp(
           title: 'Flutter Demo',

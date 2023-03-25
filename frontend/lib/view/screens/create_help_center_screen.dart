@@ -244,7 +244,7 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                       ),
                       CustomFormField(
                         label: "Phone",
-                        hint: "Phone",
+                        hint: "Ex: 0530081306",
                         onChanged: (value) {
                           newCenter.contactInfo!.phone = value;
                         },

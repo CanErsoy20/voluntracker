@@ -3,6 +3,7 @@ import 'package:afet_takip/view/screens/help_center_detail_screen.dart';
 import 'package:afet_takip/view/screens/help_center_list_screen.dart';
 import 'package:afet_takip/view/screens/login_screen.dart';
 import 'package:afet_takip/view/screens/map_screen.dart';
+import 'package:afet_takip/view/screens/sign_up_screen.dart';
 import 'package:afet_takip/view/screens/undefined_screen.dart';
 import 'package:afet_takip/view/screens/update_help_center_screen.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +24,8 @@ class RouteGenerator {
     switch (routeSettings.name) {
       case Routes.loginRoute:
         return MaterialPageRoute(builder: (_) => LoginScreen());
-      // TODO
       case Routes.registerRoute:
-        return MaterialPageRoute(builder: (_) => LoginScreen());
+        return MaterialPageRoute(builder: (_) => SignUpScreen());
       // TODO
       case Routes.landingRoute:
         return MaterialPageRoute(builder: (_) => LoginScreen());

@@ -4,6 +4,8 @@ class CustomTextFormField extends StatelessWidget {
   CustomTextFormField({
     required this.initialValue,
     required this.label,
+    this.hint,
+    this.isObscure,
     this.onChanged,
     this.customValidator,
     this.enabled,
@@ -14,6 +16,8 @@ class CustomTextFormField extends StatelessWidget {
   bool? enabled = true;
   String initialValue;
   String label;
+  String? hint;
+  bool? isObscure;
   void Function(String)? onChanged;
 
   @override
@@ -27,10 +31,11 @@ class CustomTextFormField extends StatelessWidget {
             label,
             style: TextStyle(color: Colors.white),
           ),
-          SizedBox(
+          const SizedBox(
             height: 2,
           ),
           TextFormField(
+            obscureText: isObscure ?? false,
             onChanged: onChanged,
             validator: customValidator ??
                 (value) {
@@ -42,10 +47,12 @@ class CustomTextFormField extends StatelessWidget {
             enabled: enabled,
             initialValue: initialValue,
             decoration: InputDecoration(
+              hintText: hint,
               filled: true,
               fillColor: Colors.white,
               // labelText: label,
-              border: const OutlineInputBorder(),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
             ),
           ),
         ],
