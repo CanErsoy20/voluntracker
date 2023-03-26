@@ -7,6 +7,7 @@ class CustomTextFormField extends StatelessWidget {
     this.hint,
     this.isObscure,
     this.onChanged,
+    this.suffixIcon,
     this.customValidator,
     this.enabled,
     super.key,
@@ -18,6 +19,7 @@ class CustomTextFormField extends StatelessWidget {
   String label;
   String? hint;
   bool? isObscure;
+  Widget? suffixIcon;
   void Function(String)? onChanged;
 
   @override
@@ -47,6 +49,7 @@ class CustomTextFormField extends StatelessWidget {
             enabled: enabled,
             initialValue: initialValue,
             decoration: InputDecoration(
+              suffixIcon: suffixIcon,
               hintText: hint,
               filled: true,
               fillColor: Colors.white,
