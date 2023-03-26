@@ -4,6 +4,7 @@ import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/models/help_center/help_center_model.dart';
 import 'package:afet_takip/router.dart';
 import 'package:afet_takip/view/widgets/custom_google_maps.dart';
+import 'package:afet_takip/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -110,7 +111,7 @@ class _MapScreenState extends State<MapScreen> {
               ));
             } else {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: LoadingWidget(),
               );
             }
           },

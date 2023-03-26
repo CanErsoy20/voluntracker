@@ -5,6 +5,7 @@ import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 import 'package:afet_takip/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:afet_takip/models/needed_volunteer/needed_volunteer_model.dart';
 import 'package:afet_takip/view/widgets/custom_text_field.dart';
+import 'package:afet_takip/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
@@ -535,7 +536,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
     return BlocBuilder<HelpCenterCubit, HelpCenterState>(
       builder: (context, state) {
         if (state is HelpCenterLoading) {
-          return CircularProgressIndicator();
+          return LoadingWidget();
         } else {
           return Padding(
             padding: const EdgeInsets.all(8.0),
