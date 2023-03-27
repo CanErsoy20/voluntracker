@@ -1,4 +1,5 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
+import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:afet_takip/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +19,8 @@ class HelpCenterListScreen extends StatelessWidget {
         title: const Text("Help Center List"),
         centerTitle: true,
       ),
+      //TODO: change LoggedIn
+      endDrawer: CustomDrawer(loggedIn: true),
       body: BlocBuilder<HelpCenterCubit, HelpCenterState>(
         builder: (context, state) {
           if (state is HelpCenterDisplay) {
@@ -98,7 +101,7 @@ class HelpCenterListScreen extends StatelessWidget {
               ),
             );
           } else if (state is HelpCenterLoading) {
-            return const LoadingWidget();
+            return Center(child: const LoadingWidget());
           } else {
             return const Text("Error");
           }

@@ -4,6 +4,7 @@ import 'package:afet_takip/helper_functions.dart';
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 import 'package:afet_takip/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:afet_takip/models/needed_volunteer/needed_volunteer_model.dart';
+import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:afet_takip/view/widgets/custom_text_field.dart';
 import 'package:afet_takip/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +31,12 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Update Help Center Details"),
+        title: FittedBox(
+            fit: BoxFit.fitWidth,
+            child: const Text("Update Help Center Details")),
         centerTitle: true,
       ),
+      endDrawer: CustomDrawer(loggedIn: true),
       body: DefaultTabController(
           length: 3,
           child: Column(
@@ -54,34 +58,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   ],
                 ),
               ),
-              // Expanded(
-              //   child: BlocConsumer<HelpCenterCubit, HelpCenterState>(
-              //     listener: (context, state) {
-              //       if (state is HelpCenterError) {
-              //         context.read<HelpCenterCubit>().getHelpCenters();
-              //         CustomSnackbars.errorSnackbar(
-              //             context, state.title, state.description);
-              //       } else if (state is HelpCenterSuccess) {
-              //         context.read<HelpCenterCubit>().getHelpCenters();
-              //         CustomSnackbars.successSnackbar(
-              //             context, state.title, state.description);
-              //       }
-              //     },
-              //     builder: (context, state) {
-              //       if (state is HelpCenterLoading) {
-              //         return Center(child: CircularProgressIndicator());
-              //       }
-              //       return TabBarView(children: [
-              //         _buildVolunteerNeeds(context,
-              //             context.read<HelpCenterCubit>().helpCenterList![1]),
-              //         _buildSupplyNeeds(context,
-              //             context.read<HelpCenterCubit>().helpCenterList![1]),
-              //         _buildOtherDetails(context,
-              //             context.read<HelpCenterCubit>().helpCenterList![1])
-              //       ]);
-              //     },
-              //   ),
-              // )
               Expanded(
                   child: BlocListener<HelpCenterCubit, HelpCenterState>(
                 listener: (context, state) {

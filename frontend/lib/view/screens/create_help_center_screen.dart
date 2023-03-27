@@ -5,6 +5,7 @@ import 'package:afet_takip/models/help_center/contact_info_model.dart';
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 import 'package:afet_takip/models/help_center/location_model.dart';
 import 'package:afet_takip/models/help_center/open_close_info_model.dart';
+import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:afet_takip/view/widgets/custom_snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +34,7 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
         centerTitle: true,
         title: const Text("Create New Help Center"),
       ),
+      endDrawer: CustomDrawer(loggedIn: true),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: BlocConsumer<HelpCenterCubit, HelpCenterState>(
