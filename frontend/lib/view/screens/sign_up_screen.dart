@@ -32,7 +32,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             if (state is SignUpError) {
               CustomSnackbars.errorSnackbar(
                   context, state.title, state.description);
-              //Navigator.pop(context);
             } else if (state is SignUpSuccess) {
               CustomSnackbars.successSnackbar(
                   context, state.title, state.description);

@@ -1,3 +1,4 @@
+import 'package:afet_takip/cubit/login/login_cubit.dart';
 import 'package:afet_takip/cubit/sign_up/sign_up_cubit.dart';
 import 'package:afet_takip/router.dart';
 import 'package:afet_takip/services/auth_service.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => HelpCenterCubit(HelpCenterService()),
         ),
-        BlocProvider(create: (context) => SignUpCubit(AuthService()))
+        BlocProvider(create: (context) => SignUpCubit(AuthService())),
+        BlocProvider(create: (context) => LoginCubit(AuthService()))
       ],
       child: MaterialApp(
           title: 'Flutter Demo',
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
                   backgroundColor: Color.fromARGB(225, 27, 40, 55))),
           debugShowCheckedModeBanner: false,
           onGenerateRoute: routeGenerator.getRoute,
-          initialRoute: Routes.loginRoute),
+          initialRoute: Routes.landingRoute),
     );
   }
 }
