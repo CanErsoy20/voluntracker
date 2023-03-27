@@ -1,7 +1,10 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/enums.dart';
 import 'package:afet_takip/helper_functions.dart';
+import 'package:afet_takip/models/help_center/busiest_hours_model.dart';
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
+import 'package:afet_takip/models/help_center/location_model.dart';
+import 'package:afet_takip/models/help_center/open_close_info_model.dart';
 import 'package:afet_takip/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:afet_takip/models/needed_volunteer/needed_volunteer_model.dart';
 import 'package:afet_takip/view/widgets/custom_drawer.dart';
@@ -31,9 +34,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: const Text("Update Help Center Details")),
+        title: const FittedBox(
+            fit: BoxFit.fitWidth, child: Text("Update Help Center Details")),
         centerTitle: true,
       ),
       endDrawer: CustomDrawer(loggedIn: true),
@@ -67,17 +69,18 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                         context, state.title, state.description);
                   } else if (state is HelpCenterSuccess) {
                     context.read<HelpCenterCubit>().getHelpCenters();
+
                     CustomSnackbars.successSnackbar(
                         context, state.title, state.description);
                   }
                 },
                 child: TabBarView(children: [
                   _buildVolunteerNeeds(context,
-                      context.read<HelpCenterCubit>().helpCenterList![2]),
+                      context.read<HelpCenterCubit>().helpCenterList![3]),
                   _buildSupplyNeeds(context,
-                      context.read<HelpCenterCubit>().helpCenterList![2]),
+                      context.read<HelpCenterCubit>().helpCenterList![3]),
                   _buildOtherDetails(context,
-                      context.read<HelpCenterCubit>().helpCenterList![2])
+                      context.read<HelpCenterCubit>().helpCenterList![3])
                 ]),
               ))
             ],
@@ -158,7 +161,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                     if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().updateNeededVolunteer(
                           context.read<HelpCenterCubit>().newVolunteerNeed,
-                          1,
+                          3,
                           oldModel.id!);
                       context.read<HelpCenterCubit>().newVolunteerNeed =
                           CreateNeededVolunteer();
@@ -426,7 +429,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                     if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().updateNeededSupply(
                           context.read<HelpCenterCubit>().newSupplyNeed,
-                          1,
+                          3,
                           oldModel.id!);
                       context.read<HelpCenterCubit>().newSupplyNeed =
                           CreateNeededSupply();
@@ -495,20 +498,19 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
   Widget _buildOtherDetails(
       BuildContext context, HelpCenterModel currentCenter) {
     final formKey = GlobalKey<FormState>();
-    context.read<HelpCenterCubit>().updateHelpCenter.name =
-        context.read<HelpCenterCubit>().helpCenterList![2].name;
+    context.read<HelpCenterCubit>().updateHelpCenter.name = currentCenter.name;
     context.read<HelpCenterCubit>().updateHelpCenter.additionalInfo =
-        context.read<HelpCenterCubit>().helpCenterList![2].additionalInfo;
+        currentCenter.additionalInfo;
     context.read<HelpCenterCubit>().updateHelpCenter.busiestHours =
-        context.read<HelpCenterCubit>().helpCenterList![2].busiestHours;
+        currentCenter.busiestHours;
     context.read<HelpCenterCubit>().updateHelpCenter.contactInfo =
-        context.read<HelpCenterCubit>().helpCenterList![2].contactInfo;
+        currentCenter.contactInfo;
     context.read<HelpCenterCubit>().updateHelpCenter.location =
-        context.read<HelpCenterCubit>().helpCenterList![2].location;
+        currentCenter.location;
     context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo =
-        context.read<HelpCenterCubit>().helpCenterList![2].openCloseInfo;
+        currentCenter.openCloseInfo;
     context.read<HelpCenterCubit>().updateHelpCenter.volunteerCapacity =
-        context.read<HelpCenterCubit>().helpCenterList![2].volunteerCapacity;
+        currentCenter.volunteerCapacity;
     return BlocBuilder<HelpCenterCubit, HelpCenterState>(
       builder: (context, state) {
         if (state is HelpCenterLoading) {
@@ -522,54 +524,153 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      CustomTextFormField(
-                          onChanged: (value) {
-                            context.read<HelpCenterCubit>().emitEditing();
-                            context
-                                .read<HelpCenterCubit>()
-                                .updateHelpCenter
-                                .busiestHours!
-                                .start = value;
+                      ElevatedButton(
+                          onPressed: () {
+                            _selectBHstart(context);
                           },
-                          initialValue: HelperFunctions.formatDateToTime(
-                              currentCenter.busiestHours!.start!),
-                          label: "Busiest Hours Start At"),
-                      CustomTextFormField(
-                          onChanged: (value) {
-                            context.read<HelpCenterCubit>().emitEditing();
-                            context
-                                .read<HelpCenterCubit>()
-                                .updateHelpCenter
-                                .busiestHours!
-                                .end = value;
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(context
+                                          .read<HelpCenterCubit>()
+                                          .updateHelpCenter
+                                          .busiestHours!
+                                          .start ==
+                                      null
+                                  ? "Busiest Hours Start At: Press to select"
+                                  : "Busiest Hours Start At: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().updateHelpCenter.busiestHours!.start!)}"),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              const Icon(Icons.watch_later_outlined)
+                            ],
+                          )),
+                      // CustomTextFormField(
+                      //     enabled: false,
+                      //     suffixIcon: IconButton(
+                      //         onPressed: () {
+                      //           _selectBSstart(context);
+                      //         },
+                      //         icon: Icon(Icons.edit)),
+                      //     // onChanged: (value) {
+                      //     //   context.read<HelpCenterCubit>().emitEditing();
+                      //     //   context
+                      //     //       .read<HelpCenterCubit>()
+                      //     //       .updateHelpCenter
+                      //     //       .busiestHours!
+                      //     //       .start = value;
+                      //     // },
+                      //     initialValue: HelperFunctions.formatDateToTime(
+                      //         currentCenter.busiestHours!.start!),
+                      //     label: "Busiest Hours Start At"),
+                      ElevatedButton(
+                          onPressed: () {
+                            _selectBHend(context);
                           },
-                          initialValue: HelperFunctions.formatDateToTime(
-                              currentCenter.busiestHours!.end!),
-                          label: "Busiest Hours End At"),
-                      CustomTextFormField(
-                          onChanged: (value) {
-                            context.read<HelpCenterCubit>().emitEditing();
-                            context
-                                .read<HelpCenterCubit>()
-                                .updateHelpCenter
-                                .openCloseInfo!
-                                .start = value;
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(context
+                                          .read<HelpCenterCubit>()
+                                          .updateHelpCenter
+                                          .busiestHours!
+                                          .end ==
+                                      null
+                                  ? "Busiest Hours End At: Press to select"
+                                  : "Busiest Hours End At: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().updateHelpCenter.busiestHours!.end!)}"),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              const Icon(Icons.watch_later_outlined)
+                            ],
+                          )),
+                      // CustomTextFormField(
+                      //     enabled: false,
+                      //     suffixIcon: IconButton(
+                      //         onPressed: () {}, icon: Icon(Icons.edit)),
+                      //     // onChanged: (value) {
+                      //     //   context.read<HelpCenterCubit>().emitEditing();
+                      //     //   context
+                      //     //       .read<HelpCenterCubit>()
+                      //     //       .updateHelpCenter
+                      //     //       .busiestHours!
+                      //     //       .end = value;
+                      //     // },
+                      //     initialValue: HelperFunctions.formatDateToTime(
+                      //         currentCenter.busiestHours!.end!),
+                      //     label: "Busiest Hours End At"),
+                      ElevatedButton(
+                          onPressed: () {
+                            _selectOCopen(context);
                           },
-                          initialValue: HelperFunctions.formatDateToTime(
-                              currentCenter.openCloseInfo!.start!),
-                          label: "Help Center Opens At"),
-                      CustomTextFormField(
-                          onChanged: (value) {
-                            context.read<HelpCenterCubit>().emitEditing();
-                            context
-                                .read<HelpCenterCubit>()
-                                .updateHelpCenter
-                                .openCloseInfo!
-                                .end = value;
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(context
+                                          .read<HelpCenterCubit>()
+                                          .updateHelpCenter
+                                          .openCloseInfo!
+                                          .start ==
+                                      null
+                                  ? "Help Center Opens At: Press to select"
+                                  : "Help Center Opens At: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo!.start!)}"),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              const Icon(Icons.watch_later_outlined)
+                            ],
+                          )),
+                      // CustomTextFormField(
+                      //     enabled: false,
+                      //     suffixIcon: IconButton(
+                      //         onPressed: () {}, icon: Icon(Icons.edit)),
+                      //     // onChanged: (value) {
+                      //     //   context.read<HelpCenterCubit>().emitEditing();
+                      //     //   context
+                      //     //       .read<HelpCenterCubit>()
+                      //     //       .updateHelpCenter
+                      //     //       .openCloseInfo!
+                      //     //       .start = value;
+                      //     // },
+                      //     initialValue: HelperFunctions.formatDateToTime(
+                      //         currentCenter.openCloseInfo!.start!),
+                      //     label: "Help Center Opens At"),
+                      ElevatedButton(
+                          onPressed: () {
+                            _selectOCend(context);
                           },
-                          initialValue: HelperFunctions.formatDateToTime(
-                              currentCenter.openCloseInfo!.end!),
-                          label: "Help Center Closes At"),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(context
+                                          .read<HelpCenterCubit>()
+                                          .updateHelpCenter
+                                          .openCloseInfo!
+                                          .end ==
+                                      null
+                                  ? "Help Center Closes At: Press to select"
+                                  : "Help Center Closes At: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo!.end!)}"),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              const Icon(Icons.watch_later_outlined)
+                            ],
+                          )),
+                      // CustomTextFormField(
+                      //     enabled: false,
+                      //     suffixIcon: IconButton(
+                      //         onPressed: () {}, icon: Icon(Icons.edit)),
+                      //     // onChanged: (value) {
+                      //     //   context.read<HelpCenterCubit>().emitEditing();
+                      //     //   context
+                      //     //       .read<HelpCenterCubit>()
+                      //     //       .updateHelpCenter
+                      //     //       .openCloseInfo!
+                      //     //       .end = value;
+                      //     // },
+                      //     initialValue: HelperFunctions.formatDateToTime(
+                      //         currentCenter.openCloseInfo!.end!),
+                      //     label: "Help Center Closes At"),
                       CustomTextFormField(
                         onChanged: (value) {
                           context.read<HelpCenterCubit>().emitEditing();
@@ -616,10 +717,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                                           context
                                               .read<HelpCenterCubit>()
                                               .updateHelpCenter,
-                                          2);
-                                  context
-                                      .read<HelpCenterCubit>()
-                                      .updateHelpCenter = CreateHelpCenter();
+                                          currentCenter.id!);
                                 }
                               },
                               child: const Text("Update"))
@@ -631,5 +729,53 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
         }
       },
     );
+  }
+
+  Future<void> _selectBHstart(BuildContext context) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    DateTime ocEnd =
+        DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
+    context.read<HelpCenterCubit>().updateHelpCenter.busiestHours!.start =
+        ocEnd.toIso8601String();
+    context.read<HelpCenterCubit>().emitEditing();
+  }
+
+  Future<void> _selectBHend(BuildContext context) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    DateTime bhEnd =
+        DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
+    context.read<HelpCenterCubit>().updateHelpCenter.busiestHours!.end =
+        bhEnd.toIso8601String();
+    context.read<HelpCenterCubit>().emitEditing();
+  }
+
+  Future<void> _selectOCopen(BuildContext context) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    DateTime ocStart =
+        DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
+    context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo!.start =
+        ocStart.toIso8601String();
+    context.read<HelpCenterCubit>().emitEditing();
+  }
+
+  Future<void> _selectOCend(BuildContext context) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    DateTime ocEnd =
+        DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
+    context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo!.end =
+        ocEnd.toIso8601String();
+    context.read<HelpCenterCubit>().emitEditing();
   }
 }
