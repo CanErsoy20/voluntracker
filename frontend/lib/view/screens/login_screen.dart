@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
 
 import '../../cubit/login/login_cubit.dart';
+import '../widgets/custom_drawer.dart';
 import '../widgets/custom_snackbars.dart';
+import '../widgets/profile_avatar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,69 +49,73 @@ class _LoginScreenState extends State<LoginScreen> {
                     "assets/images/loading.gif",
                     height: MediaQuery.of(context).size.height / 4,
                   ),
-                  Form(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        CustomTextFormField(
-                          initialValue: "",
-                          label: "Email",
-                          hint: "Email",
-                          suffixIcon: const Icon(Icons.credit_card),
-                          onChanged: (value) {
-                            context.read<LoginCubit>().loginModel.email = value;
-                          },
-                          customValidator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Email cannot be blank";
-                            } else if (!isEmail(value)) {
-                              return "Please enter a valid email";
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        CustomTextFormField(
-                          initialValue: "",
-                          label: "Password",
-                          hint: "Password",
-                          suffixIcon: const Icon(Icons.lock_outlined),
-                          isObscure: true,
-                          onChanged: (value) {
-                            context.read<LoginCubit>().loginModel.password =
-                                value;
-                          },
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextButton(
-                              onPressed: () {},
-                              child: const Text(
-                                "Forgot Password?",
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              context.read<LoginCubit>().login();
-                            }
-                          },
-                          child: const Text("Login"),
-                          style: ElevatedButton.styleFrom(
-                              fixedSize: Size(200, 40),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20))),
-                        )
-                      ],
-                    ),
-                  ),
+                  _buildForm(context),
                 ],
               ),
             );
           }
         }),
+      ),
+      endDrawer: CustomDrawer(loggedIn: false),
+    );
+  }
+
+  Form _buildForm(BuildContext context) {
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      key: formKey,
+      child: Column(
+        children: [
+          CustomTextFormField(
+            initialValue: "",
+            label: "Email",
+            hint: "Email",
+            suffixIcon: const Icon(Icons.credit_card),
+            onChanged: (value) {
+              context.read<LoginCubit>().loginModel.email = value;
+            },
+            customValidator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Email cannot be blank";
+              } else if (!isEmail(value)) {
+                return "Please enter a valid email";
+              } else {
+                return null;
+              }
+            },
+          ),
+          CustomTextFormField(
+            initialValue: "",
+            label: "Password",
+            hint: "Password",
+            suffixIcon: const Icon(Icons.lock_outlined),
+            isObscure: true,
+            onChanged: (value) {
+              context.read<LoginCubit>().loginModel.password = value;
+            },
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+                onPressed: () {},
+                child: const Text(
+                  "Forgot Password?",
+                  style: TextStyle(color: Colors.white),
+                )),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                context.read<LoginCubit>().login();
+              }
+            },
+            child: const Text("Login"),
+            style: ElevatedButton.styleFrom(
+                fixedSize: Size(200, 40),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20))),
+          )
+        ],
       ),
     );
   }

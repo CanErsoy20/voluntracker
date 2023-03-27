@@ -1,4 +1,5 @@
 import 'package:afet_takip/cubit/sign_up/sign_up_cubit.dart';
+import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:afet_takip/view/widgets/custom_text_form_field.dart';
 import 'package:afet_takip/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         title: const Text("Sign Up"),
         centerTitle: true,
       ),
+      endDrawer: CustomDrawer(loggedIn: false),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: BlocConsumer<SignUpCubit, SignUpState>(

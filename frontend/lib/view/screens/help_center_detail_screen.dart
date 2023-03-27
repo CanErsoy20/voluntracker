@@ -1,6 +1,7 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/cubit/map/map_cubit.dart';
 import 'package:afet_takip/router.dart';
+import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -25,6 +26,8 @@ class HelpCenterDetailScreen extends StatelessWidget {
             child: Text(currentCenter.name!),
           ),
         ),
+        //TODO: change LoggedIn
+        endDrawer: CustomDrawer(loggedIn: true),
         body: DefaultTabController(
           length: 2,
           child: Column(
