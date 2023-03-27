@@ -293,7 +293,6 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     newCenter.busiestHours!.start = bhStart.toIso8601String();
     context.read<HelpCenterCubit>().emitEditing();
-    context.read<HelpCenterCubit>().emitDisplay();
   }
 
   Future<void> _selectBHend(
@@ -306,7 +305,6 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     newCenter.busiestHours!.end = bhEnd.toIso8601String();
     context.read<HelpCenterCubit>().emitEditing();
-    context.read<HelpCenterCubit>().emitDisplay();
   }
 
   Future<void> _selectOCopen(
@@ -319,7 +317,6 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     newCenter.openCloseInfo!.start = ocStart.toIso8601String();
     context.read<HelpCenterCubit>().emitEditing();
-    context.read<HelpCenterCubit>().emitDisplay();
   }
 
   Future<void> _selectOCend(
@@ -332,6 +329,5 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     newCenter.openCloseInfo!.end = ocEnd.toIso8601String();
     context.read<HelpCenterCubit>().emitEditing();
-    context.read<HelpCenterCubit>().emitDisplay();
   }
 }
