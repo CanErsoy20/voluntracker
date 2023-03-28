@@ -18,6 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { HttpResponse } from 'src/common';
+import { UniqueEntityNotFoundException } from 'src/exceptions/unique-entity-not-found-exception.exception';
 import { OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
 import { UpdateNeededSupplyDto } from '../needed-supply/dto/update-needed-supply.dto';
@@ -25,6 +26,7 @@ import { NeededSupplyEntity } from '../needed-supply/entities/needed-supply.enti
 import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-volunteer.dto';
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
 import { NeededVolunteerEntity } from '../needed-volunteer/entities/needed-volunteer.entity';
+import { CreateCoordinatorDto } from '../volunteer/dto/create-coordinator.dto';
 import { CreateVolunteerTeamDto } from '../volunteer/dto/create-volunteer-team.dto';
 import { VolunteerTeamEntity } from '../volunteer/entities/volunteer-team.entity';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
@@ -524,5 +526,21 @@ export class HelpCentersController {
       'Successfully assigned the volunteer to the help center.',
       200,
     );
+  }
+
+  /* Help center coordinator end points */
+  @Post('/helpCenterCoordinator')
+  async assignCoordinatorToHelpCenter(
+    @Param('helpCenterId') helpCenterId,
+    @Body() createCoordinatorDto: CreateCoordinatorDto,
+  ) {
+    const helpCenterWithCoordinator =
+      this.helpCentersService.assignCoordinatorToHelpCenter(createCoordinatorDto);
+
+    if (!helpCenterWithCoordinator) {
+      throw new BadRequestException(
+        'Something went wrong while trying to assign the coordinator to the help center',
+      );
+    }
   }
 }

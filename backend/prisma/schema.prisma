@@ -165,8 +165,7 @@ model User {
   phone    String? @unique
   password String
 
-  roleId    Int
-  userRole  UserRole    @relation(fields: [roleId], references: [id])
+  userRole  UserRolesOnUsers[]
 
   volunteer Volunteer?
   admin Admin?
@@ -177,12 +176,26 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model UserRolesOnUsers {
+  userId  Int
+  user    User @relation(fields: [userId], references: [id])
+
+  userRole UserRole @relation(fields: [userRoleName], references: [roleName])
+  userRoleName String
+
+  assignedAt DateTime @default(now())
+
+  // TODO: Add assigned by field here
+  
+  @@id([userId, userRoleName])
+}
+
 
 model UserRole {
   id        Int     @id @default(autoincrement())
   roleName String   @unique // Volunteer, Admin, Superadmin, ...
 
-  users       User[]
+  users       UserRolesOnUsers[]
   permissions RolePermission[]
 
   createdAt DateTime @default(now())
@@ -225,9 +238,9 @@ model Volunteer {
   user   User @relation(fields: [userId], references: [id])
 
   // one-to-many relationship between Volunteer and VolunteerType
-  volunteerTypeName VolunteerTypeEnum
-  volunteerTypeCategory VolunteerCategoryEnum
-  volunteerType   VolunteerType @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
+  volunteerTypeName VolunteerTypeEnum?
+  volunteerTypeCategory VolunteerCategoryEnum?
+  volunteerType   VolunteerType? @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
 
   // Volunteers will be assigned to teams, but they might be unassigned.
   volunteerTeamId Int? @unique
@@ -299,7 +312,6 @@ model HelpCenterCoordinator {
   // one-to-many relationship between HelpCenter and NeededVolunteer
   helpCenterId Int @unique
   helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
-
 }
 
 model Admin {

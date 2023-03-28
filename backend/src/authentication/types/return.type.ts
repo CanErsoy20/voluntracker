@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User, UserRole, Volunteer } from '@prisma/client';
+import { User, UserRole, UserRolesOnUsers, Volunteer } from '@prisma/client';
 import { IsDefined, IsString } from 'class-validator';
 
 export class JwtTokensDto {
@@ -32,6 +32,6 @@ export class LoginInformation {
   tokens: JwtTokensDto;
   user: User & {
     volunteer: Volunteer;
-    userRole: UserRole;
+    userRole: UserRolesOnUsers[];
   };
 }

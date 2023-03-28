@@ -34,7 +34,7 @@ export class AuthController {
   })
   @UseGuards(AuthGuard('local'), LocalAuthGuard)
   @Post('login')
-  async login(@Body() authDto: AuthDto): Promise<HttpResponse<Tokens>> {
+  async login(@Body() authDto: AuthDto): Promise<HttpResponse<LoginInformation>> {
     const tokens = await this.authService.login(authDto);
     if (!tokens) {
       throw new InternalServerErrorException(

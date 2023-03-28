@@ -40,12 +40,16 @@ export class AuthService {
     const { email } = authDto;
     const user = await this.prisma.user.findUnique({
       where: { email },
+      include: {
+        userRole: true,
+        volunteer: true,
+      },
     });
 
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
-    return tokens;
+    return { tokens, user };
   }
 
   async logout(userId: number) {
@@ -72,20 +76,21 @@ export class AuthService {
         data: {
           ...createUserDto,
           password: hashedPassword,
-          userRole: {
-            connectOrCreate: {
-              create: {
-                roleName: 'Volunteer',
-              },
-              where: {
-                roleName: 'Volunteer',
-              },
-            },
-          },
           volunteer: {
             create: {
               ...createVolunteerDto,
             },
+          },
+          userRole: {
+            create: [
+              {
+                userRole: {
+                  connect: {
+                    roleName: 'Volunteer',
+                  },
+                },
+              },
+            ],
           },
         },
         include: {
@@ -101,11 +106,22 @@ export class AuthService {
       const tokens = await this.getTokens(newUser.id, newUser.email);
       await this.updateRefreshToken(newUser.id, tokens.refreshToken);
 
-      return { tokens, user: newUser };
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: newUser.id,
+        },
+        include: {
+          userRole: true,
+          volunteer: true,
+        },
+      });
+      return { tokens, user };
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
-          throw new ConflictException('Signup failed because this email is already being used.');
+          throw new ConflictException(
+            'Signup failed because either the email or the phone number is already being used.',
+          );
         }
       }
     }
