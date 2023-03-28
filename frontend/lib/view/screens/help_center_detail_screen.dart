@@ -1,6 +1,7 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/cubit/map/map_cubit.dart';
 import 'package:afet_takip/router.dart';
+import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -25,6 +26,8 @@ class HelpCenterDetailScreen extends StatelessWidget {
             child: Text(currentCenter.name!),
           ),
         ),
+        //TODO: change LoggedIn
+        endDrawer: CustomDrawer(loggedIn: true),
         body: DefaultTabController(
           length: 2,
           child: Column(
@@ -67,16 +70,11 @@ class HelpCenterDetailScreen extends StatelessWidget {
                     Text(
                         "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.end!)}"),
                   ]),
-              SizedBox(
+              const SizedBox(
                 height: 50,
                 child: TabBar(
-                  indicatorColor: Colors.white,
-                  unselectedLabelColor: Colors.blue,
-                  indicatorPadding: const EdgeInsets.symmetric(horizontal: 5),
-                  indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      color: Colors.blue),
-                  tabs: const [
+                  indicatorPadding: EdgeInsets.symmetric(horizontal: 5),
+                  tabs: [
                     Tab(text: "Volunteer Needs"),
                     Tab(text: "Supply Needs")
                   ],

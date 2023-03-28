@@ -18,18 +18,23 @@ enum SupplyTypeEnum {
   Pasta
 }
 
+
 enum SupplyCategoryEnum {
   Food
   Drink
 }
+
+
 enum VolunteerTypeEnum {
   Carrier
 }
+
 
 enum VolunteerCategoryEnum {
   Management
   Labor
 }
+
 
 enum UrgencyEnum {
   Low
@@ -37,12 +42,14 @@ enum UrgencyEnum {
   High
 }
 
+
 model Notification {
   id        Int     @id @default(autoincrement())
   title     String
   body      String
   recipient String
 }
+
 
 model HelpCenter {
   id                Int      @id @default(autoincrement())
@@ -60,6 +67,10 @@ model HelpCenter {
   /// [ContactInfo]
   contactInfo       Json 
 
+  city              String @default("Ankara")
+
+  country           String @default("Turkey")
+
   additionalInfo    String
   volunteerCapacity Int
   createdAt         DateTime @default(now())
@@ -74,8 +85,8 @@ model HelpCenter {
   volunteers        Volunteer[]
 }
 
-// Supply model and supply related models
 
+// Supply model and supply related models
 model Supply {
   id       Int @id @default(autoincrement())
   quantity Int
@@ -90,6 +101,7 @@ model Supply {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 
 model NeededSupply {
   id Int @id @default(autoincrement())
@@ -108,6 +120,7 @@ model NeededSupply {
   updatedAt DateTime @updatedAt
 }
 
+
 model SupplyType {
   typeName SupplyTypeEnum
   category SupplyCategoryEnum
@@ -120,6 +133,7 @@ model SupplyType {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 
 model NeededVolunteer {
   id Int @id @default(autoincrement())
@@ -140,6 +154,7 @@ model NeededVolunteer {
   updatedAt DateTime @updatedAt
 }
 
+
 // User model and other user related models
 model User {
   id Int @id @default(autoincrement())
@@ -150,12 +165,9 @@ model User {
   phone    String? @unique
   password String
 
-  roleId    Int?
-  userRole  UserRole?    @relation(fields: [roleId], references: [id])
+  userRole  UserRolesOnUsers[]
 
   volunteer Volunteer?
-  volunteerTeamLeader VolunteerTeamLeader?
-  helpCenterCoordinator HelpCenterCoordinator?
   admin Admin?
 
   hashedRefreshToken String?
@@ -164,17 +176,32 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model UserRolesOnUsers {
+  userId  Int
+  user    User @relation(fields: [userId], references: [id])
+
+  userRole UserRole @relation(fields: [userRoleName], references: [roleName])
+  userRoleName String
+
+  assignedAt DateTime @default(now())
+
+  // TODO: Add assigned by field here
+  
+  @@id([userId, userRoleName])
+}
+
 
 model UserRole {
-  id        Int    @id @default(autoincrement())
-  role_name String // Volunteer, Admin, Superadmin, ...
+  id        Int     @id @default(autoincrement())
+  roleName String   @unique // Volunteer, Admin, Superadmin, ...
 
-  users       User[]
+  users       UserRolesOnUsers[]
   permissions RolePermission[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 
 // For many-to many relation between UserRole and Permission
 model RolePermission {
@@ -189,6 +216,7 @@ model RolePermission {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 
 model Permission {
   id Int @id @default(autoincrement())
@@ -210,9 +238,9 @@ model Volunteer {
   user   User @relation(fields: [userId], references: [id])
 
   // one-to-many relationship between Volunteer and VolunteerType
-  volunteerTypeName VolunteerTypeEnum
-  volunteerTypeCategory VolunteerCategoryEnum
-  volunteerType   VolunteerType @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
+  volunteerTypeName VolunteerTypeEnum?
+  volunteerTypeCategory VolunteerCategoryEnum?
+  volunteerType   VolunteerType? @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
 
   // Volunteers will be assigned to teams, but they might be unassigned.
   volunteerTeamId Int? @unique
@@ -223,7 +251,12 @@ model Volunteer {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // These only exist if the volunteer is a team leader or a coordinator
+  volunteerTeamLeader   VolunteerTeamLeader?
+  helpCenterCoordinator HelpCenterCoordinator?
 }
+
 
 // Identitifed by type, category, and help center so that there won't be separate types of volunteers at each help center
 model GuestVolunteer {
@@ -243,6 +276,7 @@ model GuestVolunteer {
   @@unique([volunteerTypeName, volunteerTypeCategory, volunteerTeamId])
 }
 
+
 model VolunteerType {
   typeName VolunteerTypeEnum
   category VolunteerCategoryEnum
@@ -257,16 +291,33 @@ model VolunteerType {
   updatedAt DateTime @updatedAt
 }
 
+
 model VolunteerTeamLeader {
   id Int @id @default(autoincrement())
 
-  userId Int @unique
-  user   User @relation(fields: [userId], references: [id])
+  volunteerId Int @unique
+  volunteer   Volunteer @relation(fields: [volunteerId], references: [id])
 
   volunteerTeam VolunteerTeam @relation(fields: [volunteerTeamId], references: [id])
   volunteerTeamId Int @unique
 }
 
+
+model HelpCenterCoordinator {
+  id Int @id @default(autoincrement())
+
+  volunteerId Int @unique
+  volunteer   Volunteer @relation(fields: [volunteerId], references: [id])
+
+  // one-to-many relationship between HelpCenter and NeededVolunteer
+  helpCenterId Int @unique
+  helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
+}
+
+model Admin {
+  userId Int @unique
+  user   User @relation(fields: [userId], references: [id])
+}
 
 model VolunteerTeam {
   id Int @id @default(autoincrement())
@@ -283,22 +334,3 @@ model VolunteerTeam {
 
   @@unique([helpCenterId, teamName])
 }
-
-
-model HelpCenterCoordinator {
-  id Int @id @default(autoincrement())
-
-  userId Int @unique
-  user   User @relation(fields: [userId], references: [id])
-
-  // one-to-many relationship between HelpCenter and NeededVolunteer
-  helpCenterId Int @unique
-  helpCenter   HelpCenter @relation(fields: [helpCenterId], references: [id])
-
-}
-
-model Admin {
-  userId Int @unique
-  user   User @relation(fields: [userId], references: [id])
-}
-

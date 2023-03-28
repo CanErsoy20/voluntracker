@@ -8,7 +8,7 @@ import { VolunteerTeamEntity } from './entities/volunteer-team.entity';
 import { VolunteerTeamService } from './volunteer-team.service';
 
 // TODO: MODIFY REQUESTS CAN ONLY BE DONE BY ADMINS OR COORDINATORS OF THE HELP CENTER OR THE TEAM LEADER OF THE SPECIFIC TEAM THAT IS BEING MODIFIED
-@ApiTags('volunteerTeams')
+@ApiTags('VolunteerTeams')
 @Controller('volunteerTeams')
 export class VolunteerTeamController {
   constructor(private readonly volunteerTeamService: VolunteerTeamService) {}
@@ -135,4 +135,6 @@ export class VolunteerTeamController {
 
     return new HttpResponse(vt, 'Successfully fetched the unassigned volunteer teams', 200);
   }
+
+  /* Coordinator endpoints */
 }

@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User, VolunteerTeam, VolunteerTeamLeader } from '@prisma/client';
-import { UserEntity } from 'src/auth/entities/user.entity';
+import { Volunteer, VolunteerTeam, VolunteerTeamLeader } from '@prisma/client';
 import { VolunteerTeamEntity } from './volunteer-team.entity';
+import { VolunteerEntity } from './volunteer.entity';
 
 export class VolunteerTeamLeaderEntity implements VolunteerTeamLeader {
+  userId: number;
   @ApiProperty({
     description: `Unique ID of the volunteer team leader..`,
     type: Number,
@@ -12,20 +13,21 @@ export class VolunteerTeamLeaderEntity implements VolunteerTeamLeader {
   id: number;
 
   @ApiProperty({
-    description: `User model the entity is related to.`,
-    type: UserEntity,
-  })
-  user: User;
-
-  @ApiProperty({
-    description: `ID of the user model the volunteer is related to.`,
+    description: `ID of the volunteer model the team leader is related to.`,
     type: Number,
     example: 222,
   })
-  userId: number;
+  volunteerId: number;
 
   @ApiProperty({
-    description: `ID of the team that volunteer will lead.`,
+    description: `Volunteer model the team leader is related to.`,
+    type: VolunteerEntity,
+    example: 222,
+  })
+  volunteer: Volunteer;
+
+  @ApiProperty({
+    description: `ID of the team that team leader will lead.`,
     type: Number,
     example: 55,
   })

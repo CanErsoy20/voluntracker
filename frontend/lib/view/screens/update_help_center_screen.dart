@@ -1,10 +1,15 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/enums.dart';
 import 'package:afet_takip/helper_functions.dart';
+import 'package:afet_takip/models/help_center/busiest_hours_model.dart';
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
+import 'package:afet_takip/models/help_center/location_model.dart';
+import 'package:afet_takip/models/help_center/open_close_info_model.dart';
 import 'package:afet_takip/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:afet_takip/models/needed_volunteer/needed_volunteer_model.dart';
+import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:afet_takip/view/widgets/custom_text_field.dart';
+import 'package:afet_takip/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
@@ -29,28 +34,25 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Update Help Center Details"),
+        title: const FittedBox(
+            fit: BoxFit.fitWidth, child: Text("Update Help Center Details")),
         centerTitle: true,
       ),
+      endDrawer: CustomDrawer(loggedIn: true),
       body: DefaultTabController(
           length: 3,
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 50,
                 child: TabBar(
-                  unselectedLabelColor: Colors.blue,
-                  indicatorColor: Colors.white,
-                  indicatorPadding: const EdgeInsets.all(5),
-                  indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      color: Colors.blue),
-                  tabs: const [
+                  indicatorPadding: EdgeInsets.all(5),
+                  tabs: [
                     Tab(
                       text: "Volunteer",
                     ),
                     Tab(
-                      text: "Suppply",
+                      text: "Supply",
                     ),
                     Tab(
                       text: "Other Details",
@@ -59,34 +61,28 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                 ),
               ),
               Expanded(
-                child: BlocListener<HelpCenterCubit, HelpCenterState>(
-                  listener: (context, state) {
-                    if (state is HelpCenterError) {
-                      context.read<HelpCenterCubit>().getHelpCenters();
-                      CustomSnackbars.errorSnackbar(
-                          context, state.title, state.description);
-                    } else if (state is HelpCenterSuccess) {
-                      context.read<HelpCenterCubit>().getHelpCenters();
-                      CustomSnackbars.successSnackbar(
-                          context, state.title, state.description);
-                    }
-                  },
-                  child: TabBarView(children: [
-                    _buildVolunteerNeeds(
-                        context,
-                        context.read<HelpCenterCubit>().selectedCenter ??
-                            context.read<HelpCenterCubit>().helpCenterList![1]),
-                    _buildSupplyNeeds(
-                        context,
-                        context.read<HelpCenterCubit>().selectedCenter ??
-                            context.read<HelpCenterCubit>().helpCenterList![1]),
-                    _buildOtherDetails(
-                        context,
-                        context.read<HelpCenterCubit>().selectedCenter ??
-                            context.read<HelpCenterCubit>().helpCenterList![1])
-                  ]),
-                ),
-              )
+                  child: BlocListener<HelpCenterCubit, HelpCenterState>(
+                listener: (context, state) {
+                  if (state is HelpCenterError) {
+                    context.read<HelpCenterCubit>().getHelpCenters();
+                    CustomSnackbars.errorSnackbar(
+                        context, state.title, state.description);
+                  } else if (state is HelpCenterSuccess) {
+                    context.read<HelpCenterCubit>().getHelpCenters();
+
+                    CustomSnackbars.successSnackbar(
+                        context, state.title, state.description);
+                  }
+                },
+                child: TabBarView(children: [
+                  _buildVolunteerNeeds(context,
+                      context.read<HelpCenterCubit>().helpCenterList![3]),
+                  _buildSupplyNeeds(context,
+                      context.read<HelpCenterCubit>().helpCenterList![3]),
+                  _buildOtherDetails(context,
+                      context.read<HelpCenterCubit>().helpCenterList![3])
+                ]),
+              ))
             ],
           )),
     );
@@ -135,12 +131,21 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             },
           ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            _showNewVolunteerDialog(context);
-          },
-          child: const Text("Add New"),
-        )
+        Align(
+          alignment: Alignment.centerRight,
+          child: FloatingActionButton(
+            onPressed: () {
+              _showNewVolunteerDialog(context);
+            },
+            child: const Icon(Icons.add),
+          ),
+        ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     _showNewVolunteerDialog(context);
+        //   },
+        //   child: const Text("Add New"),
+        // )
       ],
     );
   }
@@ -165,7 +170,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                     if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().updateNeededVolunteer(
                           context.read<HelpCenterCubit>().newVolunteerNeed,
-                          1,
+                          3,
                           oldModel.id!);
                       context.read<HelpCenterCubit>().newVolunteerNeed =
                           CreateNeededVolunteer();
@@ -175,7 +180,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   child: const Text("Update"))
             ],
             content: _buildNeededVolunteerForm(
-                formKey, "Update Volunteer Need", oldModel),
+                formKey, "Update Volunteer Need", context, oldModel),
           );
         });
   }
@@ -205,19 +210,27 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Add New Need"))
             ],
-            content:
-                _buildNeededVolunteerForm(formKey, "Create New Volunteer Need"),
+            content: _buildNeededVolunteerForm(
+                formKey, "Create New Volunteer Need", context),
           );
         });
   }
 
-  Form _buildNeededVolunteerForm(GlobalKey<FormState> formKey, String title,
+  Form _buildNeededVolunteerForm(
+      GlobalKey<FormState> formKey, String title, BuildContext context,
       [NeededVolunteer? oldModel]) {
-    List<String> volunteerTypeNames =
-        VolunteerTypeName.values.map((e) => e.name).toList();
-    List<String> volunteerTypeCategory =
-        VolunteerTypeCategory.values.map((e) => e.name).toList();
+    List<String> volunteerTypeNames = [];
+    List<String> volunteerTypeCategory = [];
     List<String> urgency = Urgency.values.map((e) => e.name).toList();
+    context.read<HelpCenterCubit>().getVolunteerTypes();
+    for (var i = 0;
+        i < context.read<HelpCenterCubit>().volunteerTypes!.length;
+        i++) {
+      volunteerTypeNames
+          .add(context.read<HelpCenterCubit>().volunteerTypes![i].typeName!);
+      volunteerTypeCategory
+          .add(context.read<HelpCenterCubit>().volunteerTypes![i].category!);
+    }
 
     oldModel != null
         ? context.read<HelpCenterCubit>().newVolunteerNeed = oldModel
@@ -232,6 +245,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               child: Text(title),
             ),
             CustomDropdownFormField(
+              value: oldModel?.volunteerTypeCategory,
               list: volunteerTypeCategory,
               label: "Category",
               onChanged: (value) {
@@ -242,6 +256,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomDropdownFormField(
+              value: oldModel?.volunteerTypeName,
               list: volunteerTypeNames,
               label: "Name",
               onChanged: (value) {
@@ -252,6 +267,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomDropdownFormField(
+              value: oldModel?.urgency,
               list: urgency,
               label: "Urgency",
               onChanged: (value) {
@@ -260,11 +276,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomFormField(
-                hint: context
-                    .read<HelpCenterCubit>()
-                    .newVolunteerNeed
-                    .quantity
-                    .toString(),
+                value: oldModel?.quantity.toString(),
+                hint: oldModel?.quantity.toString() ?? "50",
                 label: "Quantity",
                 onChanged: (value) {
                   context.read<HelpCenterCubit>().newVolunteerNeed.quantity =
@@ -291,13 +304,21 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
   }
 
   // Needed supply methods
-  Form _buildNeededSupplyForm(GlobalKey<FormState> formKey, String title,
+  Form _buildNeededSupplyForm(
+      GlobalKey<FormState> formKey, String title, BuildContext context,
       [NeededSupply? oldModel]) {
-    List<String> supplyTypeNames =
-        SupplyTypeName.values.map((e) => e.name).toList();
-    List<String> supplyTypeCategory =
-        SupplyTypeCategory.values.map((e) => e.name).toList();
+    List<String> supplyTypeNames = [];
+    List<String> supplyTypeCategory = [];
     List<String> urgency = Urgency.values.map((e) => e.name).toList();
+    context.read<HelpCenterCubit>().getSupplyTypes();
+    for (var i = 0;
+        i < context.read<HelpCenterCubit>().supplyTypes!.length;
+        i++) {
+      supplyTypeNames
+          .add(context.read<HelpCenterCubit>().supplyTypes![i].typeName!);
+      supplyTypeCategory
+          .add(context.read<HelpCenterCubit>().supplyTypes![i].category!);
+    }
 
     oldModel != null
         ? context.read<HelpCenterCubit>().newSupplyNeed = oldModel
@@ -312,6 +333,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               child: Text(title),
             ),
             CustomDropdownFormField(
+              value: oldModel?.supplyTypeCategory,
               list: supplyTypeCategory,
               label: "Category",
               onChanged: (value) {
@@ -322,6 +344,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomDropdownFormField(
+              value: oldModel?.supplyTypeName,
               list: supplyTypeNames,
               label: "Name",
               onChanged: (value) {
@@ -330,6 +353,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomDropdownFormField(
+              value: oldModel?.urgency,
               list: urgency,
               label: "Urgency",
               onChanged: (value) {
@@ -337,11 +361,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
               },
             ),
             CustomFormField(
-                hint: context
-                    .read<HelpCenterCubit>()
-                    .newSupplyNeed
-                    .quantity
-                    .toString(),
+                value: oldModel?.quantity.toString(),
+                hint: oldModel?.quantity.toString() ?? "50",
                 label: "Quantity",
                 onChanged: (value) {
                   context.read<HelpCenterCubit>().newSupplyNeed.quantity =
@@ -392,7 +413,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Add New Need"))
             ],
-            content: _buildNeededSupplyForm(formKey, "Create New Supply Need"),
+            content: _buildNeededSupplyForm(
+                formKey, "Create New Supply Need", context),
           );
         });
   }
@@ -416,7 +438,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                     if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().updateNeededSupply(
                           context.read<HelpCenterCubit>().newSupplyNeed,
-                          1,
+                          3,
                           oldModel.id!);
                       context.read<HelpCenterCubit>().newSupplyNeed =
                           CreateNeededSupply();
@@ -425,8 +447,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   },
                   child: const Text("Update"))
             ],
-            content:
-                _buildNeededSupplyForm(formKey, "Update Supply Need", oldModel),
+            content: _buildNeededSupplyForm(
+                formKey, "Update Supply Need", context, oldModel),
           );
         });
   }
@@ -472,12 +494,21 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             },
           ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            _showNewSupplyDialog(context);
-          },
-          child: const Text("Add New"),
-        )
+        Align(
+          alignment: Alignment.centerRight,
+          child: FloatingActionButton(
+            onPressed: () {
+              _showNewSupplyDialog(context);
+            },
+            child: const Icon(Icons.add),
+          ),
+        ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     _showNewSupplyDialog(context);
+        //   },
+        //   child: const Text("Add New"),
+        // )
       ],
     );
   }
@@ -485,137 +516,284 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
   Widget _buildOtherDetails(
       BuildContext context, HelpCenterModel currentCenter) {
     final formKey = GlobalKey<FormState>();
-    context.read<HelpCenterCubit>().updateHelpCenter.name =
-        context.read<HelpCenterCubit>().helpCenterList![0].name;
+    context.read<HelpCenterCubit>().updateHelpCenter.name = currentCenter.name;
     context.read<HelpCenterCubit>().updateHelpCenter.additionalInfo =
-        context.read<HelpCenterCubit>().helpCenterList![0].additionalInfo;
+        currentCenter.additionalInfo;
     context.read<HelpCenterCubit>().updateHelpCenter.busiestHours =
-        context.read<HelpCenterCubit>().helpCenterList![0].busiestHours;
+        currentCenter.busiestHours;
     context.read<HelpCenterCubit>().updateHelpCenter.contactInfo =
-        context.read<HelpCenterCubit>().helpCenterList![0].contactInfo;
+        currentCenter.contactInfo;
     context.read<HelpCenterCubit>().updateHelpCenter.location =
-        context.read<HelpCenterCubit>().helpCenterList![0].location;
+        currentCenter.location;
     context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo =
-        context.read<HelpCenterCubit>().helpCenterList![0].openCloseInfo;
+        currentCenter.openCloseInfo;
     context.read<HelpCenterCubit>().updateHelpCenter.volunteerCapacity =
-        context.read<HelpCenterCubit>().helpCenterList![0].volunteerCapacity;
+        currentCenter.volunteerCapacity;
     return BlocBuilder<HelpCenterCubit, HelpCenterState>(
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              key: formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    CustomTextFormField(
+        if (state is HelpCenterLoading) {
+          return LoadingWidget();
+        } else {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            _selectBHstart(context);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(context
+                                          .read<HelpCenterCubit>()
+                                          .updateHelpCenter
+                                          .busiestHours!
+                                          .start ==
+                                      null
+                                  ? "Busiest Hours Start At: Press to select"
+                                  : "Busiest Hours Start At: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().updateHelpCenter.busiestHours!.start!)}"),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              const Icon(Icons.watch_later_outlined)
+                            ],
+                          )),
+                      // CustomTextFormField(
+                      //     enabled: false,
+                      //     suffixIcon: IconButton(
+                      //         onPressed: () {
+                      //           _selectBSstart(context);
+                      //         },
+                      //         icon: Icon(Icons.edit)),
+                      //     // onChanged: (value) {
+                      //     //   context.read<HelpCenterCubit>().emitEditing();
+                      //     //   context
+                      //     //       .read<HelpCenterCubit>()
+                      //     //       .updateHelpCenter
+                      //     //       .busiestHours!
+                      //     //       .start = value;
+                      //     // },
+                      //     initialValue: HelperFunctions.formatDateToTime(
+                      //         currentCenter.busiestHours!.start!),
+                      //     label: "Busiest Hours Start At"),
+                      ElevatedButton(
+                          onPressed: () {
+                            _selectBHend(context);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(context
+                                          .read<HelpCenterCubit>()
+                                          .updateHelpCenter
+                                          .busiestHours!
+                                          .end ==
+                                      null
+                                  ? "Busiest Hours End At: Press to select"
+                                  : "Busiest Hours End At: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().updateHelpCenter.busiestHours!.end!)}"),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              const Icon(Icons.watch_later_outlined)
+                            ],
+                          )),
+                      // CustomTextFormField(
+                      //     enabled: false,
+                      //     suffixIcon: IconButton(
+                      //         onPressed: () {}, icon: Icon(Icons.edit)),
+                      //     // onChanged: (value) {
+                      //     //   context.read<HelpCenterCubit>().emitEditing();
+                      //     //   context
+                      //     //       .read<HelpCenterCubit>()
+                      //     //       .updateHelpCenter
+                      //     //       .busiestHours!
+                      //     //       .end = value;
+                      //     // },
+                      //     initialValue: HelperFunctions.formatDateToTime(
+                      //         currentCenter.busiestHours!.end!),
+                      //     label: "Busiest Hours End At"),
+                      ElevatedButton(
+                          onPressed: () {
+                            _selectOCopen(context);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(context
+                                          .read<HelpCenterCubit>()
+                                          .updateHelpCenter
+                                          .openCloseInfo!
+                                          .start ==
+                                      null
+                                  ? "Help Center Opens At: Press to select"
+                                  : "Help Center Opens At: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo!.start!)}"),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              const Icon(Icons.watch_later_outlined)
+                            ],
+                          )),
+                      // CustomTextFormField(
+                      //     enabled: false,
+                      //     suffixIcon: IconButton(
+                      //         onPressed: () {}, icon: Icon(Icons.edit)),
+                      //     // onChanged: (value) {
+                      //     //   context.read<HelpCenterCubit>().emitEditing();
+                      //     //   context
+                      //     //       .read<HelpCenterCubit>()
+                      //     //       .updateHelpCenter
+                      //     //       .openCloseInfo!
+                      //     //       .start = value;
+                      //     // },
+                      //     initialValue: HelperFunctions.formatDateToTime(
+                      //         currentCenter.openCloseInfo!.start!),
+                      //     label: "Help Center Opens At"),
+                      ElevatedButton(
+                          onPressed: () {
+                            _selectOCend(context);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(context
+                                          .read<HelpCenterCubit>()
+                                          .updateHelpCenter
+                                          .openCloseInfo!
+                                          .end ==
+                                      null
+                                  ? "Help Center Closes At: Press to select"
+                                  : "Help Center Closes At: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo!.end!)}"),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              const Icon(Icons.watch_later_outlined)
+                            ],
+                          )),
+                      // CustomTextFormField(
+                      //     enabled: false,
+                      //     suffixIcon: IconButton(
+                      //         onPressed: () {}, icon: Icon(Icons.edit)),
+                      //     // onChanged: (value) {
+                      //     //   context.read<HelpCenterCubit>().emitEditing();
+                      //     //   context
+                      //     //       .read<HelpCenterCubit>()
+                      //     //       .updateHelpCenter
+                      //     //       .openCloseInfo!
+                      //     //       .end = value;
+                      //     // },
+                      //     initialValue: HelperFunctions.formatDateToTime(
+                      //         currentCenter.openCloseInfo!.end!),
+                      //     label: "Help Center Closes At"),
+                      CustomTextFormField(
                         onChanged: (value) {
                           context.read<HelpCenterCubit>().emitEditing();
                           context
                               .read<HelpCenterCubit>()
                               .updateHelpCenter
-                              .busiestHours!
-                              .start = value;
+                              .additionalInfo = value;
                         },
-                        initialValue: HelperFunctions.formatDateToTime(
-                            currentCenter.busiestHours!.start!),
-                        label: "Busiest Hours Start At"),
-                    CustomTextFormField(
-                        onChanged: (value) {
-                          context.read<HelpCenterCubit>().emitEditing();
-                          context
-                              .read<HelpCenterCubit>()
-                              .updateHelpCenter
-                              .busiestHours!
-                              .end = value;
-                        },
-                        initialValue: HelperFunctions.formatDateToTime(
-                            currentCenter.busiestHours!.end!),
-                        label: "Busiest Hours End At"),
-                    CustomTextFormField(
-                        onChanged: (value) {
-                          context.read<HelpCenterCubit>().emitEditing();
-                          context
-                              .read<HelpCenterCubit>()
-                              .updateHelpCenter
-                              .openCloseInfo!
-                              .start = value;
-                        },
-                        initialValue: HelperFunctions.formatDateToTime(
-                            currentCenter.openCloseInfo!.start!),
-                        label: "Help Center Opens At"),
-                    CustomTextFormField(
-                        onChanged: (value) {
-                          context.read<HelpCenterCubit>().emitEditing();
-                          context
-                              .read<HelpCenterCubit>()
-                              .updateHelpCenter
-                              .openCloseInfo!
-                              .end = value;
-                        },
-                        initialValue: HelperFunctions.formatDateToTime(
-                            currentCenter.openCloseInfo!.end!),
-                        label: "Help Center Closes At"),
-                    CustomTextFormField(
-                      onChanged: (value) {
-                        context.read<HelpCenterCubit>().emitEditing();
-                        context
-                            .read<HelpCenterCubit>()
-                            .updateHelpCenter
-                            .additionalInfo = value;
-                      },
-                      initialValue: currentCenter.additionalInfo!,
-                      label: "Additional Info",
-                    ),
-                    CustomTextFormField(
-                        customValidator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Volunteer Capacity cannot be blank";
-                          }
-                          if (isInt(value)) {
-                            if (int.parse(value) > 0) {
-                              return null;
-                            } else {
-                              return "Volunteer Capacity must be a number >= 0";
+                        initialValue: currentCenter.additionalInfo!,
+                        label: "Additional Info",
+                      ),
+                      CustomTextFormField(
+                          customValidator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Volunteer Capacity cannot be blank";
                             }
-                          } else {
-                            return "Volunteer Capacity must be a number => 0";
-                          }
-                        },
-                        onChanged: (value) {
-                          context.read<HelpCenterCubit>().emitEditing();
-                          context
-                              .read<HelpCenterCubit>()
-                              .updateHelpCenter
-                              .volunteerCapacity = int.tryParse(value);
-                        },
-                        initialValue:
-                            currentCenter.volunteerCapacity.toString(),
-                        label: "Volunteer Capacity"),
-                    state is HelpCenterEditing
-                        ? ElevatedButton(
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                context
-                                    .read<HelpCenterCubit>()
-                                    .updateOtherDetails(
-                                        context
-                                            .read<HelpCenterCubit>()
-                                            .updateHelpCenter,
-                                        1);
-                                context
-                                    .read<HelpCenterCubit>()
-                                    .updateHelpCenter = CreateHelpCenter();
+                            if (isInt(value)) {
+                              if (int.parse(value) > 0) {
+                                return null;
+                              } else {
+                                return "Volunteer Capacity must be a number >= 0";
                               }
-                            },
-                            child: const Text("Update"))
-                        : const SizedBox.shrink()
-                  ],
-                ),
-              )),
-        );
+                            } else {
+                              return "Volunteer Capacity must be a number => 0";
+                            }
+                          },
+                          onChanged: (value) {
+                            context.read<HelpCenterCubit>().emitEditing();
+                            context
+                                .read<HelpCenterCubit>()
+                                .updateHelpCenter
+                                .volunteerCapacity = int.tryParse(value);
+                          },
+                          initialValue:
+                              currentCenter.volunteerCapacity.toString(),
+                          label: "Volunteer Capacity"),
+                      state is HelpCenterEditing
+                          ? ElevatedButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  context
+                                      .read<HelpCenterCubit>()
+                                      .updateOtherDetails(
+                                          context
+                                              .read<HelpCenterCubit>()
+                                              .updateHelpCenter,
+                                          currentCenter.id!);
+                                }
+                              },
+                              child: const Text("Update"))
+                          : const SizedBox.shrink()
+                    ],
+                  ),
+                )),
+          );
+        }
       },
     );
+  }
+
+  Future<void> _selectBHstart(BuildContext context) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    DateTime ocEnd =
+        DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
+    context.read<HelpCenterCubit>().updateHelpCenter.busiestHours!.start =
+        ocEnd.toIso8601String();
+    context.read<HelpCenterCubit>().emitEditing();
+  }
+
+  Future<void> _selectBHend(BuildContext context) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    DateTime bhEnd =
+        DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
+    context.read<HelpCenterCubit>().updateHelpCenter.busiestHours!.end =
+        bhEnd.toIso8601String();
+    context.read<HelpCenterCubit>().emitEditing();
+  }
+
+  Future<void> _selectOCopen(BuildContext context) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    DateTime ocStart =
+        DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
+    context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo!.start =
+        ocStart.toIso8601String();
+    context.read<HelpCenterCubit>().emitEditing();
+  }
+
+  Future<void> _selectOCend(BuildContext context) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    DateTime ocEnd =
+        DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
+    context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo!.end =
+        ocEnd.toIso8601String();
+    context.read<HelpCenterCubit>().emitEditing();
   }
 }

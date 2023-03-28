@@ -5,6 +5,7 @@ import 'package:afet_takip/models/help_center/contact_info_model.dart';
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 import 'package:afet_takip/models/help_center/location_model.dart';
 import 'package:afet_takip/models/help_center/open_close_info_model.dart';
+import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:afet_takip/view/widgets/custom_snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +34,7 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
         centerTitle: true,
         title: const Text("Create New Help Center"),
       ),
+      endDrawer: CustomDrawer(loggedIn: true),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: BlocConsumer<HelpCenterCubit, HelpCenterState>(
@@ -54,22 +56,35 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                     children: [
                       CustomFormField(
                         label: "Name",
-                        hint: "Ex: Ahmet Taner Kışlalı Spor Salonu",
+                        hint: "Ahmet Taner Kışlalı Spor Salonu",
                         onChanged: (value) {
                           newCenter.name = value;
                         },
                       ),
                       CustomFormField(
                         label: "Adress",
-                        hint:
-                            "Ex: Koru, 2580. Sk. No:2, 06810 Yenimahalle/Ankara",
+                        hint: "Koru, 2580. Sk. No:2, 06810 Yenimahalle/Ankara",
                         onChanged: (value) {
                           newCenter.contactInfo!.address = value;
                         },
                       ),
                       CustomFormField(
+                        label: "City",
+                        hint: "Ankara",
+                        onChanged: (value) {
+                          newCenter.city = value;
+                        },
+                      ),
+                      CustomFormField(
+                        label: "Country",
+                        hint: "Turkey",
+                        onChanged: (value) {
+                          newCenter.country = value;
+                        },
+                      ),
+                      CustomFormField(
                         label: "Latitude",
-                        hint: "Ex: 39.88",
+                        hint: "39.88",
                         onChanged: (value) {
                           newCenter.location!.lat = double.tryParse(value);
                         },
@@ -85,7 +100,7 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                       ),
                       CustomFormField(
                         label: "Longitude",
-                        hint: "Ex: 32.68",
+                        hint: "32.68",
                         customValidator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Longitude cannot be blank";
@@ -110,7 +125,8 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text("Starts"),
+                                const Text("Starts",
+                                    style: TextStyle(color: Colors.white)),
                                 ElevatedButton(
                                     onPressed: () {
                                       _selectBHstart(context, newCenter);
@@ -148,20 +164,6 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                           ),
                         ],
                       ),
-                      // CustomFormField(
-                      //   label: "Busiest Hours Start At",
-                      //   hint: "Ex: 12:00",
-                      //   onChanged: (value) {
-                      //     newCenter.busiestHours!.start = value;
-                      //   },
-                      // ),
-                      // CustomFormField(
-                      //   label: "Busiest Hours End At",
-                      //   hint: "Ex: 16:00",
-                      //   onChanged: (value) {
-                      //     newCenter.busiestHours!.end = value;
-                      //   },
-                      // ),
                       const Text("Open Close Hours"),
                       const Divider(
                         color: Colors.grey,
@@ -211,23 +213,9 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                           ),
                         ],
                       ),
-                      // CustomFormField(
-                      //   label: "Help Center Opens At",
-                      //   hint: "Ex: 8:00",
-                      //   onChanged: (value) {
-                      //     newCenter.openCloseInfo!.start = value;
-                      //   },
-                      // ),
-                      // CustomFormField(
-                      //   label: "Help Center Closes At",
-                      //   hint: "23:00",
-                      //   onChanged: (value) {
-                      //     newCenter.openCloseInfo!.end = value;
-                      //   },
-                      // ),
                       CustomFormField(
                         label: "E-mail",
-                        hint: "Ex: examle@gmail.com",
+                        hint: "examle@gmail.com",
                         onChanged: (value) {
                           newCenter.contactInfo!.email = value;
                         },
@@ -243,21 +231,21 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                       ),
                       CustomFormField(
                         label: "Phone",
-                        hint: "Phone",
+                        hint: "0530081306",
                         onChanged: (value) {
                           newCenter.contactInfo!.phone = value;
                         },
                       ),
                       CustomFormField(
                         label: "Additional Info",
-                        hint: "Ex: This help center distributes...",
+                        hint: "This help center distributes...",
                         onChanged: (value) {
                           newCenter.additionalInfo = value;
                         },
                       ),
                       CustomFormField(
                         label: "Volunteer Capacity",
-                        hint: "Ex: 250",
+                        hint: "250",
                         onChanged: (value) {
                           newCenter.volunteerCapacity = int.tryParse(value);
                         },
@@ -290,7 +278,6 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     newCenter.busiestHours!.start = bhStart.toIso8601String();
     context.read<HelpCenterCubit>().emitEditing();
-    context.read<HelpCenterCubit>().emitDisplay();
   }
 
   Future<void> _selectBHend(
@@ -303,7 +290,6 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     newCenter.busiestHours!.end = bhEnd.toIso8601String();
     context.read<HelpCenterCubit>().emitEditing();
-    context.read<HelpCenterCubit>().emitDisplay();
   }
 
   Future<void> _selectOCopen(
@@ -316,7 +302,6 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     newCenter.openCloseInfo!.start = ocStart.toIso8601String();
     context.read<HelpCenterCubit>().emitEditing();
-    context.read<HelpCenterCubit>().emitDisplay();
   }
 
   Future<void> _selectOCend(
@@ -329,6 +314,5 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     newCenter.openCloseInfo!.end = ocEnd.toIso8601String();
     context.read<HelpCenterCubit>().emitEditing();
-    context.read<HelpCenterCubit>().emitDisplay();
   }
 }

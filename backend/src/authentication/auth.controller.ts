@@ -1,14 +1,23 @@
-import { Body, Controller, InternalServerErrorException, Logger, Post, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  InternalServerErrorException,
+  Logger,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from '../auth/dto/create-user.dto';
+import { CreateUserDto } from '../authentication/dto/create-user.dto';
 import { HttpResponse } from '../common';
 import { GetCurrentUser, GetCurrentUserId } from '../common/decorators';
 import { AccessTokenGuard, LocalAuthGuard, RefreshTokenGuard } from '../common/guards';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import { JwtTokensDto } from './dto/jwt-tokens.dto';
+import { CreateVolunteerDto } from './dto/create-volunteer.dto';
 import { Tokens } from './types';
+import { JwtTokensDto, LoginInformation } from './types/return.type';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -25,7 +34,7 @@ export class AuthController {
   })
   @UseGuards(AuthGuard('local'), LocalAuthGuard)
   @Post('login')
-  async login(@Body() authDto: AuthDto): Promise<HttpResponse<Tokens>> {
+  async login(@Body() authDto: AuthDto): Promise<HttpResponse<LoginInformation>> {
     const tokens = await this.authService.login(authDto);
     if (!tokens) {
       throw new InternalServerErrorException(
@@ -36,24 +45,45 @@ export class AuthController {
     return new HttpResponse(tokens, 'Login successful', 200);
   }
 
+  // @ApiOkResponse({
+  //   description: 'Login is successful. A JWT Token is returned.',
+  //   type: JwtTokensDto,
+  // })
+  // @ApiInternalServerErrorResponse({
+  //   description: 'Something went wrong while generating JWT tokens.',
+  // })
+  // @Post('signup')
+  // async signupUser(@Body() createUserDto: CreateUserDto): Promise<HttpResponse<Tokens>> {
+  //   // Hash the password and register the user
+  //   const tokens = await this.authService.signup(createUserDto);
+  //   if (!tokens) {
+  //     throw new InternalServerErrorException(
+  //       'Something went wrong while we are trying to sign you up. Please try again in a few moments.',
+  //     );
+  //   }
+
+  //   return new HttpResponse(tokens, 'Successfully registered the user', 201);
+  // }
+
   @ApiOkResponse({
     description: 'Login is successful. A JWT Token is returned.',
-    type: JwtTokensDto,
+    type: LoginInformation,
   })
   @ApiInternalServerErrorResponse({
     description: 'Something went wrong while generating JWT tokens.',
   })
   @Post('signup')
-  async signup(@Body() createUserDto: CreateUserDto): Promise<HttpResponse<Tokens>> {
-    // Hash the password and register the user
-    const tokens = await this.authService.signup(createUserDto);
-    if (!tokens) {
-      throw new InternalServerErrorException(
-        'Something went wrong while we are trying to sign you up. Please try again in a few moments.',
-      );
+  async signupVolunteer(
+    @Body('user') createUserDto: CreateUserDto,
+    @Body('volunteer') createVolunteerDto: CreateVolunteerDto,
+  ): Promise<HttpResponse<LoginInformation>> {
+    const signedUpUser = await this.authService.signup(createUserDto, createVolunteerDto);
+
+    if (!signedUpUser) {
+      throw new BadRequestException('Something went wrong during registration');
     }
 
-    return new HttpResponse(tokens, 'Successfully registered the user', 201);
+    return new HttpResponse(signedUpUser, 'Registration successfully completed', 201);
   }
 
   @ApiOkResponse({

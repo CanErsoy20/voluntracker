@@ -9,6 +9,14 @@ export class VolunteerService {
   async getVolunteer(volunteerId: number) {
     const volunteer = await this.prisma.volunteer.findUnique({
       where: { id: volunteerId },
+      include: {
+        helpCenter: true,
+        helpCenterCoordinator: true,
+        user: true,
+        volunteerTeam: true,
+        volunteerTeamLeader: true,
+        volunteerType: true,
+      },
     });
 
     if (!volunteer) {

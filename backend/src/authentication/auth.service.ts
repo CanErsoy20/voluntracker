@@ -8,10 +8,11 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import * as argon from 'argon2';
-import { CreateUserDto } from 'src/auth/dto/create-user.dto';
+import { CreateUserDto } from 'src/authentication/dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as authConstants from '../config';
 import { AuthDto } from './dto/auth.dto';
+import { CreateVolunteerDto } from './dto/create-volunteer.dto';
 import { JwtPayload, Tokens } from './types';
 
 @Injectable()
@@ -39,12 +40,16 @@ export class AuthService {
     const { email } = authDto;
     const user = await this.prisma.user.findUnique({
       where: { email },
+      include: {
+        userRole: true,
+        volunteer: true,
+      },
     });
 
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
-    return tokens;
+    return { tokens, user };
   }
 
   async logout(userId: number) {
@@ -62,12 +67,37 @@ export class AuthService {
     return true;
   }
 
-  async signup(createUserDto: CreateUserDto): Promise<Tokens> {
+  async signup(createUserDto: CreateUserDto, createVolunteerDto: CreateVolunteerDto) {
     const { password } = createUserDto;
     const hashedPassword = await this.hash(password);
 
     try {
-      const newUser = await this.prisma.user.create({ data: { ...createUserDto, password: hashedPassword } });
+      const newUser = await this.prisma.user.create({
+        data: {
+          ...createUserDto,
+          password: hashedPassword,
+          volunteer: {
+            create: {
+              ...createVolunteerDto,
+            },
+          },
+          userRole: {
+            create: [
+              {
+                userRole: {
+                  connect: {
+                    roleName: 'Volunteer',
+                  },
+                },
+              },
+            ],
+          },
+        },
+        include: {
+          userRole: true,
+          volunteer: true,
+        },
+      });
 
       if (!newUser) {
         throw new BadRequestException('Something went wrong...');
@@ -75,11 +105,23 @@ export class AuthService {
 
       const tokens = await this.getTokens(newUser.id, newUser.email);
       await this.updateRefreshToken(newUser.id, tokens.refreshToken);
-      return tokens;
+
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: newUser.id,
+        },
+        include: {
+          userRole: true,
+          volunteer: true,
+        },
+      });
+      return { tokens, user };
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
-          throw new ConflictException('Signup failed because this email is already being used.');
+          throw new ConflictException(
+            'Signup failed because either the email or the phone number is already being used.',
+          );
         }
       }
     }
@@ -92,12 +134,12 @@ export class AuthService {
       },
     });
     if (!user || !user.hashedRefreshToken) {
-      throw new ForbiddenException('Access Denied');
+      throw new ForbiddenException('Access denied.');
     }
 
     const rtMatches = await argon.verify(user.hashedRefreshToken, rt);
     if (!rtMatches) {
-      throw new ForbiddenException('Access Denied');
+      throw new ForbiddenException('Access denied.');
     }
 
     const tokens = await this.getTokens(user.id, user.email);

@@ -13,12 +13,14 @@ import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
 import { NeededVolunteerEntity } from '../needed-volunteer/entities/needed-volunteer.entity';
 import { NeededVolunteerService } from '../needed-volunteer/needed-volunteer.service';
+import { CreateCoordinatorDto } from '../volunteer/dto/create-coordinator.dto';
 import { CreateVolunteerTeamDto } from '../volunteer/dto/create-volunteer-team.dto';
 import { VolunteerTeamService } from '../volunteer/volunteer-team.service';
 import { VolunteerService } from '../volunteer/volunteer.service';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
 import { HelpCenterEntity } from './entities/help-center.entity';
+
 @Injectable()
 export class HelpCentersService {
   constructor(
@@ -503,5 +505,36 @@ export class HelpCentersService {
     });
 
     return updatedHelpCenter;
+  }
+
+  async assignCoordinatorToHelpCenter(createCoordinatorDto: CreateCoordinatorDto) {
+    const { helpCenterId, volunteerId } = createCoordinatorDto;
+    const helpCenter = this.prisma.helpCenter.findUnique({
+      where: {
+        id: helpCenterId,
+      },
+    });
+    if (!helpCenter) {
+      throw new UniqueEntityNotFoundException(
+        'The help center cannot be assigned a coordinator because the help center record cannot be found.',
+      );
+    }
+
+    // Handles volunteer not existing
+    const volunteer = await this.volunteerService.getVolunteer(volunteerId);
+
+    if (!volunteer.helpCenterId || volunteer.helpCenter === null || volunteer.helpCenter === undefined) {
+      throw new NotRelatedToHelpCenterException(
+        'The volunteer you are trying to assign as coordinator is not related to any help center.',
+      );
+    }
+
+    if (volunteer.helpCenterId !== helpCenterId) {
+      throw new NotRelatedToHelpCenterException(
+        'The volunteer you are trying to assign as coordinator is not related to the given help center.',
+      );
+    }
+
+    // Help center has already a coordinator
   }
 }

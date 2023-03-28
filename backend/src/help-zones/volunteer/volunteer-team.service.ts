@@ -128,8 +128,6 @@ export class VolunteerTeamService {
         teamLeader: true,
       },
     });
-    // Remove volunteer because volunteer is converted to volunteer team leader
-    const deletedVolunteer = this.volunteerService.deleteVolunteer(volunteerId);
 
     return team;
   }
