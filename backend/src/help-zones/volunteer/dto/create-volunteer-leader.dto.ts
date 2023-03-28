@@ -5,13 +5,13 @@ export class CreateVolunteerLeaderDto {
   @ApiProperty({
     required: true,
     nullable: false,
-    description: `ID of the user model the volunteer is related to.`,
+    description: `ID of the volunteer model the volunteer is related to.`,
     type: Number,
     example: 222,
   })
   @IsDefined()
   @IsNumber()
-  userId: number;
+  volunteerId: number;
 
   @ApiProperty({
     required: true,

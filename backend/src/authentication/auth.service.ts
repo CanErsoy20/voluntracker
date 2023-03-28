@@ -8,10 +8,11 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import * as argon from 'argon2';
-import { CreateUserDto } from 'src/auth/dto/create-user.dto';
+import { CreateUserDto } from 'src/authentication/dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as authConstants from '../config';
 import { AuthDto } from './dto/auth.dto';
+import { CreateVolunteerDto } from './dto/create-volunteer.dto';
 import { JwtPayload, Tokens } from './types';
 
 @Injectable()
@@ -62,12 +63,36 @@ export class AuthService {
     return true;
   }
 
-  async signup(createUserDto: CreateUserDto): Promise<Tokens> {
+  async signup(createUserDto: CreateUserDto, createVolunteerDto: CreateVolunteerDto) {
     const { password } = createUserDto;
     const hashedPassword = await this.hash(password);
 
     try {
-      const newUser = await this.prisma.user.create({ data: { ...createUserDto, password: hashedPassword } });
+      const newUser = await this.prisma.user.create({
+        data: {
+          ...createUserDto,
+          password: hashedPassword,
+          userRole: {
+            connectOrCreate: {
+              create: {
+                roleName: 'Volunteer',
+              },
+              where: {
+                roleName: 'Volunteer',
+              },
+            },
+          },
+          volunteer: {
+            create: {
+              ...createVolunteerDto,
+            },
+          },
+        },
+        include: {
+          userRole: true,
+          volunteer: true,
+        },
+      });
 
       if (!newUser) {
         throw new BadRequestException('Something went wrong...');
@@ -75,7 +100,8 @@ export class AuthService {
 
       const tokens = await this.getTokens(newUser.id, newUser.email);
       await this.updateRefreshToken(newUser.id, tokens.refreshToken);
-      return tokens;
+
+      return { tokens, user: newUser };
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
