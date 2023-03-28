@@ -165,8 +165,8 @@ model User {
   phone    String? @unique
   password String
 
-  roleId    Int?
-  userRole  UserRole?    @relation(fields: [roleId], references: [id])
+  roleId    Int
+  userRole  UserRole    @relation(fields: [roleId], references: [id])
 
   volunteer Volunteer?
   admin Admin?
@@ -179,8 +179,8 @@ model User {
 
 
 model UserRole {
-  id        Int    @id @default(autoincrement())
-  role_name String // Volunteer, Admin, Superadmin, ...
+  id        Int     @id @default(autoincrement())
+  roleName String   @unique // Volunteer, Admin, Superadmin, ...
 
   users       User[]
   permissions RolePermission[]
