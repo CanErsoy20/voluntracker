@@ -6,19 +6,20 @@ import 'package:http/http.dart';
 import '../api.dart';
 import '../models/auth/login_model.dart';
 import '../models/auth/sign_up_model.dart';
-import '../models/auth/tokens_model.dart';
+import '../models/auth/signup_response_model.dart';
 import '../models/response_model.dart';
 
 class AuthService {
   AuthService();
-  Future<Tokens?> signUp(SignUpModel bodyModel) async {
+  Future<SignUpResponseModel?> signUp(SignUpModel bodyModel) async {
     try {
       Response? response;
       response = await Api.instance.postRequest(ApiConstant.baseUrl,
           ApiConstant.signUpVolunteer, jsonEncode(bodyModel.toJson()));
       if (response.statusCode == 201) {
         dynamic body = json.decode(response.body);
-        return Tokens.fromJson(body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return SignUpResponseModel.fromJson(responseModel.data);
       } else {
         return null;
       }

@@ -53,7 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       CustomTextFormField(
                         initialValue: "",
                         label: "Name",
-                        hint: "Ex: Can",
+                        hint: "Can",
                         onChanged: (value) {
                           context.read<SignUpCubit>().signUpModel.firstname =
                               value;
@@ -62,7 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       CustomTextFormField(
                         initialValue: "",
                         label: "Surname",
-                        hint: "Ex: Ersoy",
+                        hint: "Ersoy",
                         onChanged: (value) {
                           context.read<SignUpCubit>().signUpModel.surname =
                               value;
@@ -71,7 +71,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       CustomTextFormField(
                         initialValue: "",
                         label: "Email",
-                        hint: "Ex: example@voluntracker.com",
+                        hint: "example@voluntracker.com",
                         onChanged: (value) {
                           context.read<SignUpCubit>().signUpModel.email = value;
                         },
@@ -88,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       CustomTextFormField(
                         initialValue: "",
                         label: "Phone",
-                        hint: "Ex: 05300861306",
+                        hint: "05300861306",
                         onChanged: (value) {
                           context.read<SignUpCubit>().signUpModel.phone = value;
                         },

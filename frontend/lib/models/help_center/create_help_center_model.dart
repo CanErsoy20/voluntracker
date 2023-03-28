@@ -12,6 +12,8 @@ class CreateHelpCenter {
   ContactInfo? contactInfo;
   String? additionalInfo;
   int? volunteerCapacity;
+  String? city;
+  String? country;
 
   CreateHelpCenter(
       {this.name,
@@ -20,7 +22,9 @@ class CreateHelpCenter {
       this.openCloseInfo,
       this.contactInfo,
       this.additionalInfo,
-      this.volunteerCapacity});
+      this.volunteerCapacity,
+      this.city,
+      this.country});
 
   CreateHelpCenter.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -30,6 +34,8 @@ class CreateHelpCenter {
     contactInfo = ContactInfo.fromJson(json['contactInfo']);
     additionalInfo = json['additionalInfo'];
     volunteerCapacity = json['volunteerCapacity'];
+    city = json['city'];
+    country = json['country'];
   }
 
   Map<String, dynamic> toJson() {
@@ -41,6 +47,8 @@ class CreateHelpCenter {
     data['contactInfo'] = contactInfo!.toJson();
     data['additionalInfo'] = additionalInfo;
     data['volunteerCapacity'] = volunteerCapacity;
+    data['city'] = city;
+    data['country'] = country;
     return data;
   }
 }

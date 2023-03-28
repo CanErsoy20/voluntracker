@@ -1,4 +1,5 @@
 import 'package:afet_takip/api.dart';
+import 'package:afet_takip/models/auth/signup_response_model.dart';
 import 'package:afet_takip/services/auth_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -14,8 +15,9 @@ class SignUpCubit extends Cubit<SignUpState> {
   SignUpModel signUpModel = SignUpModel();
   Future<void> signUp() async {
     emit(SignUpLoading());
-    Tokens? tokens = await service.signUp(signUpModel);
-    if (tokens == null) {
+    SignUpResponseModel? signUpResponseModel =
+        await service.signUp(signUpModel);
+    if (signUpResponseModel == null) {
       emit(SignUpError("Sign Up Failed", ""));
     } else {
       emit(SignUpSuccess("Successful", "Signed Up Successfully"));

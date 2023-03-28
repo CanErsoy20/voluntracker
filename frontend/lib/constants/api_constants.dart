@@ -6,6 +6,6 @@ class ApiConstant {
   static String neededSupply = "neededSupply/";
   static String supplyTypes = "supply/types/";
   static String volunteerTypes = "volunteer/types/";
-  static String signUpVolunteer = "auth/signUp/volunteer";
+  static String signUpVolunteer = "auth/signup";
   static String login = "auth/login/";
 }
