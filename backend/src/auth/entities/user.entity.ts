@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User, UserRole, Volunteer } from '@prisma/client';
+import { Admin, User, UserRole, Volunteer } from '@prisma/client';
 import {
   IsDate,
   IsDefined,
@@ -13,9 +13,8 @@ import {
 
 export class UserEntity implements User {
   @ApiProperty({
-    required: true,
     nullable: false,
-    type: 'Number',
+    type: Number,
     description: 'Unique identifier of the user.',
   })
   @IsDefined()
@@ -23,9 +22,8 @@ export class UserEntity implements User {
   id: number;
 
   @ApiProperty({
-    required: true,
     nullable: false,
-    type: 'String',
+    type: String,
     description: 'First name of the user, can also contain the middle name of the user if they have one.',
   })
   @IsDefined()
@@ -33,9 +31,8 @@ export class UserEntity implements User {
   firstname: string;
 
   @ApiProperty({
-    required: true,
     nullable: false,
-    type: 'String',
+    type: String,
     description: 'Surname of the user.',
   })
   @IsDefined()
@@ -43,9 +40,8 @@ export class UserEntity implements User {
   surname: string;
 
   @ApiProperty({
-    required: true,
     nullable: false,
-    type: 'String',
+    type: String,
     description: 'Email of the user.',
   })
   @IsDefined()
@@ -53,9 +49,8 @@ export class UserEntity implements User {
   email: string;
 
   @ApiProperty({
-    required: true,
     nullable: false,
-    type: 'String',
+    type: String,
     description: 'Password of the user.',
   })
   @IsDefined()
@@ -63,9 +58,8 @@ export class UserEntity implements User {
   password: string;
 
   @ApiProperty({
-    required: false,
     nullable: true,
-    type: 'String',
+    type: String,
     description: 'Phone number of the user. It is optional.',
   })
   @IsOptional()
@@ -73,9 +67,8 @@ export class UserEntity implements User {
   phone: string;
 
   @ApiProperty({
-    required: true,
     nullable: false,
-    type: 'Number',
+    type: Number,
     description: 'Role ID of the user.',
   })
   @IsOptional()
@@ -83,27 +76,31 @@ export class UserEntity implements User {
   roleId: number;
 
   @ApiProperty({
-    required: true,
     nullable: false,
-    type: 'UserRole',
+    type: Object,
     description: 'Role of the user.',
   })
   @IsOptional()
   userRole: UserRole;
 
   @ApiProperty({
-    required: false,
     nullable: true,
-    type: 'Volunteer',
-    description: 'Volunteer details of the user.',
+    type: Object,
+    description: 'Volunteer details of the user, not null only if the user is a volunteer.',
   })
   @IsOptional()
   volunteer: Volunteer;
 
   @ApiProperty({
-    required: true,
+    nullable: true,
+    type: Object,
+    description: 'Admin details of the user, not null only if the user is an admin.',
+  })
+  admin: Admin;
+
+  @ApiProperty({
     nullable: false,
-    type: 'String',
+    type: Object,
     description:
       'Refresh token of the user. Valid only for a specified time. Can be used to fetch new access tokens while it is valid',
   })
@@ -111,9 +108,8 @@ export class UserEntity implements User {
   hashedRefreshToken: string;
 
   @ApiProperty({
-    required: true,
     nullable: false,
-    type: 'Date',
+    type: Date,
     description: 'Creation date of the user entity.',
   })
   @IsDefined()
@@ -121,9 +117,8 @@ export class UserEntity implements User {
   createdAt: Date;
 
   @ApiProperty({
-    required: true,
     nullable: false,
-    type: 'Date',
+    type: Date,
     description: 'Latest update date of the user entity.',
   })
   @IsDefined()
