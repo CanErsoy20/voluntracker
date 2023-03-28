@@ -92,12 +92,12 @@ export class AuthService {
       },
     });
     if (!user || !user.hashedRefreshToken) {
-      throw new ForbiddenException('Access Denied');
+      throw new ForbiddenException('Access denied.');
     }
 
     const rtMatches = await argon.verify(user.hashedRefreshToken, rt);
     if (!rtMatches) {
-      throw new ForbiddenException('Access Denied');
+      throw new ForbiddenException('Access denied.');
     }
 
     const tokens = await this.getTokens(user.id, user.email);

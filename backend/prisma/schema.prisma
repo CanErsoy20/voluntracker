@@ -67,9 +67,9 @@ model HelpCenter {
   /// [ContactInfo]
   contactInfo       Json 
 
-  city              String
+  city              String @default("Ankara")
 
-  country           String
+  country           String @default("Turkey")
 
   additionalInfo    String
   volunteerCapacity Int

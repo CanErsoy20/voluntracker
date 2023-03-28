@@ -30,7 +30,6 @@ export class HelpCenterEntity implements HelpCenter {
   id: number;
 
   @ApiProperty({
-    required: true,
     nullable: false,
     description: 'Name or the title of the help center',
     example: 'Bilkent Üniversitesi Spor Salonu',
@@ -40,7 +39,6 @@ export class HelpCenterEntity implements HelpCenter {
   name: string;
 
   @ApiProperty({
-    required: true,
     nullable: false,
     description:
       'An object representing the location of the help center based on its latitude and longitude.',
@@ -51,7 +49,6 @@ export class HelpCenterEntity implements HelpCenter {
   location: Location;
 
   @ApiProperty({
-    required: false,
     nullable: true,
     description: 'Contains the start and end hours for the busiests hours in a help center.',
     example: {
@@ -64,7 +61,6 @@ export class HelpCenterEntity implements HelpCenter {
   busiestHours: StartEndDate;
 
   @ApiProperty({
-    required: false,
     nullable: true,
     description: 'Contains the opening and closing hours of the help center.',
     example: {
@@ -77,7 +73,6 @@ export class HelpCenterEntity implements HelpCenter {
   openCloseInfo: StartEndDate;
 
   @ApiProperty({
-    required: false,
     nullable: true,
     description: 'Contains the opening and closing hours of the help center.',
     example: {
@@ -91,7 +86,6 @@ export class HelpCenterEntity implements HelpCenter {
   contactInfo: ContactInfo;
 
   @ApiProperty({
-    required: false,
     nullable: true,
     description:
       'Any additional info that is not already represented by other attributed. This might contain special information about the particular help center',
@@ -101,7 +95,6 @@ export class HelpCenterEntity implements HelpCenter {
   additionalInfo: string;
 
   @ApiProperty({
-    required: false,
     nullable: true,
     description: 'Represents the maximum number of volunteers this help center can have.',
     example: 250,
@@ -110,7 +103,22 @@ export class HelpCenterEntity implements HelpCenter {
   volunteerCapacity: number;
 
   @ApiProperty({
-    required: false,
+    nullable: false,
+    description: 'Represents the city this help center is located at.',
+    example: 'Ankara',
+    type: String,
+  })
+  city: string;
+
+  @ApiProperty({
+    nullable: false,
+    description: 'Represents the country this help center is located at.',
+    example: 'Turkey',
+    type: String,
+  })
+  country: string;
+
+  @ApiProperty({
     description: 'Volunteers assigned to the help center.',
     type: Array,
     items: {
@@ -120,7 +128,6 @@ export class HelpCenterEntity implements HelpCenter {
   volunteers?: Volunteer[];
 
   @ApiProperty({
-    required: false,
     description: 'Details of the volunteers that the help center needs.',
     type: Array,
     items: {
@@ -130,7 +137,6 @@ export class HelpCenterEntity implements HelpCenter {
   neededVolunteers?: NeededVolunteer[];
 
   @ApiProperty({
-    required: false,
     description: 'Supplies that are already stored at the help center',
     type: Array,
     items: {
@@ -140,7 +146,6 @@ export class HelpCenterEntity implements HelpCenter {
   supply?: Supply[];
 
   @ApiProperty({
-    required: false,
     description: 'Details of the supply that the help center needs.',
     type: Array,
     items: {
