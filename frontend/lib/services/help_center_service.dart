@@ -47,7 +47,7 @@ class HelpCenterService {
       Response? response;
       response = await Api.instance.postRequest(ApiConstant.baseUrl,
           ApiConstant.helpCenters, jsonEncode(bodyModel.toJson()));
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         dynamic body = json.decode(response.body);
         ResponseModel responseModel = ResponseModel.fromJson(body);
         return HelpCenterModel.fromJson(responseModel.data);

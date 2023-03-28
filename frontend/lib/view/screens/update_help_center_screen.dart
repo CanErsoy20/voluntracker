@@ -52,7 +52,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                       text: "Volunteer",
                     ),
                     Tab(
-                      text: "Suppply",
+                      text: "Supply",
                     ),
                     Tab(
                       text: "Other Details",
@@ -131,12 +131,21 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             },
           ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            _showNewVolunteerDialog(context);
-          },
-          child: const Text("Add New"),
-        )
+        Align(
+          alignment: Alignment.centerRight,
+          child: FloatingActionButton(
+            onPressed: () {
+              _showNewVolunteerDialog(context);
+            },
+            child: const Icon(Icons.add),
+          ),
+        ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     _showNewVolunteerDialog(context);
+        //   },
+        //   child: const Text("Add New"),
+        // )
       ],
     );
   }
@@ -268,7 +277,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ),
             CustomFormField(
                 value: oldModel?.quantity.toString(),
-                hint: oldModel?.quantity.toString() ?? "Ex: 50",
+                hint: oldModel?.quantity.toString() ?? "50",
                 label: "Quantity",
                 onChanged: (value) {
                   context.read<HelpCenterCubit>().newVolunteerNeed.quantity =
@@ -353,7 +362,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ),
             CustomFormField(
                 value: oldModel?.quantity.toString(),
-                hint: oldModel?.quantity.toString() ?? "Ex: 50",
+                hint: oldModel?.quantity.toString() ?? "50",
                 label: "Quantity",
                 onChanged: (value) {
                   context.read<HelpCenterCubit>().newSupplyNeed.quantity =
@@ -485,12 +494,21 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             },
           ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            _showNewSupplyDialog(context);
-          },
-          child: const Text("Add New"),
-        )
+        Align(
+          alignment: Alignment.centerRight,
+          child: FloatingActionButton(
+            onPressed: () {
+              _showNewSupplyDialog(context);
+            },
+            child: const Icon(Icons.add),
+          ),
+        ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     _showNewSupplyDialog(context);
+        //   },
+        //   child: const Text("Add New"),
+        // )
       ],
     );
   }

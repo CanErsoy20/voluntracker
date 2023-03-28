@@ -56,22 +56,35 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                     children: [
                       CustomFormField(
                         label: "Name",
-                        hint: "Ex: Ahmet Taner Kışlalı Spor Salonu",
+                        hint: "Ahmet Taner Kışlalı Spor Salonu",
                         onChanged: (value) {
                           newCenter.name = value;
                         },
                       ),
                       CustomFormField(
                         label: "Adress",
-                        hint:
-                            "Ex: Koru, 2580. Sk. No:2, 06810 Yenimahalle/Ankara",
+                        hint: "Koru, 2580. Sk. No:2, 06810 Yenimahalle/Ankara",
                         onChanged: (value) {
                           newCenter.contactInfo!.address = value;
                         },
                       ),
                       CustomFormField(
+                        label: "City",
+                        hint: "Ankara",
+                        onChanged: (value) {
+                          newCenter.city = value;
+                        },
+                      ),
+                      CustomFormField(
+                        label: "Country",
+                        hint: "Turkey",
+                        onChanged: (value) {
+                          newCenter.country = value;
+                        },
+                      ),
+                      CustomFormField(
                         label: "Latitude",
-                        hint: "Ex: 39.88",
+                        hint: "39.88",
                         onChanged: (value) {
                           newCenter.location!.lat = double.tryParse(value);
                         },
@@ -87,7 +100,7 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                       ),
                       CustomFormField(
                         label: "Longitude",
-                        hint: "Ex: 32.68",
+                        hint: "32.68",
                         customValidator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Longitude cannot be blank";
@@ -151,20 +164,6 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                           ),
                         ],
                       ),
-                      // CustomFormField(
-                      //   label: "Busiest Hours Start At",
-                      //   hint: "Ex: 12:00",
-                      //   onChanged: (value) {
-                      //     newCenter.busiestHours!.start = value;
-                      //   },
-                      // ),
-                      // CustomFormField(
-                      //   label: "Busiest Hours End At",
-                      //   hint: "Ex: 16:00",
-                      //   onChanged: (value) {
-                      //     newCenter.busiestHours!.end = value;
-                      //   },
-                      // ),
                       const Text("Open Close Hours"),
                       const Divider(
                         color: Colors.grey,
@@ -214,23 +213,9 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                           ),
                         ],
                       ),
-                      // CustomFormField(
-                      //   label: "Help Center Opens At",
-                      //   hint: "Ex: 8:00",
-                      //   onChanged: (value) {
-                      //     newCenter.openCloseInfo!.start = value;
-                      //   },
-                      // ),
-                      // CustomFormField(
-                      //   label: "Help Center Closes At",
-                      //   hint: "23:00",
-                      //   onChanged: (value) {
-                      //     newCenter.openCloseInfo!.end = value;
-                      //   },
-                      // ),
                       CustomFormField(
                         label: "E-mail",
-                        hint: "Ex: examle@gmail.com",
+                        hint: "examle@gmail.com",
                         onChanged: (value) {
                           newCenter.contactInfo!.email = value;
                         },
@@ -246,21 +231,21 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                       ),
                       CustomFormField(
                         label: "Phone",
-                        hint: "Ex: 0530081306",
+                        hint: "0530081306",
                         onChanged: (value) {
                           newCenter.contactInfo!.phone = value;
                         },
                       ),
                       CustomFormField(
                         label: "Additional Info",
-                        hint: "Ex: This help center distributes...",
+                        hint: "This help center distributes...",
                         onChanged: (value) {
                           newCenter.additionalInfo = value;
                         },
                       ),
                       CustomFormField(
                         label: "Volunteer Capacity",
-                        hint: "Ex: 250",
+                        hint: "250",
                         onChanged: (value) {
                           newCenter.volunteerCapacity = int.tryParse(value);
                         },

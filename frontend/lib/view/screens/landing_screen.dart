@@ -32,9 +32,7 @@ class _LandingScreenState extends State<LandingScreen> {
                 child: const Text("Go Help Center List")),
             ElevatedButton(
                 onPressed: () {
-                  context.read<HelpCenterCubit>().getHelpCenters().then(
-                      (value) => Navigator.of(context)
-                          .pushNamed(Routes.createHelpCenter));
+                  Navigator.of(context).pushNamed(Routes.createHelpCenter);
                 },
                 child: const Text("Create Help Center Screen")),
             ElevatedButton(

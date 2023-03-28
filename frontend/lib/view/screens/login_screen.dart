@@ -1,3 +1,4 @@
+import 'package:afet_takip/router.dart';
 import 'package:afet_takip/view/widgets/custom_text_form_field.dart';
 import 'package:afet_takip/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
 
+import '../../cubit/help_centers/help_center_cubit.dart';
 import '../../cubit/login/login_cubit.dart';
 import '../widgets/custom_drawer.dart';
 import '../widgets/custom_snackbars.dart';
@@ -70,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
             initialValue: "",
             label: "Email",
             hint: "Email",
-            suffixIcon: const Icon(Icons.credit_card),
+            suffixIcon: const Icon(Icons.mail),
             onChanged: (value) {
               context.read<LoginCubit>().loginModel.email = value;
             },
@@ -114,7 +116,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 fixedSize: Size(200, 40),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20))),
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Do not have an account?"),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                        context, Routes.registerRoute);
+                  },
+                  child: Text("Sign Up"))
+            ],
+          ),
+          TextButton(
+              onPressed: () {
+                context.read<HelpCenterCubit>().getHelpCenters().then((value) =>
+                    Navigator.pushNamed(context, Routes.helpCenterList));
+              },
+              child: Text("Continue as guest"))
         ],
       ),
     );
