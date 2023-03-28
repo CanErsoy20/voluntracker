@@ -146,6 +146,28 @@ export class CreateHelpCenterDto {
   volunteerCapacity: number;
 
   @ApiProperty({
+    required: true,
+    nullable: false,
+    description: 'Represents the city this help center is located at.',
+    example: 'Ankara',
+    type: String,
+  })
+  @IsString()
+  @IsDefined()
+  city: string;
+
+  @ApiProperty({
+    required: true,
+    nullable: false,
+    description: 'Represents the country this help center is located at.',
+    example: 'Ankara',
+    type: String,
+  })
+  @IsString()
+  @IsDefined()
+  country: string;
+
+  @ApiProperty({
     required: false,
     nullable: true,
     description:
