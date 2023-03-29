@@ -1,7 +1,9 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/cubit/map/map_cubit.dart';
+import 'package:afet_takip/models/volunteer_model.dart';
 import 'package:afet_takip/router.dart';
 import 'package:afet_takip/view/widgets/custom_drawer.dart';
+import 'package:afet_takip/view/widgets/volunteer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -21,9 +23,9 @@ class HelpCenterDetailScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: FittedBox(
+          title: const FittedBox(
             fit: BoxFit.fitWidth,
-            child: Text(currentCenter.name!),
+            child: Text("Help Center Details"),
           ),
         ),
         endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
@@ -31,60 +33,138 @@ class HelpCenterDetailScreen extends StatelessWidget {
           length: 2,
           child: Column(
             children: [
-              Image.asset(
-                fit: BoxFit.fitWidth,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 6,
-                "assets/images/bilkent.jpg",
+              // Image.asset(
+              //   fit: BoxFit.fitWidth,
+              //   width: MediaQuery.of(context).size.width,
+              //   height: MediaQuery.of(context).size.height / 6,
+              //   "assets/images/bilkent.jpg",
+              // ),
+              Text(
+                currentCenter.name!,
+                style: const TextStyle(fontSize: 20),
               ),
               ListTile(
                 title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text("Adress: ${currentCenter.contactInfo!.address}"),
+                    Text("${currentCenter.contactInfo!.address}",
+                        style:
+                            const TextStyle(fontSize: 15, color: Colors.white)),
                     Text(
-                        "Last Updated At: ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.parse(currentCenter.updatedAt!))}"),
-                    Text("Additional Info: ${currentCenter.additionalInfo}")
-                  ],
-                ),
-                subtitle: TextButton(
-                    onPressed: () {
-                      context.read<MapCubit>().getCurrentLocation();
-                      context.read<MapCubit>().initialCameraLocation = LatLng(
-                          currentCenter.location!.lat!,
-                          currentCenter.location!.lon!);
-                      Navigator.pushNamed(context, Routes.mapRoute);
-                    },
-                    child: const Text(
-                      "See On Map",
-                      style: TextStyle(color: Colors.green),
-                    )),
-              ),
-              ExpansionTile(
-                  title: const Text("Time Details"),
-                  expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                        "Help Center Opens - Closes: ${HelperFunctions.formatDateToTime(currentCenter.openCloseInfo!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.openCloseInfo!.end!)}"),
-                    Text(
-                        "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.end!)}"),
-                  ]),
-              const SizedBox(
-                height: 50,
-                child: TabBar(
-                  indicatorPadding: EdgeInsets.symmetric(horizontal: 5),
-                  tabs: [
-                    Tab(text: "Volunteer Needs"),
-                    Tab(text: "Supply Needs")
+                        "Last Updated At: ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.parse(currentCenter.updatedAt!))}",
+                        style:
+                            const TextStyle(fontSize: 15, color: Colors.white)),
+                    Text("Additional Info: ${currentCenter.additionalInfo}",
+                        style:
+                            const TextStyle(fontSize: 15, color: Colors.white))
                   ],
                 ),
               ),
-              Expanded(
-                child: TabBarView(children: [
-                  _buildVolunteerNeeds(currentCenter),
-                  _buildSupplyNeeds(currentCenter)
-                ]),
-              )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                TextButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green)),
+                  onPressed: () {
+                    context.read<MapCubit>().getCurrentLocation();
+                    context.read<MapCubit>().initialCameraLocation = LatLng(
+                        currentCenter.location!.lat!,
+                        currentCenter.location!.lon!);
+                    Navigator.pushNamed(context, Routes.mapRoute);
+                  },
+                  child: RichText(
+                    text: const TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(
+                            Icons.location_on,
+                            size: 18,
+                            color: Color.fromARGB(225, 27, 40, 55),
+                          ),
+                        ),
+                        TextSpan(
+                          text: "See On Map",
+                          style: TextStyle(
+                              fontSize: 15,
+                              // set text to bold
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(225, 27, 40, 55)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                TextButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green)),
+                  onPressed: () {
+                    // TODO: Send to help_center_needs_screen
+                    // which is already defined in the routes
+                    // but send the help center context.
+                  },
+                  child: RichText(
+                    text: const TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(
+                            Icons.help,
+                            size: 18,
+                            color: Color.fromARGB(225, 27, 40, 55),
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Show Needs",
+                          style: TextStyle(
+                              fontSize: 15,
+                              // set text to bold
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(225, 27, 40, 55)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ]),
+              VolunteerList(
+                volunteers: [
+                  Volunteer(
+                    id: 1,
+                    userId: 123,
+                    volunteerTypeName: 'Event Volunteer',
+                    volunteerTypeCategory: 'Community Service',
+                    image: 'https://example.com/images/volunteer.jpg',
+                    volunteerTeamId: 456,
+                    helpCenterId: null,
+                    createdAt: '2022-01-01T10:00:00Z',
+                    updatedAt: '2022-01-01T11:00:00Z',
+                  ),
+                  Volunteer(
+                    id: 2,
+                    userId: 456,
+                    volunteerTypeName: 'Fundraising Volunteer',
+                    volunteerTypeCategory: 'Fundraising',
+                    image: 'https://example.com/images/volunteer2.jpg',
+                    volunteerTeamId: 789,
+                    helpCenterId: null,
+                    createdAt: '2022-01-02T09:00:00Z',
+                    updatedAt: '2022-01-02T10:30:00Z',
+                  ),
+                  Volunteer(
+                    id: 3,
+                    userId: 789,
+                    volunteerTypeName: 'Help Center Volunteer',
+                    volunteerTypeCategory: 'Community Service',
+                    image: 'https://example.com/images/volunteer3.jpg',
+                    volunteerTeamId: 123,
+                    helpCenterId: 456,
+                    createdAt: '2022-01-03T08:00:00Z',
+                    updatedAt: '2022-01-03T09:45:00Z',
+                  )
+                ],
+              ),
             ],
           ),
         ));
