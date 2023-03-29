@@ -214,7 +214,7 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                         ],
                       ),
                       CustomFormField(
-                        label: "E-mail",
+                        label: "Contact E-mail",
                         hint: "examle@gmail.com",
                         onChanged: (value) {
                           newCenter.contactInfo!.email = value;
@@ -230,13 +230,14 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
                         },
                       ),
                       CustomFormField(
-                        label: "Phone",
+                        label: "Contact Phone",
                         hint: "0530081306",
                         onChanged: (value) {
                           newCenter.contactInfo!.phone = value;
                         },
                       ),
                       CustomFormField(
+                        maxLines: 5,
                         label: "Additional Info",
                         hint: "This help center distributes...",
                         onChanged: (value) {
