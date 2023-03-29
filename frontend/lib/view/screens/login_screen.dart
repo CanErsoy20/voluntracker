@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   Image.asset(
-                    "assets/images/loading.gif",
+                    "assets/images/home.png",
                     height: MediaQuery.of(context).size.height / 4,
                   ),
                   _buildForm(context),

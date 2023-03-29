@@ -1,3 +1,4 @@
+import 'package:afet_takip/view/screens/add_team_screen.dart';
 import 'package:afet_takip/view/screens/create_help_center_screen.dart';
 import 'package:afet_takip/view/screens/help_center_detail_screen.dart';
 import 'package:afet_takip/view/screens/help_center_list_screen.dart';
@@ -20,6 +21,7 @@ class Routes {
   static const String helpCenterNeeds = "/help-center-needs";
   static const String createHelpCenter = "/create-help-center";
   static const String updateHelpCenter = "/update-help-center";
+  static const String addTeam = "/add-team";
 }
 
 class RouteGenerator {
@@ -43,6 +45,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => UpdateHelpCenterScreen());
       case Routes.helpCenterNeeds:
         return MaterialPageRoute(builder: (_) => HelpCenterNeedsScreen());
+      case Routes.addTeam:
+        return MaterialPageRoute(builder: (_) => AddTeamScreen());
       default:
         return MaterialPageRoute(builder: (_) => UndefinedScreen());
     }
