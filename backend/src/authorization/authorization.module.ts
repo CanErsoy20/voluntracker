@@ -7,5 +7,6 @@ import { UserRolesService } from './user-roles.service';
   imports: [PrismaModule],
   controllers: [UserRolesController],
   providers: [UserRolesService],
+  exports: [UserRolesService],
 })
 export class AuthorizationModule {}

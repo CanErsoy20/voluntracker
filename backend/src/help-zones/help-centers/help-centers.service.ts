@@ -1,5 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { HelpCenter, Prisma } from '@prisma/client';
+import { AuthService } from 'src/authentication/auth.service';
+import { UserRolesService } from 'src/authorization/user-roles.service';
 import { HttpResponse } from 'src/common';
 import { NotRelatedToHelpCenterException } from 'src/exceptions/not-related-to-help-center-exception.exception';
 import { NotRelatedToTeamException } from 'src/exceptions/not-related-to-team.exception';
@@ -30,6 +32,7 @@ export class HelpCentersService {
     private readonly neededSupplyService: NeededSupplyService,
     private readonly volunteerTeamService: VolunteerTeamService,
     private readonly volunteerService: VolunteerService,
+    private readonly userRolesService: UserRolesService,
   ) {}
 
   async create(createHelpCenterDto: CreateHelpCenterDto): Promise<HelpCenterEntity> {
@@ -549,11 +552,48 @@ export class HelpCentersService {
       },
       data: {
         coordinator: {
-          create: createCoordinatorDto,
+          create: {
+            volunteerId: volunteerId,
+          },
         },
       },
     });
+    await this.userRolesService.addUserRole(volunteer.userId, 'HelpCenterCoordinator');
 
     return updatedHelpCenter;
+  }
+
+  async removeCoordinatorFromHelpCenter(helpCenterId: number) {
+    const helpCenter = await this.prisma.helpCenter.findUnique({
+      where: {
+        id: helpCenterId,
+      },
+      include: {
+        coordinator: true,
+      },
+    });
+
+    if (!helpCenter) {
+      throw new UniqueEntityNotFoundException('Help center with given ID cannot be found');
+    }
+
+    if (!helpCenter.coordinator) {
+      throw new UniqueEntityNotFoundException(
+        'Removing coordinator from help center is unsuccessful because there is no coordinator assigned to this help center',
+      );
+    }
+
+    await this.prisma.helpCenter.update({
+      where: {
+        id: helpCenter.id,
+      },
+      data: {
+        coordinator: null,
+      },
+    });
+    return await this.userRolesService.removeUserRole(
+      helpCenter.coordinator.volunteerId,
+      'HelpCenterCoordinator',
+    );
   }
 }
