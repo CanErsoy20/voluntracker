@@ -229,7 +229,7 @@ class _MapScreenState extends State<MapScreen> {
           ),
           ElevatedButton(
               onPressed: () {
-                context.read<HelpCenterCubit>().selectedCenter = center;
+                context.read<HelpCenterCubit>().myCenter = center;
                 Navigator.pushNamed(context, Routes.helpCenterDetail);
               },
               child: const Text("Show Details"))

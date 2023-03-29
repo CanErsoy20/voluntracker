@@ -10,8 +10,8 @@ import 'package:afet_takip/view/screens/update_help_center_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
-  static const String landingRoute = "/";
-  static const String loginRoute = "/login";
+  static const String landingRoute = "/landing";
+  static const String loginRoute = "/";
   static const String registerRoute = "/register";
   static const String mapRoute = "/map";
   static const String helpCenterList = "/help-center-list";

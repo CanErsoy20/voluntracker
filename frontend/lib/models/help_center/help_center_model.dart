@@ -32,6 +32,8 @@ class HelpCenterModel extends CreateHelpCenter {
     location = Location.fromJson(json['location']);
     busiestHours = BusiestHours.fromJson(json['busiestHours']);
     openCloseInfo = OpenCloseInfo.fromJson(json['openCloseInfo']);
+    city = json['city'];
+    country = json['country'];
     neededVolunteerList = json['neededVolunteers'] == null
         ? null
         : List<NeededVolunteer>.from(
@@ -55,6 +57,8 @@ class HelpCenterModel extends CreateHelpCenter {
     data['location'] = location!.toJson();
     data['busiestHours'] = busiestHours!.toJson();
     data['openCloseInfo'] = openCloseInfo!.toJson();
+    data['city'] = city;
+    data['country'] = country;
     data['neededVolunteers'] =
         List<NeededVolunteer>.from(neededVolunteerList!.map((x) => x.toJson()));
     data['neededSupply'] =

@@ -1,28 +1,39 @@
-class SignUpModel {
-  String? firstname;
-  String? surname;
-  String? email;
-  String? password;
-  String? phone;
+import 'create_user_model.dart';
 
-  SignUpModel(
-      {this.firstname, this.surname, this.email, this.password, this.phone});
+class SignUpModel {
+  CreateUserModel? user;
+
+  SignUpModel({this.user});
 
   SignUpModel.fromJson(Map<String, dynamic> json) {
-    firstname = json['firstname'];
-    surname = json['surname'];
-    email = json['email'];
-    password = json['password'];
-    phone = json['phone'];
+    user = CreateUserModel.fromJson(json['user']);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['firstname'] = firstname;
-    data['surname'] = surname;
-    data['email'] = email;
-    data['password'] = password;
-    data['phone'] = phone;
+    VolunteerTemp temp = VolunteerTemp(
+        volunteerTypeName: "Carrier", volunteerTypeCategory: "Labor");
+    data['user'] = user!.toJson();
+    data['volunteer'] = temp.toJson();
+    return data;
+  }
+}
+
+class VolunteerTemp {
+  String? volunteerTypeName;
+  String? volunteerTypeCategory;
+
+  VolunteerTemp({this.volunteerTypeName, this.volunteerTypeCategory});
+
+  VolunteerTemp.fromJson(Map<String, dynamic> json) {
+    volunteerTypeName = json['volunteerTypeName'];
+    volunteerTypeCategory = json['volunteerTypeCategory'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['volunteerTypeName'] = volunteerTypeName;
+    data['volunteerTypeCategory'] = volunteerTypeCategory;
     return data;
   }
 }

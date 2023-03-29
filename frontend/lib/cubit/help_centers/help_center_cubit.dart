@@ -14,10 +14,13 @@ import '../../services/help_center_service.dart';
 part 'help_center_state.dart';
 
 class HelpCenterCubit extends Cubit<HelpCenterState> {
-  HelpCenterCubit(this.service) : super(HelpCenterInitial());
+  HelpCenterCubit(this.service) : super(HelpCenterInitial()) {
+    getSupplyTypes();
+    getVolunteerTypes();
+  }
   HelpCenterService service;
   List<HelpCenterModel>? helpCenterList;
-  HelpCenterModel? selectedCenter;
+  HelpCenterModel? myCenter;
   CreateNeededVolunteer newVolunteerNeed = CreateNeededVolunteer();
   CreateNeededSupply newSupplyNeed = CreateNeededSupply();
   CreateHelpCenter updateHelpCenter = CreateHelpCenter(
@@ -27,15 +30,28 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
       location: Location());
   List<SupplyTypeModel>? supplyTypes = [];
   List<VolunteerTypeModel>? volunteerTypes = [];
+  List<String> volunteerTypeNames = [];
+  List<String> volunteerTypeCategory = [];
+  List<String> supplyTypeNames = [];
+  List<String> supplyTypeCategory = [];
 
   Future<void> getHelpCenters() async {
     emit(HelpCenterLoading());
     helpCenterList = await service.getHelpCenters();
-
     if (helpCenterList != null) {
       emit(HelpCenterDisplay());
     } else {
       emit(HelpCenterError("Not Found", "No Help Center Found"));
+    }
+  }
+
+  Future<void> getMyCenter() async {
+    emit(HelpCenterLoading());
+    myCenter = await service.getMyCenter();
+    if (myCenter != null) {
+      emit(HelpCenterDisplay());
+    } else {
+      emit(HelpCenterError("Couldn't Found", "Cannot fetch your help center"));
     }
   }
 
@@ -121,15 +137,19 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   }
 
   Future<void> getSupplyTypes() async {
-    emit(HelpCenterLoading());
     supplyTypes = await service.getSupplyTypes();
-    emit(HelpCenterInitial());
+    for (var i = 0; i < supplyTypes!.length; i++) {
+      supplyTypeNames.add(supplyTypes![i].typeName!);
+      supplyTypeCategory.add(supplyTypes![i].category!);
+    }
   }
 
   Future<void> getVolunteerTypes() async {
-    emit(HelpCenterLoading());
     volunteerTypes = await service.getVolunteerTypes();
-    emit(HelpCenterInitial());
+    for (var i = 0; i < volunteerTypes!.length; i++) {
+      volunteerTypeNames.add(volunteerTypes![i].typeName!);
+      volunteerTypeCategory.add(volunteerTypes![i].category!);
+    }
   }
 
   void emitEditing() {
