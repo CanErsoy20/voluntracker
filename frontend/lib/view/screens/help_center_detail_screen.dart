@@ -97,11 +97,9 @@ class HelpCenterDetailScreen extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green)),
+                  style: TextButton.styleFrom(backgroundColor:Colors.green),
                   onPressed: () {
-                    // TODO: Send to help_center_needs_screen
+                    // TODO: Send to help_center_volunteers_screen
                     // which is already defined in the routes
                     // but send the help center context.
                   },
@@ -116,7 +114,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: "Show Needs",
+                          text: "Show Volunteers and Teams",
                           style: TextStyle(
                               fontSize: 15,
                               // set text to bold
@@ -128,42 +126,30 @@ class HelpCenterDetailScreen extends StatelessWidget {
                   ),
                 ),
               ]),
-              VolunteerList(
-                volunteers: [
-                  Volunteer(
-                    id: 1,
-                    userId: 123,
-                    volunteerTypeName: 'Event Volunteer',
-                    volunteerTypeCategory: 'Community Service',
-                    image: 'https://example.com/images/volunteer.jpg',
-                    volunteerTeamId: 456,
-                    helpCenterId: null,
-                    createdAt: '2022-01-01T10:00:00Z',
-                    updatedAt: '2022-01-01T11:00:00Z',
-                  ),
-                  Volunteer(
-                    id: 2,
-                    userId: 456,
-                    volunteerTypeName: 'Fundraising Volunteer',
-                    volunteerTypeCategory: 'Fundraising',
-                    image: 'https://example.com/images/volunteer2.jpg',
-                    volunteerTeamId: 789,
-                    helpCenterId: null,
-                    createdAt: '2022-01-02T09:00:00Z',
-                    updatedAt: '2022-01-02T10:30:00Z',
-                  ),
-                  Volunteer(
-                    id: 3,
-                    userId: 789,
-                    volunteerTypeName: 'Help Center Volunteer',
-                    volunteerTypeCategory: 'Community Service',
-                    image: 'https://example.com/images/volunteer3.jpg',
-                    volunteerTeamId: 123,
-                    helpCenterId: 456,
-                    createdAt: '2022-01-03T08:00:00Z',
-                    updatedAt: '2022-01-03T09:45:00Z',
-                  )
-                ],
+              ExpansionTile(
+                  title: const Text("Time Details"),
+                  expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        "Help Center Opens - Closes: ${HelperFunctions.formatDateToTime(currentCenter.openCloseInfo!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.openCloseInfo!.end!)}"),
+                    Text(
+                        "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.end!)}"),
+                  ]),
+              const SizedBox(
+                height: 50,
+                child: TabBar(
+                  indicatorPadding: EdgeInsets.symmetric(horizontal: 5),
+                  tabs: [
+                    Tab(text: "Volunteer Needs"),
+                    Tab(text: "Supply Needs")
+                  ],
+                ),
+              ),
+              Expanded(
+                child: TabBarView(children: [
+                  _buildVolunteerNeeds(currentCenter),
+                  _buildSupplyNeeds(currentCenter)
+                ]),
               ),
             ],
           ),

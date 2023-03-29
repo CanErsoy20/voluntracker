@@ -14,12 +14,32 @@ class HelpCenterModel extends CreateHelpCenter {
   List<NeededVolunteer>? neededVolunteerList;
   List<NeededSupply>? neededSupplyList;
 
-  HelpCenterModel(
-      {this.id,
-      this.createdAt,
-      this.updatedAt,
-      this.neededVolunteerList,
-      this.neededSupplyList});
+  HelpCenterModel({
+    String? name,
+    String? additionalInfo,
+    int? volunteerCapacity,
+    ContactInfo? contactInfo,
+    Location? location,
+    BusiestHours? busiestHours,
+    OpenCloseInfo? openCloseInfo,
+    String? city,
+    String? country,
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.neededVolunteerList,
+    this.neededSupplyList,
+  }) : super(
+          name: name,
+          additionalInfo: additionalInfo,
+          volunteerCapacity: volunteerCapacity,
+          contactInfo: contactInfo,
+          location: location,
+          busiestHours: busiestHours,
+          openCloseInfo: openCloseInfo,
+          city: city,
+          country: country,
+  );
 
   HelpCenterModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
