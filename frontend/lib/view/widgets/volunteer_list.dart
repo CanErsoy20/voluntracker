@@ -18,8 +18,8 @@ class VolunteerList extends StatelessWidget {
           leading: CircleAvatar(
             // backgroundImage: AssetImage(volunteer.image!),
           ),
-          title: Text("firstname lastname"),
-          subtitle: Text("Volunteer"),
+          title: Text("${volunteer.user?.firstname} ${volunteer.user?.surname}}"),
+          subtitle: Text("${volunteer.user?.getHighestRole()}"), 
           trailing: IconButton(
             icon: Icon(Icons.more_vert),
             onPressed: () {},
