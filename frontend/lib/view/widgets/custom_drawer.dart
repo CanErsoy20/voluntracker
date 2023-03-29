@@ -1,5 +1,9 @@
+import 'package:afet_takip/router.dart';
 import 'package:afet_takip/view/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+
+import '../../models/user/user_info.dart';
 
 class CustomDrawer extends StatelessWidget {
   CustomDrawer({
@@ -18,7 +22,10 @@ class CustomDrawer extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          loggedIn ? const Text("Can Ersoy") : const SizedBox.shrink(),
+          loggedIn
+              ? Text(
+                  "${UserInfo.loggedUser!.firstname} ${UserInfo.loggedUser!.surname}")
+              : const SizedBox.shrink(),
           loggedIn
               ? const Divider(
                   thickness: 1,
@@ -27,7 +34,9 @@ class CustomDrawer extends StatelessWidget {
                   indent: 100,
                 )
               : const SizedBox.shrink(),
-          loggedIn ? const Text("Volunteer") : const SizedBox.shrink(),
+          loggedIn
+              ? Text("${UserInfo.loggedUser!.userRole![0].userRoleName}")
+              : const SizedBox.shrink(),
           const SizedBox(
             height: 44,
           ),
@@ -60,7 +69,11 @@ class CustomDrawer extends StatelessWidget {
           loggedIn
               ? DrawerComponent(
                   title: "Exit",
-                  onTap: () {},
+                  onTap: () {
+                    UserInfo.loggedUser = null;
+                    UserInfo.tokens = null;
+                    Navigator.pushReplacementNamed(context, Routes.loginRoute);
+                  },
                   prefixIcon: const Icon(
                     Icons.exit_to_app_outlined,
                     color: Colors.white,

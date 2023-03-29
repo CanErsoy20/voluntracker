@@ -61,27 +61,32 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                 ),
               ),
               Expanded(
-                  child: BlocListener<HelpCenterCubit, HelpCenterState>(
+                  child: BlocConsumer<HelpCenterCubit, HelpCenterState>(
                 listener: (context, state) {
                   if (state is HelpCenterError) {
                     context.read<HelpCenterCubit>().getHelpCenters();
+                    context.read<HelpCenterCubit>().getMyCenter();
                     CustomSnackbars.errorSnackbar(
                         context, state.title, state.description);
                   } else if (state is HelpCenterSuccess) {
                     context.read<HelpCenterCubit>().getHelpCenters();
-
+                    context.read<HelpCenterCubit>().getMyCenter();
                     CustomSnackbars.successSnackbar(
                         context, state.title, state.description);
                   }
                 },
-                child: TabBarView(children: [
-                  _buildVolunteerNeeds(context,
-                      context.read<HelpCenterCubit>().helpCenterList![3]),
-                  _buildSupplyNeeds(context,
-                      context.read<HelpCenterCubit>().helpCenterList![3]),
-                  _buildOtherDetails(context,
-                      context.read<HelpCenterCubit>().helpCenterList![3])
-                ]),
+                builder: (context, state) {
+                  return TabBarView(children: [
+                    _buildVolunteerNeeds(
+                      context,
+                      context.read<HelpCenterCubit>().myCenter!,
+                    ),
+                    _buildSupplyNeeds(
+                        context, context.read<HelpCenterCubit>().myCenter!),
+                    _buildOtherDetails(
+                        context, context.read<HelpCenterCubit>().myCenter!)
+                  ]);
+                },
               ))
             ],
           )),
@@ -89,7 +94,9 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
   }
 
   Widget _buildVolunteerNeeds(
-      BuildContext context, HelpCenterModel currentCenter) {
+    BuildContext context,
+    HelpCenterModel currentCenter,
+  ) {
     return Column(
       children: [
         Expanded(
@@ -121,8 +128,10 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                       ),
                       trailing: IconButton(
                           onPressed: () {
-                            _showUpdateVolunteerNeedDialog(context,
-                                currentCenter.neededVolunteerList![index]);
+                            _showUpdateVolunteerNeedDialog(
+                              context,
+                              currentCenter.neededVolunteerList![index],
+                            );
                           },
                           iconSize: 20,
                           icon: const Icon(Icons.edit)),
@@ -131,28 +140,30 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             },
           ),
         ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: FloatingActionButton(
-            onPressed: () {
-              _showNewVolunteerDialog(context);
-            },
-            child: const Icon(Icons.add),
-          ),
-        ),
-        // ElevatedButton(
-        //   onPressed: () {
-        //     _showNewVolunteerDialog(context);
-        //   },
-        //   child: const Text("Add New"),
-        // )
+        // Align(
+        //   alignment: Alignment.centerRight,
+        //   child: FloatingActionButton(
+        //     onPressed: () {
+        //       _showNewVolunteerDialog(context);
+        //     },
+        //     child: const Icon(Icons.add),
+        //   ),
+        // ),
+        ElevatedButton(
+          onPressed: () {
+            _showNewVolunteerDialog(context);
+          },
+          child: const Text("Add New"),
+        )
       ],
     );
   }
 
   // Needed Volunteer methods
   void _showUpdateVolunteerNeedDialog(
-      BuildContext context, NeededVolunteer oldModel) {
+    BuildContext context,
+    NeededVolunteer oldModel,
+  ) {
     showDialog(
         context: context,
         builder: (context) {
@@ -170,7 +181,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                     if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().updateNeededVolunteer(
                           context.read<HelpCenterCubit>().newVolunteerNeed,
-                          3,
+                          context.read<HelpCenterCubit>().myCenter!.id!,
                           oldModel.id!);
                       context.read<HelpCenterCubit>().newVolunteerNeed =
                           CreateNeededVolunteer();
@@ -202,7 +213,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().createNeededVolunteer(
-                          context.read<HelpCenterCubit>().newVolunteerNeed, 1);
+                          context.read<HelpCenterCubit>().newVolunteerNeed,
+                          context.read<HelpCenterCubit>().myCenter!.id!);
                       context.read<HelpCenterCubit>().newVolunteerNeed =
                           CreateNeededVolunteer();
                       Navigator.pop(context);
@@ -219,19 +231,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
   Form _buildNeededVolunteerForm(
       GlobalKey<FormState> formKey, String title, BuildContext context,
       [NeededVolunteer? oldModel]) {
-    List<String> volunteerTypeNames = [];
-    List<String> volunteerTypeCategory = [];
     List<String> urgency = Urgency.values.map((e) => e.name).toList();
-    context.read<HelpCenterCubit>().getVolunteerTypes();
-    for (var i = 0;
-        i < context.read<HelpCenterCubit>().volunteerTypes!.length;
-        i++) {
-      volunteerTypeNames
-          .add(context.read<HelpCenterCubit>().volunteerTypes![i].typeName!);
-      volunteerTypeCategory
-          .add(context.read<HelpCenterCubit>().volunteerTypes![i].category!);
-    }
-
     oldModel != null
         ? context.read<HelpCenterCubit>().newVolunteerNeed = oldModel
         : null;
@@ -246,7 +246,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ),
             CustomDropdownFormField(
               value: oldModel?.volunteerTypeCategory,
-              list: volunteerTypeCategory,
+              list: context.read<HelpCenterCubit>().volunteerTypeCategory,
               label: "Category",
               onChanged: (value) {
                 context
@@ -257,7 +257,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ),
             CustomDropdownFormField(
               value: oldModel?.volunteerTypeName,
-              list: volunteerTypeNames,
+              list: context.read<HelpCenterCubit>().volunteerTypeNames,
               label: "Name",
               onChanged: (value) {
                 context
@@ -307,19 +307,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
   Form _buildNeededSupplyForm(
       GlobalKey<FormState> formKey, String title, BuildContext context,
       [NeededSupply? oldModel]) {
-    List<String> supplyTypeNames = [];
-    List<String> supplyTypeCategory = [];
     List<String> urgency = Urgency.values.map((e) => e.name).toList();
-    context.read<HelpCenterCubit>().getSupplyTypes();
-    for (var i = 0;
-        i < context.read<HelpCenterCubit>().supplyTypes!.length;
-        i++) {
-      supplyTypeNames
-          .add(context.read<HelpCenterCubit>().supplyTypes![i].typeName!);
-      supplyTypeCategory
-          .add(context.read<HelpCenterCubit>().supplyTypes![i].category!);
-    }
-
     oldModel != null
         ? context.read<HelpCenterCubit>().newSupplyNeed = oldModel
         : null;
@@ -334,7 +322,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ),
             CustomDropdownFormField(
               value: oldModel?.supplyTypeCategory,
-              list: supplyTypeCategory,
+              list: context.read<HelpCenterCubit>().supplyTypeCategory,
               label: "Category",
               onChanged: (value) {
                 context
@@ -345,7 +333,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ),
             CustomDropdownFormField(
               value: oldModel?.supplyTypeName,
-              list: supplyTypeNames,
+              list: context.read<HelpCenterCubit>().supplyTypeNames,
               label: "Name",
               onChanged: (value) {
                 context.read<HelpCenterCubit>().newSupplyNeed.supplyTypeName =
@@ -405,7 +393,8 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().createNeededSupply(
-                          context.read<HelpCenterCubit>().newSupplyNeed, 1);
+                          context.read<HelpCenterCubit>().newSupplyNeed,
+                          context.read<HelpCenterCubit>().myCenter!.id!);
                       context.read<HelpCenterCubit>().newSupplyNeed =
                           CreateNeededSupply();
                       Navigator.pop(context);
@@ -438,7 +427,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                     if (formKey.currentState!.validate()) {
                       context.read<HelpCenterCubit>().updateNeededSupply(
                           context.read<HelpCenterCubit>().newSupplyNeed,
-                          3,
+                          context.read<HelpCenterCubit>().myCenter!.id!,
                           oldModel.id!);
                       context.read<HelpCenterCubit>().newSupplyNeed =
                           CreateNeededSupply();
@@ -494,21 +483,21 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             },
           ),
         ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: FloatingActionButton(
-            onPressed: () {
-              _showNewSupplyDialog(context);
-            },
-            child: const Icon(Icons.add),
-          ),
-        ),
-        // ElevatedButton(
-        //   onPressed: () {
-        //     _showNewSupplyDialog(context);
-        //   },
-        //   child: const Text("Add New"),
-        // )
+        // Align(
+        //   alignment: Alignment.topRight,
+        //   child: FloatingActionButton(
+        //     onPressed: () {
+        //       _showNewSupplyDialog(context);
+        //     },
+        //     child: const Icon(Icons.add),
+        //   ),
+        // ),
+        ElevatedButton(
+          onPressed: () {
+            _showNewSupplyDialog(context);
+          },
+          child: const Text("Add New"),
+        )
       ],
     );
   }
@@ -529,10 +518,14 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
         currentCenter.openCloseInfo;
     context.read<HelpCenterCubit>().updateHelpCenter.volunteerCapacity =
         currentCenter.volunteerCapacity;
+    context.read<HelpCenterCubit>().updateHelpCenter.city = currentCenter.city;
+    context.read<HelpCenterCubit>().updateHelpCenter.country =
+        currentCenter.country;
+
     return BlocBuilder<HelpCenterCubit, HelpCenterState>(
       builder: (context, state) {
         if (state is HelpCenterLoading) {
-          return LoadingWidget();
+          return const Center(child: LoadingWidget());
         } else {
           return Padding(
             padding: const EdgeInsets.all(8.0),

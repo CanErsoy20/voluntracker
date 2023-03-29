@@ -9,6 +9,7 @@ import 'package:validators/validators.dart';
 
 import '../../cubit/help_centers/help_center_cubit.dart';
 import '../../cubit/login/login_cubit.dart';
+import '../../models/user/user_info.dart';
 import '../widgets/custom_drawer.dart';
 import '../widgets/custom_snackbars.dart';
 import '../widgets/profile_avatar.dart';
@@ -38,7 +39,11 @@ class _LoginScreenState extends State<LoginScreen> {
           } else if (state is LoginSuccess) {
             CustomSnackbars.successSnackbar(
                 context, state.title, state.description);
-            Navigator.pop(context);
+            context.read<HelpCenterCubit>().getHelpCenters();
+            if (UserInfo.loggedUser!.volunteer!.helpCenterId != null) {
+              context.read<HelpCenterCubit>().getMyCenter();
+            }
+            Navigator.pushReplacementNamed(context, Routes.landingRoute);
           }
         }, builder: (context, state) {
           if (state is LoginLoading) {
@@ -111,22 +116,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 context.read<LoginCubit>().login();
               }
             },
-            child: const Text("Login"),
             style: ElevatedButton.styleFrom(
                 fixedSize: Size(200, 40),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20))),
+            child: const Text("Login"),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Do not have an account?"),
+              const Text("Do not have an account?"),
               TextButton(
                   onPressed: () {
                     Navigator.pushReplacementNamed(
                         context, Routes.registerRoute);
                   },
-                  child: Text("Sign Up"))
+                  child: const Text("Sign Up"))
             ],
           ),
           TextButton(
@@ -134,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 context.read<HelpCenterCubit>().getHelpCenters().then((value) =>
                     Navigator.pushNamed(context, Routes.helpCenterList));
               },
-              child: Text("Continue as guest"))
+              child: const Text("Continue as guest"))
         ],
       ),
     );
