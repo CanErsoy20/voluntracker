@@ -12,6 +12,7 @@ import '../models/help_center/help_center_model.dart';
 import '../models/response_model.dart';
 import '../models/types/supply_types_model.dart';
 import '../models/types/volunteer_types_model.dart';
+import '../models/user/user_info.dart';
 
 class HelpCenterService {
   HelpCenterService();
@@ -38,6 +39,19 @@ class HelpCenterService {
       }
     } catch (e) {
       debugPrint("Error: $e");
+      return null;
+    }
+  }
+
+  Future<HelpCenterModel?> getMyCenter() async {
+    try {
+      Response? response;
+      response = await Api.instance.getRequest(ApiConstant.baseUrl,
+          "${ApiConstant.helpCenters}${UserInfo.loggedUser!.volunteer!.helpCenterId}");
+      dynamic body = json.decode(response.body);
+      ResponseModel responseModel = ResponseModel.fromJson(body);
+      return HelpCenterModel.fromJson(responseModel.data);
+    } catch (e) {
       return null;
     }
   }

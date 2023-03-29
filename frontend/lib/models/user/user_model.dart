@@ -13,7 +13,7 @@ class UserModel {
   String? hashedRefreshToken;
   String? createdAt;
   String? updatedAt;
-  UserRole? userRole;
+  List<UserRole>? userRole;
   Volunteer? volunteer;
 
   UserModel(
@@ -41,8 +41,9 @@ class UserModel {
     hashedRefreshToken = json['hashedRefreshToken'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    userRole =
-        json['userRole'] != null ? UserRole.fromJson(json['userRole']) : null;
+    userRole = json['userRole'] != null
+        ? List<UserRole>.from(json['userRole'].map((x) => UserRole.fromJson(x)))
+        : null;
     volunteer = json['volunteer'] != null
         ? Volunteer.fromJson(json['volunteer'])
         : null;
@@ -61,7 +62,7 @@ class UserModel {
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     if (userRole != null) {
-      data['userRole'] = userRole!.toJson();
+      data['userRole'] = List<UserRole>.from(userRole!.map((x) => x.toJson()));
     }
     if (volunteer != null) {
       data['volunteer'] = volunteer!.toJson();

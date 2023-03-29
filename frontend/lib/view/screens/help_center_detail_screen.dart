@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 
 import '../../helper_functions.dart';
 import '../../models/help_center/help_center_model.dart';
+import '../../models/user/user_info.dart';
 import '../widgets/custom_need_card.dart';
 
 class HelpCenterDetailScreen extends StatelessWidget {
@@ -16,8 +17,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HelpCenterModel currentCenter =
-        context.read<HelpCenterCubit>().selectedCenter!;
+    HelpCenterModel currentCenter = context.read<HelpCenterCubit>().myCenter!;
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -26,8 +26,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
             child: Text(currentCenter.name!),
           ),
         ),
-        //TODO: change LoggedIn
-        endDrawer: CustomDrawer(loggedIn: true),
+        endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
         body: DefaultTabController(
           length: 2,
           child: Column(

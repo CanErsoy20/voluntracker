@@ -1,7 +1,9 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
+import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../models/user/user_info.dart';
 import '../../router.dart';
 
 class LandingScreen extends StatefulWidget {
@@ -20,6 +22,7 @@ class _LandingScreenState extends State<LandingScreen> {
         title: const Text("Voluntracker"),
         centerTitle: true,
       ),
+      endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
       body: Center(
         child: Column(
           children: [
@@ -37,9 +40,8 @@ class _LandingScreenState extends State<LandingScreen> {
                 child: const Text("Create Help Center Screen")),
             ElevatedButton(
                 onPressed: () {
-                  context.read<HelpCenterCubit>().getHelpCenters().then(
-                      (value) => Navigator.of(context)
-                          .pushNamed(Routes.updateHelpCenter));
+                  context.read<HelpCenterCubit>().getMyCenter().then((value) =>
+                      Navigator.of(context).pushNamed(Routes.updateHelpCenter));
                 },
                 child: const Text("Update Help Center Screen")),
             ElevatedButton(
