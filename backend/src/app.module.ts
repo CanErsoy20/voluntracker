@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { HelpZonesModule } from './app/help-zones/help-zones.module';
+import { NotificationsModule } from './app/notifications/notifications.module';
 import { AuthModule } from './authentication/auth.module';
-import { HelpZonesModule } from './help-zones/help-zones.module';
-import { NotificationsModule } from './notifications/notifications.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({

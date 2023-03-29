@@ -1,9 +1,9 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import { HelpCenter, NeededSupply, NeededVolunteer, Prisma, Supply, Volunteer } from '@prisma/client';
-import { NeededSupplyEntity } from 'src/help-zones/needed-supply/entities/needed-supply.entity';
-import { NeededVolunteerEntity } from 'src/help-zones/needed-volunteer/entities/needed-volunteer.entity';
-import { SupplyEntity } from 'src/help-zones/supply/entities/supply.entity';
-import { VolunteerEntity } from 'src/help-zones/volunteer/entities/volunteer.entity';
+import { NeededSupplyEntity } from '../../needed-supply/entities/needed-supply.entity';
+import { NeededVolunteerEntity } from '../../needed-volunteer/entities/needed-volunteer.entity';
+import { SupplyEntity } from '../../supply/entities/supply.entity';
+import { VolunteerEntity } from '../../volunteer/entities/volunteer.entity';
 
 class ContactInfo {
   phone: string;
