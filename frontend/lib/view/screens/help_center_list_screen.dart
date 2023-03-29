@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../cubit/map/map_cubit.dart';
 import '../../models/help_center/help_center_model.dart';
+import '../../models/user/user_info.dart';
 import '../../router.dart';
 
 class HelpCenterListScreen extends StatelessWidget {
@@ -19,8 +20,7 @@ class HelpCenterListScreen extends StatelessWidget {
         title: const Text("Help Center List"),
         centerTitle: true,
       ),
-      //TODO: change LoggedIn
-      endDrawer: CustomDrawer(loggedIn: true),
+      endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
       body: BlocBuilder<HelpCenterCubit, HelpCenterState>(
         builder: (context, state) {
           if (state is HelpCenterDisplay) {
@@ -67,7 +67,7 @@ class HelpCenterListScreen extends StatelessWidget {
                                           onPressed: () {
                                             context
                                                 .read<HelpCenterCubit>()
-                                                .selectedCenter = currentCenter;
+                                                .myCenter = currentCenter;
                                             Navigator.pushNamed(context,
                                                 Routes.helpCenterDetail);
                                           },

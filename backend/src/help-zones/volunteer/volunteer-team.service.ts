@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { UserRolesService } from 'src/authorization/user-roles.service';
 import { NotRelatedToHelpCenterException } from 'src/exceptions/not-related-to-help-center-exception.exception';
 import { NotRelatedToTeamException } from 'src/exceptions/not-related-to-team.exception';
 import { UniqueEntityAlreadyExistsException } from 'src/exceptions/unique-entity-already-exists-exception.exception';
@@ -14,7 +15,11 @@ import { VolunteerService } from './volunteer.service';
 
 @Injectable()
 export class VolunteerTeamService {
-  constructor(private readonly prisma: PrismaService, private readonly volunteerService: VolunteerService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly volunteerService: VolunteerService,
+    private readonly userRoleService: UserRolesService,
+  ) {}
 
   async getVolunteerTeam(vtId: number) {
     const volunteerTeam = await this.prisma.volunteerTeam.findUnique({
@@ -128,7 +133,7 @@ export class VolunteerTeamService {
         teamLeader: true,
       },
     });
-
-    return team;
+    const userRole = await this.userRoleService.addUserRoleByVolunteerId(volunteerId, 'VolunteerTeamLeader');
+    return userRole;
   }
 }

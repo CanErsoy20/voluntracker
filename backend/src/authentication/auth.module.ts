@@ -12,5 +12,6 @@ import { LocalStrategy } from './strategies/local.strategy';
   imports: [PassportModule, JwtModule.register({}), PrismaModule],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}

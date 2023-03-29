@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
 
+import '../../router.dart';
 import '../widgets/custom_snackbars.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -37,7 +38,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             } else if (state is SignUpSuccess) {
               CustomSnackbars.successSnackbar(
                   context, state.title, state.description);
-              Navigator.pop(context);
             }
           },
           builder: (context, state) {
@@ -55,8 +55,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         label: "Name",
                         hint: "Can",
                         onChanged: (value) {
-                          context.read<SignUpCubit>().signUpModel.firstname =
-                              value;
+                          context
+                              .read<SignUpCubit>()
+                              .signUpModel
+                              .user!
+                              .firstname = value;
                         },
                       ),
                       CustomTextFormField(
@@ -64,8 +67,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         label: "Surname",
                         hint: "Ersoy",
                         onChanged: (value) {
-                          context.read<SignUpCubit>().signUpModel.surname =
-                              value;
+                          context
+                              .read<SignUpCubit>()
+                              .signUpModel
+                              .user!
+                              .surname = value;
                         },
                       ),
                       CustomTextFormField(
@@ -73,7 +79,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         label: "Email",
                         hint: "example@voluntracker.com",
                         onChanged: (value) {
-                          context.read<SignUpCubit>().signUpModel.email = value;
+                          context.read<SignUpCubit>().signUpModel.user!.email =
+                              value;
                         },
                         customValidator: (value) {
                           if (value == null || value.isEmpty) {
@@ -90,7 +97,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         label: "Phone",
                         hint: "05300861306",
                         onChanged: (value) {
-                          context.read<SignUpCubit>().signUpModel.phone = value;
+                          context.read<SignUpCubit>().signUpModel.user!.phone =
+                              value;
                         },
                       ),
                       CustomTextFormField(
@@ -99,8 +107,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         label: "Password",
                         hint: "Password",
                         onChanged: (value) {
-                          context.read<SignUpCubit>().signUpModel.password =
-                              value;
+                          context
+                              .read<SignUpCubit>()
+                              .signUpModel
+                              .user!
+                              .password = value;
                         },
                       ),
                       CustomTextFormField(
@@ -115,6 +126,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           } else if (context
                                   .read<SignUpCubit>()
                                   .signUpModel
+                                  .user!
                                   .password !=
                               value) {
                             return "Passwords do not match";
@@ -129,7 +141,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               context.read<SignUpCubit>().signUp();
                             }
                           },
-                          child: Text("Sign Up"))
+                          child: Text("Sign Up")),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Already have an account?"),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pushReplacementNamed(
+                                    context, Routes.loginRoute);
+                              },
+                              child: const Text("Login"))
+                        ],
+                      ),
                     ],
                   ),
                 ),

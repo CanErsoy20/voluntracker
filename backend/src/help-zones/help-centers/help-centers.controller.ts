@@ -528,11 +528,23 @@ export class HelpCentersController {
     );
   }
 
+  @Delete('/helpCenterCoordinator/:volunteerId')
+  async deleteCoordinatorFromHelpCenter(@Param('helpCenterId') hcid: string) {
+    const hc = await this.helpCentersService.removeCoordinatorFromHelpCenter(+hcid);
+
+    if (!hc) {
+      throw new BadRequestException('Something went wrong while trying to delete the coordinator');
+    }
+
+    return new HttpResponse(hc, 'Successfully removed coordinator from help center.', 200);
+  }
+
   /* Help center coordinator end points */
   @Post('/helpCenterCoordinator')
   async assignCoordinatorToHelpCenter(@Body() createCoordinatorDto: CreateCoordinatorDto) {
-    const helpCenterWithCoordinator =
-      this.helpCentersService.assignCoordinatorToHelpCenter(createCoordinatorDto);
+    const helpCenterWithCoordinator = await this.helpCentersService.assignCoordinatorToHelpCenter(
+      createCoordinatorDto,
+    );
 
     if (!helpCenterWithCoordinator) {
       throw new BadRequestException(

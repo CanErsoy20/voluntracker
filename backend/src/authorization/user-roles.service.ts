@@ -46,4 +46,105 @@ export class UserRolesService {
     });
     return deletedRole;
   }
+
+  async addUserRole(userId: number, roleName: string) {
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        userRole: {
+          create: [
+            {
+              userRole: {
+                connect: {
+                  roleName,
+                },
+              },
+            },
+          ],
+        },
+      },
+      include: {
+        userRole: true,
+      },
+    });
+    return updatedUser;
+  }
+
+  async addUserRoleByVolunteerId(volunteerId: number, roleName: string) {
+    const volunteer = await this.prisma.volunteer.findUnique({
+      where: {
+        id: volunteerId,
+      },
+    });
+
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id: volunteer.userId,
+      },
+      data: {
+        userRole: {
+          create: [
+            {
+              userRole: {
+                connect: {
+                  roleName,
+                },
+              },
+            },
+          ],
+        },
+      },
+      include: {
+        userRole: true,
+      },
+    });
+    return updatedUser;
+  }
+
+  async removeUserRole(userId: number, roleName: string) {
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        userRole: {
+          disconnect: {
+            userId_userRoleName: {
+              userId,
+              userRoleName: roleName,
+            },
+          },
+        },
+      },
+    });
+    return updatedUser;
+  }
+
+  async removeUserRoleByVolunteerId(volunteerId: number, roleName: string) {
+    const volunteer = await this.prisma.volunteer.findUnique({
+      where: {
+        id: volunteerId,
+      },
+    });
+
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id: volunteer.userId,
+      },
+      data: {
+        userRole: {
+          disconnect: {
+            userId_userRoleName: {
+              userId: volunteer.userId,
+              userRoleName: roleName,
+            },
+          },
+        },
+      },
+    });
+
+    return updatedUser;
+  }
 }
