@@ -3,6 +3,7 @@ import { HelpCenter, Prisma } from '@prisma/client';
 import { HttpResponse } from 'src/common';
 import { NotRelatedToHelpCenterException } from 'src/exceptions/not-related-to-help-center-exception.exception';
 import { NotRelatedToTeamException } from 'src/exceptions/not-related-to-team.exception';
+import { UniqueEntityAlreadyExistsException } from 'src/exceptions/unique-entity-already-exists-exception.exception';
 import { UniqueEntityNotFoundException } from 'src/exceptions/unique-entity-not-found-exception.exception';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OrderBy } from 'src/types/types';
@@ -406,16 +407,13 @@ export class HelpCentersService {
     }
 
     const volunteer = await this.volunteerService.getVolunteer(volunteerId);
-    if (volunteer.helpCenterId === null || volunteer.helpCenterId === undefined) {
-      throw new NotRelatedToHelpCenterException(
-        `This volunteer is not registered to any help center. Make sure the volunteer is registered to the 
-        help center before assigning them to a team.`,
-      );
+    if (volunteer.helpCenterId === helpCenterId) {
+      throw new UniqueEntityAlreadyExistsException('The volunteer is already assigned to this help center.');
     }
-    if (volunteer.helpCenterId !== helpCenterId) {
+
+    if (volunteer.helpCenterId !== null && volunteer.helpCenterId !== helpCenterId) {
       throw new NotRelatedToHelpCenterException(
-        `This volunteer is registered to a different help center. Make sure the user is registered to the
-         help center you are trying to access before assigning them to a team.`,
+        `This volunteer is registered to another help center. They need to be leave that help center before being assigned to this help center.`,
       );
     }
 
@@ -509,9 +507,12 @@ export class HelpCentersService {
 
   async assignCoordinatorToHelpCenter(createCoordinatorDto: CreateCoordinatorDto) {
     const { helpCenterId, volunteerId } = createCoordinatorDto;
-    const helpCenter = this.prisma.helpCenter.findUnique({
+    const helpCenter = await this.prisma.helpCenter.findUnique({
       where: {
         id: helpCenterId,
+      },
+      include: {
+        coordinator: true,
       },
     });
     if (!helpCenter) {
@@ -536,5 +537,23 @@ export class HelpCentersService {
     }
 
     // Help center has already a coordinator
+    if (helpCenter.coordinator) {
+      throw new UniqueEntityAlreadyExistsException(
+        'Help center already has a coordinator. You should remove the current coordinator to assign a new one.',
+      );
+    }
+
+    const updatedHelpCenter = await this.prisma.helpCenter.update({
+      where: {
+        id: helpCenterId,
+      },
+      data: {
+        coordinator: {
+          create: createCoordinatorDto,
+        },
+      },
+    });
+
+    return updatedHelpCenter;
   }
 }

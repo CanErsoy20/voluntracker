@@ -346,7 +346,7 @@ export class HelpCentersController {
     description: 'Could not delete all the needed supply for given help center.',
   })
   @Delete(':helpCenterId/neededSupply')
-  async deleteAllNeededSupply(@Param('id') id: string): Promise<HttpResponse<HelpCenterEntity>> {
+  async deleteAllNeededSupply(@Param('helpCenterId') id: string): Promise<HttpResponse<HelpCenterEntity>> {
     const helpCenter = await this.helpCentersService.removeAllNeededSupplyFromHelpCenter(+id);
     return new HttpResponse(
       helpCenter,
@@ -412,8 +412,8 @@ export class HelpCentersController {
     description: 'Could not fetch the volunteer teams for given help center.',
   })
   @Get('/:helpCenterId/volunteerTeam')
-  async getAllVolunteerTeams(@Param('helpCenterId') hcId) {
-    const hcWithVolunteerTeams = await this.helpCentersService.getAllVolunteerTeamsAtHelpCenter(hcId);
+  async getAllVolunteerTeams(@Param('helpCenterId') hcId: string) {
+    const hcWithVolunteerTeams = await this.helpCentersService.getAllVolunteerTeamsAtHelpCenter(+hcId);
 
     if (!hcWithVolunteerTeams) {
       throw new BadRequestException('Could not find the requested resources');
@@ -438,11 +438,11 @@ export class HelpCentersController {
   })
   @Post('/:helpCenterId/volunteerTeam')
   async createVolunteerTeam(
-    @Param('helpCenterId') hcId,
+    @Param('helpCenterId') hcId: string,
     @Body() createVolunteerTeamDto: CreateVolunteerTeamDto,
   ) {
     const hcWithVolunteerTeams = await this.helpCentersService.createVolunteerTeamAtHelpCenter(
-      hcId,
+      +hcId,
       createVolunteerTeamDto,
     );
 
@@ -469,12 +469,12 @@ export class HelpCentersController {
   })
   @Patch('/:helpCenterId/volunteerTeam/:volunteerTeamId')
   async assigntVolunteerTeamToHelpCenter(
-    @Param('helpCenterId') hcId: number,
-    @Param('volunteerTeamId') vtId: number,
+    @Param('helpCenterId') hcId: string,
+    @Param('volunteerTeamId') vtId: string,
   ) {
     const helpCenterWithVolunteerTeam = await this.helpCentersService.assignVolunteerTeamToHelpCenter(
-      hcId,
-      vtId,
+      +hcId,
+      +vtId,
     );
     const volunteerTeams = helpCenterWithVolunteerTeam.volunteerTeams;
     return new HttpResponse(
@@ -487,8 +487,8 @@ export class HelpCentersController {
   // Volunteer endpoints
   // TODO: Assign volunteer to help center
   @Patch('/:helpCenterId/volunteer/:volunteerId')
-  async assignVolunteerToHelpCenter(@Param('helpCenterId') hcid, @Param('volunteerId') vid) {
-    const updatedHelpCenter = await this.helpCentersService.assignVolunteerToHelpCenter(hcid, vid);
+  async assignVolunteerToHelpCenter(@Param('helpCenterId') hcid: string, @Param('volunteerId') vid: string) {
+    const updatedHelpCenter = await this.helpCentersService.assignVolunteerToHelpCenter(+hcid, +vid);
 
     if (!updatedHelpCenter) {
       throw new BadRequestException(
@@ -505,14 +505,14 @@ export class HelpCentersController {
 
   @Patch('/:helpCenterId/volunteerTeam/:volunteerTeamId/volunteer/:volunteerId')
   async assignVolunteerToVolunteerTeamInHelpCenter(
-    @Param('helpCenterId') hcid,
-    @Param('volunteerTeamId') vtid,
-    @Param('volunteerId') vid,
+    @Param('helpCenterId') hcid: string,
+    @Param('volunteerTeamId') vtid: string,
+    @Param('volunteerId') vid: string,
   ) {
     const updatedHelpCenter = await this.helpCentersService.assignVolunteerToVolunteerTeamAtHelpCenter(
-      hcid,
-      vtid,
-      vid,
+      +hcid,
+      +vtid,
+      +vid,
     );
 
     if (!updatedHelpCenter) {
@@ -530,10 +530,7 @@ export class HelpCentersController {
 
   /* Help center coordinator end points */
   @Post('/helpCenterCoordinator')
-  async assignCoordinatorToHelpCenter(
-    @Param('helpCenterId') helpCenterId,
-    @Body() createCoordinatorDto: CreateCoordinatorDto,
-  ) {
+  async assignCoordinatorToHelpCenter(@Body() createCoordinatorDto: CreateCoordinatorDto) {
     const helpCenterWithCoordinator =
       this.helpCentersService.assignCoordinatorToHelpCenter(createCoordinatorDto);
 
@@ -542,5 +539,11 @@ export class HelpCentersController {
         'Something went wrong while trying to assign the coordinator to the help center',
       );
     }
+
+    return new HttpResponse(
+      helpCenterWithCoordinator,
+      'Successfully assigned coordinator to the given help center.',
+      200,
+    );
   }
 }
