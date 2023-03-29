@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   InternalServerErrorException,
   Logger,
   Post,
@@ -9,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { UniqueEntityAlreadyExistsException } from 'src/exceptions/unique-entity-already-exists-exception.exception';
 import { CreateUserDto } from '../authentication/dto/create-user.dto';
 import { HttpResponse } from '../common';
 import { GetCurrentUser, GetCurrentUserId } from '../common/decorators';
@@ -106,5 +108,10 @@ export class AuthController {
   async refresh(@GetCurrentUserId() userId: number, @GetCurrentUser('refreshToken') refreshToken: string) {
     const tokens = await this.authService.refreshTokens(userId, refreshToken);
     return new HttpResponse(tokens, 'Refresh successful', 200);
+  }
+
+  @Get('dummy')
+  async dummy() {
+    throw new UniqueEntityAlreadyExistsException('Why is this not working');
   }
 }
