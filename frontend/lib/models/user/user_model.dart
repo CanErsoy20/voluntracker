@@ -69,4 +69,24 @@ class UserModel {
     }
     return data;
   }
+  
+  // Create a Map of importance
+  Map<String, int> roleImportance = {
+    "Volunteer": 1,
+    "Volunteer Team Leader": 2,
+    "Help Center Coordinator": 3,
+    "Admin": 4
+  };
+
+  String getHighestRole(){
+    // Get the highest role according to ruleImportance
+    String highestRole = "Volunteer";
+    for (var role in userRole!) {
+      if (roleImportance[role.userRoleName!]! > roleImportance[highestRole]!) {
+        highestRole = role.userRoleName!;
+      }
+    }
+    return highestRole;
+  }
+
 }
