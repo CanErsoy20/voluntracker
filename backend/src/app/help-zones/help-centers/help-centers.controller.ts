@@ -520,7 +520,7 @@ export class HelpCentersController {
   @ApiBadRequestResponse({
     description: 'Could not assign the volunteer to the given help center.',
   })
-  @Patch('/volunteer')
+  @Patch('/assign/volunteer')
   async assignVolunteerToHelpCenter(@Body() assignVolunteerToHelpCenterDto: AssignVolunteerToHelpCenterDto) {
     const { helpCenterId: hcid, email, phone, volunteerId } = assignVolunteerToHelpCenterDto;
 
