@@ -1,8 +1,12 @@
+import 'package:afet_takip/models/user/user_model.dart';
+
 class Volunteer {
   int? id;
   int? userId;
+  UserModel? user;
   String? volunteerTypeName;
   String? volunteerTypeCategory;
+  String? image;
   int? volunteerTeamId;
   int? helpCenterId;
   String? createdAt;
@@ -11,8 +15,10 @@ class Volunteer {
   Volunteer(
       {this.id,
       this.userId,
+      this.user,
       this.volunteerTypeName,
       this.volunteerTypeCategory,
+      this.image,
       this.volunteerTeamId,
       this.helpCenterId,
       this.createdAt,
@@ -21,6 +27,7 @@ class Volunteer {
   Volunteer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['userId'];
+    user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
     volunteerTypeName = json['volunteerTypeName'];
     volunteerTypeCategory = json['volunteerTypeCategory'];
     volunteerTeamId = json['volunteerTeamId'];
@@ -33,6 +40,9 @@ class Volunteer {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['userId'] = userId;
+    if (user != null) {
+      data['user'] = user!.toJson();
+    }
     data['volunteerTypeName'] = volunteerTypeName;
     data['volunteerTypeCategory'] = volunteerTypeCategory;
     data['volunteerTeamId'] = volunteerTeamId;
