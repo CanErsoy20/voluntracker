@@ -3,6 +3,7 @@ import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 
 import '../needed_supply/needed_supply_model.dart';
 import '../needed_volunteer/needed_volunteer_model.dart';
+import '../volunteer_model.dart';
 import 'contact_info_model.dart';
 import 'location_model.dart';
 import 'open_close_info_model.dart';
@@ -13,6 +14,7 @@ class HelpCenterModel extends CreateHelpCenter {
   String? updatedAt;
   List<NeededVolunteer>? neededVolunteerList;
   List<NeededSupply>? neededSupplyList;
+  List<Volunteer>? volunteerList;
 
   HelpCenterModel({
     String? name,
@@ -39,7 +41,7 @@ class HelpCenterModel extends CreateHelpCenter {
           openCloseInfo: openCloseInfo,
           city: city,
           country: country,
-  );
+        );
 
   HelpCenterModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

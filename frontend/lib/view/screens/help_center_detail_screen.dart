@@ -119,6 +119,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
                 ),
               ]),
               ExpansionTile(
+                  collapsedTextColor: Colors.white,
                   title: const Text("Time Details"),
                   expandedCrossAxisAlignment: CrossAxisAlignment.start,
                   children: [

@@ -43,7 +43,9 @@ class CustomDrawer extends StatelessWidget {
           loggedIn
               ? DrawerComponent(
                   title: "My Profile",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.profileRoute);
+                  },
                   prefixIcon: const Icon(
                     Icons.person,
                     color: Colors.white,
@@ -60,7 +62,9 @@ class CustomDrawer extends StatelessWidget {
           ),
           DrawerComponent(
             title: "Contact Us",
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacementNamed(context, Routes.contactUsRoute);
+            },
             prefixIcon: const Icon(
               Icons.contact_support_outlined,
               color: Colors.white,

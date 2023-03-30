@@ -106,6 +106,14 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   itemCount: currentCenter.neededVolunteerList!.length,
                   itemBuilder: (context, index) {
                     return CustomNeedCard(
+                      backgroundColor: currentCenter
+                                  .neededVolunteerList![index].urgency ==
+                              "Low"
+                          ? Colors.green
+                          : currentCenter.neededVolunteerList![index].urgency ==
+                                  "Medium"
+                              ? Colors.orange
+                              : Colors.red,
                       needName: currentCenter
                           .neededVolunteerList![index].volunteerTypeName!,
                       needCategory: currentCenter
@@ -114,18 +122,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                           currentCenter.neededVolunteerList![index].quantity!,
                       lastUpdatedAt:
                           currentCenter.neededVolunteerList![index].updatedAt!,
-                      leading: Icon(
-                        Icons.warning_amber_sharp,
-                        color:
-                            currentCenter.neededVolunteerList![index].urgency ==
-                                    "Low"
-                                ? Colors.green
-                                : currentCenter.neededVolunteerList![index]
-                                            .urgency ==
-                                        "Medium"
-                                    ? Colors.orange
-                                    : Colors.red,
-                      ),
                       trailing: IconButton(
                           onPressed: () {
                             _showUpdateVolunteerNeedDialog(
@@ -140,15 +136,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             },
           ),
         ),
-        // Align(
-        //   alignment: Alignment.centerRight,
-        //   child: FloatingActionButton(
-        //     onPressed: () {
-        //       _showNewVolunteerDialog(context);
-        //     },
-        //     child: const Icon(Icons.add),
-        //   ),
-        // ),
         ElevatedButton(
           onPressed: () {
             _showNewVolunteerDialog(context);
@@ -556,24 +543,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                               const Icon(Icons.watch_later_outlined)
                             ],
                           )),
-                      // CustomTextFormField(
-                      //     enabled: false,
-                      //     suffixIcon: IconButton(
-                      //         onPressed: () {
-                      //           _selectBSstart(context);
-                      //         },
-                      //         icon: Icon(Icons.edit)),
-                      //     // onChanged: (value) {
-                      //     //   context.read<HelpCenterCubit>().emitEditing();
-                      //     //   context
-                      //     //       .read<HelpCenterCubit>()
-                      //     //       .updateHelpCenter
-                      //     //       .busiestHours!
-                      //     //       .start = value;
-                      //     // },
-                      //     initialValue: HelperFunctions.formatDateToTime(
-                      //         currentCenter.busiestHours!.start!),
-                      //     label: "Busiest Hours Start At"),
                       ElevatedButton(
                           onPressed: () {
                             _selectBHend(context);
@@ -639,7 +608,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                           )),
                       CustomTextFormField(
                         onChanged: (value) {
-                          context.read<HelpCenterCubit>().emitEditing();
                           context
                               .read<HelpCenterCubit>()
                               .updateHelpCenter
@@ -664,7 +632,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                             }
                           },
                           onChanged: (value) {
-                            context.read<HelpCenterCubit>().emitEditing();
                             context
                                 .read<HelpCenterCubit>()
                                 .updateHelpCenter
@@ -673,21 +640,19 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                           initialValue:
                               currentCenter.volunteerCapacity.toString(),
                           label: "Volunteer Capacity"),
-                      state is HelpCenterEditing
-                          ? ElevatedButton(
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  context
-                                      .read<HelpCenterCubit>()
-                                      .updateOtherDetails(
-                                          context
-                                              .read<HelpCenterCubit>()
-                                              .updateHelpCenter,
-                                          currentCenter.id!);
-                                }
-                              },
-                              child: const Text("Update"))
-                          : const SizedBox.shrink(),
+                      ElevatedButton(
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              context
+                                  .read<HelpCenterCubit>()
+                                  .updateOtherDetails(
+                                      context
+                                          .read<HelpCenterCubit>()
+                                          .updateHelpCenter,
+                                      currentCenter.id!);
+                            }
+                          },
+                          child: const Text("Update"))
                     ],
                   ),
                 )),
@@ -706,7 +671,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     context.read<HelpCenterCubit>().updateHelpCenter.busiestHours!.start =
         ocEnd.toIso8601String();
-    context.read<HelpCenterCubit>().emitEditing();
   }
 
   Future<void> _selectBHend(BuildContext context) async {
@@ -718,7 +682,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     context.read<HelpCenterCubit>().updateHelpCenter.busiestHours!.end =
         bhEnd.toIso8601String();
-    context.read<HelpCenterCubit>().emitEditing();
   }
 
   Future<void> _selectOCopen(BuildContext context) async {
@@ -730,7 +693,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo!.start =
         ocStart.toIso8601String();
-    context.read<HelpCenterCubit>().emitEditing();
   }
 
   Future<void> _selectOCend(BuildContext context) async {
@@ -742,6 +704,5 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
         DateTime(2023, 3, 24, selectedTime!.hour, selectedTime.minute);
     context.read<HelpCenterCubit>().updateHelpCenter.openCloseInfo!.end =
         ocEnd.toIso8601String();
-    context.read<HelpCenterCubit>().emitEditing();
   }
 }
