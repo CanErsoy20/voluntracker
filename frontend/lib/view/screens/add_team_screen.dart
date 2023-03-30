@@ -326,12 +326,14 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                               );
                             },
                             options: CarouselOptions(
-                                enlargeCenterPage: true,
-                                viewportFraction: 0.8,
-                                enlargeFactor: 0.3,
-                                autoPlay: false,
-                                height: 100,
-                                initialPage: 0)),
+                              enableInfiniteScroll: false,
+                              enlargeCenterPage: false,
+                              viewportFraction: 0.25,
+                              enlargeFactor: 0.3,
+                              autoPlay: false,
+                              height: 100,
+                              initialPage: 0,
+                            )),
                         // Container(
                         //   height: 100,
                         //   decoration: BoxDecoration(
