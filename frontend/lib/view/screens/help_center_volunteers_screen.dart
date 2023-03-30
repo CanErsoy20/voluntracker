@@ -9,6 +9,7 @@ import 'package:afet_takip/models/volunteer_team_leader_model.dart';
 import 'package:afet_takip/models/volunteer_team_model.dart';
 import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:afet_takip/view/widgets/custom_text_field.dart';
+import 'package:afet_takip/view/widgets/loading_widget.dart';
 import 'package:afet_takip/view/widgets/volunteer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -217,12 +218,18 @@ class _HelpCenterVolunteersScreenState
           if (state is TeamSuccess) {
             CustomSnackbars.successSnackbar(
                 context, state.title, state.description);
+            context.read<TeamCubit>().emitDisplay();
           } else if (state is TeamError) {
             CustomSnackbars.errorSnackbar(
                 context, state.title, state.description);
           }
         },
         builder: (context, state) {
+          if (state is TeamLoading) {
+            return const Center(
+              child: LoadingWidget(),
+            );
+          }
           return VolunteerList(
             volunteerTeams: volunteerTeams,
           );

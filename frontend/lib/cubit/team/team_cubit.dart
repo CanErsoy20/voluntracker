@@ -21,4 +21,8 @@ class TeamCubit extends Cubit<TeamState> {
       emit(TeamError("Creation Failed", "Could not create a new team"));
     }
   }
+
+  void emitDisplay() {
+    emit(TeamDisplay());
+  }
 }
