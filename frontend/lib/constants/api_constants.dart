@@ -9,4 +9,5 @@ class ApiConstant {
   static String signUpVolunteer = "auth/signup";
   static String login = "auth/login/";
   static String volunteerTeam = "/volunteerTeam/";
+  static String assignVolunteer = "assign/volunteer/";
 }
