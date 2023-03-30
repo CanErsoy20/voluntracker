@@ -168,5 +168,5 @@ export class HelpCenterEntity implements HelpCenter {
   @ApiProperty()
   updatedAt: Date;
 
-  volunteerTeams: VolunteerTeam[];
+  volunteerTeams?: VolunteerTeam[];
 }

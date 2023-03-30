@@ -153,6 +153,7 @@ export class HelpCentersService {
       },
       include: {
         neededVolunteers: true,
+        volunteerTeams: true,
       },
     });
   }
