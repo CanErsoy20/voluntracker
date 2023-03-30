@@ -1,12 +1,13 @@
 # Set the base image to Node.js
 FROM node:18
 
+WORKDIR /app/
+
 COPY package.json /app/
 COPY package-lock.json /app/
 
-RUN cat /app/package.json
+RUN cat ./package.json
 # Create a directory for the app
-WORKDIR /app/
 
 # Copy package.json and package-lock.json into the container
 #COPY package*.json ./
@@ -14,16 +15,14 @@ WORKDIR /app/
 # Install dependencies
 RUN npm install
 
-RUN ls ./node_modules/
-
-RUN ls /app/
+RUN ls .
 # Install the Nest CLI globally
 #RUN npm install -g @nestjs/cli
 
 # Copy the rest of the application into the container
-COPY . /app/
+COPY . .
 
-RUN ls /app/
+RUN ls .
 # Generate Prisma Client
 RUN npx prisma generate
 

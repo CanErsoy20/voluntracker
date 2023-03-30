@@ -1,5 +1,13 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
-import { HelpCenter, NeededSupply, NeededVolunteer, Prisma, Supply, Volunteer } from '@prisma/client';
+import {
+  HelpCenter,
+  NeededSupply,
+  NeededVolunteer,
+  Prisma,
+  Supply,
+  Volunteer,
+  VolunteerTeam,
+} from '@prisma/client';
 import { NeededSupplyEntity } from '../../needed-supply/entities/needed-supply.entity';
 import { NeededVolunteerEntity } from '../../needed-volunteer/entities/needed-volunteer.entity';
 import { SupplyEntity } from '../../supply/entities/supply.entity';
@@ -159,4 +167,6 @@ export class HelpCenterEntity implements HelpCenter {
 
   @ApiProperty()
   updatedAt: Date;
+
+  volunteerTeams: VolunteerTeam[];
 }

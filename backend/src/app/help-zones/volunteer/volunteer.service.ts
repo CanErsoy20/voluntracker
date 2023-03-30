@@ -124,4 +124,6 @@ export class VolunteerService {
       }
     }
   }
+
+  async followHelpCenter(helpCenterId: number) {}
 }

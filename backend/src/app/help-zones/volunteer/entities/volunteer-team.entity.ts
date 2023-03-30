@@ -40,16 +40,12 @@ export class VolunteerTeamEntity implements VolunteerTeam {
   teamLeader?: VolunteerTeamLeader;
 
   @ApiProperty({
-    description: `Volunteers that are not registered in the help center but currently helping.`,
-    type: Array,
-    isArray: true,
-  })
-  guestVolunteer?: GuestVolunteer[];
-
-  @ApiProperty({
     description: `Volunteers assigned to the corresponding volunteer team.`,
     type: Array,
     isArray: true,
   })
   volunteers?: Volunteer[];
+
+  createdAt: Date;
+  updatedAt: Date;
 }
