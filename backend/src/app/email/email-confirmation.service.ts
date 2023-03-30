@@ -13,8 +13,11 @@ export class EmailConfirmationService {
     private readonly usersService: UsersService,
   ) {}
 
-  sendConfirmationCode(email: string) {
-    const code = this.generateConfirmationCode();
+  sendConfirmationCode(email: string, code = null) {
+    if (!code) {
+      code = this.generateConfirmationCode();
+      this.usersService.assignConfirmationCode(email, code);
+    }
     const text = `Welcome to Voluntracker! To confirm your email address, please enter the following code in your application: ${code}`;
     const subject = 'Voluntracker: Email confirmation';
 
@@ -26,14 +29,23 @@ export class EmailConfirmationService {
     return code;
   }
 
+  async resend(email: string) {
+    const user = await this.usersService.findOneByEmail(email);
+    if (user.activationCode === null || user.activationCode === '' || user.activationCode === undefined) {
+      return this.sendConfirmationCode(email);
+    } else {
+      return this.sendConfirmationCode(email, user.activationCode);
+    }
+  }
+
   async confirmEmailCode(email: string, code: string) {
     const user = await this.usersService.findOneByEmail(email);
-    if (user.activationCode !== code) {
-      return false;
-    }
 
-    await this.usersService.confirmAccount(email);
-    return true;
+    if (user.activationCode === code) {
+      await this.usersService.confirmAccount(email);
+      return true;
+    }
+    return false;
   }
 
   private generateConfirmationCode() {
