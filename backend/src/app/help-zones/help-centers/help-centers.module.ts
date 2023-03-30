@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { QrGeneratorModule } from 'src/app/qr-generator/qr-generator.module';
 import { UsersModule } from 'src/app/users/users.module';
 import { AuthorizationModule } from 'src/authorization/authorization.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
@@ -19,6 +20,6 @@ import { HelpCentersService } from './help-centers.service';
     VolunteerService,
     VolunteerTeamService,
   ],
-  imports: [PrismaModule, VolunteerModule, AuthorizationModule, UsersModule],
+  imports: [PrismaModule, QrGeneratorModule, VolunteerModule, AuthorizationModule, UsersModule],
 })
 export class HelpCentersModule {}
