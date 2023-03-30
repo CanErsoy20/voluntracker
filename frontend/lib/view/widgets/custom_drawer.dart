@@ -52,7 +52,9 @@ class CustomDrawer extends StatelessWidget {
               : const SizedBox.shrink(),
           DrawerComponent(
             title: "About Us",
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.aboutUsRoute);
+            },
             prefixIcon: const Icon(
               Icons.info_outlined,
               color: Colors.white,
@@ -60,7 +62,9 @@ class CustomDrawer extends StatelessWidget {
           ),
           DrawerComponent(
             title: "Contact Us",
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.contactUsRoute);
+            },
             prefixIcon: const Icon(
               Icons.contact_support_outlined,
               color: Colors.white,

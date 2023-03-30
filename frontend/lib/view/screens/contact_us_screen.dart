@@ -7,7 +7,7 @@ class ContactUsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Create New Help Center"),
+        title: const Text("Contact Us"),
       ),
       endDrawer: CustomDrawer(loggedIn: true),
       body: Padding(
