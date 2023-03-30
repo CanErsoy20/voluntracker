@@ -139,6 +139,7 @@ export class VolunteerService {
     }
 
     if (volunteer.followedHelpCenters.length >= 10) {
+      throw new ExceededMaxLimitOfItemsException('');
     }
 
     await this.prisma.volunteer.update({
