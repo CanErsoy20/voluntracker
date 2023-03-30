@@ -1,10 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { HelpCenter, Prisma } from '@prisma/client';
-import { AuthService } from 'src/authentication/auth.service';
+import { UsersService } from 'src/app/users/users.service';
 import { UserRolesService } from 'src/authorization/user-roles.service';
-import { HttpResponse } from 'src/common';
 import { NotRelatedToHelpCenterException } from 'src/exceptions/not-related-to-help-center-exception.exception';
-import { NotRelatedToTeamException } from 'src/exceptions/not-related-to-team.exception';
 import { UniqueEntityAlreadyExistsException } from 'src/exceptions/unique-entity-already-exists-exception.exception';
 import { UniqueEntityNotFoundException } from 'src/exceptions/unique-entity-not-found-exception.exception';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -33,6 +31,7 @@ export class HelpCentersService {
     private readonly volunteerTeamService: VolunteerTeamService,
     private readonly volunteerService: VolunteerService,
     private readonly userRolesService: UserRolesService,
+    private readonly usersService: UsersService,
   ) {}
 
   async create(createHelpCenterDto: CreateHelpCenterDto): Promise<HelpCenterEntity> {
@@ -397,6 +396,18 @@ export class HelpCentersService {
         }
       }
     }
+  }
+
+  async assignVolunteerToHelpCenterWithEmail(helpCenterId: number, email: string) {
+    const user = await this.usersService.findOneByEmail(email);
+    const hc = await this.assignVolunteerToHelpCenter(helpCenterId, user.volunteer.id);
+    return hc;
+  }
+
+  async assignVolunteerToHelpCenterWithPhone(helpCenterId: number, phone: string) {
+    const user = await this.usersService.findOneByPhoneNumber(phone);
+    const hc = await this.assignVolunteerToHelpCenter(helpCenterId, user.volunteer.id);
+    return hc;
   }
 
   async assignVolunteerToHelpCenter(helpCenterId: number, volunteerId: number) {

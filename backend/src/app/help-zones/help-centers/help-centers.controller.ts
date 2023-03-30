@@ -26,9 +26,11 @@ import { NeededSupplyEntity } from '../needed-supply/entities/needed-supply.enti
 import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-volunteer.dto';
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
 import { NeededVolunteerEntity } from '../needed-volunteer/entities/needed-volunteer.entity';
+import { CreateCertificateDto } from '../volunteer/dto/create-certificate.dto';
 import { CreateCoordinatorDto } from '../volunteer/dto/create-coordinator.dto';
 import { CreateVolunteerTeamDto } from '../volunteer/dto/create-volunteer-team.dto';
 import { VolunteerTeamEntity } from '../volunteer/entities/volunteer-team.entity';
+import { AssignVolunteerToHelpCenterDto } from './dto/assign-volunteer-to-help-center.dto';
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
 import { HelpCenterEntity } from './entities/help-center.entity';
@@ -486,21 +488,56 @@ export class HelpCentersController {
 
   // Volunteer endpoints
   // TODO: Assign volunteer to help center
-  @Patch('/:helpCenterId/volunteer/:volunteerId')
-  async assignVolunteerToHelpCenter(@Param('helpCenterId') hcid: string, @Param('volunteerId') vid: string) {
-    const updatedHelpCenter = await this.helpCentersService.assignVolunteerToHelpCenter(+hcid, +vid);
+  @Patch('/volunteer')
+  async assignVolunteerToHelpCenter(@Body() assignVolunteerToHelpCenterDto: AssignVolunteerToHelpCenterDto) {
+    const { helpCenterId: hcid, email, phone, volunteerId } = assignVolunteerToHelpCenterDto;
 
-    if (!updatedHelpCenter) {
-      throw new BadRequestException(
-        'Something went wrong while trying to assign the volunteer to the help center.',
+    if (volunteerId) {
+      const updatedHelpCenter = await this.helpCentersService.assignVolunteerToHelpCenter(+hcid, volunteerId);
+      if (!updatedHelpCenter) {
+        throw new BadRequestException(
+          'Something went wrong while trying to assign the volunteer to the help center.',
+        );
+      }
+
+      return new HttpResponse(
+        updatedHelpCenter,
+        'Successfully assigned the volunteer to the help center.',
+        200,
+      );
+    } else if (email) {
+      const updatedHelpCenter = await this.helpCentersService.assignVolunteerToHelpCenterWithEmail(
+        hcid,
+        email,
+      );
+      if (!updatedHelpCenter) {
+        throw new BadRequestException(
+          'Something went wrong while trying to assign the volunteer to the help center.',
+        );
+      }
+
+      return new HttpResponse(
+        updatedHelpCenter,
+        'Successfully assigned the volunteer to the help center.',
+        200,
+      );
+    } else if (phone) {
+      const updatedHelpCenter = await this.helpCentersService.assignVolunteerToHelpCenterWithPhone(
+        hcid,
+        phone,
+      );
+      if (!updatedHelpCenter) {
+        throw new BadRequestException(
+          'Something went wrong while trying to assign the volunteer to the help center.',
+        );
+      }
+
+      return new HttpResponse(
+        updatedHelpCenter,
+        'Successfully assigned the volunteer to the help center.',
+        200,
       );
     }
-
-    return new HttpResponse(
-      updatedHelpCenter,
-      'Successfully assigned the volunteer to the help center.',
-      200,
-    );
   }
 
   @Patch('/:helpCenterId/volunteerTeam/:volunteerTeamId/volunteer/:volunteerId')

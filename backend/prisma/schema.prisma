@@ -252,9 +252,26 @@ model Volunteer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  certificates Certificate[]
+
   // These only exist if the volunteer is a team leader or a coordinator
   volunteerTeamLeader   VolunteerTeamLeader?
   helpCenterCoordinator HelpCenterCoordinator?
+}
+
+model Certificate {
+  id Int @id @default(autoincrement())
+
+  name            String
+  certificateUrl  String
+  issuer          String
+  issueDate       DateTime
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  volunteerId     Int
+  volunteer       Volunteer @relation(fields: [volunteerId], references: [id])
 }
 
 

@@ -1,5 +1,5 @@
 import 'package:afet_takip/models/help_center/help_center_model.dart';
-import 'package:afet_takip/models/volunter_team_leader_model.dart';
+import 'package:afet_takip/models/volunteer_team_leader_model.dart';
 import 'package:afet_takip/models/volunteer_model.dart';
 
 class VolunteerTeam {
