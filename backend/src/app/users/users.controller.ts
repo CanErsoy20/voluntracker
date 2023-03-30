@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { HttpResponse } from 'src/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
@@ -8,8 +9,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    return new HttpResponse(await this.usersService.findAll(), 'Fetched all users', 200);
   }
 
   @Get(':email')
@@ -25,5 +26,11 @@ export class UsersController {
   @Get(':id')
   findOneById(@Param('id') id: string) {
     return this.usersService.findOneById(+id);
+  }
+
+  @Delete(':userId')
+  async deleteUser(@Param('userId') userId: string) {
+    const user = await this.usersService.deleteAccount(+userId);
+    return new HttpResponse(user, 'Successfully removed the account', 200);
   }
 }
