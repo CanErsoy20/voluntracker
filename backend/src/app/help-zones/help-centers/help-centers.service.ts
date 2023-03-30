@@ -1,10 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { HelpCenter, Prisma } from '@prisma/client';
-import { AuthService } from 'src/authentication/auth.service';
+import { HelpCenter, Prisma, Volunteer } from '@prisma/client';
+import { UsersService } from 'src/app/users/users.service';
 import { UserRolesService } from 'src/authorization/user-roles.service';
-import { HttpResponse } from 'src/common';
 import { NotRelatedToHelpCenterException } from 'src/exceptions/not-related-to-help-center-exception.exception';
-import { NotRelatedToTeamException } from 'src/exceptions/not-related-to-team.exception';
 import { UniqueEntityAlreadyExistsException } from 'src/exceptions/unique-entity-already-exists-exception.exception';
 import { UniqueEntityNotFoundException } from 'src/exceptions/unique-entity-not-found-exception.exception';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -33,6 +31,7 @@ export class HelpCentersService {
     private readonly volunteerTeamService: VolunteerTeamService,
     private readonly volunteerService: VolunteerService,
     private readonly userRolesService: UserRolesService,
+    private readonly usersService: UsersService,
   ) {}
 
   async create(createHelpCenterDto: CreateHelpCenterDto): Promise<HelpCenterEntity> {
@@ -399,6 +398,18 @@ export class HelpCentersService {
     }
   }
 
+  async assignVolunteerToHelpCenterWithEmail(helpCenterId: number, email: string) {
+    const user = await this.usersService.findOneByEmail(email);
+    const hc = await this.assignVolunteerToHelpCenter(helpCenterId, user.volunteer.id);
+    return hc;
+  }
+
+  async assignVolunteerToHelpCenterWithPhone(helpCenterId: number, phone: string) {
+    const user = await this.usersService.findOneByPhoneNumber(phone);
+    const hc = await this.assignVolunteerToHelpCenter(helpCenterId, user.volunteer.id);
+    return hc;
+  }
+
   async assignVolunteerToHelpCenter(helpCenterId: number, volunteerId: number) {
     const helpCenter = await this.prisma.helpCenter.findUnique({
       where: {
@@ -441,6 +452,87 @@ export class HelpCentersService {
   }
 
   // Volunteer resource endpoints
+  async assignMultipleVolunteersToVolunteerTeamAtHelpCenter(
+    helpCenterId: number,
+    volunteerTeamId: number,
+    volunteerId: string[],
+  ) {
+    const helpCenter = await this.prisma.helpCenter.findUnique({
+      where: {
+        id: helpCenterId,
+      },
+    });
+    if (!helpCenter) {
+      throw new UniqueEntityNotFoundException('Help center with given id cannot be found.');
+    }
+    // We trust that volunteer team service handles exceptions related to this call
+    const volunteerTeam = await this.volunteerTeamService.getVolunteerTeam(volunteerTeamId);
+
+    if (volunteerTeam.helpCenterId === null || volunteerTeam.helpCenterId === undefined) {
+      throw new NotRelatedToHelpCenterException(
+        `Volunteer team is not related to any help center. Make sure the volunteer team is contained in the
+        help center you are trying to assign a volunteer.`,
+      );
+    }
+
+    if (volunteerTeam.helpCenterId !== helpCenterId) {
+      throw new NotRelatedToHelpCenterException(
+        `Volunteer team is related to a different help center. Make sure the volunteer team is contained in the
+        help center you are trying to assign a volunteer.`,
+      );
+    }
+
+    const volunteerPromises = [];
+    volunteerId.forEach((vid) => {
+      volunteerPromises.push(this.volunteerService.getVolunteer(+vid));
+    });
+    const volunteers = (await Promise.all(volunteerPromises)) as Volunteer[];
+    const invalidRequests = [];
+    const validRequests = [];
+    for (const volunteer of volunteers) {
+      if (volunteer.helpCenterId === null || volunteer.helpCenterId === undefined) {
+        invalidRequests.push({
+          id: volunteer.id,
+          message: `This volunteer is not registered to any help center. Make sure the volunteer is registered to the 
+            help center before assigning them to a team.`,
+        });
+        continue;
+      }
+
+      if (volunteer.helpCenterId !== helpCenterId) {
+        invalidRequests.push({
+          id: volunteer.id,
+          message: `This volunteer is registered to a different help center. Make sure the user is registered to the
+        help center you are trying to access before assigning them to a team.`,
+        });
+        continue;
+      }
+      validRequests.push({ id: volunteer.id });
+    }
+
+    const connectIds = volunteers.map((v) => {
+      return {
+        id: v.id,
+      };
+    });
+    const updatedHelpCenter = await this.prisma.helpCenter.update({
+      where: {
+        id: helpCenterId,
+      },
+      data: {
+        volunteers: {
+          connect: [...connectIds],
+        },
+      },
+      include: {
+        volunteers: true,
+        volunteerTeams: true,
+      },
+    });
+
+    return { validRequests, invalidRequests };
+  }
+
   async assignVolunteerToVolunteerTeamAtHelpCenter(
     helpCenterId: number,
     volunteerTeamId: number,

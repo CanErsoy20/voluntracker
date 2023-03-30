@@ -12,6 +12,8 @@ import {
 } from 'class-validator';
 
 export class UserEntity implements User {
+  isEmailConfirmed: boolean;
+  activationCode: string;
   @ApiProperty({
     nullable: false,
     type: Number,

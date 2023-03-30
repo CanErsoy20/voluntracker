@@ -38,123 +38,133 @@ class _SignUpScreenState extends State<SignUpScreen> {
             } else if (state is SignUpSuccess) {
               CustomSnackbars.successSnackbar(
                   context, state.title, state.description);
+              Navigator.pushReplacementNamed(context, Routes.loginRoute);
             }
           },
           builder: (context, state) {
             if (state is SignUpLoading) {
               return const Center(child: LoadingWidget());
             } else {
-              return Form(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                key: formKey,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      CustomTextFormField(
-                        initialValue: "",
-                        label: "Name",
-                        hint: "Can",
-                        onChanged: (value) {
-                          context
-                              .read<SignUpCubit>()
-                              .signUpModel
-                              .user!
-                              .firstname = value;
-                        },
-                      ),
-                      CustomTextFormField(
-                        initialValue: "",
-                        label: "Surname",
-                        hint: "Ersoy",
-                        onChanged: (value) {
-                          context
-                              .read<SignUpCubit>()
-                              .signUpModel
-                              .user!
-                              .surname = value;
-                        },
-                      ),
-                      CustomTextFormField(
-                        initialValue: "",
-                        label: "Email",
-                        hint: "example@voluntracker.com",
-                        onChanged: (value) {
-                          context.read<SignUpCubit>().signUpModel.user!.email =
-                              value;
-                        },
-                        customValidator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "E-mail cannot be blank";
-                          } else if (!isEmail(value)) {
-                            return "Please enter a valid e-mail adress";
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                      CustomTextFormField(
-                        initialValue: "",
-                        label: "Phone",
-                        hint: "05300861306",
-                        onChanged: (value) {
-                          context.read<SignUpCubit>().signUpModel.user!.phone =
-                              value;
-                        },
-                      ),
-                      CustomTextFormField(
-                        isObscure: true,
-                        initialValue: "",
-                        label: "Password",
-                        hint: "Password",
-                        onChanged: (value) {
-                          context
-                              .read<SignUpCubit>()
-                              .signUpModel
-                              .user!
-                              .password = value;
-                        },
-                      ),
-                      CustomTextFormField(
-                        isObscure: true,
-                        initialValue: "",
-                        label: "Repeat Password",
-                        hint: "Password",
-                        onChanged: (value) {},
-                        customValidator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "E-mail cannot be blank";
-                          } else if (context
-                                  .read<SignUpCubit>()
-                                  .signUpModel
-                                  .user!
-                                  .password !=
-                              value) {
-                            return "Passwords do not match";
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              context.read<SignUpCubit>().signUp();
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: formKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        CustomTextFormField(
+                          initialValue: "",
+                          label: "Name",
+                          hint: "Can",
+                          onChanged: (value) {
+                            context
+                                .read<SignUpCubit>()
+                                .signUpModel
+                                .user!
+                                .firstname = value;
+                          },
+                        ),
+                        CustomTextFormField(
+                          initialValue: "",
+                          label: "Surname",
+                          hint: "Ersoy",
+                          onChanged: (value) {
+                            context
+                                .read<SignUpCubit>()
+                                .signUpModel
+                                .user!
+                                .surname = value;
+                          },
+                        ),
+                        CustomTextFormField(
+                          initialValue: "",
+                          label: "Email",
+                          hint: "example@voluntracker.com",
+                          onChanged: (value) {
+                            context
+                                .read<SignUpCubit>()
+                                .signUpModel
+                                .user!
+                                .email = value;
+                          },
+                          customValidator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "E-mail cannot be blank";
+                            } else if (!isEmail(value)) {
+                              return "Please enter a valid e-mail adress";
+                            } else {
+                              return null;
                             }
                           },
-                          child: Text("Sign Up")),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Already have an account?"),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(
-                                    context, Routes.loginRoute);
-                              },
-                              child: const Text("Login"))
-                        ],
-                      ),
-                    ],
+                        ),
+                        CustomTextFormField(
+                          initialValue: "",
+                          label: "Phone",
+                          hint: "05300861306",
+                          onChanged: (value) {
+                            context
+                                .read<SignUpCubit>()
+                                .signUpModel
+                                .user!
+                                .phone = value;
+                          },
+                        ),
+                        CustomTextFormField(
+                          isObscure: true,
+                          initialValue: "",
+                          label: "Password",
+                          hint: "Password",
+                          onChanged: (value) {
+                            context
+                                .read<SignUpCubit>()
+                                .signUpModel
+                                .user!
+                                .password = value;
+                          },
+                        ),
+                        CustomTextFormField(
+                          isObscure: true,
+                          initialValue: "",
+                          label: "Repeat Password",
+                          hint: "Password",
+                          onChanged: (value) {},
+                          customValidator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "E-mail cannot be blank";
+                            } else if (context
+                                    .read<SignUpCubit>()
+                                    .signUpModel
+                                    .user!
+                                    .password !=
+                                value) {
+                              return "Passwords do not match";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                context.read<SignUpCubit>().signUp();
+                              }
+                            },
+                            child: Text("Sign Up")),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Already have an account?"),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pushReplacementNamed(
+                                      context, Routes.loginRoute);
+                                },
+                                child: const Text("Login"))
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

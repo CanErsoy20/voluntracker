@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { EmailConfirmationGuard } from 'src/common/guards/email-confirmation.guard';
 import { UniqueEntityAlreadyExistsException } from 'src/exceptions/unique-entity-already-exists-exception.exception';
 import { CreateUserDto } from '../authentication/dto/create-user.dto';
 import { HttpResponse } from '../common';
@@ -34,7 +35,7 @@ export class AuthController {
   @ApiInternalServerErrorResponse({
     description: 'Something went wrong while generating JWT tokens.',
   })
-  @UseGuards(AuthGuard('local'), LocalAuthGuard)
+  @UseGuards(AuthGuard('local'), LocalAuthGuard, EmailConfirmationGuard)
   @Post('login')
   async login(@Body() authDto: AuthDto): Promise<HttpResponse<LoginInformation>> {
     const tokens = await this.authService.login(authDto);

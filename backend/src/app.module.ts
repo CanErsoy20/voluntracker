@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { HelpZonesModule } from './app/help-zones/help-zones.module';
+import { NotificationsModule } from './app/notifications/notifications.module';
+import { QrGeneratorModule } from './app/qr-generator/qr-generator.module';
 import { AuthModule } from './authentication/auth.module';
-import { HelpZonesModule } from './help-zones/help-zones.module';
-import { NotificationsModule } from './notifications/notifications.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
@@ -12,6 +13,7 @@ import { PrismaModule } from './prisma/prisma.module';
     AuthModule,
     HelpZonesModule,
     NotificationsModule,
+    QrGeneratorModule,
   ],
   controllers: [],
 })

@@ -7,12 +7,14 @@ class CustomFormField extends StatelessWidget {
       required this.label,
       this.customValidator,
       this.value,
+      this.maxLines,
       this.onChanged});
   final String hint;
   final String label;
   final String? Function(String?)? customValidator;
   final void Function(String)? onChanged;
   final String? value;
+  final int? maxLines;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,6 +30,7 @@ class CustomFormField extends StatelessWidget {
             height: 2,
           ),
           TextFormField(
+            maxLines: maxLines ?? 1,
             initialValue: value,
             onChanged: onChanged,
             autovalidateMode: AutovalidateMode.onUserInteraction,

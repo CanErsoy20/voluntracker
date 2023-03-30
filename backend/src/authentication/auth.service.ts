@@ -8,6 +8,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import * as argon from 'argon2';
+import { EmailConfirmationService } from 'src/app/email/email-confirmation.service';
 import { CreateUserDto } from 'src/authentication/dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as authConstants from '../config';
@@ -17,7 +18,11 @@ import { JwtPayload, Tokens } from './types';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService, private readonly prisma: PrismaService) {}
+  constructor(
+    private jwtService: JwtService,
+    private readonly prisma: PrismaService,
+    private readonly emailConfirmationService: EmailConfirmationService,
+  ) {}
 
   async validateUser(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
@@ -103,8 +108,9 @@ export class AuthService {
         throw new BadRequestException('Something went wrong...');
       }
 
+      const code = this.emailConfirmationService.sendConfirmationCode(newUser.email);
       const tokens = await this.getTokens(newUser.id, newUser.email);
-      await this.updateRefreshToken(newUser.id, tokens.refreshToken);
+      await this.updateRefreshTokenAndConfirmationCode(newUser.id, tokens.refreshToken, code.toString());
 
       const user = await this.prisma.user.findUnique({
         where: {
@@ -145,6 +151,19 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
+  }
+
+  async updateRefreshTokenAndConfirmationCode(userId: number, refreshToken: string, code: string) {
+    const hash = await this.hash(refreshToken);
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        hashedRefreshToken: hash,
+        activationCode: code,
+      },
+    });
   }
 
   async updateRefreshToken(userId: number, refreshToken: string) {

@@ -53,7 +53,32 @@ class _LandingScreenState extends State<LandingScreen> {
                 onPressed: () {
                   Navigator.of(context).pushNamed(Routes.loginRoute);
                 },
-                child: const Text("Login Screen"))
+                child: const Text("Login Screen")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.helpCenterDetail);
+                },
+                child: const Text("Help Center Detail Screen")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.helpCenterVolunteers);
+                },
+                child: const Text("Help Center Volunteers Screen")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.addTeam);
+                },
+                child: const Text("Add Team Screen")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.landingPageRoute);
+                },
+                child: const Text("Landing Page Screen")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.profileRoute);
+                },
+                child: const Text("Profile Screen")),
           ],
         ),
       ),

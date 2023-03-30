@@ -20,8 +20,6 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
     if (!refreshToken) {
       throw new ForbiddenException('Refresh token is invalid');
     }
-    this.logger.debug(`Refresh token: ${refreshToken}`);
-    this.logger.debug(`Payload: ${payload}`);
     return { ...payload, refreshToken };
   }
 }

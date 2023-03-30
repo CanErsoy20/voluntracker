@@ -595,21 +595,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                               const Icon(Icons.watch_later_outlined)
                             ],
                           )),
-                      // CustomTextFormField(
-                      //     enabled: false,
-                      //     suffixIcon: IconButton(
-                      //         onPressed: () {}, icon: Icon(Icons.edit)),
-                      //     // onChanged: (value) {
-                      //     //   context.read<HelpCenterCubit>().emitEditing();
-                      //     //   context
-                      //     //       .read<HelpCenterCubit>()
-                      //     //       .updateHelpCenter
-                      //     //       .busiestHours!
-                      //     //       .end = value;
-                      //     // },
-                      //     initialValue: HelperFunctions.formatDateToTime(
-                      //         currentCenter.busiestHours!.end!),
-                      //     label: "Busiest Hours End At"),
                       ElevatedButton(
                           onPressed: () {
                             _selectOCopen(context);
@@ -631,21 +616,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                               const Icon(Icons.watch_later_outlined)
                             ],
                           )),
-                      // CustomTextFormField(
-                      //     enabled: false,
-                      //     suffixIcon: IconButton(
-                      //         onPressed: () {}, icon: Icon(Icons.edit)),
-                      //     // onChanged: (value) {
-                      //     //   context.read<HelpCenterCubit>().emitEditing();
-                      //     //   context
-                      //     //       .read<HelpCenterCubit>()
-                      //     //       .updateHelpCenter
-                      //     //       .openCloseInfo!
-                      //     //       .start = value;
-                      //     // },
-                      //     initialValue: HelperFunctions.formatDateToTime(
-                      //         currentCenter.openCloseInfo!.start!),
-                      //     label: "Help Center Opens At"),
                       ElevatedButton(
                           onPressed: () {
                             _selectOCend(context);
@@ -667,21 +637,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                               const Icon(Icons.watch_later_outlined)
                             ],
                           )),
-                      // CustomTextFormField(
-                      //     enabled: false,
-                      //     suffixIcon: IconButton(
-                      //         onPressed: () {}, icon: Icon(Icons.edit)),
-                      //     // onChanged: (value) {
-                      //     //   context.read<HelpCenterCubit>().emitEditing();
-                      //     //   context
-                      //     //       .read<HelpCenterCubit>()
-                      //     //       .updateHelpCenter
-                      //     //       .openCloseInfo!
-                      //     //       .end = value;
-                      //     // },
-                      //     initialValue: HelperFunctions.formatDateToTime(
-                      //         currentCenter.openCloseInfo!.end!),
-                      //     label: "Help Center Closes At"),
                       CustomTextFormField(
                         onChanged: (value) {
                           context.read<HelpCenterCubit>().emitEditing();
@@ -732,7 +687,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                                 }
                               },
                               child: const Text("Update"))
-                          : const SizedBox.shrink()
+                          : const SizedBox.shrink(),
                     ],
                   ),
                 )),

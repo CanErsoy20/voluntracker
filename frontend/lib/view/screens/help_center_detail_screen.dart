@@ -1,7 +1,9 @@
 import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/cubit/map/map_cubit.dart';
+import 'package:afet_takip/models/volunteer_model.dart';
 import 'package:afet_takip/router.dart';
 import 'package:afet_takip/view/widgets/custom_drawer.dart';
+import 'package:afet_takip/view/widgets/volunteer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -21,9 +23,9 @@ class HelpCenterDetailScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: FittedBox(
+          title: const FittedBox(
             fit: BoxFit.fitWidth,
-            child: Text(currentCenter.name!),
+            child: Text("Help Center Details"),
           ),
         ),
         endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
@@ -31,35 +33,99 @@ class HelpCenterDetailScreen extends StatelessWidget {
           length: 2,
           child: Column(
             children: [
-              Image.asset(
-                fit: BoxFit.fitWidth,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 6,
-                "assets/images/bilkent.jpg",
+              // Image.asset(
+              //   fit: BoxFit.fitWidth,
+              //   width: MediaQuery.of(context).size.width,
+              //   height: MediaQuery.of(context).size.height / 6,
+              //   "assets/images/bilkent.jpg",
+              // ),
+              Text(
+                currentCenter.name!,
+                style: const TextStyle(fontSize: 20),
               ),
               ListTile(
                 title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text("Adress: ${currentCenter.contactInfo!.address}"),
+                    Text("${currentCenter.contactInfo!.address}",
+                        style:
+                            const TextStyle(fontSize: 15, color: Colors.white)),
                     Text(
-                        "Last Updated At: ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.parse(currentCenter.updatedAt!))}"),
-                    Text("Additional Info: ${currentCenter.additionalInfo}")
+                        "Last Updated At: ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.parse(currentCenter.updatedAt!))}",
+                        style:
+                            const TextStyle(fontSize: 15, color: Colors.white)),
+                    Text("Additional Info: ${currentCenter.additionalInfo}",
+                        style:
+                            const TextStyle(fontSize: 15, color: Colors.white))
                   ],
                 ),
-                subtitle: TextButton(
-                    onPressed: () {
-                      context.read<MapCubit>().getCurrentLocation();
-                      context.read<MapCubit>().initialCameraLocation = LatLng(
-                          currentCenter.location!.lat!,
-                          currentCenter.location!.lon!);
-                      Navigator.pushNamed(context, Routes.mapRoute);
-                    },
-                    child: const Text(
-                      "See On Map",
-                      style: TextStyle(color: Colors.green),
-                    )),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                TextButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green)),
+                  onPressed: () {
+                    context.read<MapCubit>().getCurrentLocation();
+                    context.read<MapCubit>().initialCameraLocation = LatLng(
+                        currentCenter.location!.lat!,
+                        currentCenter.location!.lon!);
+                    Navigator.pushNamed(context, Routes.mapRoute);
+                  },
+                  child: RichText(
+                    text: const TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(
+                            Icons.location_on,
+                            size: 18,
+                            color: Color.fromARGB(225, 27, 40, 55),
+                          ),
+                        ),
+                        TextSpan(
+                          text: "See On Map",
+                          style: TextStyle(
+                              fontSize: 15,
+                              // set text to bold
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(225, 27, 40, 55)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(backgroundColor:Colors.green),
+                  onPressed: () {
+                    // TODO: Send to help_center_volunteers_screen
+                    // which is already defined in the routes
+                    // but send the help center context.
+                  },
+                  child: RichText(
+                    text: const TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Icon(
+                            Icons.help,
+                            size: 18,
+                            color: Color.fromARGB(225, 27, 40, 55),
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Show Volunteers and Teams",
+                          style: TextStyle(
+                              fontSize: 15,
+                              // set text to bold
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(225, 27, 40, 55)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ]),
               ExpansionTile(
                   title: const Text("Time Details"),
                   expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +150,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
                   _buildVolunteerNeeds(currentCenter),
                   _buildSupplyNeeds(currentCenter)
                 ]),
-              )
+              ),
             ],
           ),
         ));
