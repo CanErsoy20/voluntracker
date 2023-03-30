@@ -31,23 +31,23 @@ export class VolunteerTeamController {
     return new HttpResponse(vt, 'Successfully fetched the volunteer team', 200);
   }
 
-  @ApiOkResponse({
-    description: 'Created the volunteer team with given details',
-    type: VolunteerTeamEntity,
-  })
-  @ApiBadRequestResponse({
-    description: 'Creation unsuccessful due to an unknown error',
-  })
-  @Post()
-  async createVolunteerTeam(@Body() createVolunteerTeamDto: CreateVolunteerTeamDto) {
-    const vt = await this.volunteerTeamService.createVolunteerTeam(createVolunteerTeamDto);
+  // @ApiOkResponse({
+  //   description: 'Created the volunteer team with given details',
+  //   type: VolunteerTeamEntity,
+  // })
+  // @ApiBadRequestResponse({
+  //   description: 'Creation unsuccessful due to an unknown error',
+  // })
+  // @Post()
+  // async createVolunteerTeam(@Body() createVolunteerTeamDto: CreateVolunteerTeamDto) {
+  //   const vt = await this.volunteerTeamService.createVolunteerTeam(createVolunteerTeamDto);
 
-    if (!vt) {
-      throw new BadRequestException('Something went wrong while creating this volunteer team');
-    }
+  //   if (!vt) {
+  //     throw new BadRequestException('Something went wrong while creating this volunteer team');
+  //   }
 
-    return new HttpResponse(vt, 'Successfully created the volunteer team', 201);
-  }
+  //   return new HttpResponse(vt, 'Successfully created the volunteer team', 201);
+  // }
 
   @ApiOkResponse({
     description: 'Deletes the volunteer team with given id',

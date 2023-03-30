@@ -79,6 +79,12 @@ class _LandingScreenState extends State<LandingScreen> {
                   Navigator.of(context).pushNamed(Routes.profileRoute);
                 },
                 child: const Text("Profile Screen")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.contactUsRoute);
+                },
+                child: const Text("Contact Us Screen")),
+
           ],
         ),
       ),

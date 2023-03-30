@@ -4,18 +4,6 @@ import { IsArray, IsDefined, IsNumber, IsOptional, IsString } from 'class-valida
 
 export class CreateVolunteerTeamDto {
   @ApiProperty({
-    required: true,
-    nullable: false,
-    description: 'Foreign key to the help center. Volunteer teams are contained within help centers.',
-    example: 55,
-    type: Number,
-    minimum: 0,
-  })
-  @IsDefined()
-  @IsNumber()
-  helpCenterId: number;
-
-  @ApiProperty({
     required: false,
     nullable: true,
     description: `Team name can be provided to distinguish teams within a help center. The team names within
