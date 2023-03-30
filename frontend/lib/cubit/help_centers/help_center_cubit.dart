@@ -1,3 +1,4 @@
+import 'package:afet_takip/models/assign_volunteer_model.dart';
 import 'package:afet_takip/models/help_center/busiest_hours_model.dart';
 import 'package:afet_takip/models/help_center/contact_info_model.dart';
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
@@ -149,6 +150,18 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
     for (var i = 0; i < volunteerTypes!.length; i++) {
       volunteerTypeNames.add(volunteerTypes![i].typeName!);
       volunteerTypeCategory.add(volunteerTypes![i].category!);
+    }
+  }
+
+  Future<void> assignVolunteers(AssignVolunteerModel bodyModel) async {
+    emit(HelpCenterLoading());
+    HelpCenterModel? response = await service.assignVolunteer(bodyModel);
+    if (response == null) {
+      emit(
+          HelpCenterError("Could not Assign", "Couldn't assign the volunteer"));
+    } else {
+      emit(HelpCenterSuccess(
+          "Assigntment Successful", "Successfully assigned the volunteer"));
     }
   }
 

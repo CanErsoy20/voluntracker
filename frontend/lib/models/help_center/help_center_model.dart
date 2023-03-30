@@ -1,9 +1,11 @@
 import 'package:afet_takip/models/help_center/busiest_hours_model.dart';
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
 
+import '../coordinator_model.dart';
 import '../needed_supply/needed_supply_model.dart';
 import '../needed_volunteer/needed_volunteer_model.dart';
 import '../volunteer_model.dart';
+import '../volunteer_team_model.dart';
 import 'contact_info_model.dart';
 import 'location_model.dart';
 import 'open_close_info_model.dart';
@@ -14,24 +16,29 @@ class HelpCenterModel extends CreateHelpCenter {
   String? updatedAt;
   List<NeededVolunteer>? neededVolunteerList;
   List<NeededSupply>? neededSupplyList;
-  List<Volunteer>? volunteerList;
+  List<Volunteer>? volunteers;
+  List<VolunteerTeam>? volunteerTeams;
+  Coordinator? coordinator;
 
-  HelpCenterModel({
-    String? name,
-    String? additionalInfo,
-    int? volunteerCapacity,
-    ContactInfo? contactInfo,
-    Location? location,
-    BusiestHours? busiestHours,
-    OpenCloseInfo? openCloseInfo,
-    String? city,
-    String? country,
-    this.id,
-    this.createdAt,
-    this.updatedAt,
-    this.neededVolunteerList,
-    this.neededSupplyList,
-  }) : super(
+  HelpCenterModel(
+      {String? name,
+      String? additionalInfo,
+      int? volunteerCapacity,
+      ContactInfo? contactInfo,
+      Location? location,
+      BusiestHours? busiestHours,
+      OpenCloseInfo? openCloseInfo,
+      String? city,
+      String? country,
+      this.id,
+      this.coordinator,
+      this.createdAt,
+      this.updatedAt,
+      this.neededVolunteerList,
+      this.neededSupplyList,
+      this.volunteers,
+      this.volunteerTeams})
+      : super(
           name: name,
           additionalInfo: additionalInfo,
           volunteerCapacity: volunteerCapacity,
@@ -56,6 +63,9 @@ class HelpCenterModel extends CreateHelpCenter {
     openCloseInfo = OpenCloseInfo.fromJson(json['openCloseInfo']);
     city = json['city'];
     country = json['country'];
+    coordinator = json['coordinator'] == null
+        ? null
+        : Coordinator.fromJson(json['coordinator']);
     neededVolunteerList = json['neededVolunteers'] == null
         ? null
         : List<NeededVolunteer>.from(
@@ -64,6 +74,14 @@ class HelpCenterModel extends CreateHelpCenter {
         ? null
         : List<NeededSupply>.from(
             json['neededSupply'].map((x) => NeededSupply.fromJson(x)));
+    volunteers = json['volunteers'] == null
+        ? null
+        : List<Volunteer>.from(
+            json['volunteers'].map((x) => Volunteer.fromJson(x)));
+    volunteerTeams = json['volunteerTeams'] == null
+        ? null
+        : List<VolunteerTeam>.from(
+            json['volunteerTeams'].map((x) => VolunteerTeam.fromJson(x)));
   }
 
   @override
@@ -81,10 +99,15 @@ class HelpCenterModel extends CreateHelpCenter {
     data['openCloseInfo'] = openCloseInfo!.toJson();
     data['city'] = city;
     data['country'] = country;
+    data['coordinator'] = coordinator == null ? null : coordinator!.toJson();
     data['neededVolunteers'] =
         List<NeededVolunteer>.from(neededVolunteerList!.map((x) => x.toJson()));
     data['neededSupply'] =
         List<NeededSupply>.from(neededSupplyList!.map((x) => x.toJson()));
+    data['volunteers'] =
+        List<Volunteer>.from(volunteers!.map((x) => x.toJson()));
+    data['volunteerTeams'] =
+        List<VolunteerTeam>.from(volunteerTeams!.map((x) => x.toJson()));
     return data;
   }
 }

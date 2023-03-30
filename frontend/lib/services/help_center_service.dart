@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 import '../api.dart';
+import '../models/assign_volunteer_model.dart';
 import '../models/help_center/help_center_model.dart';
 import '../models/response_model.dart';
 import '../models/types/supply_types_model.dart';
@@ -215,6 +216,26 @@ class HelpCenterService {
           result.add(VolunteerTypeModel.fromJson(list[i]));
         }
         return result;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<HelpCenterModel?> assignVolunteer(
+      AssignVolunteerModel bodyModel) async {
+    try {
+      Response? response;
+      response = await Api.instance.patchRequest(
+          ApiConstant.baseUrl,
+          "${ApiConstant.helpCenters}${ApiConstant.assignVolunteer}",
+          jsonEncode(bodyModel.toJson()));
+      if (response.statusCode == 200) {
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
+      } else {
+        return null;
       }
     } catch (e) {
       return null;
