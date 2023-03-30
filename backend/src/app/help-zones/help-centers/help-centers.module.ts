@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from 'src/authentication/auth.module';
-import { AuthService } from 'src/authentication/auth.service';
+import { UsersModule } from 'src/app/users/users.module';
 import { AuthorizationModule } from 'src/authorization/authorization.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { NeededSupplyService } from '../needed-supply/needed-supply.service';
@@ -20,6 +19,6 @@ import { HelpCentersService } from './help-centers.service';
     VolunteerService,
     VolunteerTeamService,
   ],
-  imports: [PrismaModule, VolunteerModule, AuthorizationModule],
+  imports: [PrismaModule, VolunteerModule, AuthorizationModule, UsersModule],
 })
 export class HelpCentersModule {}
