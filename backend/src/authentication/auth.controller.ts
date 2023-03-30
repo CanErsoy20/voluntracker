@@ -35,7 +35,7 @@ export class AuthController {
   @ApiInternalServerErrorResponse({
     description: 'Something went wrong while generating JWT tokens.',
   })
-  @UseGuards(AuthGuard('local'), LocalAuthGuard, EmailConfirmationGuard)
+  @UseGuards(AuthGuard('local'), LocalAuthGuard)
   @Post('login')
   async login(@Body() authDto: AuthDto): Promise<HttpResponse<LoginInformation>> {
     const tokens = await this.authService.login(authDto);

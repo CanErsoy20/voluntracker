@@ -108,9 +108,10 @@ export class AuthService {
         throw new BadRequestException('Something went wrong...');
       }
 
-      const code = this.emailConfirmationService.sendConfirmationCode(newUser.email);
+      // const code = this.emailConfirmationService.sendConfirmationCode(newUser.email);
       const tokens = await this.getTokens(newUser.id, newUser.email);
-      await this.updateRefreshTokenAndConfirmationCode(newUser.id, tokens.refreshToken, code.toString());
+      // await this.updateRefreshTokenAndConfirmationCode(newUser.id, tokens.refreshToken, code.toString());
+      await this.updateRefreshToken(newUser.id, tokens.refreshToken);
 
       const user = await this.prisma.user.findUnique({
         where: {
