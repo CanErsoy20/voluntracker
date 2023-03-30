@@ -181,7 +181,7 @@ model User {
   volunteer Volunteer?
   admin Admin?
 
-  isEmailConfirmed  Boolean @default(false)
+  isEmailConfirmed  Boolean @default(true)
   activationCode    String  @default("")
 
   hashedRefreshToken String?
