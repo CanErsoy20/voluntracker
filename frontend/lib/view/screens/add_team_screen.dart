@@ -1,6 +1,7 @@
 import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:afet_takip/view/widgets/custom_text_form_field.dart';
 import 'package:afet_takip/view/widgets/participant_circle.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/user/user_model.dart';
@@ -317,28 +318,42 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                           label: "",
                           suffixIcon: const Icon(Icons.search),
                         ),
-                        Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Row(
-                            children: const [
-                              FittedBox(
+                        CarouselSlider.builder(
+                            itemCount: 5,
+                            itemBuilder: (context, itemIndex, pageViewIndex) {
+                              return FittedBox(
                                 child: ParticipantCircleAvatar(),
-                              ),
-                              FittedBox(
-                                child: ParticipantCircleAvatar(),
-                              ),
-                              FittedBox(
-                                child: ParticipantCircleAvatar(),
-                              ),
-                              FittedBox(
-                                child: ParticipantCircleAvatar(),
-                              )
-                            ],
-                          ),
-                        ),
+                              );
+                            },
+                            options: CarouselOptions(
+                                enlargeCenterPage: true,
+                                viewportFraction: 0.8,
+                                enlargeFactor: 0.3,
+                                autoPlay: false,
+                                height: 100,
+                                initialPage: 0)),
+                        // Container(
+                        //   height: 100,
+                        //   decoration: BoxDecoration(
+                        //       color: Colors.red,
+                        //       borderRadius: BorderRadius.circular(30)),
+                        //   child: Row(
+                        //     children: const [
+                        //       FittedBox(
+                        //         child: ParticipantCircleAvatar(),
+                        //       ),
+                        //       FittedBox(
+                        //         child: ParticipantCircleAvatar(),
+                        //       ),
+                        //       FittedBox(
+                        //         child: ParticipantCircleAvatar(),
+                        //       ),
+                        //       FittedBox(
+                        //         child: ParticipantCircleAvatar(),
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
                         ListView.builder(
                             itemCount: 5,
                             physics: const NeverScrollableScrollPhysics(),
