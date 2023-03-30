@@ -11,6 +11,8 @@ import 'package:afet_takip/view/screens/update_help_center_screen.dart';
 import 'package:afet_takip/view/screens/help_center_volunteers_screen.dart';
 import 'package:afet_takip/view/screens/landing_page.dart';
 import 'package:afet_takip/view/screens/profile_screen.dart';
+import 'package:afet_takip/view/screens/contact_us_screen.dart';
+import 'package:afet_takip/view/screens/email_verification_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
@@ -26,6 +28,8 @@ class Routes {
   static const String updateHelpCenter = "/update-help-center";
   static const String addTeam = "/add-team";
   static const String profileRoute = "/profile";
+  static const String contactUsRoute = "/contact-us";
+  static const String emailVerificationRoute = "/email-verification";
 }
 
 class RouteGenerator {
@@ -55,6 +59,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => LandingPage());
       case Routes.profileRoute:
         return MaterialPageRoute(builder: (_) => ProfileScreen());
+      case Routes.contactUsRoute:
+        return MaterialPageRoute(builder: (_) => ContactUsScreen());
+      case Routes.emailVerificationRoute:
+        return MaterialPageRoute(builder: (_) => EmailVerificationScreen());
       default:
         return MaterialPageRoute(builder: (_) => UndefinedScreen());
     }
