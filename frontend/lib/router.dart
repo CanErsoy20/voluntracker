@@ -13,6 +13,7 @@ import 'package:afet_takip/view/screens/landing_page.dart';
 import 'package:afet_takip/view/screens/profile_screen.dart';
 import 'package:afet_takip/view/screens/contact_us_screen.dart';
 import 'package:afet_takip/view/screens/email_verification_screen.dart';
+import 'package:afet_takip/view/screens/about_us_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
@@ -30,6 +31,7 @@ class Routes {
   static const String profileRoute = "/profile";
   static const String contactUsRoute = "/contact-us";
   static const String emailVerificationRoute = "/email-verification";
+  static const String aboutUsRoute = "/about-us";
 }
 
 class RouteGenerator {
@@ -63,6 +65,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => ContactUsScreen());
       case Routes.emailVerificationRoute:
         return MaterialPageRoute(builder: (_) => EmailVerificationScreen());
+      case Routes.aboutUsRoute:
+        return MaterialPageRoute(builder: (_) => AboutUsScreen());
       default:
         return MaterialPageRoute(builder: (_) => UndefinedScreen());
     }

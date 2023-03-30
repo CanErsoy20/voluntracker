@@ -33,22 +33,22 @@ export class VolunteerTeamService {
     return volunteerTeam;
   }
 
-  async createVolunteerTeam(createVolunteerTeamDto: CreateVolunteerTeamDto) {
-    try {
-      const vt = await this.prisma.volunteerTeam.create({
-        data: createVolunteerTeamDto,
-      });
-      return vt;
-    } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2002') {
-          throw new BadRequestException(
-            'The specified volunteer team already exists in the given help center',
-          );
-        }
-      }
-    }
-  }
+  // async createVolunteerTeam(createVolunteerTeamDto: CreateVolunteerTeamDto) {
+  //   try {
+  //     const vt = await this.prisma.volunteerTeam.create({
+  //       data: {...createVolunteerTeamDto},
+  //     });
+  //     return vt;
+  //   } catch (e) {
+  //     if (e instanceof Prisma.PrismaClientKnownRequestError) {
+  //       if (e.code === 'P2002') {
+  //         throw new BadRequestException(
+  //           'The specified volunteer team already exists in the given help center',
+  //         );
+  //       }
+  //     }
+  //   }
+  // }
 
   async deleteVolunteerTeam(vtId: number) {
     return await this.prisma.volunteerTeam.delete({

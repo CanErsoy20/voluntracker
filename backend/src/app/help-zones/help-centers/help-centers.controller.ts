@@ -450,6 +450,7 @@ export class HelpCentersController {
       +hcId,
       createVolunteerTeamDto,
     );
+    this.logger.log(hcWithVolunteerTeams);
 
     if (!hcWithVolunteerTeams) {
       throw new BadRequestException('Could not find the requested resources');
