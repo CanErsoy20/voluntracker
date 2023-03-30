@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({Key? key}) : super(key: key);
@@ -9,8 +10,43 @@ class EmailVerificationScreen extends StatefulWidget {
 }
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
-  List<String> _code = List.filled(6, '');
+  List<TextEditingController> _codeControllers =
+      List.generate(6, (_) => TextEditingController());
   bool _isCodeValid = false;
+  int _secondsRemaining = 30;
+  bool _isResendButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _codeControllers.forEach((controller) => controller.dispose());
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _isResendButtonEnabled = false;
+    _secondsRemaining = 30;
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_secondsRemaining == 0) {
+        _isResendButtonEnabled = true;
+        timer.cancel();
+      } else {
+        setState(() {
+          _secondsRemaining--;
+        });
+      }
+    });
+  }
+
+  void _resendCode() {
+    // Resend the verification code here
+    _startTimer();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +79,26 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             ElevatedButton(
               onPressed: _isCodeValid
                   ? () {
-                      // Verify the code here
+                      // TODO: Verify the code here
                       // If the code is valid, navigate to the next screen
                     }
                   : null,
               child: const Text('Verify'),
+            ),
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Resend code in $_secondsRemaining seconds',
+                  style: const TextStyle(color: Colors.white),
+                ),
+                const SizedBox(width: 10.0),
+                ElevatedButton(
+                  onPressed: _isResendButtonEnabled ? _resendCode : null,
+                  child: const Text('Resend'),
+                ),
+              ],
             ),
           ],
         ),
@@ -59,16 +110,11 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     return SizedBox(
       width: 50.0,
       child: TextField(
+        controller: _codeControllers[index],
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
         maxLength: 1,
         style: const TextStyle(color: Colors.white),
-        onChanged: (value) {
-          setState(() {
-            _code[index] = value;
-            _isCodeValid = _code.every((digit) => digit.isNotEmpty);
-          });
-        },
         decoration: InputDecoration(
           counterText: '',
           enabledBorder: OutlineInputBorder(
@@ -78,6 +124,23 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             borderSide: BorderSide(color: Colors.white),
           ),
         ),
+        onChanged: (value) {
+          setState(() {
+            _isCodeValid = _codeControllers.every((controller) =>
+                controller.text.isNotEmpty && controller.text.length == 1);
+          });
+          if (value.isNotEmpty) {
+            if (index < 5) {
+              FocusScope.of(context).nextFocus();
+            } else {
+              FocusScope.of(context).unfocus();
+            }
+          } else {
+            if (index > 0) {
+              FocusScope.of(context).previousFocus();
+            }
+          }
+        },
       ),
     );
   }

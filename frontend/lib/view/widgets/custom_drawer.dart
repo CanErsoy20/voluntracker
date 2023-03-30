@@ -13,6 +13,12 @@ class CustomDrawer extends StatelessWidget {
   bool loggedIn;
   @override
   Widget build(BuildContext context) {
+    String nameField = "Not Logged In";
+
+    if(UserInfo.loggedUser != null){
+      nameField = "${UserInfo.loggedUser!.firstname} ${UserInfo.loggedUser!.surname}";
+    }
+
     return Drawer(
       backgroundColor: const Color.fromARGB(255, 41, 70, 100),
       child: Column(
@@ -22,10 +28,7 @@ class CustomDrawer extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          loggedIn
-              ? Text(
-                  "${UserInfo.loggedUser!.firstname} ${UserInfo.loggedUser!.surname}")
-              : const SizedBox.shrink(),
+          Text(nameField),
           loggedIn
               ? const Divider(
                   thickness: 1,
@@ -52,7 +55,9 @@ class CustomDrawer extends StatelessWidget {
               : const SizedBox.shrink(),
           DrawerComponent(
             title: "About Us",
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.aboutUsRoute);
+            },
             prefixIcon: const Icon(
               Icons.info_outlined,
               color: Colors.white,
@@ -60,7 +65,9 @@ class CustomDrawer extends StatelessWidget {
           ),
           DrawerComponent(
             title: "Contact Us",
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.contactUsRoute);
+            },
             prefixIcon: const Icon(
               Icons.contact_support_outlined,
               color: Colors.white,
