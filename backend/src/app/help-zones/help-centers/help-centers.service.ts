@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { HelpCenter, Prisma, Volunteer } from '@prisma/client';
 import { UsersService } from 'src/app/users/users.service';
 import { UserRolesService } from 'src/authorization/user-roles.service';
@@ -33,6 +33,7 @@ export class HelpCentersService {
     private readonly userRolesService: UserRolesService,
     private readonly usersService: UsersService,
   ) {}
+  private logger: Logger = new Logger();
 
   async create(createHelpCenterDto: CreateHelpCenterDto): Promise<HelpCenterEntity> {
     return await this.prisma.helpCenter.create({
@@ -345,8 +346,17 @@ export class HelpCentersService {
     helpCenterId: number,
     createVolunteerTeamDto: CreateVolunteerTeamDto,
   ) {
+    const hc = await this.prisma.helpCenter.findUnique({
+      where: {
+        id: helpCenterId,
+      },
+    });
+    if (!hc) {
+      throw new UniqueEntityNotFoundException('Given help center does not exist in the system.');
+    }
+
     try {
-      return await this.prisma.helpCenter.update({
+      const updatedHc = await this.prisma.helpCenter.update({
         where: { id: helpCenterId },
         data: {
           volunteerTeams: {
@@ -357,6 +367,7 @@ export class HelpCentersService {
           volunteerTeams: true,
         },
       });
+      return updatedHc;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
@@ -364,6 +375,8 @@ export class HelpCentersService {
                                         center. Please try to use another name`);
         }
       }
+
+      throw e;
     }
   }
 
