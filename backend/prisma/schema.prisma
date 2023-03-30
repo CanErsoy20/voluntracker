@@ -15,13 +15,76 @@ datasource db {
 }
 
 enum SupplyTypeEnum {
+  // Food
+  CannedVegetable
+  CannedFruit
+  Rice
   Pasta
+  Bread
+  Cereal
+  InstantNoodle
+  Biscuit
+  Cracker
+  EnergyBar
+
+  // Drink
+  InfantMilk
+  BottledWater
+
+  // Medical Supply
+  BandAid
+  Bandage
+  Gauze
+
+  // ShelterMaterial
+  Blanket
+  SleepingBag
+  Tent
+
+  // Clothing
+
+  // Personal Hygiene Products
+
+  // Tools and Equipment
+
+  // Communication Devices
+
+  // Cleaning Products
+
+  // Power Sources
+  Battery
+
+  // Cooking Supplies
+
+  // Educational Materials
+
+  // Construction Materials
+
+  // Animal Suppplies
+
+  // Search and Rescue Equipment
+
+  // Sanitation Supply
 }
 
 
 enum SupplyCategoryEnum {
   Food
   Drink
+  MedicalSupply
+  ShelterMaterial
+  Clothing
+  PersonalHygieneProducts
+  ToolsAndEquipment
+  CommunicationDevices
+  CleaningProducts
+  PowerSources
+  CookingSupplies
+  EducationalMaterials
+  ConstructionMaterials
+  AnimalSupplies
+  SearchAndResqueEquipment
+  SanitationSupply
 }
 
 
