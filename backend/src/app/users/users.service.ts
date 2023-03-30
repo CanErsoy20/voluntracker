@@ -88,4 +88,15 @@ export class UsersService {
     });
     return user;
   }
+
+  async assignConfirmationCode(email: string, code: string) {
+    const user = await this.prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        activationCode: code || '',
+      },
+    });
+  }
 }
