@@ -136,13 +136,14 @@ export class VolunteerService {
     });
 
     if (!volunteer) {
+      throw new UniqueEntityNotFoundException(`Could not find the volunteer with id: ${volunteerId}`);
     }
 
     if (volunteer.followedHelpCenters.length >= 10) {
-      throw new ExceededMaxLimitOfItemsException('');
+      throw new ExceededMaxLimitOfItemsException('A volunteer cannot follow more than 10 help center.');
     }
 
-    await this.prisma.volunteer.update({
+    const updatedVolunteer = await this.prisma.volunteer.update({
       where: {
         id: volunteerId,
       },
@@ -152,5 +153,36 @@ export class VolunteerService {
         },
       },
     });
+    return updatedVolunteer;
+  }
+
+  async unfollowHelpCenter(helpCenterId: number, volunteerId: number) {
+    const volunteer = await this.prisma.volunteer.findUnique({
+      where: {
+        id: volunteerId,
+      },
+      include: {
+        followedHelpCenters: true,
+      },
+    });
+
+    if (!volunteer) {
+      throw new UniqueEntityNotFoundException(`Could not find the volunteer with id: ${volunteerId}`);
+    }
+
+    const updatedVolunteer = await this.prisma.volunteer.update({
+      where: {
+        id: volunteerId,
+      },
+      data: {
+        followedHelpCenters: {
+          delete: {
+            id: helpCenterId,
+          },
+        },
+      },
+    });
+
+    return updatedVolunteer;
   }
 }

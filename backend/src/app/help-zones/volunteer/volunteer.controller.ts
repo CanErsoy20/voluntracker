@@ -63,6 +63,24 @@ export class VolunteerController {
   ) {
     const volunteer = await this.volunteerService.followHelpCenter(+helpCenterId, +volunteerId);
 
+    if (!volunteer) {
+      throw new BadRequestException('Something bad happened.');
+    }
+
+    return new HttpResponse(volunteer, 'Started following the help center.', 200);
+  }
+
+  @Patch(':volunteerId/helpCenters/:helpCenterId/unfollow')
+  async unfollowHelpCenter(
+    @Param('helpCenterId') helpCenterId: string,
+    @Param('volunteerId') volunteerId: string,
+  ) {
+    const volunteer = await this.volunteerService.unfollowHelpCenter(+helpCenterId, +volunteerId);
+
+    if (!volunteer) {
+      throw new BadRequestException('Something bad happened.');
+    }
+
     return new HttpResponse(volunteer, 'Started following the help center.', 200);
   }
 }
