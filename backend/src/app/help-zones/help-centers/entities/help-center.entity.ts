@@ -1,6 +1,7 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import {
   HelpCenter,
+  HelpCenterCoordinator,
   NeededSupply,
   NeededVolunteer,
   Prisma,
@@ -168,5 +169,6 @@ export class HelpCenterEntity implements HelpCenter {
   @ApiProperty()
   updatedAt: Date;
 
+  coordinator?: HelpCenterCoordinator;
   volunteerTeams?: VolunteerTeam[];
 }
