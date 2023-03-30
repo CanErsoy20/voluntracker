@@ -1,7 +1,13 @@
-import { BadRequestException, ConflictException, ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
-import * as argon from 'argon2-browser';
+import * as argon from 'argon2';
 import { EmailConfirmationService } from 'src/app/email/email-confirmation.service';
 import { CreateUserDto } from 'src/authentication/dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -26,10 +32,11 @@ export class AuthService {
       throw new ForbiddenException(`There is something wrong with logincredentials.`);
     }
 
-    const isPasswordValid = await argon.verify({ encoded: user.password, pass: password });
+    const isPasswordValid = await argon.verify(user.password, password);
     if (!isPasswordValid) {
       throw new ForbiddenException(`There is something wrong with login credentials.`);
     }
+
     const { ...result } = user;
     return result;
   }
@@ -73,7 +80,7 @@ export class AuthService {
       const newUser = await this.prisma.user.create({
         data: {
           ...createUserDto,
-          password: hashedPassword.encoded,
+          password: hashedPassword,
           volunteer: {
             create: {
               ...createVolunteerDto,
@@ -137,7 +144,7 @@ export class AuthService {
       throw new ForbiddenException('Access denied.');
     }
 
-    const rtMatches = await argon.verify({ encoded: user.hashedRefreshToken, pass: rt });
+    const rtMatches = await argon.verify(user.hashedRefreshToken, rt);
     if (!rtMatches) {
       throw new ForbiddenException('Access denied.');
     }
@@ -154,7 +161,7 @@ export class AuthService {
         id: userId,
       },
       data: {
-        hashedRefreshToken: hash.encoded,
+        hashedRefreshToken: hash,
         activationCode: code,
       },
     });
@@ -167,7 +174,7 @@ export class AuthService {
         id: userId,
       },
       data: {
-        hashedRefreshToken: hash.encoded,
+        hashedRefreshToken: hash,
       },
     });
   }
@@ -196,6 +203,6 @@ export class AuthService {
   }
 
   async hash(data: string) {
-    return await argon.hash({ pass: data, salt: `${authConstants.saltOrRounds}` });
+    return await argon.hash(data);
   }
 }
