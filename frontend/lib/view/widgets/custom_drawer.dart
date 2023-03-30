@@ -15,8 +15,9 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     String nameField = "Not Logged In";
 
-    if(UserInfo.loggedUser != null){
-      nameField = "${UserInfo.loggedUser!.firstname} ${UserInfo.loggedUser!.surname}";
+    if (UserInfo.loggedUser != null) {
+      nameField =
+          "${UserInfo.loggedUser!.firstname} ${UserInfo.loggedUser!.surname}";
     }
 
     return Drawer(
@@ -46,7 +47,9 @@ class CustomDrawer extends StatelessWidget {
           loggedIn
               ? DrawerComponent(
                   title: "My Profile",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.profileRoute);
+                  },
                   prefixIcon: const Icon(
                     Icons.person,
                     color: Colors.white,

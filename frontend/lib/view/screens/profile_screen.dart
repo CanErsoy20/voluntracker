@@ -1,33 +1,19 @@
+import 'package:afet_takip/helper_functions.dart';
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
-  final int? id;
-  final String? firstname;
-  final String? surname;
-  final String? email;
-  final String? phone;
-  final String? createdAt;
-  final String? userRole;
-  final bool? isCurrentUser;
+import '../../models/user/user_info.dart';
 
-  ProfileScreen({
-    this.id,
-    this.firstname,
-    this.surname,
-    this.email,
-    this.phone,
-    this.createdAt,
-    this.userRole,
-    this.isCurrentUser,
-  });
+class ProfileScreen extends StatelessWidget {
+  ProfileScreen();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        centerTitle: true,
+        title: const Text("My Profile"),
         actions: [
           IconButton(
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit),
             onPressed: () {},
           ),
         ],
@@ -36,37 +22,37 @@ class ProfileScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 40.0,
-                  backgroundImage: NetworkImage(
-                      'https://picsum.photos/seed/picsum/200/300'),
+                  backgroundImage:
+                      NetworkImage('https://picsum.photos/seed/picsum/200/300'),
                 ),
-                SizedBox(width: 16.0),
+                const SizedBox(width: 16.0),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${firstname ?? ""} ${surname ?? ""}',
-                        style: TextStyle(
+                        '${UserInfo.loggedUser!.firstname ?? ""} ${UserInfo.loggedUser!.surname ?? ""}',
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20.0,
                         ),
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       Text(
-                        'ID: ${id ?? ""}',
-                        style: TextStyle(
+                        'ID: ${UserInfo.loggedUser!.id ?? ""}',
+                        style: const TextStyle(
                           fontSize: 16.0,
                         ),
                       ),
-                      SizedBox(height: 8.0),
+                      const SizedBox(height: 8.0),
                       Text(
-                        '${userRole ?? ""}',
+                        UserInfo.loggedUser!.getHighestRole(),
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 16.0,
@@ -88,14 +74,19 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 children: [
-                  SizedBox(height: 16.0),
-                  buildProfileInfoRow(Icons.email, 'Email', email ?? ""),
-                  buildProfileInfoRow(Icons.phone, 'Phone', phone ?? ""),
+                  const SizedBox(height: 16.0),
                   buildProfileInfoRow(
-                      Icons.date_range, 'Joined On', createdAt ?? ""),
-                  SizedBox(height: 16.0),
+                      Icons.email, 'Email', UserInfo.loggedUser!.email ?? ""),
+                  buildProfileInfoRow(
+                      Icons.phone, 'Phone', UserInfo.loggedUser!.phone ?? ""),
+                  buildProfileInfoRow(
+                      Icons.date_range,
+                      'Joined On',
+                      HelperFunctions.formatDateToDate(
+                          UserInfo.loggedUser!.createdAt!)),
+                  const SizedBox(height: 16.0),
                 ],
               ),
             ),
@@ -112,22 +103,22 @@ class ProfileScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(iconData, size: 24.0, color: Colors.grey[600]),
-          SizedBox(width: 16.0),
+          const SizedBox(width: 16.0),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
                   ),
                 ),
-                SizedBox(height: 4.0),
+                const SizedBox(height: 4.0),
                 Text(
                   subtitle,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16.0,
                   ),
                 ),

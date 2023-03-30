@@ -7,10 +7,12 @@ class CustomFormField extends StatelessWidget {
       required this.label,
       this.customValidator,
       this.value,
+      this.labelColor,
       this.maxLines,
       this.onChanged});
   final String hint;
   final String label;
+  final Color? labelColor;
   final String? Function(String?)? customValidator;
   final void Function(String)? onChanged;
   final String? value;
@@ -24,7 +26,7 @@ class CustomFormField extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: labelColor ?? Colors.white),
           ),
           SizedBox(
             height: 2,
@@ -35,6 +37,7 @@ class CustomFormField extends StatelessWidget {
             onChanged: onChanged,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: InputDecoration(
+                errorMaxLines: 3,
                 // labelText: label,
                 hintText: hint,
                 filled: true,

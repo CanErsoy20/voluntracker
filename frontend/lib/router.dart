@@ -54,7 +54,7 @@ class RouteGenerator {
       case Routes.updateHelpCenter:
         return MaterialPageRoute(builder: (_) => UpdateHelpCenterScreen());
       case Routes.addTeam:
-        return MaterialPageRoute(builder: (_) => AddTeamScreen());
+        return MaterialPageRoute(builder: (_) => AddToTeamScreen());
       case Routes.helpCenterVolunteers:
         return MaterialPageRoute(builder: (_) => HelpCenterVolunteersScreen());
       case Routes.landingPageRoute:

@@ -1,4 +1,5 @@
 import 'package:afet_takip/models/user/user_model.dart';
+import 'package:afet_takip/models/volunteer_team_model.dart';
 
 class Volunteer {
   int? id;
@@ -7,6 +8,7 @@ class Volunteer {
   String? volunteerTypeName;
   String? volunteerTypeCategory;
   String? image;
+  VolunteerTeam? team;
   int? volunteerTeamId;
   int? helpCenterId;
   String? createdAt;

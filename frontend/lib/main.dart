@@ -3,11 +3,13 @@ import 'package:afet_takip/cubit/sign_up/sign_up_cubit.dart';
 import 'package:afet_takip/router.dart';
 import 'package:afet_takip/services/auth_service.dart';
 import 'package:afet_takip/services/help_center_service.dart';
+import 'package:afet_takip/services/team_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'cubit/help_centers/help_center_cubit.dart';
 import 'cubit/map/map_cubit.dart';
+import 'cubit/team/team_cubit.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,7 +29,8 @@ class MyApp extends StatelessWidget {
           create: (context) => HelpCenterCubit(HelpCenterService()),
         ),
         BlocProvider(create: (context) => SignUpCubit(AuthService())),
-        BlocProvider(create: (context) => LoginCubit(AuthService()))
+        BlocProvider(create: (context) => LoginCubit(AuthService())),
+        BlocProvider(create: (context) => TeamCubit(TeamService()))
       ],
       child: MaterialApp(
           title: 'Flutter Demo',
