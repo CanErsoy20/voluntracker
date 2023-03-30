@@ -2,7 +2,6 @@ import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post 
 import { ApiBadRequestResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { HttpResponse } from 'src/common';
 import { CreateVolunteerLeaderDto } from './dto/create-volunteer-leader.dto';
-import { CreateVolunteerTeamDto } from './dto/create-volunteer-team.dto';
 import { UpdateVolunteerTeamDto } from './dto/update-volunteer-team.dto';
 import { VolunteerTeamEntity } from './entities/volunteer-team.entity';
 import { VolunteerTeamService } from './volunteer-team.service';

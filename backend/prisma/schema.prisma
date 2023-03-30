@@ -78,12 +78,26 @@ model HelpCenter {
 
   coordinator     HelpCenterCoordinator? // Might be unassigned
 
+  volunteersFollowing VolunteersFollowingHelpCenters[]
+
   qrCode            QrCode?
   volunteerTeams    VolunteerTeam[]
   neededVolunteers  NeededVolunteer[]
   neededSupply      NeededSupply[]
   supply            Supply[]
   volunteers        Volunteer[]
+}
+
+model VolunteersFollowingHelpCenters {
+  id Int @id @default(autoincrement())
+
+  helpCenterId Int
+  helpCenter HelpCenter @relation(fields: [helpCenterId], references: [id])
+
+  volunteerId Int
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id])
+
+  createdAt DateTime @default(now())
 }
 
 
@@ -263,6 +277,8 @@ model Volunteer {
   helpCenterId Int?
   helpCenter HelpCenter? @relation(fields: [helpCenterId], references: [id])
 
+  followedHelpCenters VolunteersFollowingHelpCenters[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -362,6 +378,9 @@ model VolunteerTeam {
   teamLeader VolunteerTeamLeader? // Might be unassigned
   guestVolunteer GuestVolunteer[] 
   volunteers Volunteer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([helpCenterId, teamName])
 }

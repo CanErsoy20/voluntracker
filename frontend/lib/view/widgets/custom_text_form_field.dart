@@ -6,6 +6,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.label,
     this.hint,
     this.isObscure,
+    this.maxLines,
     this.onChanged,
     this.suffixIcon,
     this.customValidator,
@@ -18,6 +19,7 @@ class CustomTextFormField extends StatelessWidget {
   String initialValue;
   String label;
   String? hint;
+  int? maxLines;
   bool? isObscure;
   Widget? suffixIcon;
   void Function(String)? onChanged;
@@ -37,6 +39,7 @@ class CustomTextFormField extends StatelessWidget {
             height: 2,
           ),
           TextFormField(
+            maxLines: maxLines ?? 1,
             obscureText: isObscure ?? false,
             onChanged: onChanged,
             validator: customValidator ??

@@ -42,7 +42,7 @@ export class VolunteerController {
       throw new BadRequestException('Something bad happened while creating a certificate.');
     }
 
-    return new HttpResponse(certificate, 'Successfully updated certificat edetails.', 200);
+    return new HttpResponse(certificate, 'Successfully updated certificate details.', 200);
   }
 
   @Delete('certificates/:id')
@@ -54,5 +54,15 @@ export class VolunteerController {
     }
 
     return new HttpResponse(certificate, 'Successfully deleted the certificate', 200);
+  }
+
+  @Patch(':volunteerId/helpCenters/:helpCenterId')
+  async followHelpCenter(
+    @Param('helpCenterId') helpCenterId: number,
+    @Param('volunteerId') volunteerId: number,
+  ) {
+    const volunteer = await this.volunteerService.followHelpCenter(helpCenterId);
+
+    return new HttpResponse(volunteer, 'Started following the help center.', 200);
   }
 }

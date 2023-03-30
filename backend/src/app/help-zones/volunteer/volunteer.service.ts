@@ -124,4 +124,10 @@ export class VolunteerService {
       }
     }
   }
+
+  async followHelpCenter(helpCenterId: number) {
+    // await this.prisma.volunteer.update({
+    //   where: {}
+    // })
+  }
 }
