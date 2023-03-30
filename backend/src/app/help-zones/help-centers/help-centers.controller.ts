@@ -17,8 +17,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { QrGeneratorService } from 'src/app/qr-generator/qr-generator.service';
 import { HttpResponse } from 'src/common';
-import { UniqueEntityNotFoundException } from 'src/exceptions/unique-entity-not-found-exception.exception';
 import { OrderBy } from 'src/types/types';
 import { CreateNeededSupplyDto } from '../needed-supply/dto/create-needed-supply.dto';
 import { UpdateNeededSupplyDto } from '../needed-supply/dto/update-needed-supply.dto';
@@ -26,7 +26,6 @@ import { NeededSupplyEntity } from '../needed-supply/entities/needed-supply.enti
 import { CreateNeededVolunteerDto } from '../needed-volunteer/dto/create-needed-volunteer.dto';
 import { UpdateNeededVolunteerDto } from '../needed-volunteer/dto/update-needed-volunteer.dto';
 import { NeededVolunteerEntity } from '../needed-volunteer/entities/needed-volunteer.entity';
-import { CreateCertificateDto } from '../volunteer/dto/create-certificate.dto';
 import { CreateCoordinatorDto } from '../volunteer/dto/create-coordinator.dto';
 import { CreateVolunteerTeamDto } from '../volunteer/dto/create-volunteer-team.dto';
 import { VolunteerTeamEntity } from '../volunteer/entities/volunteer-team.entity';
@@ -34,12 +33,16 @@ import { AssignVolunteerToHelpCenterDto } from './dto/assign-volunteer-to-help-c
 import { CreateHelpCenterDto } from './dto/create-help-center.dto';
 import { UpdateHelpCenterDto } from './dto/update-help-center.dto';
 import { HelpCenterEntity } from './entities/help-center.entity';
+import { MultipleVolunteerAssignEntity } from './entities/multiple-volunteer-assign.entity';
 import { HelpCentersService } from './help-centers.service';
 
 @ApiTags('HelpCenters')
 @Controller('helpCenters')
 export class HelpCentersController {
-  constructor(private readonly helpCentersService: HelpCentersService) {}
+  constructor(
+    private readonly helpCentersService: HelpCentersService,
+    private readonly qrGeneratorService: QrGeneratorService,
+  ) {}
   private readonly logger: Logger = new Logger(HelpCentersController.name);
 
   @Post()
@@ -487,7 +490,35 @@ export class HelpCentersController {
   }
 
   // Volunteer endpoints
-  // TODO: Assign volunteer to help center
+  @ApiResponse({
+    status: 201,
+    type: [HelpCenterEntity],
+    description: 'Updated the help center so that the voluntee is assigned to the help center.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Could not assign the volunteer to the given help center.',
+  })
+  @Patch('/qr/:uuid/volunteer')
+  async assignVolunteerToHelpCenterByQr(
+    @Body() assignVolunteerToHelpCenter: AssignVolunteerToHelpCenterDto,
+    @Param('uuid') uuid: string,
+  ) {
+    const hasQrExpired = await this.qrGeneratorService.checkExpiry(uuid);
+
+    if (!hasQrExpired) {
+      const helpCenter = await this.assignVolunteerToHelpCenter(assignVolunteerToHelpCenter);
+      return new HttpResponse(helpCenter, 'Successfully assigned the volunteer to the help center.', 200);
+    }
+  }
+
+  @ApiResponse({
+    status: 200,
+    type: [HelpCenterEntity],
+    description: 'Updated the help center so that the voluntee is assigned to the help center.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Could not assign the volunteer to the given help center.',
+  })
   @Patch('/volunteer')
   async assignVolunteerToHelpCenter(@Body() assignVolunteerToHelpCenterDto: AssignVolunteerToHelpCenterDto) {
     const { helpCenterId: hcid, email, phone, volunteerId } = assignVolunteerToHelpCenterDto;
@@ -496,7 +527,7 @@ export class HelpCentersController {
       const updatedHelpCenter = await this.helpCentersService.assignVolunteerToHelpCenter(+hcid, volunteerId);
       if (!updatedHelpCenter) {
         throw new BadRequestException(
-          'Something went wrong while trying to assign the volunteer to the help center.',
+          'Something went wrong while trying to assign the volunteer to the help center using ID.',
         );
       }
 
@@ -512,7 +543,7 @@ export class HelpCentersController {
       );
       if (!updatedHelpCenter) {
         throw new BadRequestException(
-          'Something went wrong while trying to assign the volunteer to the help center.',
+          'Something went wrong while trying to assign the volunteer to the help center using email.',
         );
       }
 
@@ -526,9 +557,10 @@ export class HelpCentersController {
         hcid,
         phone,
       );
+
       if (!updatedHelpCenter) {
         throw new BadRequestException(
-          'Something went wrong while trying to assign the volunteer to the help center.',
+          'Something went wrong while trying to assign the volunteer to the help center using phone number.',
         );
       }
 
@@ -537,9 +569,45 @@ export class HelpCentersController {
         'Successfully assigned the volunteer to the help center.',
         200,
       );
+    } else {
+      throw new BadRequestException(
+        'One of the following must be present in the body: volunteerId, email, phone',
+      );
     }
   }
 
+  @ApiResponse({
+    status: 200,
+    type: [MultipleVolunteerAssignEntity],
+    description: 'Updated the help center so that the voluntee is assigned to the help center.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Could not assign the volunteer to the given help center.',
+  })
+  @Patch('/:helpCenterId/volunteerTeam/:volunteerTeamId/volunteer/')
+  async assignVolunteersToVolunteerTeamInHelpCenter(
+    @Param('helpCenterId') hcid: string,
+    @Param('volunteerTeamId') vtid: string,
+    @Body() volunteerIds: string[],
+  ) {
+    const successfulEvents =
+      (await this.helpCentersService.assignMultipleVolunteersToVolunteerTeamAtHelpCenter(
+        +hcid,
+        +vtid,
+        volunteerIds,
+      )) as MultipleVolunteerAssignEntity;
+
+    return new HttpResponse(successfulEvents, 'Multiple', 200);
+  }
+
+  @ApiResponse({
+    status: 200,
+    type: [HelpCenterEntity],
+    description: 'Updated the help center so that the volunteer is assigned to the team at the help center.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Could not assign the volunteer to the given team at the help center.',
+  })
   @Patch('/:helpCenterId/volunteerTeam/:volunteerTeamId/volunteer/:volunteerId')
   async assignVolunteerToVolunteerTeamInHelpCenter(
     @Param('helpCenterId') hcid: string,
@@ -565,6 +633,16 @@ export class HelpCentersController {
     );
   }
 
+  /* Help center coordinator end points */
+  @ApiResponse({
+    status: 200,
+    type: [HelpCenterEntity],
+    description:
+      'Deleted the coordinator from the help center so that the volunteer is assigned to the team at the help center.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Could not delete the coordinator at the help center.',
+  })
   @Delete('/helpCenterCoordinator/:volunteerId')
   async deleteCoordinatorFromHelpCenter(@Param('helpCenterId') hcid: string) {
     const hc = await this.helpCentersService.removeCoordinatorFromHelpCenter(+hcid);
@@ -576,7 +654,14 @@ export class HelpCentersController {
     return new HttpResponse(hc, 'Successfully removed coordinator from help center.', 200);
   }
 
-  /* Help center coordinator end points */
+  @ApiResponse({
+    status: 200,
+    type: [HelpCenterEntity],
+    description: 'Assigned the coordinator to the help center.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Could not assign the coordinator to the help center.',
+  })
   @Post('/helpCenterCoordinator')
   async assignCoordinatorToHelpCenter(@Body() createCoordinatorDto: CreateCoordinatorDto) {
     const helpCenterWithCoordinator = await this.helpCentersService.assignCoordinatorToHelpCenter(

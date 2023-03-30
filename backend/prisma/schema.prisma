@@ -76,13 +76,24 @@ model HelpCenter {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  coordinator HelpCenterCoordinator? // Might be unassigned
+  coordinator     HelpCenterCoordinator? // Might be unassigned
 
+  qrCode            QrCode?
   volunteerTeams    VolunteerTeam[]
   neededVolunteers  NeededVolunteer[]
   neededSupply      NeededSupply[]
   supply            Supply[]
   volunteers        Volunteer[]
+}
+
+
+model QrCode {
+  id Int @id @default(autoincrement())
+  helpCenter HelpCenter @relation(fields: [helpCenterId], references: [id])
+  helpCenterId Int @unique
+  uuid String @unique
+
+  createdAt DateTime @default(now())
 }
 
 
