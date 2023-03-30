@@ -56,6 +56,13 @@ export class VolunteerController {
     return new HttpResponse(certificate, 'Successfully deleted the certificate', 200);
   }
 
-  @Patch('helpCenters/:helpCenterId')
-  async followHelpCenter(@Param('helpCenterId') helpCenterId: number) {}
+  @Patch(':volunteerId/helpCenters/:helpCenterId')
+  async followHelpCenter(
+    @Param('helpCenterId') helpCenterId: number,
+    @Param('volunteerId') volunteerId: number,
+  ) {
+    const volunteer = await this.volunteerService.followHelpCenter(helpCenterId);
+
+    return new HttpResponse(volunteer, 'Started following the help center.', 200);
+  }
 }
