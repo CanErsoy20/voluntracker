@@ -9,7 +9,13 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll() {
-    const users = await this.prisma.user.findMany();
+    const users = await this.prisma.user.findMany({
+      include: {
+        admin: true,
+        userRole: true,
+        volunteer: true,
+      },
+    });
     return users;
   }
 
@@ -58,6 +64,28 @@ export class UsersService {
       throw new UniqueEntityNotFoundException('User with given id cannot be found');
     }
 
+    return user;
+  }
+
+  async confirmAccount(email: string) {
+    const user = await this.prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        isEmailConfirmed: true,
+        activationCode: '',
+      },
+    });
+    return user;
+  }
+
+  async deleteAccount(userId: number) {
+    const user = await this.prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
     return user;
   }
 }
