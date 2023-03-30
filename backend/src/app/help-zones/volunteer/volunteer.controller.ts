@@ -46,7 +46,7 @@ export class VolunteerController {
   }
 
   @Delete('certificates/:id')
-  async deleteCertificate(@Param('id') certificateId) {
+  async deleteCertificate(@Param('id') certificateId: string) {
     const certificate = await this.volunteerService.deleteCertificate(+certificateId);
 
     if (!certificate) {
@@ -58,10 +58,10 @@ export class VolunteerController {
 
   @Patch(':volunteerId/helpCenters/:helpCenterId')
   async followHelpCenter(
-    @Param('helpCenterId') helpCenterId: number,
-    @Param('volunteerId') volunteerId: number,
+    @Param('helpCenterId') helpCenterId: string,
+    @Param('volunteerId') volunteerId: string,
   ) {
-    const volunteer = await this.volunteerService.followHelpCenter(helpCenterId);
+    const volunteer = await this.volunteerService.followHelpCenter(+helpCenterId, +volunteerId);
 
     return new HttpResponse(volunteer, 'Started following the help center.', 200);
   }

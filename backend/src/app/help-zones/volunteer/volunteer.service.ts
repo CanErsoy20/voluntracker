@@ -125,9 +125,31 @@ export class VolunteerService {
     }
   }
 
-  async followHelpCenter(helpCenterId: number) {
-    // await this.prisma.volunteer.update({
-    //   where: {}
-    // })
+  async followHelpCenter(helpCenterId: number, volunteerId: number) {
+    const volunteer = await this.prisma.volunteer.findUnique({
+      where: {
+        id: volunteerId,
+      },
+      include: {
+        followedHelpCenters: true,
+      },
+    });
+
+    if (!volunteer) {
+    }
+
+    if (volunteer.followedHelpCenters.length >= 10) {
+    }
+
+    await this.prisma.volunteer.update({
+      where: {
+        id: volunteerId,
+      },
+      data: {
+        followedHelpCenters: {
+          create: [{ helpCenterId }],
+        },
+      },
+    });
   }
 }
