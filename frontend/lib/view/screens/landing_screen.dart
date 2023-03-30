@@ -69,6 +69,16 @@ class _LandingScreenState extends State<LandingScreen> {
                   Navigator.of(context).pushNamed(Routes.addTeam);
                 },
                 child: const Text("Add Team Screen")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.landingPageRoute);
+                },
+                child: const Text("Landing Page Screen")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.profileRoute);
+                },
+                child: const Text("Profile Screen")),
           ],
         ),
       ),
