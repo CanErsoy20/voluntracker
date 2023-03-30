@@ -1,4 +1,4 @@
-import { IsDefined, IsNumber, IsOptional } from 'class-validator';
+import { IsDefined, IsNumber, IsOptional, IsSemVer, IsString } from 'class-validator';
 
 export class AssignVolunteerToHelpCenterDto {
   @IsDefined()
@@ -9,11 +9,11 @@ export class AssignVolunteerToHelpCenterDto {
   @IsOptional()
   volunteerId?: number;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
   phone?: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
   email?: string;
 }
