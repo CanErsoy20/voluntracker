@@ -8,4 +8,5 @@ class ApiConstant {
   static String volunteerTypes = "volunteer/types/";
   static String signUpVolunteer = "auth/signup";
   static String login = "auth/login/";
+  static String volunteerTeam = "/volunteerTeam/";
 }

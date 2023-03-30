@@ -1,5 +1,3 @@
-import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
-import 'package:afet_takip/cubit/map/map_cubit.dart';
 import 'package:afet_takip/models/help_center/busiest_hours_model.dart';
 import 'package:afet_takip/models/help_center/contact_info_model.dart';
 import 'package:afet_takip/models/help_center/location_model.dart';
@@ -9,58 +7,26 @@ import 'package:afet_takip/models/user/user_role_model.dart';
 import 'package:afet_takip/models/volunteer_model.dart';
 import 'package:afet_takip/models/volunteer_team_leader_model.dart';
 import 'package:afet_takip/models/volunteer_team_model.dart';
-import 'package:afet_takip/router.dart';
 import 'package:afet_takip/view/widgets/custom_drawer.dart';
+import 'package:afet_takip/view/widgets/custom_text_field.dart';
 import 'package:afet_takip/view/widgets/volunteer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
-
-import '../../helper_functions.dart';
+import 'package:star_menu/star_menu.dart';
+import '../../cubit/team/team_cubit.dart';
 import '../../models/help_center/help_center_model.dart';
-import '../../models/user/user_info.dart';
-import '../widgets/custom_need_card.dart';
+import '../widgets/custom_snackbars.dart';
 
 class HelpCenterVolunteersScreen extends StatefulWidget {
   const HelpCenterVolunteersScreen({super.key});
 
   @override
-  _VolunteersScreenState createState() => _VolunteersScreenState();
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   HelpCenterModel currentCenter = context.read<HelpCenterCubit>().myCenter!;
-  //   return Scaffold(
-  //       appBar: AppBar(
-  //         centerTitle: true,
-  //         title: const FittedBox(
-  //           fit: BoxFit.fitWidth,
-  //           child: Text("Help Center Volunteers"),
-  //         ),
-  //       ),
-  //       endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
-  //       body: DefaultTabController(
-  //         length: 2,
-  //         child: Column(
-  //           children: [
-  //             // Image.asset(
-  //             //   fit: BoxFit.fitWidth,
-  //             //   width: MediaQuery.of(context).size.width,
-  //             //   height: MediaQuery.of(context).size.height / 6,
-  //             //   "assets/images/bilkent.jpg",
-  //             // ),
-  //             Text(
-  //               currentCenter.name!,
-  //               style: const TextStyle(fontSize: 20),
-  //             ),
-  //           ],
-  //         ),
-  //       ));
-  // }
+  State<HelpCenterVolunteersScreen> createState() =>
+      _HelpCenterVolunteersScreenState();
 }
 
-class _VolunteersScreenState extends State<HelpCenterVolunteersScreen> {
+class _HelpCenterVolunteersScreenState
+    extends State<HelpCenterVolunteersScreen> {
   List<VolunteerTeam> volunteerTeams = [
     VolunteerTeam(
       id: 1,
@@ -238,20 +204,146 @@ class _VolunteersScreenState extends State<HelpCenterVolunteersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final createTeamFormKey = GlobalKey<FormState>();
+    final assignVolunteerFormKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Volunteers'),
+        centerTitle: true,
+        title: const Text('Volunteers'),
       ),
-      body: VolunteerList(
-        volunteerTeams: volunteerTeams,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your onPressed code here!
+      endDrawer: CustomDrawer(loggedIn: true),
+      body: BlocConsumer<TeamCubit, TeamState>(
+        listener: (context, state) {
+          if (state is TeamSuccess) {
+            CustomSnackbars.successSnackbar(
+                context, state.title, state.description);
+          } else if (state is TeamError) {
+            CustomSnackbars.errorSnackbar(
+                context, state.title, state.description);
+          }
         },
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.add),
+        builder: (context, state) {
+          return VolunteerList(
+            volunteerTeams: volunteerTeams,
+          );
+        },
+      ),
+      floatingActionButton: StarMenu(
+        onItemTapped: (index, controller) {
+          if (index != 1) controller.closeMenu!();
+        },
+        params: const StarMenuParameters(
+          shape: MenuShape.linear,
+          linearShapeParams: LinearShapeParams(
+              angle: 270, space: 10, alignment: LinearAlignment.center),
+        ),
+        items: [
+          FloatingActionButton(
+            onPressed: () {
+              // show dialog for creating a team
+              _showCreateTeamDialog(context, createTeamFormKey);
+            },
+            child: const Icon(Icons.people),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              // show dialog for adding a volunteer to help center
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      content: Form(
+                          key: assignVolunteerFormKey,
+                          child: SizedBox(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CustomFormField(
+                                  hint: "",
+                                  label: "Volunteer Email",
+                                  labelColor: Colors.black,
+                                  onChanged: (value) {},
+                                ),
+                                Text("OR"),
+                                CustomFormField(
+                                  hint: "",
+                                  label: "Volunteer Phone Number",
+                                  labelColor: Colors.black,
+                                  onChanged: (value) {},
+                                ),
+                              ],
+                            ),
+                          )),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              if (assignVolunteerFormKey.currentState!
+                                  .validate()) {
+                                context.read<TeamCubit>().createNewTeam();
+                              }
+                            },
+                            child: const Text(
+                                "Assign Volunteer to My Help Center")),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Cancel")),
+                      ],
+                    );
+                  });
+            },
+            child: const Icon(Icons.person),
+          ),
+          const SizedBox(height: 70),
+        ],
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: Colors.green,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
+  }
+
+  void _showCreateTeamDialog(
+      BuildContext context, GlobalKey<FormState> formKey) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Form(
+                key: formKey,
+                child: SizedBox(
+                  height: 120,
+                  child: Column(
+                    children: [
+                      CustomFormField(
+                        hint: "",
+                        label: "Team Name",
+                        labelColor: Colors.black,
+                        onChanged: (value) {
+                          context.read<TeamCubit>().newTeam.teamName = value;
+                        },
+                      )
+                    ],
+                  ),
+                )),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Cancel")),
+              TextButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      context.read<TeamCubit>().createNewTeam();
+                    }
+                  },
+                  child: const Text("Create New Team")),
+            ],
+          );
+        });
   }
 }

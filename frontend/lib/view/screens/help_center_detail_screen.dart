@@ -33,12 +33,6 @@ class HelpCenterDetailScreen extends StatelessWidget {
           length: 2,
           child: Column(
             children: [
-              // Image.asset(
-              //   fit: BoxFit.fitWidth,
-              //   width: MediaQuery.of(context).size.width,
-              //   height: MediaQuery.of(context).size.height / 6,
-              //   "assets/images/bilkent.jpg",
-              // ),
               Text(
                 currentCenter.name!,
                 style: const TextStyle(fontSize: 20),
@@ -60,9 +54,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                 TextButton(
                   style: ButtonStyle(
                       backgroundColor:
@@ -97,7 +89,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                  style: TextButton.styleFrom(backgroundColor:Colors.green),
+                  style: TextButton.styleFrom(backgroundColor: Colors.green),
                   onPressed: () {
                     // TODO: Send to help_center_volunteers_screen
                     // which is already defined in the routes

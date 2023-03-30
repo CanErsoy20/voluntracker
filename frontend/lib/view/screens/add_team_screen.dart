@@ -7,14 +7,14 @@ import '../../models/user/user_model.dart';
 import '../../models/user/user_role_model.dart';
 import '../../models/volunteer_model.dart';
 
-class AddTeamScreen extends StatefulWidget {
-  const AddTeamScreen({super.key});
+class AddToTeamScreen extends StatefulWidget {
+  const AddToTeamScreen({super.key});
 
   @override
-  State<AddTeamScreen> createState() => _AddTeamScreenState();
+  State<AddToTeamScreen> createState() => _AddToTeamScreenState();
 }
 
-class _AddTeamScreenState extends State<AddTeamScreen> {
+class _AddToTeamScreenState extends State<AddToTeamScreen> {
   List<Volunteer> volunteers = [
     Volunteer(
       id: 2,
@@ -274,7 +274,7 @@ class _AddTeamScreenState extends State<AddTeamScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Create New Team"),
+        title: Text("Add Members To Team"),
       ),
       endDrawer: CustomDrawer(loggedIn: true),
       body: SingleChildScrollView(
@@ -341,6 +341,7 @@ class _AddTeamScreenState extends State<AddTeamScreen> {
                         ),
                         ListView.builder(
                             itemCount: 5,
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               return Column(
