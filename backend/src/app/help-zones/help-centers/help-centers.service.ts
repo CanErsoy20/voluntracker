@@ -81,7 +81,18 @@ export class HelpCentersService {
         supply: true,
         coordinator: true,
         volunteerTeams: true,
-        volunteers: true,
+        volunteers: {
+          include: {
+            user: true,
+            certificates: true,
+            followedHelpCenters: true,
+            helpCenterCoordinator: true,
+            helpCenter: true,
+            volunteerTeam: true,
+            volunteerTeamLeader: true,
+            volunteerType: true,
+          },
+        },
       },
     });
   }
@@ -96,7 +107,18 @@ export class HelpCentersService {
           supply: true,
           coordinator: true,
           volunteerTeams: true,
-          volunteers: true,
+          volunteers: {
+            include: {
+              user: true,
+              certificates: true,
+              followedHelpCenters: true,
+              helpCenterCoordinator: true,
+              helpCenter: true,
+              volunteerTeam: true,
+              volunteerTeamLeader: true,
+              volunteerType: true,
+            },
+          },
         },
       });
     } catch (e) {
