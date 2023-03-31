@@ -644,7 +644,7 @@ export class HelpCentersController {
   @ApiBadRequestResponse({
     description: 'Could not delete the coordinator at the help center.',
   })
-  @Delete('/helpCenterCoordinator/:volunteerId')
+  @Delete('/remove/helpCenterCoordinator/:volunteerId')
   async deleteCoordinatorFromHelpCenter(@Param('helpCenterId') hcid: string) {
     const hc = await this.helpCentersService.removeCoordinatorFromHelpCenter(+hcid);
 
@@ -663,10 +663,14 @@ export class HelpCentersController {
   @ApiBadRequestResponse({
     description: 'Could not assign the coordinator to the help center.',
   })
-  @Post('/helpCenterCoordinator')
-  async assignCoordinatorToHelpCenter(@Body() createCoordinatorDto: CreateCoordinatorDto) {
+  @Post('/:helpCenterId/helpCenterCoordinator/:volunteerId')
+  async assignCoordinatorToHelpCenter(
+    @Param('helpCenterId') helpCenterId: string,
+    @Param('volunteerId') volunteerId: string,
+  ) {
     const helpCenterWithCoordinator = await this.helpCentersService.assignCoordinatorToHelpCenter(
-      createCoordinatorDto,
+      +helpCenterId,
+      +volunteerId,
     );
 
     if (!helpCenterWithCoordinator) {
