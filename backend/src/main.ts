@@ -15,7 +15,7 @@ async function bootstrap() {
   app.use(helmet());
 
   // Global prefix
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix('v1');
 
   // ValidationPipeline setup
   // {
