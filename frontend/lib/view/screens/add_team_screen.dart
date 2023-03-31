@@ -38,6 +38,7 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
             CustomSnackbars.errorSnackbar(
                 context, state.title, state.description);
           }
+          Navigator.pop(context);
         },
         builder: (context, state) {
           return SingleChildScrollView(

@@ -91,6 +91,47 @@ class LandingPage extends StatelessWidget {
       "route": "/settings",
     },
   ];
+
+  final volunteerCards = [
+    {
+      "title": "Help Center List",
+      "icon": Icons.help,
+      "route": Routes.helpCenterList,
+    },
+    {
+      "title": "Help Center Map",
+      "icon": Icons.help,
+      "route": Routes.mapRoute,
+    },
+    {
+      "title": "My Help Center",
+      "icon": Icons.help,
+      "route": Routes.helpCenterDetail,
+    },
+    {
+      "title": "Favorites",
+      "icon": Icons.favorite,
+      "route": "/volunteer",
+    },
+    {
+      "title": "Contact Us",
+      "icon": Icons.contact_mail,
+      "route": Routes.contactUs,
+    },
+    {
+      "title": "About Us",
+      "icon": Icons.info,
+      "route": Routes.aboutUs,
+    },
+    {
+      "title": "Settings",
+      "icon": Icons.settings,
+      "route": "/settings",
+    }
+  ];
+
+  final teamLeaderCards = [];
+
   final items = [
     {
       "title": "Help Center List",
@@ -146,6 +187,17 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var selectedCards = volunteerCards;
+
+    if (UserInfo.loggedUser!.getHighestRole() == "Volunteer") {
+    } else if (UserInfo.loggedUser!.getHighestRole() ==
+        "HelpCenterCoordinator") {
+      selectedCards = coordinatorCards;
+    } else if (UserInfo.loggedUser!.getHighestRole() == "VolunteerTeamLeader") {
+      selectedCards = volunteerCards;
+    } else if (UserInfo.loggedUser!.getHighestRole() == "Admin") {
+      selectedCards = adminCards;
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Voluntracker"),
@@ -166,11 +218,11 @@ class LandingPage extends StatelessWidget {
                 mainAxisSpacing: 8.0,
                 crossAxisSpacing: 8.0,
                 childAspectRatio: 1.0,
-                children: List.generate(coordinatorCards.length, (index) {
+                children: List.generate(selectedCards.length, (index) {
                   return CustomMenuCard(
-                      title: "${coordinatorCards[index]["title"]}",
-                      icon: coordinatorCards[index]["icon"] as IconData,
-                      route: "${coordinatorCards[index]["route"]}");
+                      title: "${selectedCards[index]["title"]}",
+                      icon: selectedCards[index]["icon"] as IconData,
+                      route: "${selectedCards[index]["route"]}");
                 }),
               ),
             ],

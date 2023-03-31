@@ -81,7 +81,7 @@ class _HelpCenterVolunteersScreenState
           ),
           items: [
             FloatingActionButton.extended(
-              label: SizedBox(
+              label: const SizedBox(
                   width: 140, child: Center(child: const Text("Create Team"))),
               onPressed: () {
                 // show dialog for creating a team
