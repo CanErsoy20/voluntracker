@@ -6,100 +6,140 @@ import 'package:afet_takip/view/widgets/user_bar.dart';
 import 'package:flutter/material.dart';
 
 class LandingPage extends StatelessWidget {
-  final items = [
+  final adminCards = [
     {
       "title": "Help Center List",
       "icon": Icons.help,
-      "roles": [
-        "Volunteer",
-        "VolunteerTeamLeader",
-        "HelpCenterCoordinator",
-        "Admin"
-      ],
       "route": Routes.helpCenterList,
     },
     {
       "title": "Help Center Map",
       "icon": Icons.help,
-      "roles": [
-        "Volunteer",
-        "VolunteerTeamLeader",
-        "HelpCenterCoordinator",
-        "Admin"
-      ],
       "route": Routes.mapRoute,
     },
     {
       "title": "Create Help Center",
       "icon": Icons.help,
-      "roles": ["Admin"],
       "route": Routes.createHelpCenter,
-    },
-    {
-      "title": "Update Help Center",
-      "icon": Icons.help,
-      "roles": ["HelpCenterCoordinator", "Admin"],
-      "route": Routes.updateHelpCenter,
     },
     {
       "title": "Favorites",
       "icon": Icons.favorite,
-      "roles": [
-        "Volunteer",
-        "VolunteerTeamLeader",
-        "HelpCenterCoordinator",
-        "Admin"
-      ],
       "route": "/volunteer",
-    },
-    {
-      "title": "My Help Center",
-      "icon": Icons.help,
-      "roles": [
-        "Volunteer",
-        "VolunteerTeamLeader",
-        "HelpCenterCoordinator",
-        "Admin"
-      ],
-      "route": Routes.helpCenterDetail,
     },
     {
       "title": "Contact Us",
       "icon": Icons.contact_mail,
-      "roles": [
-        "Volunteer",
-        "VolunteerTeamLeader",
-        "HelpCenterCoordinator",
-        "Admin"
-      ],
       "route": Routes.contactUs,
     },
     {
       "title": "About Us",
       "icon": Icons.info,
-      "roles": [
-        "Volunteer",
-        "VolunteerTeamLeader",
-        "HelpCenterCoordinator",
-        "Admin"
-      ],
       "route": Routes.aboutUs,
     },
     {
       "title": "Settings",
       "icon": Icons.settings,
-      "roles": [
-        "Volunteer",
-        "VolunteerTeamLeader",
-        "HelpCenterCoordinator",
-        "Admin"
-      ],
+      "route": "/settings",
+    },
+  ];
+
+  final coordinatorCards = [
+    {
+      "title": "Help Center List",
+      "icon": Icons.help,
+      "route": Routes.helpCenterList,
+    },
+    {
+      "title": "Help Center Map",
+      "icon": Icons.help,
+      "route": Routes.mapRoute,
+    },
+    {
+      "title": "My Teams",
+      "icon": Icons.people,
+      "route": Routes.helpCenterVolunteers,
+    },
+    {
+      "title": "Update Help Center",
+      "icon": Icons.help,
+      "route": Routes.updateHelpCenter,
+    },
+    {
+      "title": "Favorites",
+      "icon": Icons.favorite,
+      "route": "/volunteer",
+    },
+    {
+      "title": "My Help Center",
+      "icon": Icons.help,
+      "route": Routes.helpCenterDetail,
+    },
+    {
+      "title": "Contact Us",
+      "icon": Icons.contact_mail,
+      "route": Routes.contactUs,
+    },
+    {
+      "title": "About Us",
+      "icon": Icons.info,
+      "route": Routes.aboutUs,
+    },
+    {
+      "title": "Settings",
+      "icon": Icons.settings,
+      "route": "/settings",
+    },
+  ];
+  final items = [
+    {
+      "title": "Help Center List",
+      "icon": Icons.help,
+      "route": Routes.helpCenterList,
+    },
+    {
+      "title": "Help Center Map",
+      "icon": Icons.help,
+      "route": Routes.mapRoute,
+    },
+    {
+      "title": "Create Help Center",
+      "icon": Icons.help,
+      "route": Routes.createHelpCenter,
+    },
+    {
+      "title": "Update Help Center",
+      "icon": Icons.help,
+      "route": Routes.updateHelpCenter,
+    },
+    {
+      "title": "Favorites",
+      "icon": Icons.favorite,
+      "route": "/volunteer",
+    },
+    {
+      "title": "My Help Center",
+      "icon": Icons.help,
+      "route": Routes.helpCenterDetail,
+    },
+    {
+      "title": "Contact Us",
+      "icon": Icons.contact_mail,
+      "route": Routes.contactUs,
+    },
+    {
+      "title": "About Us",
+      "icon": Icons.info,
+      "route": Routes.aboutUs,
+    },
+    {
+      "title": "Settings",
+      "icon": Icons.settings,
       "route": "/settings",
     },
     {
       "title": "My Teams",
       "icon": Icons.people,
-      "roles": ["HelpCenterCoordinator"],
       "route": Routes.helpCenterVolunteers,
     }
   ];
@@ -126,12 +166,11 @@ class LandingPage extends StatelessWidget {
                 mainAxisSpacing: 8.0,
                 crossAxisSpacing: 8.0,
                 childAspectRatio: 1.0,
-                // padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-                children: List.generate(items.length, (index) {
+                children: List.generate(coordinatorCards.length, (index) {
                   return CustomMenuCard(
-                      title: "${items[index]["title"]}",
-                      icon: items[index]["icon"] as IconData,
-                      route: "${items[index]["route"]}");
+                      title: "${coordinatorCards[index]["title"]}",
+                      icon: coordinatorCards[index]["icon"] as IconData,
+                      route: "${coordinatorCards[index]["route"]}");
                 }),
               ),
             ],

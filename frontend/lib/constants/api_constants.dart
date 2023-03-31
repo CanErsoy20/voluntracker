@@ -11,4 +11,5 @@ class ApiConstant {
   static String volunteerTeam = "/volunteerTeam/";
   static String assignVolunteer = "assign/volunteer/";
   static String confirmEmail = "emailConfirmation/confirm/";
+  static String volunteer = "volunteer/";
 }

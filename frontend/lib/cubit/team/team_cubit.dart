@@ -2,6 +2,7 @@ import 'package:afet_takip/models/create_team_model.dart';
 import 'package:afet_takip/models/user/user_info.dart';
 import 'package:bloc/bloc.dart';
 
+import '../../models/add_volunteer_response_model.dart';
 import '../../models/volunteer_model.dart';
 import '../../models/volunteer_team_model.dart';
 import '../../services/team_service.dart';
@@ -23,6 +24,23 @@ class TeamCubit extends Cubit<TeamState> {
           "Creation Successful", "Successfully created a new team"));
     } else {
       emit(TeamError("Creation Failed", "Could not create a new team"));
+    }
+  }
+
+  Future<void> addVolunteers() async {
+    emit(TeamLoading());
+    List<int> volunteerIdList = [];
+    for (var i = 0; i < volunteersToAdd.length; i++) {
+      volunteerIdList.add(volunteersToAdd[i].id!);
+    }
+    AddVolunteerResponseModel? response = await service.addVolunteers(
+        selectedTeam.helpCenterId!, selectedTeam.id!, volunteerIdList);
+    if (response != null) {
+      emit(TeamSuccess(
+          "Add Successful", "Successfully added volunteers to the team"));
+    } else {
+      emit(TeamError(
+          "Adding Failed", "Could not add the volunteers to the team"));
     }
   }
 
