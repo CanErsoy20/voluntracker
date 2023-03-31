@@ -135,6 +135,28 @@ const logger: Logger = new Logger();
 async function main() {
   await prisma.supplyType.createMany({
     data: [...supplyTypeCategoryObjects],
+    skipDuplicates: true,
+  });
+
+  // TODO: Seed volunteer type, volunter category
+  await prisma.volunteerType.createMany({
+    data: [
+      { category: 'Labor', typeName: 'Carrier' },
+      { category: 'Management', typeName: 'Carrier' },
+    ],
+    skipDuplicates: true,
+  });
+
+  // TODO: Seed user role
+
+  await prisma.userRole.createMany({
+    data: [
+      { roleName: 'Volunteer' },
+      { roleName: 'HelpCenterCoordinator' },
+      { roleName: 'VolunteerTeamLeader' },
+      { roleName: 'Admin' },
+    ],
+    skipDuplicates: true,
   });
 }
 
@@ -142,7 +164,6 @@ main()
   .catch((e) => {
     logger.log(e);
     console.error(e);
-    process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();
