@@ -94,7 +94,23 @@ export class AuthService {
         },
         include: {
           userRole: true,
-          volunteer: true,
+          volunteer: {
+            include: {
+              certificates: true,
+              followedHelpCenters: true,
+              helpCenter: true,
+              helpCenterCoordinator: true,
+              volunteerTeam: {
+                include: {
+                  teamLeader: true,
+                },
+              },
+              user: true,
+              volunteerTeamLeader: true,
+              volunteerType: true,
+            },
+          },
+          admin: true,
         },
       });
 
