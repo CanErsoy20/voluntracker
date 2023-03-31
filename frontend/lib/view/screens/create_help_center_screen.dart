@@ -42,6 +42,7 @@ class _CreateHelpCenterScreenState extends State<CreateHelpCenterScreen> {
             if (state is HelpCenterSuccess) {
               CustomSnackbars.successSnackbar(
                   context, state.title, state.description);
+              Navigator.pop(context);
             } else if (state is HelpCenterError) {
               CustomSnackbars.errorSnackbar(
                   context, state.title, state.description);

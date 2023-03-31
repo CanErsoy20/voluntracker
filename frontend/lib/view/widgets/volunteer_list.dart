@@ -1,7 +1,9 @@
+import 'package:afet_takip/cubit/team/team_cubit.dart';
 import 'package:afet_takip/models/volunteer_team_model.dart';
 import 'package:afet_takip/models/volunteer_model.dart';
 import 'package:afet_takip/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VolunteerList extends StatelessWidget {
   final List<VolunteerTeam> volunteerTeams;
@@ -17,21 +19,23 @@ class VolunteerList extends StatelessWidget {
           shrinkWrap: true,
           itemCount: volunteerTeams.length,
           itemBuilder: (context, index) {
-            final volunteerTeam = volunteerTeams[index];
+            final currentVolunteerTeam = volunteerTeams[index];
             return ExpansionTile(
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(volunteerTeam.teamName!),
+                  Text(currentVolunteerTeam.teamName!),
                   TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, Routes.addTeam);
+                        context.read<TeamCubit>().selectedTeam =
+                            currentVolunteerTeam;
                       },
                       child: const Text("Add Member"))
                 ],
               ),
-              children: volunteerTeam.volunteers != null
-                  ? _buildVolunteerList(volunteerTeam.volunteers!)
+              children: currentVolunteerTeam.volunteers != null
+                  ? _buildVolunteerList(currentVolunteerTeam.volunteers!)
                   : [
                       const Text(
                         "There are no volunteers in this team at the moment",

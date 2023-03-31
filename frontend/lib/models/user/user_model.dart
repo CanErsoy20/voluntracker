@@ -69,16 +69,16 @@ class UserModel {
     }
     return data;
   }
-  
+
   // Create a Map of importance
   Map<String, int> roleImportance = {
     "Volunteer": 1,
-    "Volunteer Team Leader": 2,
-    "Help Center Coordinator": 3,
+    "VolunteerTeamLeader": 2,
+    "HelpCenterCoordinator": 3,
     "Admin": 4
   };
 
-  String getHighestRole(){
+  String getHighestRole() {
     // Get the highest role according to ruleImportance
     String highestRole = "Volunteer";
     for (var role in userRole!) {
@@ -88,5 +88,4 @@ class UserModel {
     }
     return highestRole;
   }
-
 }

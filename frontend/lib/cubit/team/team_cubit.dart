@@ -10,6 +10,7 @@ class TeamCubit extends Cubit<TeamState> {
   TeamCubit(this.service) : super(TeamInitial());
   TeamService service;
   CreateTeamModel newTeam = CreateTeamModel();
+  VolunteerTeam selectedTeam = VolunteerTeam(volunteers: []);
   Future<void> createNewTeam() async {
     emit(TeamLoading());
 
@@ -25,5 +26,9 @@ class TeamCubit extends Cubit<TeamState> {
 
   void emitDisplay() {
     emit(TeamDisplay());
+  }
+
+  void emitLoading() {
+    emit(TeamLoading());
   }
 }

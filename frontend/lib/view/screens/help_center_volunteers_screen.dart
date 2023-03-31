@@ -48,6 +48,8 @@ class _HelpCenterVolunteersScreenState
                   context, state.title, state.description);
 
               Navigator.pop(context);
+              context.read<TeamCubit>().emitLoading();
+              context.read<HelpCenterCubit>().getMyCenter();
               context.read<TeamCubit>().emitDisplay();
             } else if (state is TeamError) {
               CustomSnackbars.errorSnackbar(
@@ -59,12 +61,13 @@ class _HelpCenterVolunteersScreenState
               return const Center(
                 child: LoadingWidget(),
               );
+            } else {
+              return VolunteerList(
+                volunteerTeams:
+                    context.read<HelpCenterCubit>().myCenter!.volunteerTeams ??
+                        [],
+              );
             }
-            return VolunteerList(
-              volunteerTeams:
-                  context.read<HelpCenterCubit>().myCenter!.volunteerTeams ??
-                      [],
-            );
           },
         ),
         floatingActionButton: StarMenu(
