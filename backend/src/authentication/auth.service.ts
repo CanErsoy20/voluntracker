@@ -110,6 +110,7 @@ export class AuthService {
               volunteerType: true,
             },
           },
+          admin: true,
         },
       });
 
