@@ -9,6 +9,7 @@
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
+- [Authors](#authors)
 
 ## Google Technologies Used
 
@@ -83,3 +84,10 @@ As this is a Google Solution Challenge project, we do not allow third-party cont
 ## License
 
 This project is licensed under the MIT License.```
+
+## Authors
+
+- Berra Yüce [📧](berrayuce@gmail.com)
+- Can Ersoy [📧](canersoy2002@gmail.com)
+- Selim Can Güler [📧](mailto:cs.selim.guler@gmail.com)
+- Tolga Özgün [📧](mailto:tolgaozgunn@gmail.com)
