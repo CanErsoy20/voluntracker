@@ -2,6 +2,7 @@ import 'package:afet_takip/models/create_team_model.dart';
 import 'package:afet_takip/models/user/user_info.dart';
 import 'package:bloc/bloc.dart';
 
+import '../../models/volunteer_model.dart';
 import '../../models/volunteer_team_model.dart';
 import '../../services/team_service.dart';
 part 'team_state.dart';
@@ -11,6 +12,7 @@ class TeamCubit extends Cubit<TeamState> {
   TeamService service;
   CreateTeamModel newTeam = CreateTeamModel();
   VolunteerTeam selectedTeam = VolunteerTeam(volunteers: []);
+  List<Volunteer> volunteersToAdd = [];
   Future<void> createNewTeam() async {
     emit(TeamLoading());
 
@@ -22,6 +24,22 @@ class TeamCubit extends Cubit<TeamState> {
     } else {
       emit(TeamError("Creation Failed", "Could not create a new team"));
     }
+  }
+
+  bool isInList(Volunteer volunteer) {
+    return volunteersToAdd.contains(volunteer);
+  }
+
+  void addToList(Volunteer volunteer) {
+    emit(TeamVolunteerAdding());
+    volunteersToAdd.add(volunteer);
+    emit(TeamDisplay());
+  }
+
+  void removeFromList(int index) {
+    emit(TeamVolunteerRemove());
+    volunteersToAdd.removeAt(index);
+    emit(TeamDisplay());
   }
 
   void emitDisplay() {

@@ -8,6 +8,10 @@ class TeamLoading extends TeamState {}
 
 class TeamDisplay extends TeamState {}
 
+class TeamVolunteerAdding extends TeamState {}
+
+class TeamVolunteerRemove extends TeamState {}
+
 class TeamSuccess extends TeamState {
   final String title;
   final String description;
