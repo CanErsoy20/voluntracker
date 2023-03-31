@@ -5,11 +5,8 @@ class CustomMenuCard extends StatelessWidget {
   final IconData icon;
   final String route;
 
-  CustomMenuCard({
-    required this.title,
-    required this.icon,
-    required this.route
-  });
+  CustomMenuCard(
+      {required this.title, required this.icon, required this.route});
 
   @override
   Widget build(BuildContext context) {
@@ -25,27 +22,32 @@ class CustomMenuCard extends StatelessWidget {
         child: SizedBox(
           width: double.infinity,
           height: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Icon(
-                  icon,
-                  color: Colors.black,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Icon(
+                    icon,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 8.0),
+                Text(
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

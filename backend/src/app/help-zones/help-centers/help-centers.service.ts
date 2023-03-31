@@ -84,7 +84,22 @@ export class HelpCentersService {
           include: {
             helpCenter: true,
             teamLeader: true,
-            volunteers: true,
+            volunteers: {
+              include: {
+                user: {
+                  include: {
+                    userRole: true,
+                  },
+                },
+                certificates: true,
+                followedHelpCenters: true,
+                helpCenterCoordinator: true,
+                helpCenter: true,
+                volunteerTeam: true,
+                volunteerTeamLeader: true,
+                volunteerType: true,
+              },
+            },
           },
         },
         volunteers: {
@@ -118,7 +133,11 @@ export class HelpCentersService {
               teamLeader: true,
               volunteers: {
                 include: {
-                  user: true,
+                  user: {
+                    include: {
+                      userRole: true,
+                    },
+                  },
                   certificates: true,
                   followedHelpCenters: true,
                   helpCenterCoordinator: true,
@@ -557,6 +576,7 @@ export class HelpCentersService {
       if (volunteer.helpCenterId === null || volunteer.helpCenterId === undefined) {
         invalidRequests.push({
           id: volunteer.id,
+          userId: volunteer.userId,
           message: `This volunteer is not registered to any help center. Make sure the volunteer is registered to the 
             help center before assigning them to a team.`,
         });
@@ -566,6 +586,7 @@ export class HelpCentersService {
       if (volunteer.helpCenterId !== helpCenterId) {
         invalidRequests.push({
           id: volunteer.id,
+          userId: volunteer.userId,
           message: `This volunteer is registered to a different help center. Make sure the user is registered to the
         help center you are trying to access before assigning them to a team.`,
         });
@@ -574,24 +595,19 @@ export class HelpCentersService {
       validRequests.push({ id: volunteer.id });
     }
 
-    const connectIds = volunteers.map((v) => {
+    const connectIds = validRequests.map((v) => {
       return {
         id: v.id,
-        volunteerTeamId,
       };
     });
-    const updatedHelpCenter = await this.prisma.helpCenter.update({
+    await this.prisma.volunteerTeam.update({
       where: {
-        id: helpCenterId,
+        id: volunteerTeamId,
       },
       data: {
         volunteers: {
           connect: [...connectIds],
         },
-      },
-      include: {
-        volunteers: true,
-        volunteerTeams: true,
       },
     });
 
@@ -653,7 +669,6 @@ export class HelpCentersService {
         volunteers: {
           connect: {
             id: volunteerId,
-            volunteerTeamId,
           },
         },
       },

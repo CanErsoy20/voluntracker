@@ -185,8 +185,6 @@ enum SupplyCategoryEnum {
 
 enum VolunteerTypeEnum {
   Carrier
-  SupplyCoordinator
-  
 }
 
 
@@ -431,7 +429,7 @@ model Volunteer {
   volunteerType   VolunteerType? @relation(fields: [volunteerTypeName, volunteerTypeCategory], references: [typeName, category])
 
   // Volunteers will be assigned to teams, but they might be unassigned.
-  volunteerTeamId Int? @unique
+  volunteerTeamId Int?
   volunteerTeam VolunteerTeam? @relation(fields: [volunteerTeamId], references: [id])
 
   helpCenterId Int?
