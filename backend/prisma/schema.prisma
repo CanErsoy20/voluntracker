@@ -26,15 +26,36 @@ enum SupplyTypeEnum {
   Biscuit
   Cracker
   EnergyBar
+  Flour
+  Sugar
+  Salt
+  Spice
+  CookingOil
+  ProteinBar
 
   // Drink
   InfantMilk
   BottledWater
+  Tea
+  Coffee
+  FruitJuice
+  VegetableJuice
 
-  // Medical Supply
-  BandAid
+
+  // MedicalSupply
   Bandage
   Gauze
+  AntisepticWipes
+  DisposableGloves
+  FaceMasks
+  SterileSyringes
+  Tourniquet
+  FirstAidKit
+  PrescriptionMedications
+  OxygenTank
+  Thermometer
+  Epipen
+  Antiacid
 
   // ShelterMaterial
   Blanket
@@ -42,29 +63,105 @@ enum SupplyTypeEnum {
   Tent
 
   // Clothing
+  Tshirt
+  Sweatshirt
+  Pants
+  Short
+  Underwear
+  Sock
+  Shoe
+  Sandal
+  Boot
+  Raincoat
+  WinterCoat
+  Hat
+  Glove
+  Scarve
+  Sunglass
+  Belt
+  Pajama
+  Bathrobe
 
-  // Personal Hygiene Products
+  // PersonalHygieneProducts
+  Soap
+  Shampoo
+  Toothbrush
+  Toothpaste
+  DentalFloss
+  Razor
+  ShavingCream
+  Deodorant
+  Tissue
+  ToiletPaper
+  WetWipe
+  InsectRepellant
+  ContactLensSolution
+  NailClipper
+  Pad
+  Tampon
 
-  // Tools and Equipment
+  // ToolsAndEquipment
+  Hammer
+  Screwdriver
+  Wrench
+  Plier
+  Handsaw
+  Axe
+  Shovel
+  Rake
+  Whellbarrow
+  Crowbar
+  WireCutter
+  UtilityKnife
+  DuctTape
+  Rope
+  Chainsaw
+  Nail
+  Fuel
 
-  // Communication Devices
+  // CommunicationDevices
+  PortableRadio
+  SattelitePhone
+  CellPhone
+  EmergencyWhistle
+  PortableWifiHotspot
 
-  // Cleaning Products
+  // CleaningProducts
+  Bleach
+  DisinfectantWipe
+  TrashBag
+  Mop
+  Broom
+  Dustpan
+  Sponge
+  Bucket
+  MicrofiberCloths
 
-  // Power Sources
+  // PowerSources
   Battery
+  Generator
+  PowerBank
 
-  // Cooking Supplies
+  // CookingSupplies
+  PortableStove
+  PropaneTank
+  CampingCookwareSet
+  Spatula
+  Plate
+  Bowl
+  Fork
+  Knive
+  Spoon
+  PaperPlate
+  PlasticUtensil
+  CanOpener
 
-  // Educational Materials
+  // EducationalMaterials
+  ChildrenBook
+  Book
 
-  // Construction Materials
-
-  // Animal Suppplies
-
-  // Search and Rescue Equipment
-
-  // Sanitation Supply
+  // AnimalSupplies
+  AnimalFood
 }
 
 
@@ -83,8 +180,6 @@ enum SupplyCategoryEnum {
   EducationalMaterials
   ConstructionMaterials
   AnimalSupplies
-  SearchAndResqueEquipment
-  SanitationSupply
 }
 
 
