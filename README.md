@@ -87,7 +87,7 @@ This project is licensed under the MIT License.```
 
 ## Authors
 
-- Berra Yüce [📧](berrayuce@gmail.com)
-- Can Ersoy [📧](canersoy2002@gmail.com)
-- Selim Can Güler [📧](mailto:cs.selim.guler@gmail.com)
-- Tolga Özgün [📧](mailto:tolgaozgunn@gmail.com)
+- Berra Yüce [📧](berrayuce@gmail.com)[🌐]()[<img src="./icons/Github-Dark.svg" width="24">]()
+- Can Ersoy [📧](canersoy2002@gmail.com)[🌐]()[<img src="./icons/Github-Dark.svg" width="24">]()
+- Selim Can Güler [📧](mailto:cs.selim.guler@gmail.com)[🌐]()[<img src="./icons/Github-Dark.svg" width="24">]()
+- Tolga Özgün [📧](mailto:tolgaozgunn@gmail.com)[🌐](https://tolgaozgun.com)[<img src="./icons/Github-Dark.svg" width="24">](https://github.com/tolgaozgun)
