@@ -5,7 +5,6 @@ import 'package:afet_takip/view/widgets/custom_menu_card.dart';
 import 'package:afet_takip/view/widgets/user_bar.dart';
 import 'package:flutter/material.dart';
 
-
 class LandingPage extends StatelessWidget {
   final items = [
     {
@@ -26,7 +25,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Contact Us",
       "icon": Icons.contact_mail,
-      "route": Routes.contactUsRoute,
+      "route": Routes.contactUs,
     },
     {
       "title": "About Us",
@@ -41,7 +40,7 @@ class LandingPage extends StatelessWidget {
     {
       'title': "Email Verification",
       'icon': Icons.email,
-      'route': Routes.emailVerificationRoute,
+      'route': Routes.emailVerification,
     }
   ];
 
@@ -70,15 +69,15 @@ class LandingPage extends StatelessWidget {
                 // padding: EdgeInsets.fromLTRB(left, top, right, bottom),
                 children: List.generate(items.length, (index) {
                   return CustomMenuCard(
-                    title: "${items[index]["title"]}", 
-                    icon: items[index]["icon"] as IconData, 
-                    route: "${items[index]["route"]}");
+                      title: "${items[index]["title"]}",
+                      icon: items[index]["icon"] as IconData,
+                      route: "${items[index]["route"]}");
                 }),
-                ),
+              ),
             ],
           ),
         ),
-        ),
-      );
+      ),
+    );
   }
 }

@@ -28,10 +28,10 @@ class Routes {
   static const String createHelpCenter = "/create-help-center";
   static const String updateHelpCenter = "/update-help-center";
   static const String addTeam = "/add-team";
-  static const String profileRoute = "/profile";
-  static const String contactUsRoute = "/contact-us";
-  static const String emailVerificationRoute = "/email-verification";
-  static const String aboutUsRoute = "/about-us";
+  static const String profile = "/profile";
+  static const String contactUs = "/contact-us";
+  static const String emailVerification = "/email-verification";
+  static const String aboutUs = "/about-us";
 }
 
 class RouteGenerator {
@@ -59,13 +59,13 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => HelpCenterVolunteersScreen());
       case Routes.landingPageRoute:
         return MaterialPageRoute(builder: (_) => LandingPage());
-      case Routes.profileRoute:
+      case Routes.profile:
         return MaterialPageRoute(builder: (_) => ProfileScreen());
-      case Routes.contactUsRoute:
+      case Routes.contactUs:
         return MaterialPageRoute(builder: (_) => ContactUsScreen());
-      case Routes.emailVerificationRoute:
+      case Routes.emailVerification:
         return MaterialPageRoute(builder: (_) => EmailVerificationScreen());
-      case Routes.aboutUsRoute:
+      case Routes.aboutUs:
         return MaterialPageRoute(builder: (_) => AboutUsScreen());
       default:
         return MaterialPageRoute(builder: (_) => UndefinedScreen());
