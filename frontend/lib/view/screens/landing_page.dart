@@ -6,41 +6,61 @@ import 'package:afet_takip/view/widgets/user_bar.dart';
 import 'package:flutter/material.dart';
 
 class LandingPage extends StatelessWidget {
+
   final items = [
     {
       "title": "Help Center List",
       "icon": Icons.help,
+      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
       "route": Routes.helpCenterList,
     },
     {
       "title": "Help Center Map",
       "icon": Icons.help,
+      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
       "route": Routes.mapRoute,
+    },
+    {
+      "title": "Create Help Center",
+      "icon": Icons.help,
+      "roles": ["Admin"],
+      "route": Routes.createHelpCenter,
+    },
+    {
+      "title": "Update Help Center",
+      "icon": Icons.help,
+      "roles": ["HelpCenterCoordinator", "Admin"],
+      "route": Routes.updateHelpCenter,
     },
     {
       "title": "Favorites",
       "icon": Icons.favorite,
+      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
       "route": "/volunteer",
+    },
+    {
+      "title": "My Help Center",
+      "icon": Icons.help,
+      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
+      "route": Routes.helpCenterDetail,
     },
     {
       "title": "Contact Us",
       "icon": Icons.contact_mail,
+      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
       "route": Routes.contactUs,
     },
     {
       "title": "About Us",
       "icon": Icons.info,
-      "route": "/about-us",
+      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
+      "route": Routes.aboutUs,
     },
     {
       "title": "Settings",
       "icon": Icons.settings,
+      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
       "route": "/settings",
-    },
-    {
-      'title': "Email Verification",
-      'icon': Icons.email,
-      'route': Routes.emailVerification,
     }
   ];
 
