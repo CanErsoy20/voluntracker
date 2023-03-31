@@ -14,7 +14,7 @@ export class EmailConfirmationController {
   @Post('confirm')
   async confirm(@Body() confirmationData: ConfirmEmailDto) {
     const { code, email } = confirmationData;
-    const isConfirmed = this.emailConfirmationService.confirmEmailCode(email, code);
+    const isConfirmed = await this.emailConfirmationService.confirmEmailCode(email, code);
 
     if (!isConfirmed) {
       throw new BadRequestException('The code entered does not match the code in the database.');

@@ -185,6 +185,8 @@ enum SupplyCategoryEnum {
 
 enum VolunteerTypeEnum {
   Carrier
+  SupplyCoordinator
+  
 }
 
 
