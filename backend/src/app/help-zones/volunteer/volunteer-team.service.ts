@@ -21,6 +21,11 @@ export class VolunteerTeamService {
     private readonly userRoleService: UserRolesService,
   ) {}
 
+  async getAllVolunteerTeams() {
+    const volunteerTeams = await this.prisma.volunteerTeam.findMany();
+    return volunteerTeams;
+  }
+
   async getVolunteerTeam(vtId: number) {
     const volunteerTeam = await this.prisma.volunteerTeam.findUnique({
       where: { id: vtId },
