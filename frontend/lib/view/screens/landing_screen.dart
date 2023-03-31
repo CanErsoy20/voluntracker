@@ -61,12 +61,12 @@ class _LandingScreenState extends State<LandingScreen> {
                 child: const Text("Help Center Detail Screen")),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.helpCenterVolunteers);
+                  Navigator.of(context).pushNamed(Routes.volunteerTeams);
                 },
                 child: const Text("Help Center Volunteers Screen")),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.addTeam);
+                  Navigator.of(context).pushNamed(Routes.addToTeam);
                 },
                 child: const Text("Add Team Screen")),
             ElevatedButton(

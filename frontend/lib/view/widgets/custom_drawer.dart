@@ -1,7 +1,6 @@
 import 'package:afet_takip/router.dart';
 import 'package:afet_takip/view/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 
 import '../../models/user/user_info.dart';
 
@@ -56,6 +55,30 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 )
               : const SizedBox.shrink(),
+          loggedIn
+              ? const SizedBox.shrink()
+              : DrawerComponent(
+                  title: "Sign Up",
+                  onTap: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, Routes.registerRoute, (route) => false);
+                  },
+                  prefixIcon: const Icon(
+                    Icons.app_registration_rounded,
+                    color: Colors.white,
+                  )),
+          loggedIn
+              ? const SizedBox.shrink()
+              : DrawerComponent(
+                  title: "Login",
+                  onTap: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, Routes.loginRoute, (route) => false);
+                  },
+                  prefixIcon: const Icon(
+                    Icons.lock_open_sharp,
+                    color: Colors.white,
+                  )),
           DrawerComponent(
             title: "About Us",
             onTap: () {

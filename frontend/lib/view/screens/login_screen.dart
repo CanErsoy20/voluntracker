@@ -103,15 +103,48 @@ class _LoginScreenState extends State<LoginScreen> {
                 context.read<LoginCubit>().loginModel.password = value;
               },
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Forgot Password?",
-                    style: TextStyle(color: Colors.white),
-                  )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "Forgot Password?",
+                      style: TextStyle(color: Colors.white),
+                    )),
+                Row(
+                  children: [
+                    const Text(
+                      "Remember Me",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    IconButton(
+                        onPressed: () {},
+                        icon: false
+                            ? const Icon(
+                                Icons.check_box_outline_blank_outlined,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                Icons.check_box_outlined,
+                                color: Colors.white,
+                              ))
+                  ],
+                ),
+              ],
             ),
+            SizedBox(
+              height: 5,
+            ),
+            // Align(
+            //   alignment: Alignment.centerLeft,
+            //   child: TextButton(
+            //       onPressed: () {},
+            //       child: const Text(
+            //         "Forgot Password?",
+            //         style: TextStyle(color: Colors.white),
+            //       )),
+            // ),
             ElevatedButton(
               onPressed: () {
                 if (formKey.currentState!.validate()) {

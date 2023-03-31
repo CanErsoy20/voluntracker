@@ -1,19 +1,19 @@
-import 'package:afet_takip/view/screens/add_team_screen.dart';
+import 'package:afet_takip/view/screens/add_to_team_screen.dart';
 import 'package:afet_takip/view/screens/create_help_center_screen.dart';
 import 'package:afet_takip/view/screens/help_center_detail_screen.dart';
 import 'package:afet_takip/view/screens/help_center_list_screen.dart';
-import 'package:afet_takip/view/screens/landing_screen.dart';
 import 'package:afet_takip/view/screens/login_screen.dart';
 import 'package:afet_takip/view/screens/map_screen.dart';
+import 'package:afet_takip/view/screens/my_team_screen.dart';
 import 'package:afet_takip/view/screens/sign_up_screen.dart';
 import 'package:afet_takip/view/screens/undefined_screen.dart';
 import 'package:afet_takip/view/screens/update_help_center_screen.dart';
-import 'package:afet_takip/view/screens/help_center_volunteers_screen.dart';
 import 'package:afet_takip/view/screens/landing_page.dart';
 import 'package:afet_takip/view/screens/profile_screen.dart';
 import 'package:afet_takip/view/screens/contact_us_screen.dart';
 import 'package:afet_takip/view/screens/email_verification_screen.dart';
 import 'package:afet_takip/view/screens/about_us_screen.dart';
+import 'package:afet_takip/view/screens/volunteer_teams_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
@@ -24,14 +24,15 @@ class Routes {
   static const String mapRoute = "/map";
   static const String helpCenterList = "/help-center-list";
   static const String helpCenterDetail = "/help-center-details";
-  static const String helpCenterVolunteers = "/help-center-volunteers";
+  static const String volunteerTeams = "/help-center-volunteers";
   static const String createHelpCenter = "/create-help-center";
   static const String updateHelpCenter = "/update-help-center";
-  static const String addTeam = "/add-team";
+  static const String addToTeam = "/add-team";
   static const String profile = "/profile";
   static const String contactUs = "/contact-us";
   static const String emailVerification = "/email-verification";
   static const String aboutUs = "/about-us";
+  static const String myTeam = "/my-team";
 }
 
 class RouteGenerator {
@@ -53,10 +54,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => CreateHelpCenterScreen());
       case Routes.updateHelpCenter:
         return MaterialPageRoute(builder: (_) => UpdateHelpCenterScreen());
-      case Routes.addTeam:
+      case Routes.addToTeam:
         return MaterialPageRoute(builder: (_) => AddToTeamScreen());
-      case Routes.helpCenterVolunteers:
-        return MaterialPageRoute(builder: (_) => HelpCenterVolunteersScreen());
+      case Routes.volunteerTeams:
+        return MaterialPageRoute(builder: (_) => VolunteerTeamsScreen());
       case Routes.landingPageRoute:
         return MaterialPageRoute(builder: (_) => LandingPage());
       case Routes.profile:
@@ -67,6 +68,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => EmailVerificationScreen());
       case Routes.aboutUs:
         return MaterialPageRoute(builder: (_) => AboutUsScreen());
+      case Routes.myTeam:
+        return MaterialPageRoute(builder: (_) => MyTeamScreen());
       default:
         return MaterialPageRoute(builder: (_) => UndefinedScreen());
     }

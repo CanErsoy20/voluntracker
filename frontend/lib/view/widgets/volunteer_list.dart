@@ -27,7 +27,7 @@ class VolunteerList extends StatelessWidget {
                   Text(currentVolunteerTeam.teamName!),
                   TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, Routes.addTeam);
+                        Navigator.pushNamed(context, Routes.addToTeam);
                         context.read<TeamCubit>().selectedTeam =
                             currentVolunteerTeam;
                       },
@@ -51,7 +51,7 @@ class VolunteerList extends StatelessWidget {
         ),
       );
     } else {
-      return Center(
+      return const Center(
         child: Text(
           "No volunteer team found.",
           style: TextStyle(color: Colors.white),
@@ -66,11 +66,13 @@ class VolunteerList extends StatelessWidget {
           .map((volunteer) => ListTile(
                 leading: CircleAvatar(),
                 title: Text(
-                    "${volunteer.user?.firstname} ${volunteer.user?.surname}}"),
+                    "${volunteer.user?.firstname} ${volunteer.user?.surname}"),
                 subtitle: Text("${volunteer.user?.getHighestRole()}"),
                 trailing: IconButton(
                   icon: Icon(Icons.more_vert),
-                  onPressed: () {},
+                  onPressed: () {
+                    // remove from team
+                  },
                 ),
               ))
           .toList();

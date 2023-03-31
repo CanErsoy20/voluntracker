@@ -1,5 +1,4 @@
 import 'package:afet_takip/view/widgets/custom_drawer.dart';
-import 'package:afet_takip/view/widgets/custom_text_form_field.dart';
 import 'package:afet_takip/view/widgets/participant_circle.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../cubit/help_centers/help_center_cubit.dart';
 import '../../cubit/team/team_cubit.dart';
-import '../../models/user/user_model.dart';
-import '../../models/user/user_role_model.dart';
 import '../../models/volunteer_model.dart';
 import '../widgets/custom_snackbars.dart';
 
@@ -37,26 +34,34 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
           } else if (state is TeamError) {
             CustomSnackbars.errorSnackbar(
                 context, state.title, state.description);
+            Navigator.pop(context);
           }
-          Navigator.pop(context);
         },
         builder: (context, state) {
           return SingleChildScrollView(
-            child: Column(children: [
-              Padding(
-                  padding: const EdgeInsets.all(25.0),
-                  child: Row(
-                    children: [
-                      Text(
-                          "Team Name: ${context.read<TeamCubit>().selectedTeam.teamName}")
-                    ],
-                  )),
-              const Text("Team members: "),
-              const SizedBox(
-                height: 10,
-              ),
-              _buildVolunteerList()
-            ]),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.all(25.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Team Name: ${context.read<TeamCubit>().selectedTeam.teamName}",
+                            style: const TextStyle(fontSize: 24),
+                          )
+                        ],
+                      )),
+                  const Text(
+                    "Team members: ",
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _buildVolunteerList()
+                ]),
           );
         },
       ),
@@ -83,6 +88,8 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                               child: TextButton(
                                   onPressed: () {
                                     context.read<TeamCubit>().addVolunteers();
+                                    context.read<TeamCubit>().volunteersToAdd =
+                                        [];
                                   },
                                   child: const Text(
                                     "Add to team",
@@ -152,11 +159,11 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                                                     .isInList(
                                                         helpCenterVolunteers[
                                                             index])
-                                                ? Icon(
+                                                ? const Icon(
                                                     Icons.check_circle,
                                                     color: Colors.green,
                                                   )
-                                                : Icon(Icons
+                                                : const Icon(Icons
                                                     .check_circle_outline_outlined)),
                                       ),
                                       const Divider(
