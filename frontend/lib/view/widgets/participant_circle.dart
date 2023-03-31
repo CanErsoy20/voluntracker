@@ -1,11 +1,10 @@
 import 'package:afet_takip/view/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class ParticipantCircleAvatar extends StatelessWidget {
-  const ParticipantCircleAvatar({super.key});
-
+  ParticipantCircleAvatar({this.name, this.onClosePressed, super.key});
+  String? name;
+  void Function()? onClosePressed;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,7 +29,7 @@ class ParticipantCircleAvatar extends StatelessWidget {
                   bottom: -12,
                   right: -12,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: onClosePressed ?? () {},
                     icon: const Icon(
                       Icons.close,
                       size: 24,
@@ -40,7 +39,7 @@ class ParticipantCircleAvatar extends StatelessWidget {
               ])),
         ]),
         Text(
-          "Name",
+          name ?? "No name",
           style: TextStyle(color: Colors.blue),
         )
       ],

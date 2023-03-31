@@ -6,18 +6,27 @@ import 'package:afet_takip/view/widgets/user_bar.dart';
 import 'package:flutter/material.dart';
 
 class LandingPage extends StatelessWidget {
-
   final items = [
     {
       "title": "Help Center List",
       "icon": Icons.help,
-      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
+      "roles": [
+        "Volunteer",
+        "VolunteerTeamLeader",
+        "HelpCenterCoordinator",
+        "Admin"
+      ],
       "route": Routes.helpCenterList,
     },
     {
       "title": "Help Center Map",
       "icon": Icons.help,
-      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
+      "roles": [
+        "Volunteer",
+        "VolunteerTeamLeader",
+        "HelpCenterCoordinator",
+        "Admin"
+      ],
       "route": Routes.mapRoute,
     },
     {
@@ -35,32 +44,63 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Favorites",
       "icon": Icons.favorite,
-      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
+      "roles": [
+        "Volunteer",
+        "VolunteerTeamLeader",
+        "HelpCenterCoordinator",
+        "Admin"
+      ],
       "route": "/volunteer",
     },
     {
       "title": "My Help Center",
       "icon": Icons.help,
-      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
+      "roles": [
+        "Volunteer",
+        "VolunteerTeamLeader",
+        "HelpCenterCoordinator",
+        "Admin"
+      ],
       "route": Routes.helpCenterDetail,
     },
     {
       "title": "Contact Us",
       "icon": Icons.contact_mail,
-      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
+      "roles": [
+        "Volunteer",
+        "VolunteerTeamLeader",
+        "HelpCenterCoordinator",
+        "Admin"
+      ],
       "route": Routes.contactUs,
     },
     {
       "title": "About Us",
       "icon": Icons.info,
-      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
+      "roles": [
+        "Volunteer",
+        "VolunteerTeamLeader",
+        "HelpCenterCoordinator",
+        "Admin"
+      ],
       "route": Routes.aboutUs,
     },
     {
       "title": "Settings",
       "icon": Icons.settings,
-      "roles": ["Volunteer", "VolunteerTeamLeader", "HelpCenterCoordinator", "Admin"],
+      "roles": [
+        "Volunteer",
+        "VolunteerTeamLeader",
+        "HelpCenterCoordinator",
+        "Admin"
+      ],
       "route": "/settings",
+    },
+    {
+      "title": "My Teams",
+      "icon": Icons.people,
+      "roles": ["HelpCenterCoordinator"],
+      "route": Routes.helpCenterVolunteers,
     }
   ];
 

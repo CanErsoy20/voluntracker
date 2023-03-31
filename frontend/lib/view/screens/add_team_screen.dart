@@ -41,98 +41,126 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
           const SizedBox(
             height: 10,
           ),
-          _buildVolunteerList(
-              context.read<TeamCubit>().selectedTeam.volunteers ?? [])
+          _buildVolunteerList()
         ]),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          List<Volunteer> helpCenterVolunteers =
-              context.read<HelpCenterCubit>().myCenter!.volunteers ?? [];
           showModalBottomSheet(
-              backgroundColor: Colors.green,
+              backgroundColor: Colors.red,
               context: context,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
               builder: (BuildContext context) {
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                              onPressed: () {},
-                              child: const Text(
-                                "Add to team",
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ),
-                        //Search bar
-                        CustomTextFormField(
-                          initialValue: "",
-                          label: "",
-                          suffixIcon: const Icon(Icons.search),
-                        ),
-                        (context.read<TeamCubit>().selectedTeam.volunteers !=
-                                    null) &&
-                                context
-                                    .read<TeamCubit>()
-                                    .selectedTeam
-                                    .volunteers!
-                                    .isNotEmpty
-                            ? CarouselSlider.builder(
-                                itemCount: context
-                                    .read<TeamCubit>()
-                                    .selectedTeam
-                                    .volunteers!
-                                    .length,
-                                itemBuilder:
-                                    (context, itemIndex, pageViewIndex) {
-                                  return const FittedBox(
-                                    child: ParticipantCircleAvatar(),
+                return BlocBuilder<TeamCubit, TeamState>(
+                  builder: (context, state) {
+                    List<Volunteer> helpCenterVolunteers =
+                        context.read<HelpCenterCubit>().myCenter!.volunteers ??
+                            [];
+                    print(helpCenterVolunteers.length);
+                    return SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                  onPressed: () {},
+                                  child: const Text(
+                                    "Add to team",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ),
+                            //Search bar
+                            CustomTextFormField(
+                              initialValue: "",
+                              label: "",
+                              suffixIcon: const Icon(Icons.search),
+                            ),
+
+                            context.read<TeamCubit>().volunteersToAdd.isNotEmpty
+                                ? CarouselSlider.builder(
+                                    itemCount: context
+                                        .read<TeamCubit>()
+                                        .volunteersToAdd
+                                        .length,
+                                    itemBuilder:
+                                        (context, itemIndex, pageViewIndex) {
+                                      return FittedBox(
+                                        child: ParticipantCircleAvatar(
+                                          name:
+                                              "${context.read<TeamCubit>().volunteersToAdd[itemIndex].user!.firstname!} ${context.read<TeamCubit>().volunteersToAdd[itemIndex].user!.surname!}",
+                                        ),
+                                      );
+                                    },
+                                    options: CarouselOptions(
+                                      initialPage: 0,
+                                      enableInfiniteScroll: false,
+                                      enlargeCenterPage: true,
+                                      viewportFraction: 0.25,
+                                      enlargeFactor: 0.3,
+                                      autoPlay: false,
+                                      height: 100,
+                                    ))
+                                : const SizedBox.shrink(),
+                            ListView.builder(
+                                itemCount: helpCenterVolunteers.length,
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: ListTile(
+                                            onTap: () {
+                                              if (context
+                                                  .read<TeamCubit>()
+                                                  .isInList(
+                                                      helpCenterVolunteers[
+                                                          index])) {
+                                                context
+                                                    .read<TeamCubit>()
+                                                    .removeFromList(index);
+                                              } else {
+                                                context
+                                                    .read<TeamCubit>()
+                                                    .addToList(
+                                                        helpCenterVolunteers[
+                                                            index]);
+                                              }
+                                            },
+                                            leading: const CircleAvatar(),
+                                            title: Text(
+                                                "${helpCenterVolunteers[index].user!.firstname!} ${helpCenterVolunteers[index].user!.surname!}"),
+                                            trailing: context
+                                                    .read<TeamCubit>()
+                                                    .isInList(
+                                                        helpCenterVolunteers[
+                                                            index])
+                                                ? Icon(
+                                                    Icons.check_circle,
+                                                    color: Colors.green,
+                                                  )
+                                                : Icon(Icons
+                                                    .check_circle_outline_outlined)),
+                                      ),
+                                      const Divider(
+                                        indent: 25,
+                                        endIndent: 25,
+                                        color: Colors.black,
+                                        thickness: 2,
+                                      )
+                                    ],
                                   );
-                                },
-                                options: CarouselOptions(
-                                  enableInfiniteScroll: false,
-                                  enlargeCenterPage: false,
-                                  viewportFraction: 0.25,
-                                  enlargeFactor: 0.3,
-                                  autoPlay: false,
-                                  height: 100,
-                                  initialPage: 0,
-                                ))
-                            : const SizedBox.shrink(),
-                        ListView.builder(
-                            itemCount: helpCenterVolunteers.length,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: ListTile(
-                                        leading: const CircleAvatar(),
-                                        title: Text(
-                                            "${helpCenterVolunteers[index].user!.firstname!} ${helpCenterVolunteers[index].user!.surname!}"),
-                                        trailing: Icon(Icons
-                                            .check_circle_outline_outlined)),
-                                  ),
-                                  const Divider(
-                                    indent: 25,
-                                    endIndent: 25,
-                                    color: Colors.black,
-                                    thickness: 2,
-                                  )
-                                ],
-                              );
-                            })
-                      ],
-                    ),
-                  ),
+                                })
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 );
               });
         },
@@ -141,7 +169,9 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
     );
   }
 
-  Widget _buildVolunteerList(List<Volunteer> volunteers) {
+  Widget _buildVolunteerList() {
+    List<Volunteer> volunteers =
+        context.read<TeamCubit>().selectedTeam.volunteers ?? [];
     if (volunteers.isNotEmpty) {
       return ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
