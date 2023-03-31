@@ -48,7 +48,7 @@ class CustomDrawer extends StatelessWidget {
               ? DrawerComponent(
                   title: "My Profile",
                   onTap: () {
-                    Navigator.pushNamed(context, Routes.profileRoute);
+                    Navigator.pushNamed(context, Routes.profile);
                   },
                   prefixIcon: const Icon(
                     Icons.person,
@@ -59,7 +59,7 @@ class CustomDrawer extends StatelessWidget {
           DrawerComponent(
             title: "About Us",
             onTap: () {
-              Navigator.of(context).pushNamed(Routes.aboutUsRoute);
+              Navigator.of(context).pushNamed(Routes.aboutUs);
             },
             prefixIcon: const Icon(
               Icons.info_outlined,
@@ -69,7 +69,7 @@ class CustomDrawer extends StatelessWidget {
           DrawerComponent(
             title: "Contact Us",
             onTap: () {
-              Navigator.of(context).pushNamed(Routes.contactUsRoute);
+              Navigator.of(context).pushNamed(Routes.contactUs);
             },
             prefixIcon: const Icon(
               Icons.contact_support_outlined,
