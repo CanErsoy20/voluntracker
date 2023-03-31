@@ -614,8 +614,7 @@ export class HelpCentersService {
     return updatedHelpCenter;
   }
 
-  async assignCoordinatorToHelpCenter(createCoordinatorDto: CreateCoordinatorDto) {
-    const { helpCenterId, volunteerId } = createCoordinatorDto;
+  async assignCoordinatorToHelpCenter(helpCenterId: number, volunteerId: number) {
     const helpCenter = await this.prisma.helpCenter.findUnique({
       where: {
         id: helpCenterId,
