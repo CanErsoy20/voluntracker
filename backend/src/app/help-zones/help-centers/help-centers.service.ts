@@ -653,6 +653,7 @@ export class HelpCentersService {
         volunteers: {
           connect: {
             id: volunteerId,
+            volunteerTeamId,
           },
         },
       },

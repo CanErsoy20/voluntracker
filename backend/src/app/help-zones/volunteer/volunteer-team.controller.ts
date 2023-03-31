@@ -12,6 +12,12 @@ import { VolunteerTeamService } from './volunteer-team.service';
 export class VolunteerTeamController {
   constructor(private readonly volunteerTeamService: VolunteerTeamService) {}
 
+  @Get()
+  async getVolunteerTeams() {
+    const volunteerTeams = await this.volunteerTeamService.getAllVolunteerTeams();
+    return new HttpResponse(volunteerTeams, 'Successfully fetched all the volunteer teams', 200);
+  }
+
   @ApiOkResponse({
     description: 'Fetched the details of the volunteer team with given id',
     type: VolunteerTeamEntity,
@@ -20,8 +26,8 @@ export class VolunteerTeamController {
     description: 'Fetch unsuccessful due to an unknown error',
   })
   @Get(':id')
-  async getVolunteerTeam(@Param('id') vtId: number) {
-    const vt = await this.volunteerTeamService.getVolunteerTeam(vtId);
+  async getVolunteerTeam(@Param('id') vtId: string) {
+    const vt = await this.volunteerTeamService.getVolunteerTeam(+vtId);
 
     if (!vt) {
       throw new BadRequestException('Something went wrong while fetching this volunteer team');
@@ -56,8 +62,8 @@ export class VolunteerTeamController {
     description: 'Deletion unsuccessful due to an unknown error',
   })
   @Delete(':id')
-  async deleteVolunteerTeam(@Param('id') vtId: number) {
-    const vt = await this.volunteerTeamService.deleteVolunteerTeam(vtId);
+  async deleteVolunteerTeam(@Param('id') vtId: string) {
+    const vt = await this.volunteerTeamService.deleteVolunteerTeam(+vtId);
 
     if (!vt) {
       throw new BadRequestException('Something went wrong while deleting this volunteer team');
@@ -74,8 +80,8 @@ export class VolunteerTeamController {
     description: 'Update unsuccessful due to an unknown error',
   })
   @Patch(':id')
-  async updateVolunteerTeam(@Param('id') vtId: number, @Body() updateVolunteerTeam: UpdateVolunteerTeamDto) {
-    const vt = await this.volunteerTeamService.updateVolunteerTeam(vtId, updateVolunteerTeam);
+  async updateVolunteerTeam(@Param('id') vtId: string, @Body() updateVolunteerTeam: UpdateVolunteerTeamDto) {
+    const vt = await this.volunteerTeamService.updateVolunteerTeam(+vtId, updateVolunteerTeam);
 
     if (!vt) {
       throw new BadRequestException('Something went wrong while updating this volunteer team');
@@ -118,13 +124,13 @@ export class VolunteerTeamController {
   })
   @Post(':volunteerTeamId/volunteerLeader/:volunteerId')
   async assignVolunteerAsLeaderToTeam(
-    @Param('volunteerTeamId') vtid,
-    @Param('volunteerId') vid,
+    @Param('volunteerTeamId') vtid: string,
+    @Param('volunteerId') vid: string,
     @Body() createVolunteerLeaderDto: CreateVolunteerLeaderDto,
   ) {
     const vt = await this.volunteerTeamService.assignVolunteerAsLeaderToTeam(
-      vtid,
-      vid,
+      +vtid,
+      +vid,
       createVolunteerLeaderDto,
     );
 
