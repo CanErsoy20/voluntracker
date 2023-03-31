@@ -15,7 +15,7 @@ export class EmailConfirmationService {
 
   sendConfirmationCode(email: string, code = null) {
     if (!code) {
-      code = this.generateConfirmationCode();
+      code = String(this.generateConfirmationCode());
       this.usersService.assignConfirmationCode(email, code);
     }
     const text = `Welcome to Voluntracker! To confirm your email address, please enter the following code in your application: ${code}`;

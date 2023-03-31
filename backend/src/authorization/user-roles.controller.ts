@@ -31,7 +31,6 @@ export class UserRolesController {
   @Get()
   async getRoles() {
     const roles = await this.userRolesService.findAll();
-
     return new HttpResponse(roles, 'Successfully fetched all roles.', 200);
   }
 
