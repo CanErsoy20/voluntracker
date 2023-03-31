@@ -549,6 +549,7 @@ export class HelpCentersService {
     const connectIds = volunteers.map((v) => {
       return {
         id: v.id,
+        volunteerTeamId,
       };
     });
     const updatedHelpCenter = await this.prisma.helpCenter.update({
