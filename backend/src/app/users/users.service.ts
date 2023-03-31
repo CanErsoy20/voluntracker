@@ -26,6 +26,8 @@ export class UsersService {
       },
       include: {
         volunteer: true,
+        admin: true,
+        userRole: true,
       },
     });
     if (!user) {
