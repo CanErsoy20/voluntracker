@@ -8,7 +8,7 @@ export class NeededSupplyTypeController {
   constructor(private readonly neededSupplyTypeService: NeededSupplyTypeService) {}
 
   @Get()
-  async getNeededSupplyTypes(@Body() createNeededSupplyTypeDto: CreateNeededSupplyTypeDto) {
+  async getNeededSupplyTypes() {
     const supplyTypes = await this.neededSupplyTypeService.findAll();
     return new HttpResponse(supplyTypes, 'Fetched all the supply types.', 200);
   }
