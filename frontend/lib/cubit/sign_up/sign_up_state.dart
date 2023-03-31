@@ -14,6 +14,8 @@ class SignUpError extends SignUpState {
   SignUpError(this.title, this.description);
 }
 
+class SignUpConfirm extends SignUpState {}
+
 class SignUpSuccess extends SignUpState {
   final String title;
   final String description;

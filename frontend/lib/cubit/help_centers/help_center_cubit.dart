@@ -1,4 +1,5 @@
 import 'package:afet_takip/models/assign_volunteer_model.dart';
+import 'package:afet_takip/models/confirm_email_model.dart';
 import 'package:afet_takip/models/help_center/busiest_hours_model.dart';
 import 'package:afet_takip/models/help_center/contact_info_model.dart';
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
