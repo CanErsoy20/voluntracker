@@ -42,7 +42,7 @@ class RouteGenerator {
       case Routes.registerRoute:
         return MaterialPageRoute(builder: (_) => SignUpScreen());
       case Routes.landingRoute:
-        return MaterialPageRoute(builder: (_) => LandingScreen());
+        return MaterialPageRoute(builder: (_) => LandingPage());
       case Routes.mapRoute:
         return MaterialPageRoute(builder: (_) => MapScreen());
       case Routes.helpCenterList:
