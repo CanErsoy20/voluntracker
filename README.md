@@ -35,8 +35,10 @@ To get started with the project, follow these steps:
 
 3. Install the dependencies:
 
-```cd frontend
-   flutter pub get```
+```
+   cd frontend
+   flutter pub get
+```
 
 4. Follow the [official Flutter run instructions]() to run either on an emulator or a physical device. Or you can build the project on following architectures:
 
@@ -50,9 +52,10 @@ Building a server is not mandatory, but if you are planning on building your ser
 2. Install Node.js and NPM through the [official guide](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). Here is the link to [official downloads](https://nodejs.org/en/download).
 
 3. Install the project dependencies:
-
-   ```cd backend
-   npm install```
+```
+   cd backend
+   npm install
+```
 
 4. Set up environment variables:
 
