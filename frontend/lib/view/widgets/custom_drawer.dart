@@ -39,7 +39,7 @@ class CustomDrawer extends StatelessWidget {
                 )
               : const SizedBox.shrink(),
           loggedIn
-              ? Text("${UserInfo.loggedUser!.userRole![0].userRoleName}")
+              ? Text(UserInfo.loggedUser!.getHighestRole())
               : const SizedBox.shrink(),
           const SizedBox(
             height: 44,
