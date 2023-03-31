@@ -34,7 +34,8 @@ class VolunteerList extends StatelessWidget {
                       child: const Text("Add Member"))
                 ],
               ),
-              children: currentVolunteerTeam.volunteers != null
+              children: (currentVolunteerTeam.volunteers != null &&
+                      currentVolunteerTeam.volunteers!.isNotEmpty)
                   ? _buildVolunteerList(currentVolunteerTeam.volunteers!)
                   : [
                       const Text(
