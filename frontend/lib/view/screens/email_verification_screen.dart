@@ -80,7 +80,8 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 length: 6,
                 onCompleted: (value) {
                   ConfirmEmailModel confirmEmailModel = ConfirmEmailModel();
-                  confirmEmailModel.email = UserInfo.loggedUser!.email!;
+                  confirmEmailModel.email =
+                      context.read<SignUpCubit>().signUpModel.user!.email;
                   confirmEmailModel.code = value;
                   context.read<SignUpCubit>().confirmEmail(confirmEmailModel);
                 },

@@ -12,6 +12,7 @@ import 'package:bloc/bloc.dart';
 import '../../models/help_center/help_center_model.dart';
 import '../../models/needed_volunteer/create_needed_volunteer_model.dart';
 import '../../models/types/volunteer_types_model.dart';
+import '../../models/volunteer_model.dart';
 import '../../services/help_center_service.dart';
 part 'help_center_state.dart';
 
@@ -23,6 +24,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   HelpCenterService service;
   List<HelpCenterModel>? helpCenterList;
   HelpCenterModel? myCenter;
+
+  // Create and Update HelpCenter Related
   CreateNeededVolunteer newVolunteerNeed = CreateNeededVolunteer();
   CreateNeededSupply newSupplyNeed = CreateNeededSupply();
   CreateHelpCenter updateHelpCenter = CreateHelpCenter(
@@ -30,6 +33,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
       openCloseInfo: OpenCloseInfo(),
       contactInfo: ContactInfo(),
       location: Location());
+
+  // Types and Categories
   List<SupplyTypeModel>? supplyTypes = [];
   List<VolunteerTypeModel>? volunteerTypes = [];
   List<String> volunteerTypeNames = [];

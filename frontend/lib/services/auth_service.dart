@@ -58,7 +58,7 @@ class AuthService {
       Response? response;
       response = await Api.instance.postRequest(ApiConstant.baseUrl,
           ApiConstant.confirmEmail, jsonEncode(bodyModel.toJson()));
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         dynamic body = jsonDecode(response.body);
         ResponseModel responseModel = ResponseModel.fromJson(body);
         ConfirmEmailResponseModel confirmEmailResponseModel =
