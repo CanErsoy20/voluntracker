@@ -19,7 +19,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HelpCenterModel currentCenter = context.read<HelpCenterCubit>().myCenter!;
+    HelpCenterModel? myCenter = context.read<HelpCenterCubit>().myCenter;
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -29,124 +29,132 @@ class HelpCenterDetailScreen extends StatelessWidget {
           ),
         ),
         endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
-        body: DefaultTabController(
-          length: 2,
-          child: Column(
-            children: [
-              Text(
-                currentCenter.name!,
-                style: const TextStyle(fontSize: 20),
-              ),
-              ListTile(
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text("${currentCenter.contactInfo!.address}",
-                        style:
-                            const TextStyle(fontSize: 15, color: Colors.white)),
-                    Text(
-                        "Last Updated At: ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.parse(currentCenter.updatedAt!))}",
-                        style:
-                            const TextStyle(fontSize: 15, color: Colors.white)),
-                    Text("Additional Info: ${currentCenter.additionalInfo}",
-                        style:
-                            const TextStyle(fontSize: 15, color: Colors.white))
-                  ],
-                ),
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                TextButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green)),
-                  onPressed: () {
-                    context.read<MapCubit>().getCurrentLocation();
-                    context.read<MapCubit>().initialCameraLocation = LatLng(
-                        currentCenter.location!.lat!,
-                        currentCenter.location!.lon!);
-                    Navigator.pushNamed(context, Routes.mapRoute);
-                  },
-                  child: RichText(
-                    text: const TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: Icon(
-                            Icons.location_on,
-                            size: 18,
-                            color: Color.fromARGB(225, 27, 40, 55),
-                          ),
-                        ),
-                        TextSpan(
-                          text: "See On Map",
-                          style: TextStyle(
-                              fontSize: 15,
-                              // set text to bold
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(225, 27, 40, 55)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(backgroundColor: Colors.green),
-                  onPressed: () {
-                    // TODO: Send to help_center_volunteers_screen
-                    // which is already defined in the routes
-                    // but send the help center context.
-                  },
-                  child: RichText(
-                    text: const TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: Icon(
-                            Icons.help,
-                            size: 18,
-                            color: Color.fromARGB(225, 27, 40, 55),
-                          ),
-                        ),
-                        TextSpan(
-                          text: "Show Volunteers and Teams",
-                          style: TextStyle(
-                              fontSize: 15,
-                              // set text to bold
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(225, 27, 40, 55)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ]),
-              ExpansionTile(
-                  collapsedTextColor: Colors.white,
-                  title: const Text("Time Details"),
-                  expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        body: myCenter == null
+            ? Center(
+                child: Text("You are not assigned to a help center yet :("),
+              )
+            : DefaultTabController(
+                length: 2,
+                child: Column(
                   children: [
                     Text(
-                        "Help Center Opens - Closes: ${HelperFunctions.formatDateToTime(currentCenter.openCloseInfo!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.openCloseInfo!.end!)}"),
-                    Text(
-                        "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(currentCenter.busiestHours!.end!)}"),
-                  ]),
-              const SizedBox(
-                height: 50,
-                child: TabBar(
-                  indicatorPadding: EdgeInsets.symmetric(horizontal: 5),
-                  tabs: [
-                    Tab(text: "Volunteer Needs"),
-                    Tab(text: "Supply Needs")
+                      myCenter.name!,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    ListTile(
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("${myCenter.contactInfo!.address}",
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.white)),
+                          Text(
+                              "Last Updated At: ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.parse(myCenter.updatedAt!))}",
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.white)),
+                          Text("Additional Info: ${myCenter.additionalInfo}",
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.white))
+                        ],
+                      ),
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          TextButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.green)),
+                            onPressed: () {
+                              context.read<MapCubit>().getCurrentLocation();
+                              context.read<MapCubit>().initialCameraLocation =
+                                  LatLng(myCenter.location!.lat!,
+                                      myCenter.location!.lon!);
+                              Navigator.pushNamed(context, Routes.mapRoute);
+                            },
+                            child: RichText(
+                              text: const TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    child: Icon(
+                                      Icons.location_on,
+                                      size: 18,
+                                      color: Color.fromARGB(225, 27, 40, 55),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "See On Map",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        // set text to bold
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(225, 27, 40, 55)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.green),
+                            onPressed: () {
+                              // TODO: Send to help_center_volunteers_screen
+                              // which is already defined in the routes
+                              // but send the help center context.
+                            },
+                            child: RichText(
+                              text: const TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    child: Icon(
+                                      Icons.help,
+                                      size: 18,
+                                      color: Color.fromARGB(225, 27, 40, 55),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "Show Volunteers and Teams",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        // set text to bold
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(225, 27, 40, 55)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ]),
+                    ExpansionTile(
+                        collapsedTextColor: Colors.white,
+                        title: const Text("Time Details"),
+                        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              "Help Center Opens - Closes: ${HelperFunctions.formatDateToTime(myCenter.openCloseInfo!.start!)} - ${HelperFunctions.formatDateToTime(myCenter.openCloseInfo!.end!)}"),
+                          Text(
+                              "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(myCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(myCenter.busiestHours!.end!)}"),
+                        ]),
+                    const SizedBox(
+                      height: 50,
+                      child: TabBar(
+                        indicatorPadding: EdgeInsets.symmetric(horizontal: 5),
+                        tabs: [
+                          Tab(text: "Volunteer Needs"),
+                          Tab(text: "Supply Needs")
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: TabBarView(children: [
+                        _buildVolunteerNeeds(myCenter),
+                        _buildSupplyNeeds(myCenter)
+                      ]),
+                    ),
                   ],
                 ),
-              ),
-              Expanded(
-                child: TabBarView(children: [
-                  _buildVolunteerNeeds(currentCenter),
-                  _buildSupplyNeeds(currentCenter)
-                ]),
-              ),
-            ],
-          ),
-        ));
+              ));
   }
 
   Widget _buildVolunteerNeeds(HelpCenterModel currentCenter) {
