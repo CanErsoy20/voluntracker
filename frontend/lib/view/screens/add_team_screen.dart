@@ -10,6 +10,7 @@ import '../../cubit/team/team_cubit.dart';
 import '../../models/user/user_model.dart';
 import '../../models/user/user_role_model.dart';
 import '../../models/volunteer_model.dart';
+import '../widgets/custom_snackbars.dart';
 
 class AddToTeamScreen extends StatefulWidget {
   const AddToTeamScreen({super.key});
@@ -27,27 +28,41 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
         title: const Text("Add Members To Team"),
       ),
       endDrawer: CustomDrawer(loggedIn: true),
-      body: SingleChildScrollView(
-        child: Column(children: [
-          Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Row(
-                children: [
-                  Text(
-                      "Team Name: ${context.read<TeamCubit>().selectedTeam.teamName}")
-                ],
-              )),
-          const Text("Team members: "),
-          const SizedBox(
-            height: 10,
-          ),
-          _buildVolunteerList()
-        ]),
+      body: BlocConsumer<TeamCubit, TeamState>(
+        listener: (context, state) {
+          if (state is TeamSuccess) {
+            CustomSnackbars.successSnackbar(
+                context, state.title, state.description);
+            Navigator.pop(context);
+          } else if (state is TeamError) {
+            CustomSnackbars.errorSnackbar(
+                context, state.title, state.description);
+          }
+        },
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Column(children: [
+              Padding(
+                  padding: const EdgeInsets.all(25.0),
+                  child: Row(
+                    children: [
+                      Text(
+                          "Team Name: ${context.read<TeamCubit>().selectedTeam.teamName}")
+                    ],
+                  )),
+              const Text("Team members: "),
+              const SizedBox(
+                height: 10,
+              ),
+              _buildVolunteerList()
+            ]),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-              backgroundColor: Colors.red,
+              backgroundColor: Colors.white,
               context: context,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
@@ -57,7 +72,6 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                     List<Volunteer> helpCenterVolunteers =
                         context.read<HelpCenterCubit>().myCenter!.volunteers ??
                             [];
-                    print(helpCenterVolunteers.length);
                     return SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -66,19 +80,15 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    context.read<TeamCubit>().addVolunteers();
+                                  },
                                   child: const Text(
                                     "Add to team",
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                        color: Colors.blue, fontSize: 15),
                                   )),
                             ),
-                            //Search bar
-                            CustomTextFormField(
-                              initialValue: "",
-                              label: "",
-                              suffixIcon: const Icon(Icons.search),
-                            ),
-
                             context.read<TeamCubit>().volunteersToAdd.isNotEmpty
                                 ? CarouselSlider.builder(
                                     itemCount: context
@@ -89,6 +99,11 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                                         (context, itemIndex, pageViewIndex) {
                                       return FittedBox(
                                         child: ParticipantCircleAvatar(
+                                          onClosePressed: () {
+                                            context
+                                                .read<TeamCubit>()
+                                                .removeFromList(itemIndex);
+                                          },
                                           name:
                                               "${context.read<TeamCubit>().volunteersToAdd[itemIndex].user!.firstname!} ${context.read<TeamCubit>().volunteersToAdd[itemIndex].user!.surname!}",
                                         ),
@@ -116,15 +131,11 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                                             horizontal: 8.0),
                                         child: ListTile(
                                             onTap: () {
-                                              if (context
+                                              if (!context
                                                   .read<TeamCubit>()
                                                   .isInList(
                                                       helpCenterVolunteers[
                                                           index])) {
-                                                context
-                                                    .read<TeamCubit>()
-                                                    .removeFromList(index);
-                                              } else {
                                                 context
                                                     .read<TeamCubit>()
                                                     .addToList(

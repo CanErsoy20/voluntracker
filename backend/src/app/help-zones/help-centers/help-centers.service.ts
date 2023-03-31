@@ -80,7 +80,13 @@ export class HelpCentersService {
         neededVolunteers: true,
         supply: true,
         coordinator: true,
-        volunteerTeams: true,
+        volunteerTeams: {
+          include: {
+            helpCenter: true,
+            teamLeader: true,
+            volunteers: true,
+          },
+        },
         volunteers: {
           include: {
             user: true,
@@ -106,7 +112,24 @@ export class HelpCentersService {
           neededVolunteers: true,
           supply: true,
           coordinator: true,
-          volunteerTeams: true,
+          volunteerTeams: {
+            include: {
+              helpCenter: true,
+              teamLeader: true,
+              volunteers: {
+                include: {
+                  user: true,
+                  certificates: true,
+                  followedHelpCenters: true,
+                  helpCenterCoordinator: true,
+                  helpCenter: true,
+                  volunteerTeam: true,
+                  volunteerTeamLeader: true,
+                  volunteerType: true,
+                },
+              },
+            },
+          },
           volunteers: {
             include: {
               user: true,
@@ -334,7 +357,12 @@ export class HelpCentersService {
         neededVolunteers: true,
         supply: true,
         coordinator: true,
-        volunteerTeams: true,
+        volunteerTeams: {
+          include: {
+            volunteers: true,
+            teamLeader: true,
+          },
+        },
         volunteers: true,
       },
     });
@@ -625,6 +653,7 @@ export class HelpCentersService {
         volunteers: {
           connect: {
             id: volunteerId,
+            volunteerTeamId,
           },
         },
       },
