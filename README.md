@@ -23,7 +23,7 @@
 
 ## Installation
 
-To get started with the project, follow these steps:
+To get started with the project, please follow these steps:
 
 1. Clone the repository:
 
@@ -40,7 +40,8 @@ To get started with the project, follow these steps:
    flutter pub get
 ```
 
-4. Follow the [official Flutter run instructions]() to run either on an emulator or a physical device. Or you can build the project on following architectures:
+4. Follow the [official Flutter run instructions]() to run either on an emulator or a physical device. 
+Or you can build the project on following architectures:
 
 - [Android](https://docs.flutter.dev/deployment/android)
 - [iOS](https://docs.flutter.dev/deployment/ios)

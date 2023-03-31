@@ -1,21 +1,26 @@
-FROM ubuntu:20.04
+# Use the official Flutter Docker image as a base
+FROM cirrusci/flutter:stable AS builder
 
-# Setup 
-RUN apt-get update && apt-get install -y unzip xz-utils git openssh-client curl python3 && apt-get upgrade -y && rm -rf /var/cache/apt
+# Set the working directory to the Flutter project folder
+WORKDIR /app
 
-# Install Flutter
-RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
-ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"RUN flutter channel master
-RUN flutter upgrade
-RUN flutter config --enable-web
-RUN flutter doctor -v
+# Copy the entire Flutter project folder into the Docker image
+COPY . .
 
-# Copy files to container and get dependencies
-COPY . /usr/local/bin/app
-WORKDIR /usr/local/bin/app
-RUN flutter pub get
-RUN flutter build web
+# Run the following commands to install the necessary dependencies
+RUN flutter channel beta && flutter upgrade && flutter config --enable-web && flutter doctor && flutter pub get
 
-# Document the exposed port and start serser
-EXPOSE 8080
-ENTRYPOINT [ "/usr/local/bin/app/server/server.sh" ]
+# Build the Flutter web app
+RUN flutter build web --release
+
+# Use the official NGINX Docker image as a base
+FROM nginx:stable-alpine
+
+# Copy the built Flutter web app to the NGINX web root directory
+COPY --from=builder /app/build/web /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Start NGINX and serve the Flutter web app
+CMD ["nginx", "-g", "daemon off;"]
