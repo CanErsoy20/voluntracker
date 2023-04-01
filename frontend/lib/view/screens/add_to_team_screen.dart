@@ -28,12 +28,12 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
       body: BlocConsumer<TeamCubit, TeamState>(
         listener: (context, state) {
           if (state is TeamSuccess) {
-            CustomSnackbars.successSnackbar(
-                context, state.title, state.description);
+            // CustomSnackbars.successSnackbar(
+            //     context, state.title, state.description);
             Navigator.pop(context);
           } else if (state is TeamError) {
-            CustomSnackbars.errorSnackbar(
-                context, state.title, state.description);
+            // CustomSnackbars.errorSnackbar(
+            //     context, state.title, state.description);
             Navigator.pop(context);
           }
         },
@@ -48,7 +48,7 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "Team Name: ${context.read<TeamCubit>().selectedTeam.teamName}",
+                            "${context.read<TeamCubit>().selectedTeam.teamName}",
                             style: const TextStyle(fontSize: 24),
                           )
                         ],

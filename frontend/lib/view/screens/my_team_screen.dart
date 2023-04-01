@@ -66,11 +66,7 @@ class _MyTeamScreenState extends State<MyTeamScreen> {
                 child: LoadingWidget(),
               );
             } else {
-              return VolunteerList(
-                volunteerTeams:
-                    context.read<HelpCenterCubit>().myCenter!.volunteerTeams ??
-                        [],
-              );
+              return VolunteerList();
             }
           },
         ),

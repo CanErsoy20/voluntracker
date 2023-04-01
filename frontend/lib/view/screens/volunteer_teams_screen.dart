@@ -1,4 +1,3 @@
-
 import 'package:voluntracker/models/assign_volunteer_model.dart';
 import 'package:voluntracker/view/widgets/custom_drawer.dart';
 import 'package:voluntracker/view/widgets/custom_text_field.dart';
@@ -23,13 +22,17 @@ class _VolunteerTeamsScreenState extends State<VolunteerTeamsScreen> {
   Widget build(BuildContext context) {
     final createTeamFormKey = GlobalKey<FormState>();
     final assignVolunteerFormKey = GlobalKey<FormState>();
-    return BlocListener<HelpCenterCubit, HelpCenterState>(
+    return BlocListener<TeamCubit, TeamState>(
       listener: (context, state) {
-        if (state is HelpCenterSuccess) {
+        if (state is TeamSuccess) {
           CustomSnackbars.successSnackbar(
               context, state.title, state.description);
+
           Navigator.pop(context);
-        } else if (state is HelpCenterError) {
+          context.read<TeamCubit>().emitLoading();
+          context.read<HelpCenterCubit>().getMyCenter();
+          context.read<TeamCubit>().emitDisplay();
+        } else if (state is TeamError) {
           CustomSnackbars.errorSnackbar(
               context, state.title, state.description);
         }
@@ -40,32 +43,14 @@ class _VolunteerTeamsScreenState extends State<VolunteerTeamsScreen> {
           title: const Text("Volunteer Teams"),
         ),
         endDrawer: CustomDrawer(loggedIn: true),
-        body: BlocConsumer<TeamCubit, TeamState>(
-          listener: (context, state) {
-            if (state is TeamSuccess) {
-              CustomSnackbars.successSnackbar(
-                  context, state.title, state.description);
-
-              Navigator.pop(context);
-              context.read<TeamCubit>().emitLoading();
-              context.read<HelpCenterCubit>().getMyCenter();
-              context.read<TeamCubit>().emitDisplay();
-            } else if (state is TeamError) {
-              CustomSnackbars.errorSnackbar(
-                  context, state.title, state.description);
-            }
-          },
+        body: BlocBuilder<TeamCubit, TeamState>(
           builder: (context, state) {
             if (state is TeamLoading) {
               return const Center(
                 child: LoadingWidget(),
               );
             } else {
-              return VolunteerList(
-                volunteerTeams:
-                    context.read<HelpCenterCubit>().myCenter!.volunteerTeams ??
-                        [],
-              );
+              return VolunteerList();
             }
           },
         ),
