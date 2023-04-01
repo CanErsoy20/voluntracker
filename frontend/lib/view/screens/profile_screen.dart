@@ -1,5 +1,6 @@
 import 'package:voluntracker/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:voluntracker/router.dart';
 
 import '../../models/user/user_info.dart';
 
@@ -14,7 +15,9 @@ class ProfileScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.editProfile);
+            },
           ),
         ],
       ),

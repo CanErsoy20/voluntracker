@@ -13,9 +13,10 @@
 
 ## Google Technologies Used
 
-- Flutter
 - Firebase
   - Firebase Cloud Messaging
+  - Firebase Storage
+- Flutter
 - Google Maps API
 - Google Cloud
   - Cloud Build

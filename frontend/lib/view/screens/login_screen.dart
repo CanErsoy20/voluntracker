@@ -113,6 +113,14 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, Routes.forgotPassword);
+                    },
+                    child: const Text(
+                      "Forgot Password?",
+                      style: TextStyle(color: Colors.white),
+                    )),
                 Expanded(
                   child: CheckboxListTile(
                       controlAffinity: ListTileControlAffinity.leading,
