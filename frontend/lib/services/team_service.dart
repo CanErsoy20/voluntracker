@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:afet_takip/constants/api_constants.dart';
-import 'package:afet_takip/models/add_volunteer_response_model.dart';
-import 'package:afet_takip/models/create_team_model.dart';
-import 'package:afet_takip/models/response_model.dart';
-import 'package:afet_takip/models/volunteer_team_model.dart';
+import 'package:voluntracker/constants/api_constants.dart';
+import 'package:voluntracker/models/add_volunteer_response_model.dart';
+import 'package:voluntracker/models/create_team_model.dart';
+import 'package:voluntracker/models/response_model.dart';
+import 'package:voluntracker/models/volunteer_team_model.dart';
 import 'package:http/http.dart';
 
 import '../api.dart';

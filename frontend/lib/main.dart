@@ -1,9 +1,9 @@
-import 'package:afet_takip/cubit/login/login_cubit.dart';
-import 'package:afet_takip/cubit/sign_up/sign_up_cubit.dart';
-import 'package:afet_takip/router.dart';
-import 'package:afet_takip/services/auth_service.dart';
-import 'package:afet_takip/services/help_center_service.dart';
-import 'package:afet_takip/services/team_service.dart';
+import 'package:voluntracker/cubit/login/login_cubit.dart';
+import 'package:voluntracker/cubit/sign_up/sign_up_cubit.dart';
+import 'package:voluntracker/router.dart';
+import 'package:voluntracker/services/auth_service.dart';
+import 'package:voluntracker/services/help_center_service.dart';
+import 'package:voluntracker/services/team_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';

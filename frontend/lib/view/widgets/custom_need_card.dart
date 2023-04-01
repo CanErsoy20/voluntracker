@@ -1,4 +1,4 @@
-import 'package:afet_takip/helper_functions.dart';
+import 'package:voluntracker/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class CustomNeedCard extends StatelessWidget {

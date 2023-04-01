@@ -1,7 +1,7 @@
-import 'package:afet_takip/cubit/team/team_cubit.dart';
-import 'package:afet_takip/models/volunteer_team_model.dart';
-import 'package:afet_takip/models/volunteer_model.dart';
-import 'package:afet_takip/router.dart';
+import 'package:voluntracker/cubit/team/team_cubit.dart';
+import 'package:voluntracker/models/volunteer_team_model.dart';
+import 'package:voluntracker/models/volunteer_model.dart';
+import 'package:voluntracker/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

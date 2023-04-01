@@ -1,5 +1,5 @@
-import 'package:afet_takip/view/widgets/custom_drawer.dart';
-import 'package:afet_takip/view/widgets/custom_text_form_field.dart';
+import 'package:voluntracker/view/widgets/custom_drawer.dart';
+import 'package:voluntracker/view/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 
 class ContactUsScreen extends StatelessWidget {

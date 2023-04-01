@@ -1,4 +1,4 @@
-package com.example.afet_takip
+package app.voluntracker.voluntracker
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,8 +1,8 @@
-import 'package:afet_takip/models/user/user_info.dart';
-import 'package:afet_takip/router.dart';
-import 'package:afet_takip/view/widgets/custom_drawer.dart';
-import 'package:afet_takip/view/widgets/custom_menu_card.dart';
-import 'package:afet_takip/view/widgets/user_bar.dart';
+import 'package:voluntracker/models/user/user_info.dart';
+import 'package:voluntracker/router.dart';
+import 'package:voluntracker/view/widgets/custom_drawer.dart';
+import 'package:voluntracker/view/widgets/custom_menu_card.dart';
+import 'package:voluntracker/view/widgets/user_bar.dart';
 import 'package:flutter/material.dart';
 
 class LandingPage extends StatelessWidget {
