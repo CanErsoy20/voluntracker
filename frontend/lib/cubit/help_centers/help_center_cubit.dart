@@ -21,6 +21,7 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   }
   HelpCenterService service;
   List<HelpCenterModel>? helpCenterList;
+  HelpCenterModel? selectedCenter;
   HelpCenterModel? myCenter;
 
   // Create and Update HelpCenter Related
