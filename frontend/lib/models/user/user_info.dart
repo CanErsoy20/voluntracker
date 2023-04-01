@@ -1,4 +1,4 @@
-import 'package:afet_takip/models/user/user_model.dart';
+import 'package:voluntracker/models/user/user_model.dart';
 
 import '../auth/tokens_model.dart';
 

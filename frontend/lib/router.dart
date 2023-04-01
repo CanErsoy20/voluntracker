@@ -1,20 +1,20 @@
-import 'package:afet_takip/view/screens/add_to_team_screen.dart';
-import 'package:afet_takip/view/screens/create_help_center_screen.dart';
-import 'package:afet_takip/view/screens/help_center_detail_screen.dart';
-import 'package:afet_takip/view/screens/help_center_list_screen.dart';
-import 'package:afet_takip/view/screens/login_screen.dart';
-import 'package:afet_takip/view/screens/map_screen.dart';
-import 'package:afet_takip/view/screens/my_team_screen.dart';
-import 'package:afet_takip/view/screens/sign_up_screen.dart';
-import 'package:afet_takip/view/screens/undefined_screen.dart';
-import 'package:afet_takip/view/screens/update_help_center_screen.dart';
-import 'package:afet_takip/view/screens/landing_page.dart';
-import 'package:afet_takip/view/screens/profile_screen.dart';
-import 'package:afet_takip/view/screens/contact_us_screen.dart';
-import 'package:afet_takip/view/screens/email_verification_screen.dart';
-import 'package:afet_takip/view/screens/about_us_screen.dart';
-import 'package:afet_takip/view/screens/volunteer_teams_screen.dart';
-import 'package:afet_takip/view/screens/welcome_screen.dart';
+import 'package:voluntracker/view/screens/add_to_team_screen.dart';
+import 'package:voluntracker/view/screens/create_help_center_screen.dart';
+import 'package:voluntracker/view/screens/help_center_detail_screen.dart';
+import 'package:voluntracker/view/screens/help_center_list_screen.dart';
+import 'package:voluntracker/view/screens/login_screen.dart';
+import 'package:voluntracker/view/screens/map_screen.dart';
+import 'package:voluntracker/view/screens/my_team_screen.dart';
+import 'package:voluntracker/view/screens/sign_up_screen.dart';
+import 'package:voluntracker/view/screens/undefined_screen.dart';
+import 'package:voluntracker/view/screens/update_help_center_screen.dart';
+import 'package:voluntracker/view/screens/landing_page.dart';
+import 'package:voluntracker/view/screens/profile_screen.dart';
+import 'package:voluntracker/view/screens/contact_us_screen.dart';
+import 'package:voluntracker/view/screens/email_verification_screen.dart';
+import 'package:voluntracker/view/screens/about_us_screen.dart';
+import 'package:voluntracker/view/screens/volunteer_teams_screen.dart';
+import 'package:voluntracker/view/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {

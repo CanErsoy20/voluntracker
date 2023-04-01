@@ -1,6 +1,6 @@
 {
-    "name": "afet_takip",
-    "short_name": "afet_takip",
+    "name": "voluntracker",
+    "short_name": "voluntracker",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

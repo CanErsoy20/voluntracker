@@ -1,6 +1,6 @@
-import 'package:afet_takip/router.dart';
-import 'package:afet_takip/view/widgets/custom_text_form_field.dart';
-import 'package:afet_takip/view/widgets/loading_widget.dart';
+import 'package:voluntracker/router.dart';
+import 'package:voluntracker/view/widgets/custom_text_form_field.dart';
+import 'package:voluntracker/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';

@@ -1,5 +1,5 @@
-import 'package:afet_takip/models/volunteer_model.dart';
-import 'package:afet_takip/models/volunteer_team_model.dart';
+import 'package:voluntracker/models/volunteer_model.dart';
+import 'package:voluntracker/models/volunteer_team_model.dart';
 
 class VolunteerTeamLeader {
   int? id;
