@@ -28,6 +28,7 @@ class VolunteerList extends StatelessWidget {
                   .read<HelpCenterCubit>()
                   .myCenter!
                   .volunteerTeams![index];
+
               return ExpansionTile(
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,6 +40,7 @@ class VolunteerList extends StatelessWidget {
                           Navigator.pushNamed(context, Routes.addToTeam);
                           context.read<TeamCubit>().selectedTeam =
                               currentVolunteerTeam;
+                          context.read<TeamCubit>().selectedTeamIndex = index;
                         },
                         child: const Text("Add Member"))
                   ],
