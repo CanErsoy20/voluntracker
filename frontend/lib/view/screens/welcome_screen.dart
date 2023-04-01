@@ -1,5 +1,7 @@
+import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
 import 'package:afet_takip/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -43,6 +45,7 @@ class WelcomeScreen extends StatelessWidget {
           // Continue as guest text
           GestureDetector(
             onTap: () {
+              context.read<HelpCenterCubit>().getHelpCenters();
               Navigator.pushNamed(context, Routes.helpCenterList);
             },
             child: const Padding(
