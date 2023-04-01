@@ -52,6 +52,7 @@ dependencies:
   carousel_slider: ^4.2.1
   pinput: ^2.2.31
   lottie: ^2.3.1
+  shared_preferences: ^2.1.0
 
 dev_dependencies:
   flutter_test:

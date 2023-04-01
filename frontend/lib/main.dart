@@ -6,6 +6,7 @@ import 'package:afet_takip/services/help_center_service.dart';
 import 'package:afet_takip/services/team_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'cubit/help_centers/help_center_cubit.dart';
 import 'cubit/map/map_cubit.dart';
@@ -15,9 +16,16 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   RouteGenerator routeGenerator = RouteGenerator();
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -29,7 +37,8 @@ class MyApp extends StatelessWidget {
           create: (context) => HelpCenterCubit(HelpCenterService()),
         ),
         BlocProvider(create: (context) => SignUpCubit(AuthService())),
-        BlocProvider(create: (context) => LoginCubit(AuthService())),
+        BlocProvider(
+            create: (context) => LoginCubit(AuthService())..checkPrefs()),
         BlocProvider(create: (context) => TeamCubit(TeamService()))
       ],
       child: MaterialApp(

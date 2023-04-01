@@ -6,6 +6,14 @@ class LoginInitial extends LoginState {}
 
 class LoginLoading extends LoginState {}
 
+class LoginDisplay extends LoginState {}
+
+class LoginChecking extends LoginState {}
+
+class LoginFirstTime extends LoginState {}
+
+class LoginLoggedOut extends LoginState {}
+
 class LoginError extends LoginState {
   final String title;
   final String description;
