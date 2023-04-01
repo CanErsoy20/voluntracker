@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:voluntracker/router.dart';
@@ -124,7 +126,48 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _imageFile = File(value!.path);
       });
       uploadImage();
+      faceDetectImage();
     });
+  }
+
+  Future<void> faceDetectImage() async {
+    print("Face Detecting");
+    if(_imageFile == null) {
+      print("Image is null");
+      return;
+    }
+    print("Detecting image");
+    final inputImage = InputImage.fromFile(_imageFile!);
+    final options = FaceDetectorOptions();
+    final faceDetector = FaceDetector(options: options);
+    final List<Face> faces = await faceDetector.processImage(inputImage);
+    String text = 'Detected ${faces.length} faces';
+    print(text);
+    // for (Face face in faces) {
+    //   final Rect boundingBox = face.boundingBox;
+
+    //   final double? rotX = face.headEulerAngleX; // Head is tilted up and down rotX degrees
+    //   final double? rotY = face.headEulerAngleY; // Head is rotated to the right rotY degrees
+    //   final double? rotZ = face.headEulerAngleZ; // Head is tilted sideways rotZ degrees
+
+    //   // If landmark detection was enabled with FaceDetectorOptions (mouth, ears,
+    //   // eyes, cheeks, and nose available):
+    //   final FaceLandmark? leftEar = face.landmarks[FaceLandmarkType.leftEar];
+    //   if (leftEar != null) {
+    //     final Point<int> leftEarPos = leftEar.position;
+    //   }
+
+    //   // If classification was enabled with FaceDetectorOptions:
+    //   if (face.smilingProbability != null) {
+    //     final double? smileProb = face.smilingProbability;
+    //   }
+
+    //   // If face tracking was enabled with FaceDetectorOptions:
+    //   if (face.trackingId != null) {
+    //     final int? id = face.trackingId;
+    //   }
+    // }
+    // print("Detected faces: $text");
   }
 
   Future uploadImage() async {
