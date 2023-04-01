@@ -13,6 +13,7 @@ class NotFoundLottie extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Lottie.asset(
               "assets/lotties/not_found_lottie.json",
