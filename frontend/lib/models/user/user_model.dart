@@ -31,6 +31,7 @@ class UserModel {
       this.volunteer});
 
   UserModel.fromJson(Map<String, dynamic> json) {
+    print("User JSON: $json");
     id = json['id'];
     firstname = json['firstname'];
     surname = json['surname'];
