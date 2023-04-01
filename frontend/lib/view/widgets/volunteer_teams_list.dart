@@ -14,8 +14,8 @@ class VolunteerTeamList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HelpCenterCubit, HelpCenterState>(
       builder: (context, state) {
-        return Container(
-          color: Colors.white,
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
           child: ListView.builder(
             shrinkWrap: true,
             itemCount: context
@@ -29,34 +29,43 @@ class VolunteerTeamList extends StatelessWidget {
                   .myCenter!
                   .volunteerTeams![index];
 
-              return ExpansionTile(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                        "${currentVolunteerTeam.teamName!} (${currentVolunteerTeam.volunteers?.length ?? 0})"),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, Routes.addToTeam);
-                          context.read<TeamCubit>().selectedTeam =
-                              currentVolunteerTeam;
-                          context.read<TeamCubit>().selectedTeamIndex = index;
-                        },
-                        child: const Text("Add Member"))
-                  ],
-                ),
-                children: (currentVolunteerTeam.volunteers != null &&
-                        currentVolunteerTeam.volunteers!.isNotEmpty)
-                    ? _buildVolunteerList(currentVolunteerTeam.volunteers!)
-                    : [
-                        const Text(
-                          "There are no volunteers in this team at the moment",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        )
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: ExpansionTile(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            "${currentVolunteerTeam.teamName!} (${currentVolunteerTeam.volunteers?.length ?? 0})"),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, Routes.addToTeam);
+                              context.read<TeamCubit>().selectedTeam =
+                                  currentVolunteerTeam;
+                              context.read<TeamCubit>().selectedTeamIndex =
+                                  index;
+                            },
+                            child: const Text("Add Member"))
                       ],
+                    ),
+                    children: (currentVolunteerTeam.volunteers != null &&
+                            currentVolunteerTeam.volunteers!.isNotEmpty)
+                        ? _buildVolunteerList(currentVolunteerTeam.volunteers!)
+                        : [
+                            const Text(
+                              "There are no volunteers in this team at the moment",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            )
+                          ],
+                  ),
+                ),
               );
             },
           ),

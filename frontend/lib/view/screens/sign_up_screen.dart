@@ -56,7 +56,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomTextFormField(
                           initialValue: "",
                           label: "Name",
-                          hint: "Can",
+                          hint: "Name",
                           onChanged: (value) {
                             context
                                 .read<SignUpCubit>()
@@ -68,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomTextFormField(
                           initialValue: "",
                           label: "Surname",
-                          hint: "Ersoy",
+                          hint: "Surname",
                           onChanged: (value) {
                             context
                                 .read<SignUpCubit>()
@@ -101,7 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         CustomTextFormField(
                           initialValue: "",
                           label: "Phone",
-                          hint: "05300861306",
+                          hint: "05xxxxxxxxx",
                           onChanged: (value) {
                             context
                                 .read<SignUpCubit>()
@@ -145,7 +145,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onChanged: (value) {},
                           customValidator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "E-mail cannot be blank";
+                              return "Password cannot be blank";
                             } else if (context
                                     .read<SignUpCubit>()
                                     .signUpModel

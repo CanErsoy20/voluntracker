@@ -4,7 +4,7 @@
    <application
         android:label="Voluntracker"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyBI40EBqIwqh2eHOXvF82srkQn0fcGNTC4"/>
         <activity
