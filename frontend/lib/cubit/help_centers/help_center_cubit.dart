@@ -1,5 +1,4 @@
 import 'package:afet_takip/models/assign_volunteer_model.dart';
-import 'package:afet_takip/models/confirm_email_model.dart';
 import 'package:afet_takip/models/help_center/busiest_hours_model.dart';
 import 'package:afet_takip/models/help_center/contact_info_model.dart';
 import 'package:afet_takip/models/help_center/create_help_center_model.dart';
@@ -12,7 +11,6 @@ import 'package:bloc/bloc.dart';
 import '../../models/help_center/help_center_model.dart';
 import '../../models/needed_volunteer/create_needed_volunteer_model.dart';
 import '../../models/types/volunteer_types_model.dart';
-import '../../models/volunteer_model.dart';
 import '../../services/help_center_service.dart';
 part 'help_center_state.dart';
 
@@ -146,16 +144,24 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   Future<void> getSupplyTypes() async {
     supplyTypes = await service.getSupplyTypes();
     for (var i = 0; i < supplyTypes!.length; i++) {
-      supplyTypeNames.add(supplyTypes![i].typeName!);
-      supplyTypeCategory.add(supplyTypes![i].category!);
+      if (!supplyTypeCategory.contains(supplyTypes![i].category!)) {
+        supplyTypeCategory.add(supplyTypes![i].category!);
+      }
+      if (!supplyTypeNames.contains(supplyTypes![i].typeName!)) {
+        supplyTypeNames.add(supplyTypes![i].typeName!);
+      }
     }
   }
 
   Future<void> getVolunteerTypes() async {
     volunteerTypes = await service.getVolunteerTypes();
     for (var i = 0; i < volunteerTypes!.length; i++) {
-      volunteerTypeNames.add(volunteerTypes![i].typeName!);
-      volunteerTypeCategory.add(volunteerTypes![i].category!);
+      if (!volunteerTypeCategory.contains(volunteerTypes![i].category!)) {
+        volunteerTypeCategory.add(volunteerTypes![i].category!);
+      }
+      if (!volunteerTypeNames.contains(volunteerTypes![i].typeName!)) {
+        volunteerTypeNames.add(volunteerTypes![i].typeName!);
+      }
     }
   }
 

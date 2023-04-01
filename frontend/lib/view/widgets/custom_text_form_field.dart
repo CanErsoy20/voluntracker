@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
   CustomTextFormField({
-    required this.initialValue,
     required this.label,
+    this.initialValue,
     this.hint,
     this.isObscure,
     this.maxLines,
     this.onChanged,
     this.suffixIcon,
+    this.prefixIcon,
+    this.controller,
     this.customValidator,
     this.enabled,
     super.key,
@@ -16,12 +18,14 @@ class CustomTextFormField extends StatelessWidget {
 
   final String? Function(String?)? customValidator;
   bool? enabled = true;
-  String initialValue;
+  String? initialValue;
   String label;
   String? hint;
   int? maxLines;
   bool? isObscure;
   Widget? suffixIcon;
+  Widget? prefixIcon;
+  TextEditingController? controller;
   void Function(String)? onChanged;
 
   @override
@@ -39,6 +43,7 @@ class CustomTextFormField extends StatelessWidget {
             height: 2,
           ),
           TextFormField(
+            controller: controller,
             maxLines: maxLines ?? 1,
             obscureText: isObscure ?? false,
             onChanged: onChanged,
@@ -52,6 +57,7 @@ class CustomTextFormField extends StatelessWidget {
             enabled: enabled,
             initialValue: initialValue,
             decoration: InputDecoration(
+              prefixIcon: prefixIcon,
               suffixIcon: suffixIcon,
               hintText: hint,
               filled: true,

@@ -9,12 +9,12 @@ class LandingPage extends StatelessWidget {
   final adminCards = [
     {
       "title": "Help Center List",
-      "icon": Icons.help,
+      "icon": Icons.feed_outlined,
       "route": Routes.helpCenterList,
     },
     {
       "title": "Help Center Map",
-      "icon": Icons.help,
+      "icon": Icons.location_on_outlined,
       "route": Routes.mapRoute,
     },
     {
@@ -47,22 +47,22 @@ class LandingPage extends StatelessWidget {
   final coordinatorCards = [
     {
       "title": "Help Center List",
-      "icon": Icons.help,
+      "icon": Icons.feed_outlined,
       "route": Routes.helpCenterList,
     },
     {
       "title": "Help Center Map",
-      "icon": Icons.help,
+      "icon": Icons.location_on_outlined,
       "route": Routes.mapRoute,
     },
     {
       "title": "My Teams",
       "icon": Icons.people,
-      "route": Routes.helpCenterVolunteers,
+      "route": Routes.volunteerTeams,
     },
     {
       "title": "Update Help Center",
-      "icon": Icons.help,
+      "icon": Icons.edit,
       "route": Routes.updateHelpCenter,
     },
     {
@@ -72,7 +72,7 @@ class LandingPage extends StatelessWidget {
     },
     {
       "title": "My Help Center",
-      "icon": Icons.help,
+      "icon": Icons.apartment_outlined,
       "route": Routes.helpCenterDetail,
     },
     {
@@ -95,17 +95,17 @@ class LandingPage extends StatelessWidget {
   final volunteerCards = [
     {
       "title": "Help Center List",
-      "icon": Icons.help,
+      "icon": Icons.feed_outlined,
       "route": Routes.helpCenterList,
     },
     {
       "title": "Help Center Map",
-      "icon": Icons.help,
+      "icon": Icons.location_on_outlined,
       "route": Routes.mapRoute,
     },
     {
       "title": "My Help Center",
-      "icon": Icons.help,
+      "icon": Icons.apartment_outlined,
       "route": Routes.helpCenterDetail,
     },
     {
@@ -130,38 +130,31 @@ class LandingPage extends StatelessWidget {
     }
   ];
 
-  final teamLeaderCards = [];
-
-  final items = [
+  final teamLeaderCards = [
     {
       "title": "Help Center List",
-      "icon": Icons.help,
+      "icon": Icons.feed_outlined,
       "route": Routes.helpCenterList,
     },
     {
       "title": "Help Center Map",
-      "icon": Icons.help,
+      "icon": Icons.location_on_outlined,
       "route": Routes.mapRoute,
     },
     {
-      "title": "Create Help Center",
-      "icon": Icons.help,
-      "route": Routes.createHelpCenter,
+      "title": "My Help Center",
+      "icon": Icons.apartment_outlined,
+      "route": Routes.helpCenterDetail,
     },
     {
-      "title": "Update Help Center",
+      "title": "My Team",
       "icon": Icons.help,
-      "route": Routes.updateHelpCenter,
+      "route": Routes.myTeam,
     },
     {
       "title": "Favorites",
       "icon": Icons.favorite,
       "route": "/volunteer",
-    },
-    {
-      "title": "My Help Center",
-      "icon": Icons.help,
-      "route": Routes.helpCenterDetail,
     },
     {
       "title": "Contact Us",
@@ -177,19 +170,17 @@ class LandingPage extends StatelessWidget {
       "title": "Settings",
       "icon": Icons.settings,
       "route": "/settings",
-    },
-    {
-      "title": "My Teams",
-      "icon": Icons.people,
-      "route": Routes.helpCenterVolunteers,
     }
   ];
+
+  LandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     var selectedCards = volunteerCards;
 
     if (UserInfo.loggedUser!.getHighestRole() == "Volunteer") {
+      selectedCards = volunteerCards;
     } else if (UserInfo.loggedUser!.getHighestRole() ==
         "HelpCenterCoordinator") {
       selectedCards = coordinatorCards;
@@ -205,12 +196,18 @@ class LandingPage extends StatelessWidget {
       ),
       endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const SizedBox(
+                height: 10,
+              ),
               UserBar(user: UserInfo.loggedUser!),
               // Put an input field here
+              const SizedBox(
+                height: 20,
+              ),
               GridView.count(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,

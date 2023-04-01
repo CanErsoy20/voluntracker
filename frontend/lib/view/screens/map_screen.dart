@@ -65,7 +65,8 @@ class _MapScreenState extends State<MapScreen> {
             }
           },
           builder: (context, state) {
-            if (state is MapDisplay) {
+            debugPrint(state.toString());
+            if (state is MapDisplay || state is MapInitial) {
               return Stack(
                 children: [
                   CustomGoogleMap(

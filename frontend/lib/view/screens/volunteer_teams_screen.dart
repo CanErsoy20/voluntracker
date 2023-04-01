@@ -1,3 +1,4 @@
+
 import 'package:afet_takip/models/assign_volunteer_model.dart';
 import 'package:afet_takip/view/widgets/custom_drawer.dart';
 import 'package:afet_takip/view/widgets/custom_text_field.dart';
@@ -10,16 +11,14 @@ import '../../cubit/help_centers/help_center_cubit.dart';
 import '../../cubit/team/team_cubit.dart';
 import '../widgets/custom_snackbars.dart';
 
-class HelpCenterVolunteersScreen extends StatefulWidget {
-  const HelpCenterVolunteersScreen({super.key});
+class VolunteerTeamsScreen extends StatefulWidget {
+  const VolunteerTeamsScreen({super.key});
 
   @override
-  State<HelpCenterVolunteersScreen> createState() =>
-      _HelpCenterVolunteersScreenState();
+  State<VolunteerTeamsScreen> createState() => _VolunteerTeamsScreenState();
 }
 
-class _HelpCenterVolunteersScreenState
-    extends State<HelpCenterVolunteersScreen> {
+class _VolunteerTeamsScreenState extends State<VolunteerTeamsScreen> {
   @override
   Widget build(BuildContext context) {
     final createTeamFormKey = GlobalKey<FormState>();

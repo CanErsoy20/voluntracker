@@ -104,7 +104,11 @@ export class HelpCentersService {
         },
         volunteers: {
           include: {
-            user: true,
+            user: {
+              include: {
+                userRole: true,
+              },
+            },
             certificates: true,
             followedHelpCenters: true,
             helpCenterCoordinator: true,
@@ -151,7 +155,11 @@ export class HelpCentersService {
           },
           volunteers: {
             include: {
-              user: true,
+              user: {
+                include: {
+                  userRole: true,
+                },
+              },
               certificates: true,
               followedHelpCenters: true,
               helpCenterCoordinator: true,

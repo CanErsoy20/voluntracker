@@ -2,6 +2,8 @@ import 'package:afet_takip/models/user/user_model.dart';
 import 'package:afet_takip/router.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/user/user_info.dart';
+
 class UserBar extends StatelessWidget {
   final UserModel user;
 
@@ -16,8 +18,12 @@ class UserBar extends StatelessWidget {
           Navigator.pushNamed(context, Routes.profile);
         },
         child: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  fit: BoxFit.fitWidth,
+                  image:
+                      AssetImage("assets/images/user_banner_background.png"))),
           height: 120,
-          // color: Colors.white,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -49,11 +55,13 @@ class UserBar extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "Team 1",
+                      user.volunteer!.team == null
+                          ? "Team: You are not assigned to any team yet"
+                          : "Team: ${user.volunteer!.team!.teamName}",
                       style: const TextStyle(
                         fontSize: 14,
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),

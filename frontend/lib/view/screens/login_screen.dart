@@ -23,6 +23,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
               context.read<HelpCenterCubit>().getMyCenter();
             }
             Navigator.pushReplacementNamed(context, Routes.landingRoute);
+          } else if (state is LoginFirstTime || state is LoginLoggedOut) {
+            context.read<LoginCubit>().updatePrefRememberMe();
           }
         }, builder: (context, state) {
           if (state is LoginLoading) {
@@ -69,20 +72,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Padding _buildForm(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Form(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         key: formKey,
         child: Column(
           children: [
             CustomTextFormField(
-              initialValue: "",
+              controller: context.read<LoginCubit>().emailController,
               label: "Email",
               hint: "Email",
-              suffixIcon: const Icon(Icons.mail),
-              onChanged: (value) {
-                context.read<LoginCubit>().loginModel.email = value;
-              },
+              prefixIcon: const Icon(Icons.mail),
               customValidator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Email cannot be blank";
@@ -94,23 +94,52 @@ class _LoginScreenState extends State<LoginScreen> {
               },
             ),
             CustomTextFormField(
-              initialValue: "",
+              controller: context.read<LoginCubit>().passwordController,
               label: "Password",
               hint: "Password",
-              suffixIcon: const Icon(Icons.lock_outlined),
-              isObscure: true,
-              onChanged: (value) {
-                context.read<LoginCubit>().loginModel.password = value;
-              },
+              prefixIcon: const Icon(Icons.lock_outlined),
+              suffixIcon: IconButton(
+                icon: Icon(!context.read<LoginCubit>().isVisible
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined),
+                onPressed: () {
+                  context.read<LoginCubit>().changeVisible();
+                },
+              ),
+              isObscure: context.read<LoginCubit>().isVisible,
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Forgot Password?",
-                    style: TextStyle(color: Colors.white),
-                  )),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "Forgot Password?",
+                      style: TextStyle(color: Colors.white),
+                    )),
+                Expanded(
+                  child: CheckboxListTile(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 25),
+                      side: const BorderSide(color: Colors.blue, width: 3),
+                      checkColor: Colors.white,
+                      title: const FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          "Remember Me",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      value: context.read<LoginCubit>().rememberMe,
+                      tristate: true,
+                      onChanged: (value) {
+                        context.read<LoginCubit>().changeRememberMe();
+                      }),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
             ),
             ElevatedButton(
               onPressed: () {
