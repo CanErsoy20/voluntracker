@@ -1,4 +1,5 @@
 import 'package:voluntracker/view/widgets/custom_drawer.dart';
+import 'package:voluntracker/view/widgets/loading_widget.dart';
 import 'package:voluntracker/view/widgets/participant_circle.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -9,35 +10,49 @@ import '../../cubit/team/team_cubit.dart';
 import '../../models/volunteer_model.dart';
 import '../widgets/custom_snackbars.dart';
 
-class AddToTeamScreen extends StatefulWidget {
-  const AddToTeamScreen({super.key});
+class TeamDetailsScreen extends StatefulWidget {
+  const TeamDetailsScreen({super.key});
 
   @override
-  State<AddToTeamScreen> createState() => _AddToTeamScreenState();
+  State<TeamDetailsScreen> createState() => _TeamDetailsScreenState();
 }
 
-class _AddToTeamScreenState extends State<AddToTeamScreen> {
+class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Add Members To Team"),
+        title: const Text("Team Details"),
       ),
       endDrawer: CustomDrawer(loggedIn: true),
       body: BlocConsumer<TeamCubit, TeamState>(
         listener: (context, state) {
           if (state is TeamSuccess) {
+            Navigator.pop(context);
             CustomSnackbars.successSnackbar(
                 context, state.title, state.description);
+
+            context.read<TeamCubit>().emitLoading();
+            context.read<HelpCenterCubit>().getMyCenter();
+            context.read<TeamCubit>().selectedTeam = context
+                .read<HelpCenterCubit>()
+                .myCenter!
+                .volunteerTeams![context.read<TeamCubit>().selectedTeamIndex];
+
+            context.read<TeamCubit>().emitDisplay();
             Navigator.pop(context);
           } else if (state is TeamError) {
             CustomSnackbars.errorSnackbar(
                 context, state.title, state.description);
-            Navigator.pop(context);
           }
         },
         builder: (context, state) {
+          if (state is TeamLoading) {
+            return const Center(
+              child: LoadingWidget(),
+            );
+          }
           return SingleChildScrollView(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,7 +63,7 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "Team Name: ${context.read<TeamCubit>().selectedTeam.teamName}",
+                            "${context.read<TeamCubit>().selectedTeam.teamName}",
                             style: const TextStyle(fontSize: 24),
                           )
                         ],
@@ -60,7 +75,8 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  _buildVolunteerList()
+                  _buildVolunteerList(
+                      context.read<TeamCubit>().selectedTeam.volunteers!)
                 ]),
           );
         },
@@ -188,9 +204,7 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
     );
   }
 
-  Widget _buildVolunteerList() {
-    List<Volunteer> volunteers =
-        context.read<TeamCubit>().selectedTeam.volunteers ?? [];
+  Widget _buildVolunteerList(List<Volunteer> volunteers) {
     if (volunteers.isNotEmpty) {
       return ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
@@ -204,17 +218,25 @@ class _AddToTeamScreenState extends State<AddToTeamScreen> {
                     borderRadius: BorderRadius.circular(20)),
                 elevation: 5,
                 child: ListTile(
-                  leading: const CircleAvatar(),
-                  title: Text(
-                      "${volunteers[index].user?.firstname} ${volunteers[index].user?.surname}"),
-                  subtitle: Text("${volunteers[index].user?.getHighestRole()}"),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.more_vert),
-                    onPressed: () {
-                      // open menu, show remove volunteer from team option, if selected remove them from the team
-                    },
-                  ),
-                ),
+                    leading: const CircleAvatar(),
+                    title: Text(
+                        "${volunteers[index].user?.firstname} ${volunteers[index].user?.surname}"),
+                    subtitle:
+                        Text("${volunteers[index].user?.getHighestRole()}"),
+                    trailing: PopupMenuButton(
+                      itemBuilder: (contex) {
+                        return [
+                          PopupMenuItem<int>(
+                            value: 0,
+                            child: const Text("Remove from team"),
+                            onTap: () {
+                              // remove isteği at
+                            },
+                          ),
+                        ];
+                      },
+                      position: PopupMenuPosition.over,
+                    )),
               ),
             );
           });
