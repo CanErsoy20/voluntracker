@@ -112,7 +112,9 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, Routes.forgotPassword);
+                    },
                     child: const Text(
                       "Forgot Password?",
                       style: TextStyle(color: Colors.white),

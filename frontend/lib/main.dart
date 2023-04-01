@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:voluntracker/cubit/login/login_cubit.dart';
 import 'package:voluntracker/cubit/sign_up/sign_up_cubit.dart';
 import 'package:voluntracker/router.dart';
@@ -13,6 +14,8 @@ import 'cubit/map/map_cubit.dart';
 import 'cubit/team/team_cubit.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   runApp(MyApp());
 }
 
