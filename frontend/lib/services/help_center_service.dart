@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:afet_takip/constants/api_constants.dart';
-import 'package:afet_takip/models/help_center/create_help_center_model.dart';
-import 'package:afet_takip/models/needed_supply/create_needed_supply_model.dart';
-import 'package:afet_takip/models/needed_volunteer/create_needed_volunteer_model.dart';
+import 'package:voluntracker/constants/api_constants.dart';
+import 'package:voluntracker/models/help_center/create_help_center_model.dart';
+import 'package:voluntracker/models/needed_supply/create_needed_supply_model.dart';
+import 'package:voluntracker/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 

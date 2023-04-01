@@ -1,4 +1,4 @@
-import 'package:afet_takip/view/widgets/profile_avatar.dart';
+import 'package:voluntracker/view/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
 
 class ParticipantCircleAvatar extends StatelessWidget {

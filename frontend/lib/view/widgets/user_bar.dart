@@ -1,5 +1,5 @@
-import 'package:afet_takip/models/user/user_model.dart';
-import 'package:afet_takip/router.dart';
+import 'package:voluntracker/models/user/user_model.dart';
+import 'package:voluntracker/router.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/user/user_info.dart';

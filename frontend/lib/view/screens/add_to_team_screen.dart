@@ -1,5 +1,5 @@
-import 'package:afet_takip/view/widgets/custom_drawer.dart';
-import 'package:afet_takip/view/widgets/participant_circle.dart';
+import 'package:voluntracker/view/widgets/custom_drawer.dart';
+import 'package:voluntracker/view/widgets/participant_circle.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

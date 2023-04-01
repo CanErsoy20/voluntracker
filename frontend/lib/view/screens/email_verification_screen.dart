@@ -1,6 +1,6 @@
-import 'package:afet_takip/cubit/sign_up/sign_up_cubit.dart';
-import 'package:afet_takip/models/confirm_email_model.dart';
-import 'package:afet_takip/router.dart';
+import 'package:voluntracker/cubit/sign_up/sign_up_cubit.dart';
+import 'package:voluntracker/models/confirm_email_model.dart';
+import 'package:voluntracker/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinput/pinput.dart';

@@ -2,7 +2,7 @@
     package="app.voluntracker.voluntracker">
    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
    <application
-        android:label="afet_takip"
+        android:label="Voluntracker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
