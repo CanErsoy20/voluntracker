@@ -109,26 +109,18 @@ class _LoginScreenState extends State<LoginScreen> {
               isObscure: context.read<LoginCubit>().isVisible,
             ),
             Row(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Forgot Password?",
-                      style: TextStyle(color: Colors.white),
-                    )),
                 Expanded(
                   child: CheckboxListTile(
+                      controlAffinity: ListTileControlAffinity.leading,
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 25),
                       side: const BorderSide(color: Colors.blue, width: 3),
                       checkColor: Colors.white,
-                      title: const FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: Text(
-                          "Remember Me",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                      title: Text(
+                        "Remember Me",
+                        style: TextStyle(color: Colors.white),
                       ),
                       value: context.read<LoginCubit>().rememberMe,
                       tristate: true,
@@ -136,6 +128,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         context.read<LoginCubit>().changeRememberMe();
                       }),
                 ),
+                TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "Forgot Password?",
+                      style: TextStyle(color: Colors.white),
+                    )),
               ],
             ),
             const SizedBox(
