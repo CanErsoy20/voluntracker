@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 class AboutUsScreen extends StatelessWidget {
@@ -29,22 +30,22 @@ class AboutUsScreen extends StatelessWidget {
                   _buildTeamMember(
                     name: 'Tolga Özgün',
                     email: 'tolgaozgun@gmail.com',
-                    image: AssetImage('assets/john.jpg'),
+                    image: AssetImage('assets/images/team/tolga.png'),
                   ),
                   _buildTeamMember(
                     name: 'Can Ersoy',
                     email: 'canersoy2002@gmail.com',
-                    image: AssetImage('assets/jane.jpg'),
+                    image: AssetImage('images/team/can.jpeg'),
                   ),
                   _buildTeamMember(
                     name: 'Selim Can Güler',
                     email: 'cs.selim.guler@gmail.com',
-                    image: AssetImage('assets/alex.jpg'),
+                    image: AssetImage('images/team/selim.JPG'),
                   ),
                   _buildTeamMember(
                     name: 'Berra Yüce',
                     email: 'berrayuce@gmail.com',
-                    image: AssetImage('assets/sarah.jpg'),
+                    image: AssetImage('images/team/berra.jpg'),
                   ),
                 ],
               ),
