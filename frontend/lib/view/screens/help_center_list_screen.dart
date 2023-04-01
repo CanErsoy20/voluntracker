@@ -67,7 +67,7 @@ class HelpCenterListScreen extends StatelessWidget {
                                           onPressed: () {
                                             context
                                                 .read<HelpCenterCubit>()
-                                                .myCenter = currentCenter;
+                                                .selectedCenter = currentCenter;
                                             Navigator.pushNamed(context,
                                                 Routes.helpCenterDetail);
                                           },

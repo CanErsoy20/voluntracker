@@ -19,13 +19,14 @@ import 'package:voluntracker/view/screens/image_picker_screen.dart';
 import 'package:voluntracker/view/screens/edit_profile_screen.dart';
 import 'package:voluntracker/view/screens/change_password_screen.dart';
 import 'package:voluntracker/view/screens/forgot_password_screen.dart';
+import 'package:voluntracker/view/screens/favorites_screen.dart';
+import 'package:voluntracker/view/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
   static const String landingRoute = "/landing";
-  static const String welcomeScreenRoute = "/welcome-screen";
-  static const String landingPageRoute = "/landing-page";
-  static const String loginRoute = "/";
+  static const String welcomeScreenRoute = "/";
+  static const String loginRoute = "/login";
   static const String registerRoute = "/register";
   static const String mapRoute = "/map";
   static const String helpCenterList = "/help-center-list";
@@ -42,6 +43,8 @@ class Routes {
   static const String myTeam = "/my-team";
   static const String forgotPassword = "/forgot-password";
   static const String changePassword = "/change-password";
+  static const String favorites = "/favorites";
+  static const String settings = "/settings";
 }
 
 class RouteGenerator {
@@ -67,8 +70,6 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => AddToTeamScreen());
       case Routes.volunteerTeams:
         return MaterialPageRoute(builder: (_) => VolunteerTeamsScreen());
-      case Routes.landingPageRoute:
-        return MaterialPageRoute(builder: (_) => LandingPage());
       case Routes.profile:
         return MaterialPageRoute(builder: (_) => ProfileScreen());
       case Routes.editProfile:
@@ -88,6 +89,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => ForgotPasswordScreen());
       case Routes.changePassword:
         return MaterialPageRoute(builder: (_) => ChangePasswordScreen());
+      case Routes.settings:
+        return MaterialPageRoute(builder: (_) => SettingsScreen());
+      case Routes.favorites:
+        return MaterialPageRoute(builder: (_) => FavoritesScreen());
       default:
         return MaterialPageRoute(builder: (_) => UndefinedScreen());
     }

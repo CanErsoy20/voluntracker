@@ -11,7 +11,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit(this.service) : super(SignUpInitial());
   AuthService service;
   SignUpModel signUpModel = SignUpModel(user: CreateUserModel());
-  bool isVisible = false;
+  bool isObscure = true;
 
   Future<void> signUp() async {
     emit(SignUpLoading());
@@ -35,7 +35,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   void changeVisible() {
     emit(SignUpChecking());
-    isVisible = !isVisible;
+    isObscure = !isObscure;
     emit(SignUpDisplay());
   }
 }

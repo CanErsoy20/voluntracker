@@ -440,6 +440,14 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                   itemCount: currentCenter.neededSupplyList!.length,
                   itemBuilder: (context, index) {
                     return CustomNeedCard(
+                      backgroundColor: currentCenter
+                                  .neededSupplyList![index].urgency ==
+                              "Low"
+                          ? Colors.green
+                          : currentCenter.neededSupplyList![index].urgency ==
+                                  "Medium"
+                              ? Colors.orange
+                              : Colors.red,
                       needName: currentCenter
                           .neededSupplyList![index].supplyTypeName!,
                       needCategory: currentCenter
@@ -448,16 +456,6 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
                           currentCenter.neededSupplyList![index].quantity!,
                       lastUpdatedAt:
                           currentCenter.neededSupplyList![index].updatedAt!,
-                      leading: Icon(
-                        Icons.warning_amber_sharp,
-                        color: currentCenter.neededSupplyList![index].urgency ==
-                                "Low"
-                            ? Colors.green
-                            : currentCenter.neededSupplyList![index].urgency ==
-                                    "Medium"
-                                ? Colors.orange
-                                : Colors.red,
-                      ),
                       trailing: IconButton(
                           onPressed: () {
                             _showUpdateSupplyNeedDialog(context,

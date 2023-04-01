@@ -111,9 +111,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
                         CustomTextFormField(
-                          isObscure: context.read<SignUpCubit>().isVisible,
+                          isObscure: context.read<SignUpCubit>().isObscure,
                           suffixIcon: IconButton(
-                            icon: Icon(!context.read<SignUpCubit>().isVisible
+                            icon: Icon(!context.read<SignUpCubit>().isObscure
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined),
                             onPressed: () {
@@ -131,11 +131,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
                         CustomTextFormField(
-                          isObscure: context.read<SignUpCubit>().isVisible,
+                          isObscure: context.read<SignUpCubit>().isObscure,
                           label: "Repeat Password",
                           hint: "Password",
                           suffixIcon: IconButton(
-                            icon: Icon(!context.read<SignUpCubit>().isVisible
+                            icon: Icon(!context.read<SignUpCubit>().isObscure
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined),
                             onPressed: () {

@@ -35,6 +35,7 @@ class Location {
 @ApiExtraModels(NeededSupplyEntity)
 @ApiExtraModels(NeededVolunteerEntity)
 export class HelpCenterEntity implements HelpCenter {
+  helpCenterImageUrls: string[];
   @ApiProperty({ type: Number, example: 125 })
   id: number;
 
