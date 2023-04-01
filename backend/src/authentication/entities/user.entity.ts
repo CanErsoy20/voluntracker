@@ -12,6 +12,7 @@ import {
 } from 'class-validator';
 
 export class UserEntity implements User {
+  profileImageUrl: string;
   isEmailConfirmed: boolean;
   activationCode: string;
   @ApiProperty({
