@@ -28,14 +28,25 @@ class _VolunteerTeamsScreenState extends State<VolunteerTeamsScreen> {
         title: const Text("Volunteer Teams"),
       ),
       endDrawer: CustomDrawer(loggedIn: true),
-      body: BlocBuilder<TeamCubit, TeamState>(
+      body: BlocConsumer<HelpCenterCubit, HelpCenterState>(
+        listener: (context, state) {
+          if (state is HelpCenterSuccess) {
+            Navigator.pop(context);
+            CustomSnackbars.successSnackbar(
+                context, state.title, state.description);
+          } else if (state is HelpCenterError) {
+            Navigator.pop(context);
+            CustomSnackbars.errorSnackbar(
+                context, state.title, state.description);
+          }
+        },
         builder: (context, state) {
-          if (state is TeamLoading) {
+          if (state is HelpCenterLoading) {
             return const Center(
               child: LoadingWidget(),
             );
           } else {
-            return VolunteerTeamList();
+            return const VolunteerTeamList();
           }
         },
       ),
