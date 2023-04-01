@@ -14,10 +14,12 @@ import 'package:afet_takip/view/screens/contact_us_screen.dart';
 import 'package:afet_takip/view/screens/email_verification_screen.dart';
 import 'package:afet_takip/view/screens/about_us_screen.dart';
 import 'package:afet_takip/view/screens/volunteer_teams_screen.dart';
+import 'package:afet_takip/view/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
   static const String landingRoute = "/landing";
+  static const String welcomeScreenRoute = "/welcome-screen";
   static const String landingPageRoute = "/landing-page";
   static const String loginRoute = "/";
   static const String registerRoute = "/register";
@@ -70,6 +72,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => AboutUsScreen());
       case Routes.myTeam:
         return MaterialPageRoute(builder: (_) => MyTeamScreen());
+      case Routes.welcomeScreenRoute:
+        return MaterialPageRoute(builder: (_) => WelcomeScreen());
       default:
         return MaterialPageRoute(builder: (_) => UndefinedScreen());
     }

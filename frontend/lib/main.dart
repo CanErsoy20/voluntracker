@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
                   backgroundColor: Color.fromARGB(225, 27, 40, 55))),
           debugShowCheckedModeBanner: false,
           onGenerateRoute: routeGenerator.getRoute,
-          initialRoute: Routes.loginRoute),
+          initialRoute: Routes.welcomeScreenRoute),
     );
   }
 }
