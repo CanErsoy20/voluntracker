@@ -16,6 +16,8 @@
 - Firebase
   - Firebase Cloud Messaging
   - Firebase Storage
+  - Firebase Crashlytics
+  - Firebase Analytics
 - Flutter
 - Google Maps API
 - Google Cloud
