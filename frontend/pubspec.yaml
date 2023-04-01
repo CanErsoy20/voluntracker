@@ -53,6 +53,7 @@ dependencies:
   pinput: ^2.2.31
   lottie: ^2.3.1
   shared_preferences: ^2.1.0
+  google_maps_flutter_web: ^0.4.0+7
 
 dev_dependencies:
   flutter_test:
