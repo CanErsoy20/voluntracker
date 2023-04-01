@@ -1,26 +1,35 @@
-# Use the official Flutter Docker image as a base
-FROM cirrusci/flutter:stable AS builder
+# Use an official Dart runtime as a parent image
+FROM google/dart AS dartbuilder
 
-# Set the working directory to the Flutter project folder
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y git unzip wget curl
+
+# Install Flutter
+ENV FLUTTER_HOME=/usr/local/flutter
+RUN git clone https://github.com/flutter/flutter.git $FLUTTER_HOME \
+  && $FLUTTER_HOME/bin/flutter precache \
+  && $FLUTTER_HOME/bin/flutter config --enable-web \
+  && $FLUTTER_HOME/bin/flutter doctor
+
+# Add the Flutter binary directory to your path
+ENV PATH=$PATH:$FLUTTER_HOME/bin
+
+# Set the working directory to /app
 WORKDIR /app
 
-# Copy the entire Flutter project folder into the Docker image
+# Copy the entire Flutter project to the container
 COPY . .
 
-# Run the following commands to install the necessary dependencies
-RUN flutter channel beta && flutter upgrade && flutter config --enable-web && flutter doctor && flutter pub get
+RUN flutter config --enable-web
 
-# Build the Flutter web app
-RUN flutter build web --release
+RUN flutter devices
 
-# Use the official NGINX Docker image as a base
-FROM nginx:stable-alpine
+# Install project dependencies
+RUN flutter pub get
 
-# Copy the built Flutter web app to the NGINX web root directory
-COPY --from=builder /app/build/web /usr/share/nginx/html
+# Build the Flutter web application
+RUN flutter build web
 
-# Expose port 80
-EXPOSE 80
+FROM nginx:alpine
 
-# Start NGINX and serve the Flutter web app
-CMD ["nginx", "-g", "daemon off;"]
+COPY --from=dartbuilder /app/build/web /usr/share/nginx/html
