@@ -1,4 +1,4 @@
-import 'package:afet_takip/models/needed_supply/create_needed_supply_model.dart';
+import 'package:voluntracker/models/needed_supply/create_needed_supply_model.dart';
 
 class NeededSupply extends CreateNeededSupply {
   int? id;

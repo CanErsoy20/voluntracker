@@ -1,5 +1,5 @@
-import 'package:afet_takip/models/help_center/busiest_hours_model.dart';
-import 'package:afet_takip/models/help_center/create_help_center_model.dart';
+import 'package:voluntracker/models/help_center/busiest_hours_model.dart';
+import 'package:voluntracker/models/help_center/create_help_center_model.dart';
 
 import '../coordinator_model.dart';
 import '../needed_supply/needed_supply_model.dart';

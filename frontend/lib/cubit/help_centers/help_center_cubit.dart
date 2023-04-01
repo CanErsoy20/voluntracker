@@ -1,11 +1,11 @@
-import 'package:afet_takip/models/assign_volunteer_model.dart';
-import 'package:afet_takip/models/help_center/busiest_hours_model.dart';
-import 'package:afet_takip/models/help_center/contact_info_model.dart';
-import 'package:afet_takip/models/help_center/create_help_center_model.dart';
-import 'package:afet_takip/models/help_center/location_model.dart';
-import 'package:afet_takip/models/help_center/open_close_info_model.dart';
-import 'package:afet_takip/models/needed_supply/create_needed_supply_model.dart';
-import 'package:afet_takip/models/types/supply_types_model.dart';
+import 'package:voluntracker/models/assign_volunteer_model.dart';
+import 'package:voluntracker/models/help_center/busiest_hours_model.dart';
+import 'package:voluntracker/models/help_center/contact_info_model.dart';
+import 'package:voluntracker/models/help_center/create_help_center_model.dart';
+import 'package:voluntracker/models/help_center/location_model.dart';
+import 'package:voluntracker/models/help_center/open_close_info_model.dart';
+import 'package:voluntracker/models/needed_supply/create_needed_supply_model.dart';
+import 'package:voluntracker/models/types/supply_types_model.dart';
 import 'package:bloc/bloc.dart';
 
 import '../../models/help_center/help_center_model.dart';

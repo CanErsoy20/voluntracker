@@ -1,4 +1,4 @@
-import 'package:afet_takip/models/help_center/open_close_info_model.dart';
+import 'package:voluntracker/models/help_center/open_close_info_model.dart';
 
 import 'busiest_hours_model.dart';
 import 'contact_info_model.dart';

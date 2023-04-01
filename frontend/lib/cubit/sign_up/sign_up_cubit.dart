@@ -1,5 +1,5 @@
-import 'package:afet_takip/models/auth/auth_response_model.dart';
-import 'package:afet_takip/services/auth_service.dart';
+import 'package:voluntracker/models/auth/auth_response_model.dart';
+import 'package:voluntracker/services/auth_service.dart';
 import 'package:bloc/bloc.dart';
 import '../../models/auth/create_user_model.dart';
 import '../../models/auth/sign_up_model.dart';

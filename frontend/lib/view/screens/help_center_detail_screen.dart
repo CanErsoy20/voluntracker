@@ -1,9 +1,9 @@
-import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
-import 'package:afet_takip/cubit/map/map_cubit.dart';
-import 'package:afet_takip/models/volunteer_model.dart';
-import 'package:afet_takip/router.dart';
-import 'package:afet_takip/view/widgets/custom_drawer.dart';
-import 'package:afet_takip/view/widgets/volunteer_list.dart';
+import 'package:voluntracker/cubit/help_centers/help_center_cubit.dart';
+import 'package:voluntracker/cubit/map/map_cubit.dart';
+import 'package:voluntracker/models/volunteer_model.dart';
+import 'package:voluntracker/router.dart';
+import 'package:voluntracker/view/widgets/custom_drawer.dart';
+import 'package:voluntracker/view/widgets/volunteer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
