@@ -19,10 +19,17 @@ class LoginCubit extends Cubit<LoginState> {
   AuthService service;
   Future<SharedPreferences> preferences = SharedPreferences.getInstance();
   bool rememberMe = false;
+  bool isVisible = false;
 
   void changeRememberMe() {
     emit(LoginChecking());
     rememberMe = !rememberMe;
+    emit(LoginDisplay());
+  }
+
+  void changeVisible() {
+    emit(LoginChecking());
+    isVisible = !isVisible;
     emit(LoginDisplay());
   }
 

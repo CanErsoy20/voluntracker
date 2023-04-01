@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: context.read<LoginCubit>().emailController,
               label: "Email",
               hint: "Email",
-              suffixIcon: const Icon(Icons.mail),
+              prefixIcon: const Icon(Icons.mail),
               customValidator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Email cannot be blank";
@@ -97,8 +97,16 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: context.read<LoginCubit>().passwordController,
               label: "Password",
               hint: "Password",
-              suffixIcon: const Icon(Icons.lock_outlined),
-              isObscure: true,
+              prefixIcon: const Icon(Icons.lock_outlined),
+              suffixIcon: IconButton(
+                icon: Icon(!context.read<LoginCubit>().isVisible
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined),
+                onPressed: () {
+                  context.read<LoginCubit>().changeVisible();
+                },
+              ),
+              isObscure: context.read<LoginCubit>().isVisible,
             ),
             Row(
               mainAxisSize: MainAxisSize.max,
@@ -111,7 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     )),
                 Expanded(
                   child: CheckboxListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 25),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 25),
                       side: const BorderSide(color: Colors.blue, width: 3),
                       checkColor: Colors.white,
                       title: const FittedBox(

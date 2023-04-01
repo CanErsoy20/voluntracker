@@ -9,6 +9,7 @@ class CustomTextFormField extends StatelessWidget {
     this.maxLines,
     this.onChanged,
     this.suffixIcon,
+    this.prefixIcon,
     this.controller,
     this.customValidator,
     this.enabled,
@@ -23,6 +24,7 @@ class CustomTextFormField extends StatelessWidget {
   int? maxLines;
   bool? isObscure;
   Widget? suffixIcon;
+  Widget? prefixIcon;
   TextEditingController? controller;
   void Function(String)? onChanged;
 
@@ -55,6 +57,7 @@ class CustomTextFormField extends StatelessWidget {
             enabled: enabled,
             initialValue: initialValue,
             decoration: InputDecoration(
+              prefixIcon: prefixIcon,
               suffixIcon: suffixIcon,
               hintText: hint,
               filled: true,

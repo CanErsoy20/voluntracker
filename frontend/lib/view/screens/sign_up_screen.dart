@@ -37,7 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               CustomSnackbars.successSnackbar(
                   context, state.title, state.description);
               Navigator.pushReplacementNamed(context, Routes.loginRoute);
-            } else {
+            } else if (state is SignUpConfirm) {
               Navigator.pushNamed(context, Routes.emailVerification);
             }
           },
@@ -111,8 +111,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
                         CustomTextFormField(
-                          isObscure: true,
-                          initialValue: "",
+                          isObscure: context.read<SignUpCubit>().isVisible,
+                          suffixIcon: IconButton(
+                            icon: Icon(!context.read<SignUpCubit>().isVisible
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined),
+                            onPressed: () {
+                              context.read<SignUpCubit>().changeVisible();
+                            },
+                          ),
                           label: "Password",
                           hint: "Password",
                           onChanged: (value) {
@@ -124,10 +131,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
                         CustomTextFormField(
-                          isObscure: true,
-                          initialValue: "",
+                          isObscure: context.read<SignUpCubit>().isVisible,
                           label: "Repeat Password",
                           hint: "Password",
+                          suffixIcon: IconButton(
+                            icon: Icon(!context.read<SignUpCubit>().isVisible
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined),
+                            onPressed: () {
+                              context.read<SignUpCubit>().changeVisible();
+                            },
+                          ),
                           onChanged: (value) {},
                           customValidator: (value) {
                             if (value == null || value.isEmpty) {
