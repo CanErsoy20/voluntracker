@@ -15,7 +15,6 @@ import 'package:voluntracker/view/screens/email_verification_screen.dart';
 import 'package:voluntracker/view/screens/about_us_screen.dart';
 import 'package:voluntracker/view/screens/volunteer_teams_screen.dart';
 import 'package:voluntracker/view/screens/welcome_screen.dart';
-import 'package:voluntracker/view/screens/image_picker_screen.dart';
 import 'package:voluntracker/view/screens/edit_profile_screen.dart';
 import 'package:voluntracker/view/screens/change_password_screen.dart';
 import 'package:voluntracker/view/screens/forgot_password_screen.dart';
@@ -24,8 +23,8 @@ import 'package:voluntracker/view/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
-  static const String landingRoute = "/landing";
   static const String welcomeScreenRoute = "/";
+  static const String landingRoute = "/landing";
   static const String loginRoute = "/login";
   static const String registerRoute = "/register";
   static const String mapRoute = "/map";
@@ -80,7 +79,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => EmailVerificationScreen());
       case Routes.aboutUs:
         return MaterialPageRoute(builder: (_) => AboutUsScreen());
-        // return MaterialPageRoute(builder: (_) => ImagePickerScreen());
+      // return MaterialPageRoute(builder: (_) => ImagePickerScreen());
       case Routes.myTeam:
         return MaterialPageRoute(builder: (_) => MyTeamScreen());
       case Routes.welcomeScreenRoute:

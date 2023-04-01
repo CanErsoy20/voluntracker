@@ -21,6 +21,7 @@ import '../widgets/custom_dropdown_form_field.dart';
 import '../widgets/custom_need_card.dart';
 import '../widgets/custom_snackbars.dart';
 import '../widgets/custom_text_form_field.dart';
+import '../widgets/not_found_widget.dart';
 
 class UpdateHelpCenterScreen extends StatefulWidget {
   const UpdateHelpCenterScreen({super.key});
@@ -102,37 +103,46 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
         Expanded(
           child: BlocBuilder<HelpCenterCubit, HelpCenterState>(
             builder: (context, state) {
-              return ListView.builder(
-                  itemCount: currentCenter.neededVolunteerList!.length,
-                  itemBuilder: (context, index) {
-                    return CustomNeedCard(
-                      backgroundColor: currentCenter
-                                  .neededVolunteerList![index].urgency ==
-                              "Low"
-                          ? Colors.green
-                          : currentCenter.neededVolunteerList![index].urgency ==
-                                  "Medium"
-                              ? Colors.orange
-                              : Colors.red,
-                      needName: currentCenter
-                          .neededVolunteerList![index].volunteerTypeName!,
-                      needCategory: currentCenter
-                          .neededVolunteerList![index].volunteerTypeCategory!,
-                      quantity:
-                          currentCenter.neededVolunteerList![index].quantity!,
-                      lastUpdatedAt:
-                          currentCenter.neededVolunteerList![index].updatedAt!,
-                      trailing: IconButton(
-                          onPressed: () {
-                            _showUpdateVolunteerNeedDialog(
-                              context,
-                              currentCenter.neededVolunteerList![index],
-                            );
-                          },
-                          iconSize: 20,
-                          icon: const Icon(Icons.edit)),
-                    );
-                  });
+              if (currentCenter.neededVolunteerList == null ||
+                  currentCenter.neededVolunteerList!.isEmpty) {
+                return NotFoundLottie(
+                    title: "No Volunteer Needed",
+                    description:
+                        "Currently there is not any volunteer need at this help center");
+              } else {
+                return ListView.builder(
+                    itemCount: currentCenter.neededVolunteerList!.length,
+                    itemBuilder: (context, index) {
+                      return CustomNeedCard(
+                        backgroundColor:
+                            currentCenter.neededVolunteerList![index].urgency ==
+                                    "Low"
+                                ? Colors.green
+                                : currentCenter.neededVolunteerList![index]
+                                            .urgency ==
+                                        "Medium"
+                                    ? Colors.orange
+                                    : Colors.red,
+                        needName: currentCenter
+                            .neededVolunteerList![index].volunteerTypeName!,
+                        needCategory: currentCenter
+                            .neededVolunteerList![index].volunteerTypeCategory!,
+                        quantity:
+                            currentCenter.neededVolunteerList![index].quantity!,
+                        lastUpdatedAt: currentCenter
+                            .neededVolunteerList![index].updatedAt!,
+                        trailing: IconButton(
+                            onPressed: () {
+                              _showUpdateVolunteerNeedDialog(
+                                context,
+                                currentCenter.neededVolunteerList![index],
+                              );
+                            },
+                            iconSize: 20,
+                            icon: const Icon(Icons.edit)),
+                      );
+                    });
+              }
             },
           ),
         ),
@@ -436,35 +446,43 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
         Expanded(
           child: BlocBuilder<HelpCenterCubit, HelpCenterState>(
             builder: (context, state) {
-              return ListView.builder(
-                  itemCount: currentCenter.neededSupplyList!.length,
-                  itemBuilder: (context, index) {
-                    return CustomNeedCard(
-                      backgroundColor: currentCenter
-                                  .neededSupplyList![index].urgency ==
-                              "Low"
-                          ? Colors.green
-                          : currentCenter.neededSupplyList![index].urgency ==
-                                  "Medium"
-                              ? Colors.orange
-                              : Colors.red,
-                      needName: currentCenter
-                          .neededSupplyList![index].supplyTypeName!,
-                      needCategory: currentCenter
-                          .neededSupplyList![index].supplyTypeCategory!,
-                      quantity:
-                          currentCenter.neededSupplyList![index].quantity!,
-                      lastUpdatedAt:
-                          currentCenter.neededSupplyList![index].updatedAt!,
-                      trailing: IconButton(
-                          onPressed: () {
-                            _showUpdateSupplyNeedDialog(context,
-                                currentCenter.neededSupplyList![index]);
-                          },
-                          iconSize: 20,
-                          icon: const Icon(Icons.edit)),
-                    );
-                  });
+              if (currentCenter.neededSupplyList == null ||
+                  currentCenter.neededSupplyList!.isEmpty) {
+                return NotFoundLottie(
+                    title: "No Supply Needed",
+                    description:
+                        "Currently there is not any supply need at this help center");
+              } else {
+                return ListView.builder(
+                    itemCount: currentCenter.neededSupplyList!.length,
+                    itemBuilder: (context, index) {
+                      return CustomNeedCard(
+                        backgroundColor: currentCenter
+                                    .neededSupplyList![index].urgency ==
+                                "Low"
+                            ? Colors.green
+                            : currentCenter.neededSupplyList![index].urgency ==
+                                    "Medium"
+                                ? Colors.orange
+                                : Colors.red,
+                        needName: currentCenter
+                            .neededSupplyList![index].supplyTypeName!,
+                        needCategory: currentCenter
+                            .neededSupplyList![index].supplyTypeCategory!,
+                        quantity:
+                            currentCenter.neededSupplyList![index].quantity!,
+                        lastUpdatedAt:
+                            currentCenter.neededSupplyList![index].updatedAt!,
+                        trailing: IconButton(
+                            onPressed: () {
+                              _showUpdateSupplyNeedDialog(context,
+                                  currentCenter.neededSupplyList![index]);
+                            },
+                            iconSize: 20,
+                            icon: const Icon(Icons.edit)),
+                      );
+                    });
+              }
             },
           ),
         ),

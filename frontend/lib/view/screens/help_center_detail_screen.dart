@@ -3,6 +3,7 @@ import 'package:voluntracker/cubit/map/map_cubit.dart';
 import 'package:voluntracker/models/volunteer_model.dart';
 import 'package:voluntracker/router.dart';
 import 'package:voluntracker/view/widgets/custom_drawer.dart';
+import 'package:voluntracker/view/widgets/not_found_widget.dart';
 import 'package:voluntracker/view/widgets/volunteer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,8 +41,11 @@ class HelpCenterDetailScreen extends StatelessWidget {
           ),
           endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
           body: myCenter == null
-              ? const Center(
-                  child: Text("You are not assigned to a help center yet :("),
+              ? Center(
+                  child: NotFoundLottie(
+                      title: "Help Center Not Found",
+                      description:
+                          "You are not assigned to a help center yet :("),
                 )
               : DefaultTabController(
                   length: 2,
@@ -159,8 +163,20 @@ class HelpCenterDetailScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: TabBarView(children: [
-                          _buildVolunteerNeeds(myCenter),
-                          _buildSupplyNeeds(myCenter)
+                          myCenter.neededVolunteerList == null ||
+                                  myCenter.neededVolunteerList!.isEmpty
+                              ? NotFoundLottie(
+                                  title: "No Volunteer Needed",
+                                  description:
+                                      "Currently there is not any volunteer need at this help center")
+                              : _buildVolunteerNeeds(myCenter),
+                          myCenter.neededSupplyList == null ||
+                                  myCenter.neededSupplyList!.isEmpty
+                              ? NotFoundLottie(
+                                  title: "No Supply Needed",
+                                  description:
+                                      "Currently there is not any supply need at this help center")
+                              : _buildSupplyNeeds(myCenter),
                         ]),
                       ),
                     ],
@@ -188,10 +204,6 @@ class HelpCenterDetailScreen extends StatelessWidget {
                 needCategory: currentCenter
                     .neededVolunteerList![index].volunteerTypeCategory!,
                 quantity: currentCenter.neededVolunteerList![index].quantity!,
-                // (currentCenter.volunteerCapacity! -
-                //         currentCenter
-                //             .neededVolunteerList![index].quantity!) /
-                //     currentCenter.volunteerCapacity!,
                 lastUpdatedAt:
                     currentCenter.neededVolunteerList![index].updatedAt!,
                 leading: Icon(

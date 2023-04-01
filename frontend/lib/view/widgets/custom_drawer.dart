@@ -1,7 +1,9 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:voluntracker/router.dart';
 import 'package:voluntracker/view/widgets/profile_avatar.dart';
 import 'package:flutter/material.dart';
 
+import '../../cubit/help_centers/help_center_cubit.dart';
 import '../../models/user/user_info.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -105,6 +107,7 @@ class CustomDrawer extends StatelessWidget {
                   onTap: () {
                     UserInfo.loggedUser = null;
                     UserInfo.tokens = null;
+                    context.read<HelpCenterCubit>().myCenter = null;
                     Navigator.pushReplacementNamed(context, Routes.loginRoute);
                   },
                   prefixIcon: const Icon(

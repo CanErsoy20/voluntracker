@@ -25,7 +25,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Favorites",
       "icon": Icons.favorite,
-      "route": "/volunteer",
+      "route": "/favorites",
     },
     {
       "title": "Contact Us",
@@ -68,7 +68,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Favorites",
       "icon": Icons.favorite,
-      "route": "/volunteer",
+      "route": "/favorites",
     },
     {
       "title": "My Help Center",
@@ -111,7 +111,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Favorites",
       "icon": Icons.favorite,
-      "route": "/volunteer",
+      "route": "/favorites",
     },
     {
       "title": "Contact Us",
@@ -154,7 +154,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Favorites",
       "icon": Icons.favorite,
-      "route": "/volunteer",
+      "route": "/favorites",
     },
     {
       "title": "Contact Us",
