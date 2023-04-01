@@ -1,4 +1,4 @@
-import 'package:voluntracker/view/screens/add_to_team_screen.dart';
+import 'package:voluntracker/view/screens/team_details_screen.dart';
 import 'package:voluntracker/view/screens/create_help_center_screen.dart';
 import 'package:voluntracker/view/screens/help_center_detail_screen.dart';
 import 'package:voluntracker/view/screens/help_center_list_screen.dart';
@@ -66,7 +66,7 @@ class RouteGenerator {
       case Routes.updateHelpCenter:
         return MaterialPageRoute(builder: (_) => UpdateHelpCenterScreen());
       case Routes.addToTeam:
-        return MaterialPageRoute(builder: (_) => AddToTeamScreen());
+        return MaterialPageRoute(builder: (_) => TeamDetailsScreen());
       case Routes.volunteerTeams:
         return MaterialPageRoute(builder: (_) => VolunteerTeamsScreen());
       case Routes.profile:

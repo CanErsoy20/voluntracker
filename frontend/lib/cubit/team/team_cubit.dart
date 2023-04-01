@@ -13,6 +13,7 @@ class TeamCubit extends Cubit<TeamState> {
   TeamService service;
   CreateTeamModel newTeam = CreateTeamModel();
   VolunteerTeam selectedTeam = VolunteerTeam(volunteers: []);
+  int selectedTeamIndex = 0;
   List<Volunteer> volunteersToAdd = [];
   Future<void> createNewTeam() async {
     emit(TeamLoading());

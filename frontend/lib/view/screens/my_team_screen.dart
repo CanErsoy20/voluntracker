@@ -3,13 +3,13 @@ import 'package:voluntracker/models/user/user_info.dart';
 import 'package:voluntracker/view/widgets/custom_drawer.dart';
 import 'package:voluntracker/view/widgets/custom_text_field.dart';
 import 'package:voluntracker/view/widgets/loading_widget.dart';
-import 'package:voluntracker/view/widgets/volunteer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubit/help_centers/help_center_cubit.dart';
 import '../../cubit/team/team_cubit.dart';
 import '../../models/volunteer_team_model.dart';
 import '../widgets/custom_snackbars.dart';
+import '../widgets/volunteer_teams_list.dart';
 
 class MyTeamScreen extends StatefulWidget {
   const MyTeamScreen({super.key});
@@ -66,11 +66,7 @@ class _MyTeamScreenState extends State<MyTeamScreen> {
                 child: LoadingWidget(),
               );
             } else {
-              return VolunteerList(
-                volunteerTeams:
-                    context.read<HelpCenterCubit>().myCenter!.volunteerTeams ??
-                        [],
-              );
+              return VolunteerTeamList();
             }
           },
         ),
