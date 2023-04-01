@@ -15,6 +15,10 @@ import 'package:voluntracker/view/screens/email_verification_screen.dart';
 import 'package:voluntracker/view/screens/about_us_screen.dart';
 import 'package:voluntracker/view/screens/volunteer_teams_screen.dart';
 import 'package:voluntracker/view/screens/welcome_screen.dart';
+import 'package:voluntracker/view/screens/image_picker_screen.dart';
+import 'package:voluntracker/view/screens/edit_profile_screen.dart';
+import 'package:voluntracker/view/screens/change_password_screen.dart';
+import 'package:voluntracker/view/screens/forgot_password_screen.dart';
 import 'package:voluntracker/view/screens/favorites_screen.dart';
 import 'package:voluntracker/view/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -32,10 +36,13 @@ class Routes {
   static const String updateHelpCenter = "/update-help-center";
   static const String addToTeam = "/add-team";
   static const String profile = "/profile";
+  static const String editProfile = "/edit-profile";
   static const String contactUs = "/contact-us";
   static const String emailVerification = "/email-verification";
   static const String aboutUs = "/about-us";
   static const String myTeam = "/my-team";
+  static const String forgotPassword = "/forgot-password";
+  static const String changePassword = "/change-password";
   static const String favorites = "/favorites";
   static const String settings = "/settings";
 }
@@ -65,16 +72,23 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => VolunteerTeamsScreen());
       case Routes.profile:
         return MaterialPageRoute(builder: (_) => ProfileScreen());
+      case Routes.editProfile:
+        return MaterialPageRoute(builder: (_) => EditProfileScreen());
       case Routes.contactUs:
         return MaterialPageRoute(builder: (_) => ContactUsScreen());
       case Routes.emailVerification:
         return MaterialPageRoute(builder: (_) => EmailVerificationScreen());
       case Routes.aboutUs:
         return MaterialPageRoute(builder: (_) => AboutUsScreen());
+        // return MaterialPageRoute(builder: (_) => ImagePickerScreen());
       case Routes.myTeam:
         return MaterialPageRoute(builder: (_) => MyTeamScreen());
       case Routes.welcomeScreenRoute:
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
+      case Routes.forgotPassword:
+        return MaterialPageRoute(builder: (_) => ForgotPasswordScreen());
+      case Routes.changePassword:
+        return MaterialPageRoute(builder: (_) => ChangePasswordScreen());
       case Routes.settings:
         return MaterialPageRoute(builder: (_) => SettingsScreen());
       case Routes.favorites:

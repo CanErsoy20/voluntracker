@@ -46,13 +46,16 @@ dependencies:
   intl: ^0.18.0
   validators: ^3.0.0
   awesome_snackbar_content: ^0.1.1
-  firebase_core: ^2.8.0
+  firebase_core: ^2.9.0
   firebase_messaging: ^14.3.0
   star_menu: ^3.1.4
   carousel_slider: ^4.2.1
   pinput: ^2.2.31
   lottie: ^2.3.1
   shared_preferences: ^2.1.0
+  image_picker: ^0.8.7+1
+  firebase_storage: ^11.1.0
+  google_maps_flutter_web: ^0.4.0+7
 
 dev_dependencies:
   flutter_test:
