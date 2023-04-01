@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:afet_takip/constants/api_constants.dart';
-import 'package:afet_takip/models/confirm_email_response_model.dart';
+import 'package:voluntracker/constants/api_constants.dart';
+import 'package:voluntracker/models/confirm_email_response_model.dart';
 import 'package:http/http.dart';
 
 import '../api.dart';

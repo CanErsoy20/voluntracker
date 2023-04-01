@@ -1,27 +1,28 @@
-import 'package:afet_takip/view/screens/add_to_team_screen.dart';
-import 'package:afet_takip/view/screens/create_help_center_screen.dart';
-import 'package:afet_takip/view/screens/help_center_detail_screen.dart';
-import 'package:afet_takip/view/screens/help_center_list_screen.dart';
-import 'package:afet_takip/view/screens/login_screen.dart';
-import 'package:afet_takip/view/screens/map_screen.dart';
-import 'package:afet_takip/view/screens/my_team_screen.dart';
-import 'package:afet_takip/view/screens/sign_up_screen.dart';
-import 'package:afet_takip/view/screens/undefined_screen.dart';
-import 'package:afet_takip/view/screens/update_help_center_screen.dart';
-import 'package:afet_takip/view/screens/landing_page.dart';
-import 'package:afet_takip/view/screens/profile_screen.dart';
-import 'package:afet_takip/view/screens/contact_us_screen.dart';
-import 'package:afet_takip/view/screens/email_verification_screen.dart';
-import 'package:afet_takip/view/screens/about_us_screen.dart';
-import 'package:afet_takip/view/screens/volunteer_teams_screen.dart';
-import 'package:afet_takip/view/screens/welcome_screen.dart';
+import 'package:voluntracker/view/screens/add_to_team_screen.dart';
+import 'package:voluntracker/view/screens/create_help_center_screen.dart';
+import 'package:voluntracker/view/screens/help_center_detail_screen.dart';
+import 'package:voluntracker/view/screens/help_center_list_screen.dart';
+import 'package:voluntracker/view/screens/login_screen.dart';
+import 'package:voluntracker/view/screens/map_screen.dart';
+import 'package:voluntracker/view/screens/my_team_screen.dart';
+import 'package:voluntracker/view/screens/sign_up_screen.dart';
+import 'package:voluntracker/view/screens/undefined_screen.dart';
+import 'package:voluntracker/view/screens/update_help_center_screen.dart';
+import 'package:voluntracker/view/screens/landing_page.dart';
+import 'package:voluntracker/view/screens/profile_screen.dart';
+import 'package:voluntracker/view/screens/contact_us_screen.dart';
+import 'package:voluntracker/view/screens/email_verification_screen.dart';
+import 'package:voluntracker/view/screens/about_us_screen.dart';
+import 'package:voluntracker/view/screens/volunteer_teams_screen.dart';
+import 'package:voluntracker/view/screens/welcome_screen.dart';
+import 'package:voluntracker/view/screens/favorites_screen.dart';
+import 'package:voluntracker/view/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
   static const String landingRoute = "/landing";
-  static const String welcomeScreenRoute = "/welcome-screen";
-  static const String landingPageRoute = "/landing-page";
-  static const String loginRoute = "/";
+  static const String welcomeScreenRoute = "/";
+  static const String loginRoute = "/login";
   static const String registerRoute = "/register";
   static const String mapRoute = "/map";
   static const String helpCenterList = "/help-center-list";
@@ -35,6 +36,8 @@ class Routes {
   static const String emailVerification = "/email-verification";
   static const String aboutUs = "/about-us";
   static const String myTeam = "/my-team";
+  static const String favorites = "/favorites";
+  static const String settings = "/settings";
 }
 
 class RouteGenerator {
@@ -60,8 +63,6 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => AddToTeamScreen());
       case Routes.volunteerTeams:
         return MaterialPageRoute(builder: (_) => VolunteerTeamsScreen());
-      case Routes.landingPageRoute:
-        return MaterialPageRoute(builder: (_) => LandingPage());
       case Routes.profile:
         return MaterialPageRoute(builder: (_) => ProfileScreen());
       case Routes.contactUs:
@@ -74,6 +75,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => MyTeamScreen());
       case Routes.welcomeScreenRoute:
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
+      case Routes.settings:
+        return MaterialPageRoute(builder: (_) => SettingsScreen());
+      case Routes.favorites:
+        return MaterialPageRoute(builder: (_) => FavoritesScreen());
       default:
         return MaterialPageRoute(builder: (_) => UndefinedScreen());
     }

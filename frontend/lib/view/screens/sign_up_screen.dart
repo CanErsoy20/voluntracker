@@ -1,7 +1,7 @@
-import 'package:afet_takip/cubit/sign_up/sign_up_cubit.dart';
-import 'package:afet_takip/view/widgets/custom_drawer.dart';
-import 'package:afet_takip/view/widgets/custom_text_form_field.dart';
-import 'package:afet_takip/view/widgets/loading_widget.dart';
+import 'package:voluntracker/cubit/sign_up/sign_up_cubit.dart';
+import 'package:voluntracker/view/widgets/custom_drawer.dart';
+import 'package:voluntracker/view/widgets/custom_text_form_field.dart';
+import 'package:voluntracker/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:validators/validators.dart';
@@ -111,9 +111,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
                         CustomTextFormField(
-                          isObscure: context.read<SignUpCubit>().isVisible,
+                          isObscure: context.read<SignUpCubit>().isObscure,
                           suffixIcon: IconButton(
-                            icon: Icon(!context.read<SignUpCubit>().isVisible
+                            icon: Icon(!context.read<SignUpCubit>().isObscure
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined),
                             onPressed: () {
@@ -131,11 +131,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
                         CustomTextFormField(
-                          isObscure: context.read<SignUpCubit>().isVisible,
+                          isObscure: context.read<SignUpCubit>().isObscure,
                           label: "Repeat Password",
                           hint: "Password",
                           suffixIcon: IconButton(
-                            icon: Icon(!context.read<SignUpCubit>().isVisible
+                            icon: Icon(!context.read<SignUpCubit>().isObscure
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined),
                             onPressed: () {

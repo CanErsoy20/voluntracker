@@ -1,8 +1,8 @@
-import 'package:afet_takip/models/user/user_info.dart';
-import 'package:afet_takip/router.dart';
-import 'package:afet_takip/view/widgets/custom_drawer.dart';
-import 'package:afet_takip/view/widgets/custom_menu_card.dart';
-import 'package:afet_takip/view/widgets/user_bar.dart';
+import 'package:voluntracker/models/user/user_info.dart';
+import 'package:voluntracker/router.dart';
+import 'package:voluntracker/view/widgets/custom_drawer.dart';
+import 'package:voluntracker/view/widgets/custom_menu_card.dart';
+import 'package:voluntracker/view/widgets/user_bar.dart';
 import 'package:flutter/material.dart';
 
 class LandingPage extends StatelessWidget {
@@ -189,40 +189,46 @@ class LandingPage extends StatelessWidget {
     } else if (UserInfo.loggedUser!.getHighestRole() == "Admin") {
       selectedCards = adminCards;
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Voluntracker"),
-        centerTitle: true,
-      ),
-      endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              UserBar(user: UserInfo.loggedUser!),
-              // Put an input field here
-              const SizedBox(
-                height: 20,
-              ),
-              GridView.count(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                crossAxisCount: 3,
-                mainAxisSpacing: 8.0,
-                crossAxisSpacing: 8.0,
-                childAspectRatio: 1.0,
-                children: List.generate(selectedCards.length, (index) {
-                  return CustomMenuCard(
-                      title: "${selectedCards[index]["title"]}",
-                      icon: selectedCards[index]["icon"] as IconData,
-                      route: "${selectedCards[index]["route"]}");
-                }),
-              ),
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: SizedBox.shrink(),
+          title: const Text("Voluntracker"),
+          centerTitle: true,
+        ),
+        endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                UserBar(user: UserInfo.loggedUser!),
+                // Put an input field here
+                const SizedBox(
+                  height: 20,
+                ),
+                GridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 8.0,
+                  childAspectRatio: 1.0,
+                  children: List.generate(selectedCards.length, (index) {
+                    return CustomMenuCard(
+                        title: "${selectedCards[index]["title"]}",
+                        icon: selectedCards[index]["icon"] as IconData,
+                        route: "${selectedCards[index]["route"]}");
+                  }),
+                ),
+              ],
+            ),
           ),
         ),
       ),

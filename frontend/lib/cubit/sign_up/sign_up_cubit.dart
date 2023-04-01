@@ -1,5 +1,5 @@
-import 'package:afet_takip/models/auth/auth_response_model.dart';
-import 'package:afet_takip/services/auth_service.dart';
+import 'package:voluntracker/models/auth/auth_response_model.dart';
+import 'package:voluntracker/services/auth_service.dart';
 import 'package:bloc/bloc.dart';
 import '../../models/auth/create_user_model.dart';
 import '../../models/auth/sign_up_model.dart';
@@ -11,7 +11,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit(this.service) : super(SignUpInitial());
   AuthService service;
   SignUpModel signUpModel = SignUpModel(user: CreateUserModel());
-  bool isVisible = false;
+  bool isObscure = true;
 
   Future<void> signUp() async {
     emit(SignUpLoading());
@@ -35,7 +35,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   void changeVisible() {
     emit(SignUpChecking());
-    isVisible = !isVisible;
+    isObscure = !isObscure;
     emit(SignUpDisplay());
   }
 }

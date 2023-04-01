@@ -1,5 +1,5 @@
-import 'package:afet_takip/models/create_team_model.dart';
-import 'package:afet_takip/models/user/user_info.dart';
+import 'package:voluntracker/models/create_team_model.dart';
+import 'package:voluntracker/models/user/user_info.dart';
 import 'package:bloc/bloc.dart';
 
 import '../../models/add_volunteer_response_model.dart';

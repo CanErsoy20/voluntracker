@@ -1,4 +1,4 @@
-import 'package:afet_takip/services/auth_service.dart';
+import 'package:voluntracker/services/auth_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,7 +19,7 @@ class LoginCubit extends Cubit<LoginState> {
   AuthService service;
   Future<SharedPreferences> preferences = SharedPreferences.getInstance();
   bool rememberMe = false;
-  bool isVisible = false;
+  bool isObscure = true;
 
   void changeRememberMe() {
     emit(LoginChecking());
@@ -29,7 +29,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   void changeVisible() {
     emit(LoginChecking());
-    isVisible = !isVisible;
+    isObscure = !isObscure;
     emit(LoginDisplay());
   }
 

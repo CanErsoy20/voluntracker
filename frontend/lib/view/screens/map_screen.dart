@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:afet_takip/cubit/help_centers/help_center_cubit.dart';
-import 'package:afet_takip/models/help_center/help_center_model.dart';
-import 'package:afet_takip/router.dart';
-import 'package:afet_takip/view/widgets/custom_google_maps.dart';
-import 'package:afet_takip/view/widgets/loading_widget.dart';
+import 'package:voluntracker/cubit/help_centers/help_center_cubit.dart';
+import 'package:voluntracker/models/help_center/help_center_model.dart';
+import 'package:voluntracker/router.dart';
+import 'package:voluntracker/view/widgets/custom_google_maps.dart';
+import 'package:voluntracker/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -230,7 +230,7 @@ class _MapScreenState extends State<MapScreen> {
           ),
           ElevatedButton(
               onPressed: () {
-                context.read<HelpCenterCubit>().myCenter = center;
+                context.read<HelpCenterCubit>().selectedCenter = center;
                 Navigator.pushNamed(context, Routes.helpCenterDetail);
               },
               child: const Text("Show Details"))
