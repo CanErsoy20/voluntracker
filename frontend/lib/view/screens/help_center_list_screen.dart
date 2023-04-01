@@ -4,6 +4,7 @@ import 'package:voluntracker/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:voluntracker/view/widgets/not_found_widget.dart';
 
 import '../../cubit/map/map_cubit.dart';
 import '../../models/help_center/help_center_model.dart';
@@ -37,66 +38,77 @@ class HelpCenterListScreen extends StatelessWidget {
                         },
                         child: const Text("Go To Map")),
                   ),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: context
+                  (context.read<HelpCenterCubit>().helpCenterList == null ||
+                          context
                               .read<HelpCenterCubit>()
-                              .helpCenterList
-                              ?.length ??
-                          0,
-                      itemBuilder: (context, index) {
-                        HelpCenterModel currentCenter = context
-                            .read<HelpCenterCubit>()
-                            .helpCenterList![index];
-                        return Card(
-                          elevation: 5,
-                          child: ExpansionTile(
-                            title: Text(currentCenter.name!),
-                            children: [
-                              ListTile(
-                                title: Text(
-                                    "Adress: ${currentCenter.contactInfo!.address!}"),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            context
-                                                .read<HelpCenterCubit>()
-                                                .selectedCenter = currentCenter;
-                                            Navigator.pushNamed(context,
-                                                Routes.helpCenterDetail);
-                                          },
-                                          child: const Text("Show Details")),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            context
+                              .helpCenterList!
+                              .isEmpty)
+                      ? NotFoundLottie(
+                          title: "Help Center List Not Found",
+                          description:
+                              "Currently there are no help centers to display")
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: context
+                                  .read<HelpCenterCubit>()
+                                  .helpCenterList
+                                  ?.length ??
+                              0,
+                          itemBuilder: (context, index) {
+                            HelpCenterModel currentCenter = context
+                                .read<HelpCenterCubit>()
+                                .helpCenterList![index];
+                            return Card(
+                              elevation: 5,
+                              child: ExpansionTile(
+                                title: Text(currentCenter.name!),
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                        "Adress: ${currentCenter.contactInfo!.address!}"),
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                context
+                                                        .read<HelpCenterCubit>()
+                                                        .selectedCenter =
+                                                    currentCenter;
+                                                Navigator.pushNamed(context,
+                                                    Routes.helpCenterDetail);
+                                              },
+                                              child:
+                                                  const Text("Show Details")),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                context
+                                                        .read<MapCubit>()
+                                                        .initialCameraLocation =
+                                                    LatLng(
+                                                        currentCenter
+                                                            .location!.lat!,
+                                                        currentCenter
+                                                            .location!.lon!);
+                                                context
                                                     .read<MapCubit>()
-                                                    .initialCameraLocation =
-                                                LatLng(
-                                                    currentCenter
-                                                        .location!.lat!,
-                                                    currentCenter
-                                                        .location!.lon!);
-                                            context
-                                                .read<MapCubit>()
-                                                .getCurrentLocation();
-                                            Navigator.of(context)
-                                                .pushNamed(Routes.mapRoute);
-                                          },
-                                          child: const Text("See On Map"))
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      })
+                                                    .getCurrentLocation();
+                                                Navigator.of(context)
+                                                    .pushNamed(Routes.mapRoute);
+                                              },
+                                              child: const Text("See On Map"))
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          })
                 ],
               ),
             );

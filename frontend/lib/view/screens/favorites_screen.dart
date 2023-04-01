@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:voluntracker/view/widgets/not_found_widget.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -15,9 +16,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         centerTitle: true,
         title: const Text("Favorites"),
       ),
-      body: const Center(
-        child: Text(
-            "This page is currently under construction...\n We thank you for your patience."),
+      body: Center(
+        child: NotFoundLottie(
+            title: "This page is currently under construction...",
+            description: "We thank you for your patience."),
       ),
     );
   }
