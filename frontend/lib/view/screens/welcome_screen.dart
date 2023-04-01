@@ -12,9 +12,9 @@ class WelcomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Logo at the top
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(20),
-            // child: Image.asset('assets/logo.png'),
+            child: Image.asset("assets/images/voluntracker.png"),
           ),
 
           // Catchphrase to encourage volunteering
