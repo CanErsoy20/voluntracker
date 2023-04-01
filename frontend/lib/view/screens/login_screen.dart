@@ -113,24 +113,18 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.forgotPassword);
-                    },
-                    child: const Text(
-                      "Forgot Password?",
-                      style: TextStyle(color: Colors.white),
-                    )),
                 Expanded(
                   child: CheckboxListTile(
                       controlAffinity: ListTileControlAffinity.leading,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 25),
                       side: const BorderSide(color: Colors.blue, width: 3),
                       checkColor: Colors.white,
-                      title: Text(
+                      title: const Text(
                         "Remember Me",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
+                        softWrap: true,
                       ),
                       value: context.read<LoginCubit>().rememberMe,
                       tristate: true,
@@ -141,7 +135,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       }),
                 ),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, Routes.forgotPassword);
+                    },
                     child: const Text(
                       "Forgot Password?",
                       style: TextStyle(color: Colors.white),
