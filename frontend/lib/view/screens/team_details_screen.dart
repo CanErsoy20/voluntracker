@@ -39,7 +39,9 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                 .read<HelpCenterCubit>()
                 .myCenter!
                 .volunteerTeams![context.read<TeamCubit>().selectedTeamIndex];
+
             context.read<TeamCubit>().emitDisplay();
+            Navigator.pop(context);
           } else if (state is TeamError) {
             CustomSnackbars.errorSnackbar(
                 context, state.title, state.description);
@@ -47,7 +49,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
         },
         builder: (context, state) {
           if (state is TeamLoading) {
-            return Center(
+            return const Center(
               child: LoadingWidget(),
             );
           }

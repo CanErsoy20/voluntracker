@@ -2,13 +2,13 @@ import 'package:voluntracker/models/assign_volunteer_model.dart';
 import 'package:voluntracker/view/widgets/custom_drawer.dart';
 import 'package:voluntracker/view/widgets/custom_text_field.dart';
 import 'package:voluntracker/view/widgets/loading_widget.dart';
-import 'package:voluntracker/view/widgets/volunteer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:star_menu/star_menu.dart';
 import '../../cubit/help_centers/help_center_cubit.dart';
 import '../../cubit/team/team_cubit.dart';
 import '../widgets/custom_snackbars.dart';
+import '../widgets/volunteer_teams_list.dart';
 
 class VolunteerTeamsScreen extends StatefulWidget {
   const VolunteerTeamsScreen({super.key});
@@ -35,7 +35,7 @@ class _VolunteerTeamsScreenState extends State<VolunteerTeamsScreen> {
               child: LoadingWidget(),
             );
           } else {
-            return const VolunteerList();
+            return VolunteerTeamList();
           }
         },
       ),

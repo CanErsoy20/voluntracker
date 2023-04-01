@@ -7,8 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../cubit/help_centers/help_center_cubit.dart';
 
-class VolunteerList extends StatelessWidget {
-  const VolunteerList({super.key});
+class VolunteerTeamList extends StatelessWidget {
+  const VolunteerTeamList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class VolunteerList extends StatelessWidget {
                 .volunteerTeams!
                 .length,
             itemBuilder: (context, index) {
-              final currentVolunteerTeam = context
+              VolunteerTeam currentVolunteerTeam = context
                   .read<HelpCenterCubit>()
                   .myCenter!
                   .volunteerTeams![index];
@@ -69,17 +69,24 @@ class VolunteerList extends StatelessWidget {
     if (volunteers.isNotEmpty) {
       return volunteers
           .map((volunteer) => ListTile(
-                leading: CircleAvatar(),
-                title: Text(
-                    "${volunteer.user?.firstname} ${volunteer.user?.surname}"),
-                subtitle: Text("${volunteer.user?.getHighestRole()}"),
-                trailing: IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () {
-                    // remove from team
-                  },
-                ),
-              ))
+              leading: CircleAvatar(),
+              title: Text(
+                  "${volunteer.user?.firstname} ${volunteer.user?.surname}"),
+              subtitle: Text("${volunteer.user?.getHighestRole()}"),
+              trailing: PopupMenuButton(
+                itemBuilder: (contex) {
+                  return [
+                    PopupMenuItem<int>(
+                      value: 0,
+                      child: const Text("Remove from team"),
+                      onTap: () {
+                        // remove isteği at
+                      },
+                    ),
+                  ];
+                },
+                position: PopupMenuPosition.over,
+              )))
           .toList();
     } else {
       return [];
