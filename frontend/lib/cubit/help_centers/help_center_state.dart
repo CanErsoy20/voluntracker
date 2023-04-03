@@ -23,3 +23,7 @@ class HelpCenterSuccess extends HelpCenterState {
 }
 
 class HelpCenterEditing extends HelpCenterState {}
+
+class HelpCenterSearching extends HelpCenterState {}
+
+class HelpCenterNotFound extends HelpCenterState {}

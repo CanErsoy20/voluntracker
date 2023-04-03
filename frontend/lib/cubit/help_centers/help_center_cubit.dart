@@ -21,7 +21,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
     getVolunteerTypes();
   }
   HelpCenterService service;
-  List<HelpCenterModel>? helpCenterList;
+  List<HelpCenterModel>? allHelpCentersList;
+  List<HelpCenterModel>? tempHelpCentersList;
   HelpCenterModel? selectedCenter;
   HelpCenterModel? myCenter;
 
@@ -44,8 +45,9 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
 
   Future<void> getHelpCenters() async {
     emit(HelpCenterLoading());
-    helpCenterList = await service.getHelpCenters();
-    if (helpCenterList != null) {
+    allHelpCentersList = await service.getHelpCenters();
+    tempHelpCentersList = allHelpCentersList;
+    if (allHelpCentersList != null) {
       emit(HelpCenterDisplay());
     } else {
       emit(HelpCenterError("Not Found", "No Help Center Found"));
@@ -209,5 +211,25 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
 
   void emitDisplay() {
     emit(HelpCenterDisplay());
+  }
+
+  void searchCenters(String query) {
+    emit(HelpCenterSearching());
+
+    if (query == "") {
+      tempHelpCentersList = allHelpCentersList;
+      emitDisplay();
+    } else {
+      tempHelpCentersList = allHelpCentersList
+          ?.where((element) =>
+              (element.city!.toLowerCase().contains(query.toLowerCase()) ||
+                  element.name!.toLowerCase().contains(query.toLowerCase())))
+          .toList();
+      if (tempHelpCentersList!.isEmpty) {
+        emit(HelpCenterNotFound());
+      } else {
+        emit(HelpCenterDisplay());
+      }
+    }
   }
 }
