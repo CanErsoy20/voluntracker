@@ -6,6 +6,7 @@ import 'package:voluntracker/models/needed_supply/create_needed_supply_model.dar
 import 'package:voluntracker/models/needed_volunteer/create_needed_volunteer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:voluntracker/models/volunteer_model.dart';
 
 import '../api.dart';
 import '../models/assign_volunteer_model.dart';
@@ -234,6 +235,41 @@ class HelpCenterService {
         dynamic body = json.decode(response.body);
         ResponseModel responseModel = ResponseModel.fromJson(body);
         return HelpCenterModel.fromJson(responseModel.data);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Volunteer?> followHelpCenter(int volunteerId, int helpCenterId) async {
+    try {
+      Response? response;
+      response = await Api.instance.patchRequest(ApiConstant.baseUrl,
+          "${ApiConstant.volunteers}$volunteerId/${ApiConstant.helpCenters}$helpCenterId");
+      if (response.statusCode == 200) {
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return Volunteer.fromJson(responseModel.data);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Volunteer?> unfollowHelpCenter(
+      int volunteerId, int helpCenterId) async {
+    try {
+      Response? response;
+      response = await Api.instance.patchRequest(ApiConstant.baseUrl,
+          "${ApiConstant.volunteers}$volunteerId/${ApiConstant.helpCenters}$helpCenterId${ApiConstant.unfollow}");
+      if (response.statusCode == 200) {
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return Volunteer.fromJson(responseModel.data);
       } else {
         return null;
       }

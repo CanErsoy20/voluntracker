@@ -20,8 +20,8 @@ class Api {
     return response;
   }
 
-  Future<http.Response> patchRequest(
-      String adress, String path, Object? requestBody) async {
+  Future<http.Response> patchRequest(String adress, String path,
+      [Object? requestBody]) async {
     final response = await http.patch(Uri.parse(adress + path),
         headers: tokenHeader, body: requestBody);
     return response;

@@ -1,6 +1,5 @@
 import 'package:voluntracker/cubit/help_centers/help_center_cubit.dart';
 import 'package:voluntracker/cubit/map/map_cubit.dart';
-import 'package:voluntracker/models/volunteer_model.dart';
 import 'package:voluntracker/router.dart';
 import 'package:voluntracker/view/widgets/custom_drawer.dart';
 import 'package:voluntracker/view/widgets/not_found_widget.dart';
@@ -70,15 +69,36 @@ class HelpCenterDetailScreen extends StatelessWidget {
                                     fontSize: 15, color: Colors.white))
                           ],
                         ),
+                        trailing: UserInfo.loggedUser == null
+                            ? SizedBox.shrink()
+                            : IconButton(
+                                onPressed: () {
+                                  // if not following rn
+                                  context
+                                      .read<HelpCenterCubit>()
+                                      .followHelpCenter(
+                                          UserInfo.loggedUser!.volunteer!.id!,
+                                          myCenter!.id!);
+                                  // else
+                                  // context
+                                  //     .read<HelpCenterCubit>()
+                                  //     .unfollowHelpCenter(
+                                  //         UserInfo.loggedUser!.volunteer!.id!,
+                                  //         myCenter!.id!);
+                                },
+                                icon: Icon(
+                                  Icons
+                                      .favorite_border_outlined, // : Icons.favorite
+                                  color: Colors.red,
+                                ),
+                              ),
                       ),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             TextButton(
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.green)),
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.green),
                               onPressed: () {
                                 context.read<MapCubit>().getCurrentLocation();
                                 context.read<MapCubit>().initialCameraLocation =
@@ -109,38 +129,9 @@ class HelpCenterDetailScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // TextButton(
-                            //   style: TextButton.styleFrom(
-                            //       backgroundColor: Colors.green),
-                            //   onPressed: () {
-                            //     // TODO: Send to help_center_volunteers_screen
-                            //     // which is already defined in the routes
-                            //     // but send the help center context.
-                            //   },
-                            //   child: RichText(
-                            //     text: const TextSpan(
-                            //       children: [
-                            //         WidgetSpan(
-                            //           child: Icon(
-                            //             Icons.help,
-                            //             size: 18,
-                            //             color: Color.fromARGB(225, 27, 40, 55),
-                            //           ),
-                            //         ),
-                            //         TextSpan(
-                            //           text: "Show Volunteers and Teams",
-                            //           style: TextStyle(
-                            //               fontSize: 15,
-                            //               // set text to bold
-                            //               fontWeight: FontWeight.bold,
-                            //               color: Color.fromARGB(225, 27, 40, 55)),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // ),
                           ]),
                       ExpansionTile(
+                          collapsedIconColor: Colors.white,
                           collapsedTextColor: Colors.white,
                           title: const Text("Time Details"),
                           expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -150,14 +141,18 @@ class HelpCenterDetailScreen extends StatelessWidget {
                             Text(
                                 "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(myCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(myCenter.busiestHours!.end!)}"),
                           ]),
-                      const SizedBox(
-                        height: 50,
-                        child: TabBar(
-                          indicatorPadding: EdgeInsets.symmetric(horizontal: 5),
-                          tabs: [
-                            Tab(text: "Volunteer Needs"),
-                            Tab(text: "Supply Needs")
-                          ],
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          height: 50,
+                          child: TabBar(
+                            indicatorPadding:
+                                EdgeInsets.symmetric(horizontal: 5),
+                            tabs: [
+                              Tab(text: "Volunteer Needs"),
+                              Tab(text: "Supply Needs")
+                            ],
+                          ),
                         ),
                       ),
                       Expanded(
@@ -190,30 +185,33 @@ class HelpCenterDetailScreen extends StatelessWidget {
             shrinkWrap: true,
             itemCount: currentCenter.neededVolunteerList!.length,
             itemBuilder: (context, index) {
-              return CustomNeedCard(
-                backgroundColor:
-                    currentCenter.neededVolunteerList![index].urgency == "Low"
-                        ? Colors.green
-                        : currentCenter.neededVolunteerList![index].urgency ==
-                                "Medium"
-                            ? Colors.orange
-                            : Colors.red,
-                needName: currentCenter
-                    .neededVolunteerList![index].volunteerTypeName!,
-                needCategory: currentCenter
-                    .neededVolunteerList![index].volunteerTypeCategory!,
-                quantity: currentCenter.neededVolunteerList![index].quantity!,
-                lastUpdatedAt:
-                    currentCenter.neededVolunteerList![index].updatedAt!,
-                leading: Icon(
-                  Icons.warning_amber_sharp,
-                  color:
+              return Padding(
+                padding: EdgeInsets.fromLTRB(25, 4, 25, 4),
+                child: CustomNeedCard(
+                  backgroundColor:
                       currentCenter.neededVolunteerList![index].urgency == "Low"
                           ? Colors.green
                           : currentCenter.neededVolunteerList![index].urgency ==
                                   "Medium"
                               ? Colors.orange
                               : Colors.red,
+                  needName: currentCenter
+                      .neededVolunteerList![index].volunteerTypeName!,
+                  needCategory: currentCenter
+                      .neededVolunteerList![index].volunteerTypeCategory!,
+                  quantity: currentCenter.neededVolunteerList![index].quantity!,
+                  lastUpdatedAt:
+                      currentCenter.neededVolunteerList![index].updatedAt!,
+                  leading: Icon(
+                    Icons.warning_amber_sharp,
+                    color: currentCenter.neededVolunteerList![index].urgency ==
+                            "Low"
+                        ? Colors.green
+                        : currentCenter.neededVolunteerList![index].urgency ==
+                                "Medium"
+                            ? Colors.orange
+                            : Colors.red,
+                  ),
                 ),
               );
             })

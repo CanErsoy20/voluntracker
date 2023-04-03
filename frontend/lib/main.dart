@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
           title: 'Flutter Demo',
           theme: ThemeData(
               textTheme: TextTheme(bodyMedium: TextStyle(color: Colors.white)),
-              scaffoldBackgroundColor: const Color.fromARGB(225, 16, 24, 33),
+              scaffoldBackgroundColor: const Color.fromARGB(255, 16, 24, 33),
               tabBarTheme: TabBarTheme(
                 unselectedLabelColor: Colors.white,
                 indicator: BoxDecoration(
@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
                     color: Color.fromARGB(225, 75, 142, 178)),
               ),
               appBarTheme: const AppBarTheme(
-                  backgroundColor: Color.fromARGB(225, 27, 40, 55))),
+                  backgroundColor: Color.fromARGB(255, 27, 40, 55))),
           debugShowCheckedModeBanner: false,
           onGenerateRoute: routeGenerator.getRoute,
           initialRoute: Routes.welcomeScreenRoute),

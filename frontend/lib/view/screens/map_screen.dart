@@ -23,6 +23,7 @@ class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   Set<Marker> markers = {};
+  TextEditingController controller = TextEditingController();
   @override
   void initState() {
     setMarkers(context);
@@ -76,11 +77,14 @@ class _MapScreenState extends State<MapScreen> {
                     controller: _controller,
                     markers: markers,
                   ),
-                  const Align(
+                  Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: CustomSearchBar(),
+                      padding: const EdgeInsets.only(top: 10),
+                      child: CustomSearchBar(
+                        controller: controller,
+                        onChanged: (value) {},
+                      ),
                     ),
                   ),
                 ],
@@ -121,7 +125,7 @@ class _MapScreenState extends State<MapScreen> {
 
   void setMarkers(BuildContext context) {
     List<HelpCenterModel> centerList =
-        context.read<HelpCenterCubit>().helpCenterList!;
+        context.read<HelpCenterCubit>().allHelpCentersList!;
     for (int i = 0; i < centerList.length; i++) {
       markers.add(Marker(
           markerId: MarkerId("${centerList[i].id}"),

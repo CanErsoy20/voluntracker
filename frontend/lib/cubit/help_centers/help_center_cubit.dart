@@ -7,6 +7,7 @@ import 'package:voluntracker/models/help_center/open_close_info_model.dart';
 import 'package:voluntracker/models/needed_supply/create_needed_supply_model.dart';
 import 'package:voluntracker/models/types/supply_types_model.dart';
 import 'package:bloc/bloc.dart';
+import 'package:voluntracker/models/volunteer_model.dart';
 
 import '../../models/help_center/help_center_model.dart';
 import '../../models/needed_volunteer/create_needed_volunteer_model.dart';
@@ -20,7 +21,8 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
     getVolunteerTypes();
   }
   HelpCenterService service;
-  List<HelpCenterModel>? helpCenterList;
+  List<HelpCenterModel>? allHelpCentersList;
+  List<HelpCenterModel>? tempHelpCentersList;
   HelpCenterModel? selectedCenter;
   HelpCenterModel? myCenter;
 
@@ -43,8 +45,9 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
 
   Future<void> getHelpCenters() async {
     emit(HelpCenterLoading());
-    helpCenterList = await service.getHelpCenters();
-    if (helpCenterList != null) {
+    allHelpCentersList = await service.getHelpCenters();
+    tempHelpCentersList = allHelpCentersList;
+    if (allHelpCentersList != null) {
       emit(HelpCenterDisplay());
     } else {
       emit(HelpCenterError("Not Found", "No Help Center Found"));
@@ -178,11 +181,55 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
     }
   }
 
+  Future<void> followHelpCenter(int volunteerId, int helpCenterId) async {
+    Volunteer? response =
+        await service.followHelpCenter(volunteerId, helpCenterId);
+    if (response == null) {
+      emit(HelpCenterError("Could not follow the help center",
+          "You cannot follow more than 10 centers"));
+    } else {
+      emit(HelpCenterSuccess("Started Following This Center",
+          "You will receive notifications from this center"));
+    }
+  }
+
+  Future<void> unfollowHelpCenter(int volunteerId, int helpCenterId) async {
+    Volunteer? response =
+        await service.unfollowHelpCenter(volunteerId, helpCenterId);
+    if (response == null) {
+      emit(HelpCenterError("Oops! An Error Occured",
+          "Something went wrong while unfollowing this center... Please try again later"));
+    } else {
+      emit(HelpCenterSuccess("Started Following This Center",
+          "You will not receive notifications from this center anymore... :("));
+    }
+  }
+
   void emitEditing() {
     emit(HelpCenterEditing());
   }
 
   void emitDisplay() {
     emit(HelpCenterDisplay());
+  }
+
+  void searchCenters(String query) {
+    emit(HelpCenterSearching());
+
+    if (query == "") {
+      tempHelpCentersList = allHelpCentersList;
+      emitDisplay();
+    } else {
+      tempHelpCentersList = allHelpCentersList
+          ?.where((element) =>
+              (element.city!.toLowerCase().contains(query.toLowerCase()) ||
+                  element.name!.toLowerCase().contains(query.toLowerCase())))
+          .toList();
+      if (tempHelpCentersList!.isEmpty) {
+        emit(HelpCenterNotFound());
+      } else {
+        emit(HelpCenterDisplay());
+      }
+    }
   }
 }
