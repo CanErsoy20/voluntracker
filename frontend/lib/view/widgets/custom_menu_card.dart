@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 class CustomMenuCard extends StatelessWidget {
   final String title;
   final IconData icon;
-  final String route;
+  final List<String> authList;
+  void Function()? onTap;
 
   CustomMenuCard(
-      {required this.title, required this.icon, required this.route});
+      {required this.title,
+      required this.icon,
+      required this.onTap,
+      required this.authList});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +20,7 @@ class CustomMenuCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: InkWell(
-        onTap: () {
-          Navigator.of(context).pushNamed(route);
-        },
+        onTap: onTap,
         child: SizedBox(
           width: double.infinity,
           height: double.infinity,

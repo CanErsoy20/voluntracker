@@ -1,5 +1,6 @@
 import 'package:voluntracker/cubit/help_centers/help_center_cubit.dart';
 import 'package:voluntracker/view/widgets/custom_drawer.dart';
+import 'package:voluntracker/view/widgets/custom_search_bar.dart';
 import 'package:voluntracker/view/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,114 +11,101 @@ import '../../cubit/map/map_cubit.dart';
 import '../../models/help_center/help_center_model.dart';
 import '../../models/user/user_info.dart';
 import '../../router.dart';
+import '../widgets/help_center_brief_card.dart';
 
 class HelpCenterListScreen extends StatelessWidget {
-  const HelpCenterListScreen({super.key});
-
+  HelpCenterListScreen({super.key});
+  TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Help Center List"),
-        centerTitle: true,
-      ),
-      endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
-      body: BlocBuilder<HelpCenterCubit, HelpCenterState>(
-        builder: (context, state) {
-          if (state is HelpCenterDisplay) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  Center(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          context.read<MapCubit>().getCurrentLocation();
-                          Navigator.pushNamed(context, Routes.mapRoute);
-                          context.read<MapCubit>().initialCameraLocation =
-                              context.read<MapCubit>().currentLocation;
-                        },
-                        child: const Text("Go To Map")),
-                  ),
-                  (context.read<HelpCenterCubit>().helpCenterList == null ||
-                          context
-                              .read<HelpCenterCubit>()
-                              .helpCenterList!
-                              .isEmpty)
-                      ? NotFoundLottie(
-                          title: "Help Center List Not Found",
-                          description:
-                              "Currently there are no help centers to display")
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: context
-                                  .read<HelpCenterCubit>()
-                                  .helpCenterList
-                                  ?.length ??
-                              0,
-                          itemBuilder: (context, index) {
-                            HelpCenterModel currentCenter = context
-                                .read<HelpCenterCubit>()
-                                .helpCenterList![index];
-                            return Card(
-                              elevation: 5,
-                              child: ExpansionTile(
-                                title: Text(currentCenter.name!),
-                                children: [
-                                  ListTile(
-                                    title: Text(
-                                        "Adress: ${currentCenter.contactInfo!.address!}"),
-                                    subtitle: Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                context
-                                                        .read<HelpCenterCubit>()
-                                                        .selectedCenter =
-                                                    currentCenter;
-                                                Navigator.pushNamed(context,
-                                                    Routes.helpCenterDetail);
-                                              },
-                                              child:
-                                                  const Text("Show Details")),
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                context
-                                                        .read<MapCubit>()
-                                                        .initialCameraLocation =
-                                                    LatLng(
-                                                        currentCenter
-                                                            .location!.lat!,
-                                                        currentCenter
-                                                            .location!.lon!);
-                                                context
-                                                    .read<MapCubit>()
-                                                    .getCurrentLocation();
-                                                Navigator.of(context)
-                                                    .pushNamed(Routes.mapRoute);
-                                              },
-                                              child: const Text("See On Map"))
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          })
-                ],
-              ),
-            );
-          } else if (state is HelpCenterLoading) {
-            return Center(child: const LoadingWidget());
-          } else {
-            return const Text("Error");
-          }
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        controller.clear();
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Help Center List"),
+          centerTitle: true,
+        ),
+        endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              context.read<MapCubit>().getCurrentLocation();
+              Navigator.pushNamed(context, Routes.mapRoute);
+              context.read<MapCubit>().initialCameraLocation =
+                  context.read<MapCubit>().currentLocation;
+            },
+            child: const Icon(Icons.map)),
+        body: BlocBuilder<HelpCenterCubit, HelpCenterState>(
+          builder: (context, state) {
+            print(state.toString());
+            if (state is HelpCenterDisplay || state is HelpCenterNotFound) {
+              return SingleChildScrollView(
+                child: (context.read<HelpCenterCubit>().allHelpCentersList ==
+                            null ||
+                        context
+                            .read<HelpCenterCubit>()
+                            .allHelpCentersList!
+                            .isEmpty)
+                    ? Center(
+                        child: NotFoundLottie(
+                            title: "Help Center List Not Found",
+                            description:
+                                "Currently there are no help centers to display"),
+                      )
+                    : Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CustomSearchBar(
+                              controller: controller,
+                              onChanged: (value) {
+                                context
+                                    .read<HelpCenterCubit>()
+                                    .searchCenters(value);
+                              },
+                            ),
+                          ),
+                          state is HelpCenterNotFound
+                              ? Center(
+                                  child: NotFoundLottie(
+                                      title: "No Help Center Found",
+                                      description: "No help center found"))
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: context
+                                          .read<HelpCenterCubit>()
+                                          .tempHelpCentersList
+                                          ?.length ??
+                                      0,
+                                  itemBuilder: (context, index) {
+                                    HelpCenterModel currentCenter = context
+                                        .read<HelpCenterCubit>()
+                                        .tempHelpCentersList![index];
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: HelpCenterBriefCard(
+                                          currentCenter: currentCenter),
+                                    );
+                                  })
+                        ],
+                      ),
+              );
+            } else if (state is HelpCenterLoading) {
+              return const Center(child: LoadingWidget());
+            } else if (state is HelpCenterNotFound) {
+              return Center(
+                child: NotFoundLottie(
+                    title: "No Help Center Found",
+                    description: "No help center found"),
+              );
+            } else {
+              return const Text("Error");
+            }
+          },
+        ),
       ),
     );
   }
