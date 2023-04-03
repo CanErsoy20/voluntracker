@@ -1,3 +1,6 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:voluntracker/cubit/help_centers/help_center_cubit.dart';
 import 'package:voluntracker/models/user/user_info.dart';
 import 'package:voluntracker/router.dart';
 import 'package:voluntracker/view/widgets/custom_drawer.dart';
@@ -25,7 +28,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Favorites",
       "icon": Icons.favorite,
-      "route": "/favorites",
+      "route": Routes.followed,
     },
     {
       "title": "Contact Us",
@@ -40,7 +43,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Settings",
       "icon": Icons.settings,
-      "route": "/settings",
+      "route": Routes.settings,
     },
   ];
 
@@ -68,7 +71,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Favorites",
       "icon": Icons.favorite,
-      "route": "/favorites",
+      "route": Routes.followed,
     },
     {
       "title": "My Help Center",
@@ -88,7 +91,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Settings",
       "icon": Icons.settings,
-      "route": "/settings",
+      "route": Routes.settings,
     },
   ];
 
@@ -111,7 +114,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Favorites",
       "icon": Icons.favorite,
-      "route": "/favorites",
+      "route": Routes.followed,
     },
     {
       "title": "Contact Us",
@@ -126,7 +129,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Settings",
       "icon": Icons.settings,
-      "route": "/settings",
+      "route": Routes.settings,
     }
   ];
 
@@ -154,7 +157,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Favorites",
       "icon": Icons.favorite,
-      "route": "/favorites",
+      "route": Routes.followed,
     },
     {
       "title": "Contact Us",
@@ -169,7 +172,7 @@ class LandingPage extends StatelessWidget {
     {
       "title": "Settings",
       "icon": Icons.settings,
-      "route": "/settings",
+      "route": Routes.settings,
     }
   ];
 
@@ -195,7 +198,7 @@ class LandingPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: SizedBox.shrink(),
+          leading: const SizedBox.shrink(),
           title: const Text("Voluntracker"),
           centerTitle: true,
         ),
@@ -209,10 +212,101 @@ class LandingPage extends StatelessWidget {
                   height: 10,
                 ),
                 UserBar(user: UserInfo.loggedUser!),
-                // Put an input field here
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Followed Help Centers",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, Routes.followed);
+                          },
+                          child: const Text(
+                            "See All (5)",
+                          ))
+                    ],
+                  ),
+                ),
+                CarouselSlider.builder(
+                    itemCount: 5,
+                    itemBuilder: (context, index, realIndex) {
+                      return Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                const Flexible(
+                                  child: Center(
+                                    child: Text(
+                                      "Help Center",
+                                      style: TextStyle(color: Colors.black),
+                                      softWrap: true,
+                                      overflow: TextOverflow.clip,
+                                      maxLines: null,
+                                    ),
+                                  ),
+                                ),
+                                const Text(
+                                  "Working Hours: 12:30 - 17:30",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                Flexible(
+                                  child: RichText(
+                                    text: const TextSpan(
+                                      children: [
+                                        TextSpan(text: "Currently: "),
+                                        TextSpan(
+                                            text: "Open",
+                                            style:
+                                                TextStyle(color: Colors.green))
+                                      ],
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Center(
+                                    child: TextButton(
+                                        onPressed: () {
+                                          // TODO: seçilen center'la değiştir
+                                          context
+                                                  .read<HelpCenterCubit>()
+                                                  .selectedCenter =
+                                              context
+                                                  .read<HelpCenterCubit>()
+                                                  .helpCenterList![0];
+                                          Navigator.pushNamed(
+                                              context, Routes.helpCenterDetail);
+                                        },
+                                        child: const Text(
+                                          "See Details",
+                                        )),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ));
+                    },
+                    options: CarouselOptions(
+                        aspectRatio: 5 / 2,
+                        enlargeCenterPage: true,
+                        autoPlay: true,
+                        height: 150)),
                 GridView.count(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,

@@ -42,7 +42,7 @@ class Routes {
   static const String myTeam = "/my-team";
   static const String forgotPassword = "/forgot-password";
   static const String changePassword = "/change-password";
-  static const String favorites = "/favorites";
+  static const String followed = "/followed";
   static const String settings = "/settings";
 }
 
@@ -90,7 +90,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => ChangePasswordScreen());
       case Routes.settings:
         return MaterialPageRoute(builder: (_) => SettingsScreen());
-      case Routes.favorites:
+      case Routes.followed:
         return MaterialPageRoute(builder: (_) => FavoritesScreen());
       default:
         return MaterialPageRoute(builder: (_) => UndefinedScreen());

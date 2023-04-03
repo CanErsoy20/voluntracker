@@ -3,6 +3,8 @@ import 'package:voluntracker/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../cubit/login/login_cubit.dart';
+
 class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -71,6 +73,7 @@ class WelcomeScreen extends StatelessWidget {
                   padding: EdgeInsets.all(20),
                   child: ElevatedButton(
                     onPressed: () {
+                      context.read<LoginCubit>().updatePrefRememberMe();
                       Navigator.pushNamed(context, Routes.loginRoute);
                     },
                     child: const Text(
