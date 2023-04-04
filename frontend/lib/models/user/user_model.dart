@@ -15,6 +15,7 @@ class UserModel {
   String? updatedAt;
   List<UserRole>? userRole;
   Volunteer? volunteer;
+  String? profileImageUrl;
 
   UserModel(
       {this.id,
@@ -28,7 +29,8 @@ class UserModel {
       this.createdAt,
       this.updatedAt,
       this.userRole,
-      this.volunteer});
+      this.volunteer,
+      this.profileImageUrl});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -47,6 +49,7 @@ class UserModel {
     volunteer = json['volunteer'] != null
         ? Volunteer.fromJson(json['volunteer'])
         : null;
+    profileImageUrl = json['profileImageUrl'];
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +64,7 @@ class UserModel {
     data['hashedRefreshToken'] = hashedRefreshToken;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
+    data['profileImageUrl'] = profileImageUrl;
     if (userRole != null) {
       data['userRole'] = List<UserRole>.from(userRole!.map((x) => x.toJson()));
     }
