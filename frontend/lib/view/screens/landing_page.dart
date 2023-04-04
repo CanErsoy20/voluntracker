@@ -238,132 +238,139 @@ class LandingPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // UserInfo.loggedUser!.volunteer!.followedCenters!.isEmpty
-                      //     ? const Text(
-                      //         "You are not following any help center yet... Please follow to get notified.")
-                      //     : CarouselSlider.builder(
-                      //         itemCount: UserInfo.loggedUser!.volunteer!
-                      //             .followedCenters!.length,
-                      //         itemBuilder: (context, index, realIndex) {
-                      //           return Card(
-                      //               shape: RoundedRectangleBorder(
-                      //                   borderRadius:
-                      //                       BorderRadius.circular(20)),
-                      //               elevation: 5,
-                      //               child: Padding(
-                      //                 padding: const EdgeInsets.all(8.0),
-                      //                 child: Column(
-                      //                   crossAxisAlignment:
-                      //                       CrossAxisAlignment.center,
-                      //                   mainAxisAlignment:
-                      //                       MainAxisAlignment.spaceBetween,
-                      //                   mainAxisSize: MainAxisSize.max,
-                      //                   children: [
-                      //                     // Flexible(
-                      //                     //   child: Center(
-                      //                     //     child: Text(
-                      //                     //       // "${context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.name}",
-                      //                     //       "${context.read<HelpCenterCubit>().followedCenters![index].name}",
-                      //                     //       style: const TextStyle(
-                      //                     //           color: Colors.black),
-                      //                     //       softWrap: true,
-                      //                     //       overflow: TextOverflow.clip,
-                      //                     //       maxLines: null,
-                      //                     //     ),
-                      //                     //   ),
-                      //                     // ),
-                      //                     // Text(
-                      //                     //   "Working Hours: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.openCloseInfo!.start!)} - ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.openCloseInfo!.end!)}",
-                      //                     //   style:
-                      //                     //       const TextStyle(color: Colors.black),
-                      //                     // ),
-                      //                     // Flexible(
-                      //                     //   child: RichText(
-                      //                     //     text: TextSpan(
-                      //                     //       children: [
-                      //                     //         const TextSpan(text: "Currently: "),
-                      //                     //         HelperFunctions.isOpen(
-                      //                     //                 DateFormat("yyyy-MM-dd hh:mm:ss").parse((context
-                      //                     //                     .read<HelpCenterCubit>()
-                      //                     //                     .allHelpCentersList!
-                      //                     //                     .where((element) =>
-                      //                     //                         element.id ==
-                      //                     //                         UserInfo
-                      //                     //                             .loggedUser!
-                      //                     //                             .volunteer!
-                      //                     //                             .followedCenters![
-                      //                     //                                 index]
-                      //                     //                             .helpCenterId)
-                      //                     //                     .first
-                      //                     //                     .openCloseInfo!
-                      //                     //                     .start!)),
-                      //                     //                 DateFormat("yyyy-MM-dd hh:mm:ss").parse((context
-                      //                     //                     .read<HelpCenterCubit>()
-                      //                     //                     .allHelpCentersList!
-                      //                     //                     .where((element) =>
-                      //                     //                         element.id ==
-                      //                     //                         UserInfo
-                      //                     //                             .loggedUser!
-                      //                     //                             .volunteer!
-                      //                     //                             .followedCenters![
-                      //                     //                                 index]
-                      //                     //                             .helpCenterId)
-                      //                     //                     .first
-                      //                     //                     .openCloseInfo!
-                      //                     //                     .end!)))
-                      //                     //             ? const TextSpan(
-                      //                     //                 text: "Open",
-                      //                     //                 style: TextStyle(
-                      //                     //                     color: Colors.green))
-                      //                     //             : const TextSpan(
-                      //                     //                 text: "Closed",
-                      //                     //                 style: TextStyle(
-                      //                     //                     color: Colors.red))
-                      //                     //       ],
-                      //                     //       style: const TextStyle(
-                      //                     //           color: Colors.black),
-                      //                     //     ),
-                      //                     //   ),
-                      //                     // ),
-                      //                     Flexible(
-                      //                       child: Center(
-                      //                         child: TextButton(
-                      //                             onPressed: () {
-                      //                               context
-                      //                                       .read<HelpCenterCubit>()
-                      //                                       .selectedCenter =
-                      //                                   context
-                      //                                       .read<
-                      //                                           HelpCenterCubit>()
-                      //                                       .allHelpCentersList!
-                      //                                       .where((element) =>
-                      //                                           element.id ==
-                      //                                           UserInfo
-                      //                                               .loggedUser!
-                      //                                               .volunteer!
-                      //                                               .followedCenters![
-                      //                                                   index]
-                      //                                               .helpCenterId)
-                      //                                       .first;
-                      //                               Navigator.pushNamed(
-                      //                                   context,
-                      //                                   Routes
-                      //                                       .helpCenterDetail);
-                      //                             },
-                      //                             child: const Text(
-                      //                               "See Details",
-                      //                             )),
-                      //                       ),
-                      //                     )
-                      //                   ],
-                      //                 ),
-                      //               ));
-                      //         },
-                      //         options: CarouselOptions(
-                      //             aspectRatio: 5 / 2,
-                      //             enlargeCenterPage: true,
-                      //             autoPlay: true,
-                      //             height: 150)),
+                      UserInfo.loggedUser!.volunteer!.followedCenters!.isEmpty
+                          ? const Text(
+                              "You are not following any help center yet... Please follow to get notified.")
+                          : CarouselSlider.builder(
+                              itemCount: UserInfo.loggedUser!.volunteer!
+                                  .followedCenters!.length,
+                              itemBuilder: (context, index, realIndex) {
+                                print(context
+                                    .read<HelpCenterCubit>()
+                                    .allHelpCentersList);
+                                return Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    elevation: 5,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Flexible(
+                                            child: Center(
+                                              child: Text(
+                                                "${context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.name}",
+                                                style: const TextStyle(
+                                                    color: Colors.black),
+                                                softWrap: true,
+                                                overflow: TextOverflow.clip,
+                                                maxLines: null,
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            "Working Hours: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.openCloseInfo!.start!)} - ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.openCloseInfo!.end!)}",
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                          ),
+                                          Flexible(
+                                            child: RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  const TextSpan(
+                                                      text: "Currently: "),
+                                                  HelperFunctions.isOpen(
+                                                          DateTime.parse((context
+                                                              .read<
+                                                                  HelpCenterCubit>()
+                                                              .allHelpCentersList!
+                                                              .where((element) =>
+                                                                  element.id ==
+                                                                  UserInfo
+                                                                      .loggedUser!
+                                                                      .volunteer!
+                                                                      .followedCenters![
+                                                                          index]
+                                                                      .helpCenterId)
+                                                              .first
+                                                              .openCloseInfo!
+                                                              .start!)),
+                                                          DateTime.parse((context
+                                                              .read<
+                                                                  HelpCenterCubit>()
+                                                              .allHelpCentersList!
+                                                              .where((element) =>
+                                                                  element.id ==
+                                                                  UserInfo
+                                                                      .loggedUser!
+                                                                      .volunteer!
+                                                                      .followedCenters![
+                                                                          index]
+                                                                      .helpCenterId)
+                                                              .first
+                                                              .openCloseInfo!
+                                                              .end!)))
+                                                      ? const TextSpan(
+                                                          text: "Open",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.green))
+                                                      : const TextSpan(
+                                                          text: "Closed",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.red))
+                                                ],
+                                                style: const TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                            ),
+                                          ),
+                                          Flexible(
+                                            child: Center(
+                                              child: TextButton(
+                                                  onPressed: () {
+                                                    context
+                                                            .read<HelpCenterCubit>()
+                                                            .selectedCenter =
+                                                        context
+                                                            .read<
+                                                                HelpCenterCubit>()
+                                                            .allHelpCentersList!
+                                                            .where((element) =>
+                                                                element.id ==
+                                                                UserInfo
+                                                                    .loggedUser!
+                                                                    .volunteer!
+                                                                    .followedCenters![
+                                                                        index]
+                                                                    .helpCenterId)
+                                                            .first;
+                                                    Navigator.pushNamed(
+                                                        context,
+                                                        Routes
+                                                            .helpCenterDetail);
+                                                  },
+                                                  child: const Text(
+                                                    "See Details",
+                                                  )),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ));
+                              },
+                              options: CarouselOptions(
+                                  aspectRatio: 5 / 2,
+                                  enlargeCenterPage: true,
+                                  autoPlay: true,
+                                  height: 150)),
                       GridView.count(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
