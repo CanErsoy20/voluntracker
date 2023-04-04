@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:voluntracker/cubit/help_centers/help_center_cubit.dart';
+import 'package:voluntracker/cubit/map/map_cubit.dart';
 import 'package:voluntracker/models/user/user_info.dart';
 import 'package:voluntracker/router.dart';
 import 'package:voluntracker/view/widgets/custom_drawer.dart';
@@ -38,6 +39,7 @@ class LandingPage extends StatelessWidget {
           ],
           onTap: () {
             context.read<HelpCenterCubit>().getHelpCenters();
+            context.read<MapCubit>().getCurrentLocation();
             Navigator.pushNamed(context, Routes.mapRoute);
           }),
       CustomMenuCard(

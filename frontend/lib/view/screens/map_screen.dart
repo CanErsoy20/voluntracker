@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:voluntracker/cubit/help_centers/help_center_cubit.dart';
 import 'package:voluntracker/models/help_center/help_center_model.dart';
 import 'package:voluntracker/router.dart';
@@ -23,10 +24,12 @@ class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   Set<Marker> markers = {};
+  List<HelpCenterModel> items = [];
   TextEditingController controller = TextEditingController();
   @override
   void initState() {
     setMarkers(context);
+    setItems(context);
     super.initState();
   }
 
@@ -80,12 +83,51 @@ class _MapScreenState extends State<MapScreen> {
                   Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: CustomSearchBar(
-                        controller: controller,
-                        onChanged: (value) {},
-                      ),
-                    ),
+                        padding: const EdgeInsets.only(top: 10),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width / 1.5,
+                          child: DropdownSearch<HelpCenterModel>(
+                            popupProps: const PopupProps.dialog(
+                                fit: FlexFit.loose,
+                                searchDelay: Duration.zero,
+                                searchFieldProps: TextFieldProps(
+                                  decoration: InputDecoration(
+                                    hintText: "Search by name or city",
+                                    enabled: true,
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    prefixIcon: Icon(Icons.search),
+                                  ),
+                                ),
+                                showSearchBox: true),
+                            filterFn: (item, filter) {
+                              return item.name!
+                                      .toLowerCase()
+                                      .contains(filter.toLowerCase()) ||
+                                  item.city!
+                                      .toLowerCase()
+                                      .contains(filter.toLowerCase());
+                            },
+                            items: items,
+                            itemAsString: (item) {
+                              return item.name!;
+                            },
+                            dropdownDecoratorProps:
+                                const DropDownDecoratorProps(
+                                    baseStyle: TextStyle(color: Colors.black),
+                                    textAlignVertical: TextAlignVertical.center,
+                                    dropdownSearchDecoration: InputDecoration(
+                                      enabled: true,
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      prefixIcon: Icon(Icons.search),
+                                      border: InputBorder.none,
+                                    )),
+                            onChanged: (value) {
+                              _goToPosition(value!);
+                            },
+                          ),
+                        )),
                   ),
                 ],
               );
@@ -121,6 +163,27 @@ class _MapScreenState extends State<MapScreen> {
             }
           },
         ));
+  }
+
+  Future<void> _goToPosition(HelpCenterModel selectedCenter) async {
+    final GoogleMapController controller = await _controller.future;
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(
+            selectedCenter.location!.lat!, selectedCenter.location!.lon!),
+        zoom: 15)));
+  }
+
+  void setItems(BuildContext context) {
+    List<HelpCenterModel> centerList =
+        context.read<HelpCenterCubit>().allHelpCentersList!;
+    items.addAll(centerList);
+    // for (var i = 0; i < centerList.length; i++) {
+    //   if (!items.contains(centerList[i].city)) {
+    //     items.add(centerList[i].city!);
+    //   }
+    //   items.add(centerList[i].name!);
+    // }
   }
 
   void setMarkers(BuildContext context) {
