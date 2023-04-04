@@ -248,6 +248,8 @@ model VolunteersFollowingHelpCenters {
   volunteer   Volunteer @relation(fields: [volunteerId], references: [id])
 
   createdAt DateTime @default(now())
+
+  @@unique([helpCenterId, volunteerId])
 }
 
 model QrCode {
