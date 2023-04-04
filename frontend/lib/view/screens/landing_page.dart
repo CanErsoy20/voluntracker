@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:voluntracker/cubit/help_centers/help_center_cubit.dart';
 import 'package:voluntracker/cubit/map/map_cubit.dart';
 import 'package:voluntracker/models/user/user_info.dart';
@@ -8,6 +9,8 @@ import 'package:voluntracker/view/widgets/custom_drawer.dart';
 import 'package:voluntracker/view/widgets/custom_menu_card.dart';
 import 'package:voluntracker/view/widgets/user_bar.dart';
 import 'package:flutter/material.dart';
+
+import '../../helper_functions.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -214,83 +217,132 @@ class LandingPage extends StatelessWidget {
                           onPressed: () {
                             Navigator.pushNamed(context, Routes.followed);
                           },
-                          child: const Text(
-                            "See All (5)",
+                          child: Text(
+                            "See All (${UserInfo.loggedUser!.volunteer!.followedCenters!.length})",
                           ))
                     ],
                   ),
                 ),
-                CarouselSlider.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, index, realIndex) {
-                      return Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          elevation: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const Flexible(
-                                  child: Center(
-                                    child: Text(
-                                      "Help Center",
-                                      style: TextStyle(color: Colors.black),
-                                      softWrap: true,
-                                      overflow: TextOverflow.clip,
-                                      maxLines: null,
+                UserInfo.loggedUser!.volunteer!.followedCenters!.length == 0
+                    ? const Text(
+                        "You are not following any help center yet... Please follow to get notified.")
+                    : CarouselSlider.builder(
+                        itemCount: UserInfo
+                            .loggedUser!.volunteer!.followedCenters!.length,
+                        itemBuilder: (context, index, realIndex) {
+                          return Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              elevation: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Flexible(
+                                      child: Center(
+                                        child: Text(
+                                          "${context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.name}",
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                          softWrap: true,
+                                          overflow: TextOverflow.clip,
+                                          maxLines: null,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                const Text(
-                                  "Working Hours: 12:30 - 17:30",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                Flexible(
-                                  child: RichText(
-                                    text: const TextSpan(
-                                      children: [
-                                        TextSpan(text: "Currently: "),
-                                        TextSpan(
-                                            text: "Open",
-                                            style:
-                                                TextStyle(color: Colors.green))
-                                      ],
-                                      style: TextStyle(color: Colors.black),
+                                    Text(
+                                      "Working Hours: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.openCloseInfo!.start!)} - ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.openCloseInfo!.end!)}",
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                     ),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Center(
-                                    child: TextButton(
-                                        onPressed: () {
-                                          // TODO: seçilen center'la değiştir
-                                          context
-                                                  .read<HelpCenterCubit>()
-                                                  .selectedCenter =
+                                    Flexible(
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            const TextSpan(text: "Currently: "),
+                                            HelperFunctions.isOpen(
+                                                    DateFormat("yyyy-MM-dd hh:mm:ss").parse((context
+                                                        .read<HelpCenterCubit>()
+                                                        .allHelpCentersList!
+                                                        .where((element) =>
+                                                            element.id ==
+                                                            UserInfo
+                                                                .loggedUser!
+                                                                .volunteer!
+                                                                .followedCenters![
+                                                                    index]
+                                                                .helpCenterId)
+                                                        .first
+                                                        .openCloseInfo!
+                                                        .start!)),
+                                                    DateFormat("yyyy-MM-dd hh:mm:ss").parse((context
+                                                        .read<HelpCenterCubit>()
+                                                        .allHelpCentersList!
+                                                        .where((element) =>
+                                                            element.id ==
+                                                            UserInfo
+                                                                .loggedUser!
+                                                                .volunteer!
+                                                                .followedCenters![
+                                                                    index]
+                                                                .helpCenterId)
+                                                        .first
+                                                        .openCloseInfo!
+                                                        .end!)))
+                                                ? const TextSpan(
+                                                    text: "Open",
+                                                    style: TextStyle(
+                                                        color: Colors.green))
+                                                : const TextSpan(
+                                                    text: "Closed",
+                                                    style: TextStyle(
+                                                        color: Colors.red))
+                                          ],
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                        ),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: Center(
+                                        child: TextButton(
+                                            onPressed: () {
                                               context
-                                                  .read<HelpCenterCubit>()
-                                                  .allHelpCentersList![0];
-                                          Navigator.pushNamed(
-                                              context, Routes.helpCenterDetail);
-                                        },
-                                        child: const Text(
-                                          "See Details",
-                                        )),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ));
-                    },
-                    options: CarouselOptions(
-                        aspectRatio: 5 / 2,
-                        enlargeCenterPage: true,
-                        autoPlay: true,
-                        height: 150)),
+                                                      .read<HelpCenterCubit>()
+                                                      .selectedCenter =
+                                                  context
+                                                      .read<HelpCenterCubit>()
+                                                      .allHelpCentersList!
+                                                      .where((element) =>
+                                                          element.id ==
+                                                          UserInfo
+                                                              .loggedUser!
+                                                              .volunteer!
+                                                              .followedCenters![
+                                                                  index]
+                                                              .helpCenterId)
+                                                      .first;
+                                              Navigator.pushNamed(context,
+                                                  Routes.helpCenterDetail);
+                                            },
+                                            child: const Text(
+                                              "See Details",
+                                            )),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ));
+                        },
+                        options: CarouselOptions(
+                            aspectRatio: 5 / 2,
+                            enlargeCenterPage: true,
+                            autoPlay: true,
+                            height: 150)),
                 GridView.count(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,

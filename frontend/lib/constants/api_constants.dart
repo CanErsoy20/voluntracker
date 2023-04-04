@@ -20,4 +20,5 @@ class ApiConstant {
   static String profilePic = "profile/users/";
   static String removeCoord = "remove/helpCenterCoordinator/";
   static String coordinator = "/helpCenterCoordinator/";
+  static String followedCenters = "/followedHelpCenters/";
 }

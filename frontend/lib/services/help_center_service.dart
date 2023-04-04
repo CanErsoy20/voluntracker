@@ -279,6 +279,28 @@ class HelpCenterService {
     }
   }
 
+  Future<List<HelpCenterModel>?> getFollowedCenters(int volunteerId) async {
+    try {
+      Response? response;
+      response = await Api.instance.getRequest(ApiConstant.baseUrl,
+          "${ApiConstant.volunteers}$volunteerId${ApiConstant.followedCenters}");
+      if (response.statusCode == 200) {
+        List<HelpCenterModel> result = <HelpCenterModel>[];
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        List<dynamic> list = responseModel.data;
+        for (int i = 0; i < list.length; i++) {
+          result.add(HelpCenterModel.fromJson(list[i]));
+        }
+        return result;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<HelpCenterModel?> assignCoordinator(
       int helpCenterId, int volunteerId) async {
     try {

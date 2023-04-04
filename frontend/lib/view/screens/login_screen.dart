@@ -43,7 +43,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 context.read<HelpCenterCubit>().getHelpCenters();
                 if (UserInfo.loggedUser!.volunteer!.helpCenterId != null) {
                   context.read<HelpCenterCubit>().getMyCenter();
+                  context.read<HelpCenterCubit>().followedCenters = context
+                      .read<HelpCenterCubit>()
+                      .allHelpCentersList!
+                      .where((element) {
+                    for (var center
+                        in UserInfo.loggedUser!.volunteer!.followedCenters!) {
+                      if (center.id == element.id) {
+                        return true;
+                      }
+                    }
+                    return false;
+                  }).toList();
                 }
+                print(context.read<HelpCenterCubit>().followedCenters!.length);
                 Navigator.pushReplacementNamed(context, Routes.landingRoute);
               }
             },
@@ -130,8 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       tristate: true,
                       onChanged: (value) {
                         context.read<LoginCubit>().changeRememberMe();
-                        print(
-                            "changed to: ${context.read<LoginCubit>().rememberMe}");
                       }),
                 ),
                 TextButton(
