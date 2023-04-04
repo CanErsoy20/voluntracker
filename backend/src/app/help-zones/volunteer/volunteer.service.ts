@@ -140,7 +140,7 @@ export class VolunteerService {
     }
 
     if (volunteer.followedHelpCenters.length >= 10) {
-      throw new ExceededMaxLimitOfItemsException('A volunteer cannot follow more than 10 help center.');
+      throw new ExceededMaxLimitOfItemsException('A volunteer cannot follow more than 10 help centers.');
     }
 
     const updatedVolunteer = await this.prisma.volunteer.update({
@@ -161,10 +161,29 @@ export class VolunteerService {
       where: {
         id: volunteerId,
       },
+      include: {
+        followedHelpCenters: true,
+      },
     });
 
     if (!volunteer) {
       throw new UniqueEntityNotFoundException(`Could not find the volunteer with id: ${volunteerId}`);
+    }
+
+    const followedHelpCenters = volunteer.followedHelpCenters;
+    let isFollowing = false;
+    const newFollowedHelpCenters = [];
+    for (const hc of followedHelpCenters) {
+      if (hc.helpCenterId === helpCenterId) {
+        isFollowing = true;
+      }
+
+      newFollowedHelpCenters.push(hc);
+    }
+    if (isFollowing === false) {
+      throw new UniqueEntityNotFoundException(
+        `Unfollow unsuccessful: user does not follow this help center.`,
+      );
     }
 
     const updatedVolunteer = await this.prisma.volunteer.update({
@@ -174,7 +193,10 @@ export class VolunteerService {
       data: {
         followedHelpCenters: {
           delete: {
-            id: helpCenterId,
+            helpCenterId_volunteerId: {
+              helpCenterId,
+              volunteerId,
+            },
           },
         },
       },
