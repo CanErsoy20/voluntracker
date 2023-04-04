@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:voluntracker/cubit/help_centers/help_center_cubit.dart';
 import 'package:voluntracker/models/help_center/help_center_model.dart';
+import 'package:voluntracker/models/user/user_info.dart';
 import 'package:voluntracker/router.dart';
 import 'package:voluntracker/view/widgets/custom_google_maps.dart';
 import 'package:voluntracker/view/widgets/loading_widget.dart';
@@ -35,134 +36,143 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Help Center Map"),
-          centerTitle: true,
-        ),
-        body: BlocConsumer<MapCubit, MapState>(
-          listener: (context, state) {
-            if (state is MapNoService) {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text("GPS Service is disabled"),
-                      content: const Text(
-                          "Please try again after you enable the location of your device."),
-                      actions: [
-                        TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              context.read<MapCubit>().continueWithoutGPS();
-                            },
-                            child: const Text("Continue without my location")),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              context.read<MapCubit>().getCurrentLocation();
-                            },
-                            child: const Text("Try Again"))
-                      ],
-                    );
-                  });
-            }
-          },
-          builder: (context, state) {
-            debugPrint(state.toString());
-            if (state is MapDisplay || state is MapInitial) {
-              return Stack(
-                children: [
-                  CustomGoogleMap(
-                    initialCameraPosition: CameraPosition(
-                        target: context.read<MapCubit>().initialCameraLocation,
-                        zoom: 15),
-                    controller: _controller,
-                    markers: markers,
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 1.5,
-                          child: DropdownSearch<HelpCenterModel>(
-                            popupProps: const PopupProps.dialog(
-                                fit: FlexFit.loose,
-                                searchDelay: Duration.zero,
-                                searchFieldProps: TextFieldProps(
-                                  decoration: InputDecoration(
-                                    hintText: "Search by name or city",
-                                    enabled: true,
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    prefixIcon: Icon(Icons.search),
-                                  ),
-                                ),
-                                showSearchBox: true),
-                            filterFn: (item, filter) {
-                              return item.name!
-                                      .toLowerCase()
-                                      .contains(filter.toLowerCase()) ||
-                                  item.city!
-                                      .toLowerCase()
-                                      .contains(filter.toLowerCase());
-                            },
-                            items: items,
-                            itemAsString: (item) {
-                              return item.name!;
-                            },
-                            dropdownDecoratorProps:
-                                const DropDownDecoratorProps(
-                                    baseStyle: TextStyle(color: Colors.black),
-                                    textAlignVertical: TextAlignVertical.center,
-                                    dropdownSearchDecoration: InputDecoration(
+    return WillPopScope(
+      onWillPop: () async {
+        UserInfo.currentLatLng = null;
+        return true;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            title: const Text("Help Center Map"),
+            centerTitle: true,
+          ),
+          body: BlocConsumer<MapCubit, MapState>(
+            listener: (context, state) {
+              if (state is MapNoService) {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("GPS Service is disabled"),
+                        content: const Text(
+                            "Please try again after you enable the location of your device."),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                context.read<MapCubit>().continueWithoutGPS();
+                              },
+                              child:
+                                  const Text("Continue without my location")),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                context.read<MapCubit>().getCurrentLocation();
+                              },
+                              child: const Text("Try Again"))
+                        ],
+                      );
+                    });
+              }
+            },
+            builder: (context, state) {
+              debugPrint(state.toString());
+              if (state is MapDisplay || state is MapInitial) {
+                return Stack(
+                  children: [
+                    CustomGoogleMap(
+                      initialCameraPosition: CameraPosition(
+                          target:
+                              context.read<MapCubit>().initialCameraLocation,
+                          zoom: 15),
+                      controller: _controller,
+                      markers: markers,
+                    ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.5,
+                            child: DropdownSearch<HelpCenterModel>(
+                              popupProps: const PopupProps.dialog(
+                                  fit: FlexFit.loose,
+                                  searchDelay: Duration.zero,
+                                  searchFieldProps: TextFieldProps(
+                                    decoration: InputDecoration(
+                                      hintText: "Search by name or city",
                                       enabled: true,
                                       filled: true,
                                       fillColor: Colors.white,
                                       prefixIcon: Icon(Icons.search),
-                                      border: InputBorder.none,
-                                    )),
-                            onChanged: (value) {
-                              _goToPosition(value!);
+                                    ),
+                                  ),
+                                  showSearchBox: true),
+                              filterFn: (item, filter) {
+                                return item.name!
+                                        .toLowerCase()
+                                        .contains(filter.toLowerCase()) ||
+                                    item.city!
+                                        .toLowerCase()
+                                        .contains(filter.toLowerCase());
+                              },
+                              items: items,
+                              itemAsString: (item) {
+                                return item.name!;
+                              },
+                              dropdownDecoratorProps:
+                                  const DropDownDecoratorProps(
+                                      baseStyle: TextStyle(color: Colors.black),
+                                      textAlignVertical:
+                                          TextAlignVertical.center,
+                                      dropdownSearchDecoration: InputDecoration(
+                                        enabled: true,
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        prefixIcon: Icon(Icons.search),
+                                        border: InputBorder.none,
+                                      )),
+                              onChanged: (value) {
+                                _goToPosition(value!);
+                              },
+                            ),
+                          )),
+                    ),
+                  ],
+                );
+              } else if (state is MapNoService) {
+                return Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("GPS Service is disabled"),
+                    const Text(
+                        "Please try again after you enable the location of your device."),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              context.read<MapCubit>().continueWithoutGPS();
                             },
-                          ),
-                        )),
-                  ),
-                ],
-              );
-            } else if (state is MapNoService) {
-              return Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("GPS Service is disabled"),
-                  const Text(
-                      "Please try again after you enable the location of your device."),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            context.read<MapCubit>().continueWithoutGPS();
-                          },
-                          child: const Text("Continue without my location")),
-                      ElevatedButton(
-                          onPressed: () {
-                            context.read<MapCubit>().getCurrentLocation();
-                          },
-                          child: const Text("Try again")),
-                    ],
-                  )
-                ],
-              ));
-            } else {
-              return const Center(
-                child: LoadingWidget(),
-              );
-            }
-          },
-        ));
+                            child: const Text("Continue without my location")),
+                        ElevatedButton(
+                            onPressed: () {
+                              context.read<MapCubit>().getCurrentLocation();
+                            },
+                            child: const Text("Try again")),
+                      ],
+                    )
+                  ],
+                ));
+              } else {
+                return const Center(
+                  child: LoadingWidget(),
+                );
+              }
+            },
+          )),
+    );
   }
 
   Future<void> _goToPosition(HelpCenterModel selectedCenter) async {
@@ -205,14 +215,15 @@ class _MapScreenState extends State<MapScreen> {
                 });
           }));
     }
-    markers.add(Marker(
-        markerId: const MarkerId("current"),
-        visible: context.read<MapCubit>().serviceEnabled,
-        position: LatLng(context.read<MapCubit>().currentLocation.latitude,
-            context.read<MapCubit>().currentLocation.longitude),
-        draggable: false,
-        icon:
-            BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)));
+    // markers.add(Marker(
+    //     markerId: const MarkerId("current"),
+    //     visible: context.read<MapCubit>().serviceEnabled,
+    //     position: LatLng(context.read<MapCubit>().currentLocation.latitude,
+    //         context.read<MapCubit>().currentLocation.longitude),
+    //     draggable: false,
+    //     icon:
+    //         BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure))
+    //         );
   }
 
   Padding buildBottomSheetBody(HelpCenterModel center, BuildContext context) {

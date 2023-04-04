@@ -25,8 +25,9 @@ class LandingPage extends StatelessWidget {
           ],
           icon: Icons.feed_outlined,
           onTap: () {
-            context.read<HelpCenterCubit>().getHelpCenters();
             context.read<MapCubit>().getCurrentLocation();
+            context.read<HelpCenterCubit>().getHelpCenters();
+
             Navigator.pushNamed(context, Routes.helpCenterList);
           }),
       CustomMenuCard(
