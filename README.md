@@ -7,6 +7,8 @@ To address this issue, Voluntracker aims to create an application that streamlin
 
 By leveraging technology to improve the efficiency of community relief efforts, Voluntracker aims to make a positive impact in times of crisis and contribute towards achieving Goal 11 and Target 11.b of Sustainable Development Goals. The project is driven by first-hand experiences of the team members who have witnessed the challenges of relief efforts and aims to make a meaningful contribution towards more effective community response during times of crisis. Join us in our mission to create a more efficient and coordinated approach to community relief efforts with Voluntracker. Let's make a difference together!
 
+Our main product is our Android application, which you can find under releases, but you can check out our web application  in a really early stage at [voluntracker.app](https://voluntracker.app). In the near future, we will be releasing our iOS and macOS applications as well.
+
 ## Table of Contents
 
 - [Google Technologies Used](#google-tech-used)
@@ -35,7 +37,6 @@ By leveraging technology to improve the efficiency of community relief efforts, 
   - Cloud Build
   - Cloud SQL
   - Cloud Run
-
 
 ## Screenshots
 
@@ -80,15 +81,22 @@ Building a server is not mandatory, but if you are planning on building your ser
 
    Place an .env file in the root directory of the project. The file should contain the following variables:
 
-   ```DATABASE_URL=
+   ```
+      DATABASE_URL=
       NODE_ENV=DEV
       JWT_ACCESS_SECRET=
       JWT_REFRESH_SECRET=
       FIREBASE_PROJECT_ID=
       FIREBASE_PRIVATE_KEY=
       FIREBASE_CLIENT_EMAIL=
-      FIREBASE_DATABASE_URL=```
+      FIREBASE_DATABASE_URL=
+   ```
+   For database URL, you can use the following template or check out [Prisma documentation](https://www.prisma.io/docs/reference/database-reference/connection-urls):
+   ```
+      postgres://<username>:<password>@<host>:<port>/<database>
+   ```
 
+   For Firebase variables, you can check out [Firebase documentation](https://firebase.google.com/docs/admin/setup#initialize-sdk) or you can download the service account key from Firebase console.
 
 
 5. Set up the database and start the development server:
