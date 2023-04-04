@@ -29,8 +29,8 @@ Our main product is our Android application, which you can find under releases, 
   - Firebase Analytics
 - Google ML Kit
   - Face Detection
-  - Image Labeling
-  - Barcode Scanning
+  - Image Labeling (not implemented yet, under development)
+  - Barcode Scanning (not implemented yet, under development)
 - Flutter
 - Google Maps API
 - Google Cloud
@@ -104,6 +104,15 @@ Building a server is not mandatory, but if you are planning on building your ser
    ```npm run start:migrate```
 
 6. Change API URL in frontend
+
+  Navigate to: frontend\lib\constants\api_constants.dart
+  
+  Change
+  
+ ``` static String baseUrl = "https://api.voluntracker.app/v1/"; ```
+  
+  to match your backend endpoint.
+
 
 ## Usage
 
