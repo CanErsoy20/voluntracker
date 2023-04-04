@@ -267,25 +267,7 @@ class CenterExpansionTile extends StatelessWidget {
                                                     volunteerId = value!.id!;
                                                   },
                                                 ),
-                                              )
-                                                  // CustomDropdownFormField(
-                                                  //     validator: (value) {
-                                                  //       if (value == null) {
-                                                  //         return "Please choose a volunteer to assign as coordinator";
-                                                  //       }
-                                                  //     },
-                                                  //     list: currentCenter
-                                                  //         .volunteers!
-                                                  //         .map((e) =>
-                                                  //             "${e.user!.firstname} ${e.user!.surname}")
-                                                  //         .toList(),
-                                                  //     label: "Volunteers",
-                                                  //     onChanged: (value) {
-                                                  //       volunteerId =
-                                                  //           int.tryParse(
-                                                  //               value!);
-                                                  //     }),
-                                                  )),
+                                              ))),
                                           actions: [
                                             TextButton(
                                                 onPressed: () {

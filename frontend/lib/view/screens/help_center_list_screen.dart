@@ -34,13 +34,10 @@ class HelpCenterListScreen extends StatelessWidget {
             onPressed: () {
               context.read<MapCubit>().getCurrentLocation();
               Navigator.pushNamed(context, Routes.mapRoute);
-              context.read<MapCubit>().initialCameraLocation =
-                  context.read<MapCubit>().currentLocation;
             },
             child: const Icon(Icons.map)),
         body: BlocBuilder<HelpCenterCubit, HelpCenterState>(
           builder: (context, state) {
-            print(state.toString());
             if (state is HelpCenterDisplay || state is HelpCenterNotFound) {
               return SingleChildScrollView(
                 child: (context.read<HelpCenterCubit>().allHelpCentersList ==

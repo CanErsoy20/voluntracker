@@ -39,6 +39,7 @@ class _MapScreenState extends State<MapScreen> {
     return WillPopScope(
       onWillPop: () async {
         UserInfo.currentLatLng = null;
+        context.read<HelpCenterCubit>().selectedCenter = null;
         return true;
       },
       child: Scaffold(
@@ -77,7 +78,20 @@ class _MapScreenState extends State<MapScreen> {
             },
             builder: (context, state) {
               debugPrint(state.toString());
-              if (state is MapDisplay || state is MapInitial) {
+              if (state is MapDisplay) {
+                if (context.read<HelpCenterCubit>().selectedCenter != null) {
+                  context.read<MapCubit>().initialCameraLocation = LatLng(
+                      context
+                          .read<HelpCenterCubit>()
+                          .selectedCenter!
+                          .location!
+                          .lat!,
+                      context
+                          .read<HelpCenterCubit>()
+                          .selectedCenter!
+                          .location!
+                          .lon!);
+                }
                 return Stack(
                   children: [
                     CustomGoogleMap(

@@ -40,8 +40,9 @@ class LandingPage extends StatelessWidget {
             "Admin"
           ],
           onTap: () {
-            context.read<HelpCenterCubit>().getHelpCenters();
             context.read<MapCubit>().getCurrentLocation();
+            context.read<HelpCenterCubit>().getHelpCenters();
+
             Navigator.pushNamed(context, Routes.mapRoute);
           }),
       CustomMenuCard(
