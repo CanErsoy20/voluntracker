@@ -65,7 +65,6 @@ class LandingPage extends StatelessWidget {
             "Admin"
           ],
           onTap: () {
-            //context.read<HelpCenterCubit>().getHelpCenters();
             Navigator.pushNamed(context, Routes.followed);
           }),
       CustomMenuCard(
@@ -75,6 +74,7 @@ class LandingPage extends StatelessWidget {
             "HelpCenterCoordinator",
           ],
           onTap: () {
+            context.read<HelpCenterCubit>().getMyCenter();
             Navigator.pushNamed(context, Routes.volunteerTeams);
           }),
       CustomMenuCard(
@@ -213,17 +213,21 @@ class LandingPage extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
                       ),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, Routes.followed);
-                          },
-                          child: Text(
-                            "See All (${UserInfo.loggedUser!.volunteer!.followedCenters!.length})",
-                          ))
+                      UserInfo.loggedUser!.volunteer!.followedCenters != null &&
+                              UserInfo.loggedUser!.volunteer!.followedCenters!
+                                  .isNotEmpty
+                          ? TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, Routes.followed);
+                              },
+                              child: Text(
+                                "See All (${UserInfo.loggedUser!.volunteer!.followedCenters!.length})",
+                              ))
+                          : SizedBox.shrink()
                     ],
                   ),
                 ),
-                UserInfo.loggedUser!.volunteer!.followedCenters!.length == 0
+                UserInfo.loggedUser!.volunteer!.followedCenters!.isEmpty
                     ? const Text(
                         "You are not following any help center yet... Please follow to get notified.")
                     : CarouselSlider.builder(
