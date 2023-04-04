@@ -135,7 +135,7 @@ export class VolunteerTeamController {
     return new HttpResponse(vt, 'Successfully assigned volunteer team leader to the team.', 200);
   }
 
-  @Delete(':volunteerTeamId/volunteerLeader')
+  @Delete(':volunteerTeamId/volunteerLeader/:volunteerId')
   async removeVolunteerLeaderFromTeam(
     @Param('volunteerTeamId') volunteerTeamId: string,
     @Param('volunteerId') volunteerId: string,
