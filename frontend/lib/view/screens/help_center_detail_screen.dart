@@ -186,7 +186,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
             itemCount: currentCenter.neededVolunteerList!.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: EdgeInsets.fromLTRB(25, 4, 25, 4),
+                padding: const EdgeInsets.fromLTRB(25, 4, 25, 4),
                 child: CustomNeedCard(
                   backgroundColor:
                       currentCenter.neededVolunteerList![index].urgency == "Low"
@@ -224,21 +224,24 @@ class HelpCenterDetailScreen extends StatelessWidget {
             shrinkWrap: true,
             itemCount: currentCenter.neededSupplyList!.length,
             itemBuilder: (context, index) {
-              return CustomNeedCard(
-                  backgroundColor:
-                      currentCenter.neededSupplyList![index].urgency == "Low"
-                          ? Colors.green
-                          : currentCenter.neededSupplyList![index].urgency ==
-                                  "Medium"
-                              ? Colors.orange
-                              : Colors.red,
-                  needName: currentCenter
-                      .neededSupplyList![index].supplyTypeCategory!,
-                  needCategory: currentCenter
-                      .neededSupplyList![index].supplyTypeCategory!,
-                  quantity: 8,
-                  lastUpdatedAt:
-                      currentCenter.neededSupplyList![index].updatedAt!);
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(25, 4, 25, 4),
+                child: CustomNeedCard(
+                    backgroundColor:
+                        currentCenter.neededSupplyList![index].urgency == "Low"
+                            ? Colors.green
+                            : currentCenter.neededSupplyList![index].urgency ==
+                                    "Medium"
+                                ? Colors.orange
+                                : Colors.red,
+                    needName:
+                        currentCenter.neededSupplyList![index].supplyTypeName!,
+                    needCategory: currentCenter
+                        .neededSupplyList![index].supplyTypeCategory!,
+                    quantity: 8,
+                    lastUpdatedAt:
+                        currentCenter.neededSupplyList![index].updatedAt!),
+              );
             })
         : Text("No supply needed at the moment: ${currentCenter.updatedAt}");
   }

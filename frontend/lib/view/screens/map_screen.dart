@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:voluntracker/cubit/help_centers/help_center_cubit.dart';
 import 'package:voluntracker/models/help_center/help_center_model.dart';
 import 'package:voluntracker/router.dart';
@@ -23,10 +24,12 @@ class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   Set<Marker> markers = {};
+  List<HelpCenterModel> items = [];
   TextEditingController controller = TextEditingController();
   @override
   void initState() {
     setMarkers(context);
+    setItems(context);
     super.initState();
   }
 
@@ -80,12 +83,51 @@ class _MapScreenState extends State<MapScreen> {
                   Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: CustomSearchBar(
-                        controller: controller,
-                        onChanged: (value) {},
-                      ),
-                    ),
+                        padding: const EdgeInsets.only(top: 10),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width / 1.5,
+                          child: DropdownSearch<HelpCenterModel>(
+                            popupProps: const PopupProps.dialog(
+                                fit: FlexFit.loose,
+                                searchDelay: Duration.zero,
+                                searchFieldProps: TextFieldProps(
+                                  decoration: InputDecoration(
+                                    hintText: "Search by name or city",
+                                    enabled: true,
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    prefixIcon: Icon(Icons.search),
+                                  ),
+                                ),
+                                showSearchBox: true),
+                            filterFn: (item, filter) {
+                              return item.name!
+                                      .toLowerCase()
+                                      .contains(filter.toLowerCase()) ||
+                                  item.city!
+                                      .toLowerCase()
+                                      .contains(filter.toLowerCase());
+                            },
+                            items: items,
+                            itemAsString: (item) {
+                              return item.name!;
+                            },
+                            dropdownDecoratorProps:
+                                const DropDownDecoratorProps(
+                                    baseStyle: TextStyle(color: Colors.black),
+                                    textAlignVertical: TextAlignVertical.center,
+                                    dropdownSearchDecoration: InputDecoration(
+                                      enabled: true,
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      prefixIcon: Icon(Icons.search),
+                                      border: InputBorder.none,
+                                    )),
+                            onChanged: (value) {
+                              _goToPosition(value!);
+                            },
+                          ),
+                        )),
                   ),
                 ],
               );
@@ -123,6 +165,27 @@ class _MapScreenState extends State<MapScreen> {
         ));
   }
 
+  Future<void> _goToPosition(HelpCenterModel selectedCenter) async {
+    final GoogleMapController controller = await _controller.future;
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: LatLng(
+            selectedCenter.location!.lat!, selectedCenter.location!.lon!),
+        zoom: 15)));
+  }
+
+  void setItems(BuildContext context) {
+    List<HelpCenterModel> centerList =
+        context.read<HelpCenterCubit>().allHelpCentersList!;
+    items.addAll(centerList);
+    // for (var i = 0; i < centerList.length; i++) {
+    //   if (!items.contains(centerList[i].city)) {
+    //     items.add(centerList[i].city!);
+    //   }
+    //   items.add(centerList[i].name!);
+    // }
+  }
+
   void setMarkers(BuildContext context) {
     List<HelpCenterModel> centerList =
         context.read<HelpCenterCubit>().allHelpCentersList!;
@@ -155,91 +218,47 @@ class _MapScreenState extends State<MapScreen> {
   Padding buildBottomSheetBody(HelpCenterModel center, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      "assets/images/bilkent.jpg",
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 9,
-                ),
-                Flexible(
-                  child: Text(center.name!,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Color.fromRGBO(100, 100, 100, 1))),
-                )
-              ],
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.asset(
+            "assets/images/bilkent.jpg",
+          ),
+        ),
+        Text(center.name!,
+            style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Color.fromRGBO(100, 100, 100, 1))),
+        Text(
+          center.contactInfo!.address!,
+          style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Color.fromRGBO(100, 100, 100, 1)),
+        ),
+        SimpleTags(
+          content:
+              center.neededSupplyList!.map((e) => e.supplyTypeName!).toList(),
+          wrapSpacing: 4,
+          wrapRunSpacing: 4,
+          tagContainerPadding: const EdgeInsets.all(6),
+          tagTextStyle: const TextStyle(color: Colors.white),
+          tagContainerDecoration: const BoxDecoration(
+            color: Colors.orange,
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
             ),
           ),
-          Expanded(
-            child: Text(
-              center.contactInfo!.address!,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: Color.fromRGBO(100, 100, 100, 1)),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Row(
-              children: [
-                _buildBottomSheetNeedInfo(const Icon(Icons.person),
-                    "Volunteer Need", const Icon(Icons.battery_2_bar_sharp)),
-                const VerticalDivider(
-                  thickness: 2,
-                  endIndent: 40,
-                ),
-                _buildBottomSheetNeedInfo(const Icon(Icons.person),
-                    "Supply Need", const Icon(Icons.battery_0_bar_sharp)),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: SimpleTags(
-              content: const [
-                "Mont / Ceket",
-                "İlaç",
-                "Gıda",
-                "Mont / Ceket",
-                "İlaç",
-                "Gıda",
-                "Mont / Ceket",
-                "İlaç",
-                "Gıda"
-              ],
-              wrapSpacing: 4,
-              wrapRunSpacing: 4,
-              tagContainerPadding: const EdgeInsets.all(6),
-              tagTextStyle: const TextStyle(color: Colors.white),
-              tagContainerDecoration: const BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-            ),
-          ),
-          ElevatedButton(
-              onPressed: () {
-                context.read<HelpCenterCubit>().selectedCenter = center;
-                Navigator.pushNamed(context, Routes.helpCenterDetail);
-              },
-              child: const Text("Show Details"))
-        ],
-      ),
+        ),
+        ElevatedButton(
+            onPressed: () {
+              context.read<HelpCenterCubit>().selectedCenter = center;
+              Navigator.pushNamed(context, Routes.helpCenterDetail);
+            },
+            child: const Text("Show Details"))
+      ]),
     );
   }
 

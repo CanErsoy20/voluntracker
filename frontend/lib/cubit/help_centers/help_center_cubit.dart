@@ -38,10 +38,12 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   // Types and Categories
   List<SupplyTypeModel>? supplyTypes = [];
   List<VolunteerTypeModel>? volunteerTypes = [];
-  List<String> volunteerTypeNames = [];
-  List<String> volunteerTypeCategory = [];
-  List<String> supplyTypeNames = [];
-  List<String> supplyTypeCategory = [];
+  List<String> allVolunteerTypeNames = [];
+  List<String> allVolunteerTypeCategory = [];
+  List<String> allSupplyTypeNames = [];
+  List<String> allSupplyTypeCategory = [];
+  List<String> tempVolunteerTypeNames = [];
+  List<String> tempSupplyTypeNames = [];
 
   Future<void> getHelpCenters() async {
     emit(HelpCenterLoading());
@@ -147,24 +149,24 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
 
   Future<void> getSupplyTypes() async {
     supplyTypes = await service.getSupplyTypes();
-    for (var i = 0; i < supplyTypes!.length; i++) {
-      if (!supplyTypeCategory.contains(supplyTypes![i].category!)) {
-        supplyTypeCategory.add(supplyTypes![i].category!);
+    for (int i = 0; i < supplyTypes!.length; i++) {
+      if (!allSupplyTypeCategory.contains(supplyTypes![i].category!)) {
+        allSupplyTypeCategory.add(supplyTypes![i].category!);
       }
-      if (!supplyTypeNames.contains(supplyTypes![i].typeName!)) {
-        supplyTypeNames.add(supplyTypes![i].typeName!);
+      if (!allSupplyTypeNames.contains(supplyTypes![i].typeName!)) {
+        allSupplyTypeNames.add(supplyTypes![i].typeName!);
       }
     }
   }
 
   Future<void> getVolunteerTypes() async {
     volunteerTypes = await service.getVolunteerTypes();
-    for (var i = 0; i < volunteerTypes!.length; i++) {
-      if (!volunteerTypeCategory.contains(volunteerTypes![i].category!)) {
-        volunteerTypeCategory.add(volunteerTypes![i].category!);
+    for (int i = 0; i < volunteerTypes!.length; i++) {
+      if (!allVolunteerTypeCategory.contains(volunteerTypes![i].category!)) {
+        allVolunteerTypeCategory.add(volunteerTypes![i].category!);
       }
-      if (!volunteerTypeNames.contains(volunteerTypes![i].typeName!)) {
-        volunteerTypeNames.add(volunteerTypes![i].typeName!);
+      if (!allVolunteerTypeNames.contains(volunteerTypes![i].typeName!)) {
+        allVolunteerTypeNames.add(volunteerTypes![i].typeName!);
       }
     }
   }
@@ -231,5 +233,31 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
         emit(HelpCenterDisplay());
       }
     }
+  }
+
+  void filterSupplies(String category) {
+    tempSupplyTypeNames = supplyTypes!
+        .where((element) =>
+            element.category!.toLowerCase() == category.toLowerCase())
+        .map((e) => e.typeName!)
+        .toList();
+  }
+
+  void clearSupplyFilter() {
+    tempSupplyTypeNames = allSupplyTypeNames;
+    newSupplyNeed = CreateNeededSupply();
+  }
+
+  void clearVolunteerFilter() {
+    tempVolunteerTypeNames = allVolunteerTypeNames;
+    newVolunteerNeed = CreateNeededVolunteer();
+  }
+
+  void filterCategories(String category) {
+    tempVolunteerTypeNames = volunteerTypes!
+        .where((element) =>
+            element.category!.toLowerCase() == category.toLowerCase())
+        .map((e) => e.typeName!)
+        .toList();
   }
 }
