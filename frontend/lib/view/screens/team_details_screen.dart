@@ -72,7 +72,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                             )
                           ],
                         )),
-                    Divider(
+                    const Divider(
                       indent: 30,
                       endIndent: 30,
                       color: Colors.white,
@@ -100,15 +100,27 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                                 leading: const CircleAvatar(),
                                 title: Text(
                                     "${context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteer!.user!.firstname} ${context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteer!.user!.surname}"),
-                                //subtitle: Text("${context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteer!.user!.getHighestRole()}"),
                                 trailing: PopupMenuButton(
                                   itemBuilder: (contex) {
                                     return [
                                       PopupMenuItem<int>(
                                         value: 0,
-                                        child: const Text("Remove from team"),
+                                        child: const Text(
+                                            "Remove from teamleader"),
                                         onTap: () {
-                                          // remove isteği at
+                                          context
+                                              .read<TeamCubit>()
+                                              .removeLeader(
+                                                  context
+                                                      .read<TeamCubit>()
+                                                      .selectedTeam
+                                                      .id!,
+                                                  context
+                                                      .read<TeamCubit>()
+                                                      .selectedTeam
+                                                      .volunteerTeamLeader!
+                                                      .volunteer!
+                                                      .id!);
                                         },
                                       ),
                                     ];
