@@ -57,7 +57,7 @@ export class AssetsController {
 
   // Delete profile image
   @Delete('/images/users/:userId/profile')
-  async deleteUserImage(@Param() userId: string) {
+  async deleteUserImage(@Param('userId') userId: string) {
     const deletedProfileImage = await this.assetsService.deleteUsersProfilePicture(+userId);
     return new HttpResponse(
       { imageUrl: deletedProfileImage },
