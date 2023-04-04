@@ -84,10 +84,14 @@ class HelpCenterDetailScreen extends StatelessWidget {
                             ),
                             trailing: UserInfo.loggedUser == null
                                 ? const SizedBox.shrink()
-                                : context
-                                        .read<HelpCenterCubit>()
-                                        .followedCenters!
-                                        .contains(myCenter)
+                                : (context
+                                                .read<HelpCenterCubit>()
+                                                .followedCenters !=
+                                            null &&
+                                        context
+                                            .read<HelpCenterCubit>()
+                                            .followedCenters!
+                                            .contains(myCenter))
                                     ? IconButton(
                                         onPressed: () {
                                           context
