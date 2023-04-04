@@ -129,7 +129,7 @@ export class VolunteerTeamService {
       },
       data: {
         teamLeader: {
-          connect: {
+          create: {
             volunteerId,
           },
         },
