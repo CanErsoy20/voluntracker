@@ -218,91 +218,47 @@ class _MapScreenState extends State<MapScreen> {
   Padding buildBottomSheetBody(HelpCenterModel center, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      "assets/images/bilkent.jpg",
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 9,
-                ),
-                Flexible(
-                  child: Text(center.name!,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Color.fromRGBO(100, 100, 100, 1))),
-                )
-              ],
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.asset(
+            "assets/images/bilkent.jpg",
+          ),
+        ),
+        Text(center.name!,
+            style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Color.fromRGBO(100, 100, 100, 1))),
+        Text(
+          center.contactInfo!.address!,
+          style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Color.fromRGBO(100, 100, 100, 1)),
+        ),
+        SimpleTags(
+          content:
+              center.neededSupplyList!.map((e) => e.supplyTypeName!).toList(),
+          wrapSpacing: 4,
+          wrapRunSpacing: 4,
+          tagContainerPadding: const EdgeInsets.all(6),
+          tagTextStyle: const TextStyle(color: Colors.white),
+          tagContainerDecoration: const BoxDecoration(
+            color: Colors.orange,
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
             ),
           ),
-          Expanded(
-            child: Text(
-              center.contactInfo!.address!,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: Color.fromRGBO(100, 100, 100, 1)),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Row(
-              children: [
-                _buildBottomSheetNeedInfo(const Icon(Icons.person),
-                    "Volunteer Need", const Icon(Icons.battery_2_bar_sharp)),
-                const VerticalDivider(
-                  thickness: 2,
-                  endIndent: 40,
-                ),
-                _buildBottomSheetNeedInfo(const Icon(Icons.person),
-                    "Supply Need", const Icon(Icons.battery_0_bar_sharp)),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: SimpleTags(
-              content: const [
-                "Mont / Ceket",
-                "İlaç",
-                "Gıda",
-                "Mont / Ceket",
-                "İlaç",
-                "Gıda",
-                "Mont / Ceket",
-                "İlaç",
-                "Gıda"
-              ],
-              wrapSpacing: 4,
-              wrapRunSpacing: 4,
-              tagContainerPadding: const EdgeInsets.all(6),
-              tagTextStyle: const TextStyle(color: Colors.white),
-              tagContainerDecoration: const BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-            ),
-          ),
-          ElevatedButton(
-              onPressed: () {
-                context.read<HelpCenterCubit>().selectedCenter = center;
-                Navigator.pushNamed(context, Routes.helpCenterDetail);
-              },
-              child: const Text("Show Details"))
-        ],
-      ),
+        ),
+        ElevatedButton(
+            onPressed: () {
+              context.read<HelpCenterCubit>().selectedCenter = center;
+              Navigator.pushNamed(context, Routes.helpCenterDetail);
+            },
+            child: const Text("Show Details"))
+      ]),
     );
   }
 

@@ -50,7 +50,7 @@ class LandingPage extends StatelessWidget {
             Navigator.pushNamed(context, Routes.createHelpCenter);
           }),
       CustomMenuCard(
-          title: "Favorites",
+          title: "Followed Help Centers",
           icon: Icons.favorite,
           authList: const [
             "Volunteer",
@@ -61,6 +61,57 @@ class LandingPage extends StatelessWidget {
           onTap: () {
             //context.read<HelpCenterCubit>().getHelpCenters();
             Navigator.pushNamed(context, Routes.followed);
+          }),
+      CustomMenuCard(
+          title: "My Teams",
+          icon: Icons.people,
+          authList: const [
+            "HelpCenterCoordinator",
+          ],
+          onTap: () {
+            Navigator.pushNamed(context, Routes.volunteerTeams);
+          }),
+      CustomMenuCard(
+          title: "My Help Center",
+          icon: Icons.apartment_outlined,
+          authList: const [
+            "Volunteer",
+            "VolunteerTeamleader",
+            "HelpCenterCoordinator",
+          ],
+          onTap: () {
+            context.read<HelpCenterCubit>().getMyCenter();
+            Navigator.pushNamed(context, Routes.helpCenterDetail);
+          }),
+      CustomMenuCard(
+          title: "Update My Help Center",
+          icon: Icons.edit,
+          authList: const [
+            "HelpCenterCoordinator",
+          ],
+          onTap: () {
+            Navigator.pushNamed(context, Routes.updateHelpCenter);
+          }),
+      CustomMenuCard(
+          title: "My Team",
+          icon: Icons.help,
+          authList: const [
+            "VolunteerTeamleader",
+          ],
+          onTap: () {
+            Navigator.pushNamed(context, Routes.myTeam);
+          }),
+      CustomMenuCard(
+          title: "Settings",
+          icon: Icons.settings,
+          authList: const [
+            "Volunteer",
+            "VolunteerTeamleader",
+            "HelpCenterCoordinator",
+            "Admin"
+          ],
+          onTap: () {
+            Navigator.pushNamed(context, Routes.settings);
           }),
       CustomMenuCard(
           title: "Contact Us",
@@ -86,57 +137,6 @@ class LandingPage extends StatelessWidget {
           onTap: () {
             Navigator.pushNamed(context, Routes.aboutUs);
           }),
-      CustomMenuCard(
-          title: "Settings",
-          icon: Icons.settings,
-          authList: const [
-            "Volunteer",
-            "VolunteerTeamleader",
-            "HelpCenterCoordinator",
-            "Admin"
-          ],
-          onTap: () {
-            Navigator.pushNamed(context, Routes.settings);
-          }),
-      CustomMenuCard(
-          title: "My Teams",
-          icon: Icons.people,
-          authList: const [
-            "HelpCenterCoordinator",
-          ],
-          onTap: () {
-            Navigator.pushNamed(context, Routes.volunteerTeams);
-          }),
-      CustomMenuCard(
-          title: "Update Help Center",
-          icon: Icons.edit,
-          authList: const [
-            "HelpCenterCoordinator",
-          ],
-          onTap: () {
-            Navigator.pushNamed(context, Routes.updateHelpCenter);
-          }),
-      CustomMenuCard(
-          title: "My Help Center",
-          icon: Icons.apartment_outlined,
-          authList: const [
-            "Volunteer",
-            "VolunteerTeamleader",
-            "HelpCenterCoordinator",
-          ],
-          onTap: () {
-            context.read<HelpCenterCubit>().getMyCenter();
-            Navigator.pushNamed(context, Routes.helpCenterDetail);
-          }),
-      CustomMenuCard(
-          title: "My Team",
-          icon: Icons.help,
-          authList: const [
-            "VolunteerTeamleader",
-          ],
-          onTap: () {
-            Navigator.pushNamed(context, Routes.myTeam);
-          })
     ];
     List<CustomMenuCard> adminCards = allCards
         .where((element) => element.authList.contains("Admin"))
