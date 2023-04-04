@@ -28,6 +28,7 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   List<HelpCenterModel>? tempHelpCentersList;
   HelpCenterModel? selectedCenter;
   HelpCenterModel? myCenter;
+  List<HelpCenterModel>? followedCenters = [];
 
   // Create and Update HelpCenter Related
   CreateNeededVolunteer newVolunteerNeed = CreateNeededVolunteer();
@@ -220,6 +221,20 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
     } else {
       emit(HelpCenterSuccess("Started Following This Center",
           "You will not receive notifications from this center anymore... :("));
+    }
+  }
+
+  Future<void> getFollowedHelpCenters(
+    int volunteerId,
+  ) async {
+    List<HelpCenterModel>? response =
+        await service.getFollowedCenters(volunteerId);
+    if (response == null) {
+      emit(HelpCenterError(
+          "Oops! An Error Occured", "Could not get followed help centers."));
+    } else {
+      emit(HelpCenterSuccess("Successfully Fetched Help Centers",
+          "Successfully fetched followed help centers"));
     }
   }
 

@@ -58,6 +58,19 @@ class TeamCubit extends Cubit<TeamState> {
     }
   }
 
+  Future<void> removeLeader(int volunteerTeamId, int volunteerId) async {
+    emit(TeamLoading());
+    VolunteerTeam? response =
+        await service.removeLeader(volunteerTeamId, volunteerId);
+    if (response != null) {
+      emit(TeamSuccess("Removed Team Leader",
+          "Successfully removed team leader to the team"));
+    } else {
+      emit(TeamError("Oops! An Error Occured",
+          "Something went wrong while removing this team leader... Please try again later"));
+    }
+  }
+
   bool isInList(Volunteer volunteer) {
     return volunteersToAdd.contains(volunteer);
   }

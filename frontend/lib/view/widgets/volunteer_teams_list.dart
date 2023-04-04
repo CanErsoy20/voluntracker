@@ -82,7 +82,9 @@ class VolunteerTeamList extends StatelessWidget {
                 backgroundImage: volunteer.user!.profileImageUrl != ""
                     ? NetworkImage(volunteer.user!.profileImageUrl!)
                     : null,
-                child: const Icon(Icons.person),
+                child: volunteer.user!.profileImageUrl == ""
+                    ? const Icon(Icons.person)
+                    : null,
               ),
               title: Text(
                   "${volunteer.user?.firstname} ${volunteer.user?.surname}"),

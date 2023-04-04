@@ -34,7 +34,6 @@ class UserBar extends StatelessWidget {
                   backgroundImage: user.profileImageUrl != ""
                       ? NetworkImage(UserInfo.loggedUser!.profileImageUrl!)
                       : null,
-                  child: const Icon(Icons.person),
                 ),
               ),
               Expanded(
