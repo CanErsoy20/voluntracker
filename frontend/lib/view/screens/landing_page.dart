@@ -25,7 +25,9 @@ class LandingPage extends StatelessWidget {
           ],
           icon: Icons.feed_outlined,
           onTap: () {
+            context.read<MapCubit>().getCurrentLocation();
             context.read<HelpCenterCubit>().getHelpCenters();
+
             Navigator.pushNamed(context, Routes.helpCenterList);
           }),
       CustomMenuCard(
@@ -38,14 +40,15 @@ class LandingPage extends StatelessWidget {
             "Admin"
           ],
           onTap: () {
-            context.read<HelpCenterCubit>().getHelpCenters();
             context.read<MapCubit>().getCurrentLocation();
+            context.read<HelpCenterCubit>().getHelpCenters();
+
             Navigator.pushNamed(context, Routes.mapRoute);
           }),
       CustomMenuCard(
           title: "Create Help Center",
           icon: Icons.help,
-          authList: const ["Admin"],
+          authList: const ["Admin", "HelpCenterCoordinator"],
           onTap: () {
             Navigator.pushNamed(context, Routes.createHelpCenter);
           }),
@@ -100,6 +103,17 @@ class LandingPage extends StatelessWidget {
           ],
           onTap: () {
             Navigator.pushNamed(context, Routes.myTeam);
+          }),
+      CustomMenuCard(
+          title: "Manage Users",
+          icon: Icons.help,
+          authList: const [
+            "HelpCenterCoordinator",
+            "Admin",
+          ],
+          onTap: () {
+            context.read<HelpCenterCubit>().getHelpCenters();
+            Navigator.pushNamed(context, Routes.manageUsers);
           }),
       CustomMenuCard(
           title: "Settings",

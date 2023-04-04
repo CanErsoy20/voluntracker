@@ -9,6 +9,8 @@ class ApiConstant {
   static String signUpVolunteer = "auth/signup";
   static String login = "auth/login/";
   static String volunteerTeam = "/volunteerTeam/";
+  static String volunteerTeams = "volunteerTeams/";
+  static String teamLeader = "/volunteerLeader/";
   static String assignVolunteer = "assign/volunteer/";
   static String confirmEmail = "emailConfirmation/confirm/";
   static String volunteer = "/volunteer/";
@@ -16,4 +18,6 @@ class ApiConstant {
   static String unfollow = "/unfollow/";
   static String assets = "assets/images/";
   static String profilePic = "profile/users/";
+  static String removeCoord = "remove/helpCenterCoordinator/";
+  static String coordinator = "/helpCenterCoordinator/";
 }

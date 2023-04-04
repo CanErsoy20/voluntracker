@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:voluntracker/models/assign_volunteer_model.dart';
 import 'package:voluntracker/models/help_center/busiest_hours_model.dart';
 import 'package:voluntracker/models/help_center/contact_info_model.dart';
@@ -7,11 +8,13 @@ import 'package:voluntracker/models/help_center/open_close_info_model.dart';
 import 'package:voluntracker/models/needed_supply/create_needed_supply_model.dart';
 import 'package:voluntracker/models/types/supply_types_model.dart';
 import 'package:bloc/bloc.dart';
+import 'package:voluntracker/models/user/user_info.dart';
 import 'package:voluntracker/models/volunteer_model.dart';
 
 import '../../models/help_center/help_center_model.dart';
 import '../../models/needed_volunteer/create_needed_volunteer_model.dart';
 import '../../models/types/volunteer_types_model.dart';
+import '../../models/user/user_model.dart';
 import '../../services/help_center_service.dart';
 part 'help_center_state.dart';
 
@@ -48,8 +51,21 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   Future<void> getHelpCenters() async {
     emit(HelpCenterLoading());
     allHelpCentersList = await service.getHelpCenters();
-    tempHelpCentersList = allHelpCentersList;
+
     if (allHelpCentersList != null) {
+      if (UserInfo.currentLatLng != null) {
+        for (int i = 0; i < allHelpCentersList!.length; i++) {
+          allHelpCentersList![i].distance = double.parse(
+              (Geolocator.distanceBetween(
+                          allHelpCentersList![i].location!.lat!,
+                          allHelpCentersList![i].location!.lon!,
+                          UserInfo.currentLatLng!.latitude,
+                          UserInfo.currentLatLng!.longitude) /
+                      1000)
+                  .toStringAsFixed(2));
+        }
+      }
+      tempHelpCentersList = allHelpCentersList;
       emit(HelpCenterDisplay());
     } else {
       emit(HelpCenterError("Not Found", "No Help Center Found"));
@@ -207,6 +223,29 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
     }
   }
 
+  Future<void> assignCoordinator(int helpCenterId, int volunteerId) async {
+    HelpCenterModel? response =
+        await service.assignCoordinator(helpCenterId, volunteerId);
+    if (response == null) {
+      emit(HelpCenterError("Oops! An Error Occured",
+          "Something went wrong while assigning this coordinator... Please try again later"));
+    } else {
+      emit(HelpCenterSuccess("Assigned Coordinator",
+          "Successfully assigned coordinator to the help center"));
+    }
+  }
+
+  Future<void> removeCoordinator(int helpCenterId) async {
+    UserModel? response = await service.removeCoordinator(helpCenterId);
+    if (response == null) {
+      emit(HelpCenterError("Oops! An Error Occured",
+          "Something went wrong while removeing this coordinator... Please try again later"));
+    } else {
+      emit(HelpCenterSuccess("Removed Coordinator",
+          "Successfully removed coordinator from the help center"));
+    }
+  }
+
   void emitEditing() {
     emit(HelpCenterEditing());
   }
@@ -233,6 +272,32 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
         emit(HelpCenterDisplay());
       }
     }
+  }
+
+  void sortbyDistance() {
+    emit(HelpCenterSorting());
+    tempHelpCentersList!.sort((a, b) {
+      return a.distance!.compareTo(b.distance!);
+    });
+    print(tempHelpCentersList);
+    emit(HelpCenterDisplay());
+  }
+
+  void sortbyName() {
+    emit(HelpCenterSorting());
+    tempHelpCentersList!.sort((a, b) {
+      return a.name!.compareTo(b.name!);
+    });
+
+    emit(HelpCenterDisplay());
+  }
+
+  void sortbyCity() {
+    emit(HelpCenterSorting());
+    tempHelpCentersList!.sort((a, b) {
+      return a.city!.compareTo(b.city!);
+    });
+    emit(HelpCenterDisplay());
   }
 
   void filterSupplies(String category) {

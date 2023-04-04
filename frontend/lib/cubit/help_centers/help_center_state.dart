@@ -27,3 +27,5 @@ class HelpCenterEditing extends HelpCenterState {}
 class HelpCenterSearching extends HelpCenterState {}
 
 class HelpCenterNotFound extends HelpCenterState {}
+
+class HelpCenterSorting extends HelpCenterState {}

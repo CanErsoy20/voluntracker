@@ -1,3 +1,4 @@
+import 'package:voluntracker/view/screens/manage_users.dart';
 import 'package:voluntracker/view/screens/team_details_screen.dart';
 import 'package:voluntracker/view/screens/create_help_center_screen.dart';
 import 'package:voluntracker/view/screens/help_center_detail_screen.dart';
@@ -44,6 +45,7 @@ class Routes {
   static const String changePassword = "/change-password";
   static const String followed = "/followed";
   static const String settings = "/settings";
+  static const String manageUsers = "/manage-users";
 }
 
 class RouteGenerator {
@@ -92,6 +94,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => SettingsScreen());
       case Routes.followed:
         return MaterialPageRoute(builder: (_) => FavoritesScreen());
+      case Routes.manageUsers:
+        return MaterialPageRoute(builder: (_) => ManageUsersScreen());
       default:
         return MaterialPageRoute(builder: (_) => UndefinedScreen());
     }

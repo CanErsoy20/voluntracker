@@ -1,3 +1,4 @@
+import 'package:voluntracker/models/assign_team_leader_model.dart';
 import 'package:voluntracker/models/create_team_model.dart';
 import 'package:voluntracker/models/user/user_info.dart';
 import 'package:bloc/bloc.dart';
@@ -42,6 +43,18 @@ class TeamCubit extends Cubit<TeamState> {
     } else {
       emit(TeamError(
           "Adding Failed", "Could not add the volunteers to the team"));
+    }
+  }
+
+  Future<void> assignLeader(AssignTeamLeaderModel bodyModel) async {
+    emit(TeamLoading());
+    VolunteerTeam? response = await service.assignLeader(bodyModel);
+    if (response != null) {
+      emit(TeamSuccess("Assigned Team Leader",
+          "Successfully assigned team leader to the team"));
+    } else {
+      emit(TeamError("Oops! An Error Occured",
+          "Something went wrong while assigning this team leader... Please try again later"));
     }
   }
 

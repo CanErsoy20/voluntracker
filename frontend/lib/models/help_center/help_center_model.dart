@@ -20,6 +20,8 @@ class HelpCenterModel extends CreateHelpCenter {
   List<VolunteerTeam>? volunteerTeams;
   Coordinator? coordinator;
 
+  double? distance;
+
   HelpCenterModel(
       {String? name,
       String? additionalInfo,
