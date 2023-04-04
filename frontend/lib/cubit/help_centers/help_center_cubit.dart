@@ -12,6 +12,7 @@ import 'package:voluntracker/models/volunteer_model.dart';
 import '../../models/help_center/help_center_model.dart';
 import '../../models/needed_volunteer/create_needed_volunteer_model.dart';
 import '../../models/types/volunteer_types_model.dart';
+import '../../models/user/user_model.dart';
 import '../../services/help_center_service.dart';
 part 'help_center_state.dart';
 
@@ -204,6 +205,29 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
     } else {
       emit(HelpCenterSuccess("Started Following This Center",
           "You will not receive notifications from this center anymore... :("));
+    }
+  }
+
+  Future<void> assignCoordinator(int helpCenterId, int volunteerId) async {
+    HelpCenterModel? response =
+        await service.assignCoordinator(helpCenterId, volunteerId);
+    if (response == null) {
+      emit(HelpCenterError("Oops! An Error Occured",
+          "Something went wrong while assigning this coordinator... Please try again later"));
+    } else {
+      emit(HelpCenterSuccess("Assigned Coordinator",
+          "Successfully assigned coordinator to the help center"));
+    }
+  }
+
+  Future<void> removeCoordinator(int helpCenterId) async {
+    UserModel? response = await service.removeCoordinator(helpCenterId);
+    if (response == null) {
+      emit(HelpCenterError("Oops! An Error Occured",
+          "Something went wrong while removeing this coordinator... Please try again later"));
+    } else {
+      emit(HelpCenterSuccess("Removed Coordinator",
+          "Successfully removed coordinator from the help center"));
     }
   }
 

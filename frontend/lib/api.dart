@@ -13,8 +13,8 @@ class Api {
     return response;
   }
 
-  Future<http.Response> postRequest(
-      String adress, String path, Object? requestBody) async {
+  Future<http.Response> postRequest(String adress, String path,
+      [Object? requestBody]) async {
     final response = await http.post(Uri.parse(adress + path),
         headers: tokenHeader, body: requestBody);
     return response;
@@ -23,6 +23,13 @@ class Api {
   Future<http.Response> patchRequest(String adress, String path,
       [Object? requestBody]) async {
     final response = await http.patch(Uri.parse(adress + path),
+        headers: tokenHeader, body: requestBody);
+    return response;
+  }
+
+  Future<http.Response> deleteRequest(String adress, String path,
+      [Object? requestBody]) async {
+    final response = await http.delete(Uri.parse(adress + path),
         headers: tokenHeader, body: requestBody);
     return response;
   }

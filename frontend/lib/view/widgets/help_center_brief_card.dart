@@ -21,7 +21,11 @@ class HelpCenterBriefCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 5,
       child: ExpansionTile(
-        title: Text(currentCenter.name!),
+        title: Row(
+          children: [
+            Text(currentCenter.name!),
+          ],
+        ),
         children: [
           ListTile(
             title: Text("Adress: ${currentCenter.contactInfo!.address!}"),

@@ -16,4 +16,6 @@ class ApiConstant {
   static String unfollow = "/unfollow/";
   static String assets = "assets/images/";
   static String profilePic = "profile/users/";
+  static String removeCoord = "remove/helpCenterCoordinator/";
+  static String coordinator = "/helpCenterCoordinator/";
 }

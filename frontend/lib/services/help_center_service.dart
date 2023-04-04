@@ -15,6 +15,7 @@ import '../models/response_model.dart';
 import '../models/types/supply_types_model.dart';
 import '../models/types/volunteer_types_model.dart';
 import '../models/user/user_info.dart';
+import '../models/user/user_model.dart';
 
 class HelpCenterService {
   HelpCenterService();
@@ -270,6 +271,41 @@ class HelpCenterService {
         dynamic body = json.decode(response.body);
         ResponseModel responseModel = ResponseModel.fromJson(body);
         return Volunteer.fromJson(responseModel.data);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<HelpCenterModel?> assignCoordinator(
+      int helpCenterId, int volunteerId) async {
+    try {
+      Response? response;
+      response = await Api.instance.postRequest(ApiConstant.baseUrl,
+          "${ApiConstant.helpCenters}$helpCenterId${ApiConstant.coordinator}$volunteerId");
+      if (response.statusCode == 201) {
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return HelpCenterModel.fromJson(responseModel.data);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<UserModel?> removeCoordinator(int helpCenterId) async {
+    try {
+      Response? response;
+      response = await Api.instance.deleteRequest(ApiConstant.baseUrl,
+          "${ApiConstant.helpCenters}${ApiConstant.removeCoord}$helpCenterId");
+      if (response.statusCode == 200) {
+        dynamic body = json.decode(response.body);
+        ResponseModel responseModel = ResponseModel.fromJson(body);
+        return UserModel.fromJson(responseModel.data);
       } else {
         return null;
       }
