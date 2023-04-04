@@ -6,6 +6,7 @@ import 'package:voluntracker/cubit/sign_up/sign_up_cubit.dart';
 import 'package:voluntracker/router.dart';
 import 'package:voluntracker/services/auth_service.dart';
 import 'package:voluntracker/services/help_center_service.dart';
+import 'package:voluntracker/services/profile_service.dart';
 import 'package:voluntracker/services/team_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'cubit/help_centers/help_center_cubit.dart';
 import 'cubit/map/map_cubit.dart';
+import 'cubit/profile/profile_cubit.dart';
 import 'cubit/team/team_cubit.dart';
 
 void main() {
@@ -22,7 +24,7 @@ void main() {
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
-  
+
   // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
@@ -54,7 +56,8 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context) => SignUpCubit(AuthService())),
         BlocProvider(
             create: (context) => LoginCubit(AuthService())..checkPrefs()),
-        BlocProvider(create: (context) => TeamCubit(TeamService()))
+        BlocProvider(create: (context) => TeamCubit(TeamService())),
+        BlocProvider(create: (context) => ProfileCubit(ProfileService()))
       ],
       child: MaterialApp(
           title: 'Flutter Demo',

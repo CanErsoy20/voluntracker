@@ -14,4 +14,6 @@ class ApiConstant {
   static String volunteer = "/volunteer/";
   static String volunteers = "volunteers/";
   static String unfollow = "/unfollow/";
+  static String assets = "assets/images/";
+  static String profilePic = "profile/users/";
 }

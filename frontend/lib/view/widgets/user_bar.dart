@@ -27,11 +27,14 @@ class UserBar extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(8, 8, 15, 8),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 15, 8),
                 child: CircleAvatar(
                   radius: 30,
-                  // backgroundImage: NetworkImage(user.ava),
+                  backgroundImage: user.profileImageUrl != ""
+                      ? NetworkImage(UserInfo.loggedUser!.profileImageUrl!)
+                      : null,
+                  child: const Icon(Icons.person),
                 ),
               ),
               Expanded(
