@@ -28,7 +28,7 @@ class HelpCenterCubit extends Cubit<HelpCenterState> {
   List<HelpCenterModel>? tempHelpCentersList;
   HelpCenterModel? selectedCenter;
   HelpCenterModel? myCenter;
-  List<HelpCenterModel>? followedCenters;
+  List<HelpCenterModel>? followedCenters = [];
 
   // Create and Update HelpCenter Related
   CreateNeededVolunteer newVolunteerNeed = CreateNeededVolunteer();

@@ -90,7 +90,8 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                     context
                                 .read<TeamCubit>()
                                 .selectedTeam
-                                .volunteerTeamLeader !=
+                                .volunteerTeamLeader!
+                                .volunteerId !=
                             null
                         ? Card(
                             shape: RoundedRectangleBorder(
@@ -99,28 +100,27 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                             child: ListTile(
                                 leading: const CircleAvatar(),
                                 title: Text(
-                                    "${context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteer!.user!.firstname} ${context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteer!.user!.surname}"),
+                                    "${context.read<TeamCubit>().selectedTeam.volunteers!.where((element) => element.id == context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteerId).first.user!.firstname} ${context.read<TeamCubit>().selectedTeam.volunteers!.where((element) => element.id == context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteerId).first.user!.surname}"),
                                 trailing: PopupMenuButton(
                                   itemBuilder: (contex) {
                                     return [
                                       PopupMenuItem<int>(
                                         value: 0,
                                         child: const Text(
-                                            "Remove from teamleader"),
+                                            "Remove from team leader"),
                                         onTap: () {
-                                          context
-                                              .read<TeamCubit>()
-                                              .removeLeader(
-                                                  context
-                                                      .read<TeamCubit>()
-                                                      .selectedTeam
-                                                      .id!,
-                                                  context
-                                                      .read<TeamCubit>()
-                                                      .selectedTeam
-                                                      .volunteerTeamLeader!
-                                                      .volunteer!
-                                                      .id!);
+                                          // context
+                                          //     .read<TeamCubit>()
+                                          //     .removeLeader(
+                                          //         context
+                                          //             .read<TeamCubit>()
+                                          //             .selectedTeam
+                                          //             .id!,
+                                          //         context
+                                          //             .read<TeamCubit>()
+                                          //             .selectedTeam
+                                          //             .volunteerTeamLeader!
+                                          //             .volunteerId!);
                                         },
                                       ),
                                     ];
