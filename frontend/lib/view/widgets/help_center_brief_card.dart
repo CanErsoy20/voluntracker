@@ -60,10 +60,9 @@ class HelpCenterBriefCard extends StatelessWidget {
                       child: const Text("Show Details")),
                   ElevatedButton(
                       onPressed: () {
-                        context.read<MapCubit>().initialCameraLocation = LatLng(
-                            currentCenter.location!.lat!,
-                            currentCenter.location!.lon!);
                         context.read<MapCubit>().getCurrentLocation();
+                        context.read<HelpCenterCubit>().selectedCenter =
+                            currentCenter;
                         Navigator.of(context).pushNamed(Routes.mapRoute);
                       },
                       child: const Text("See On Map"))

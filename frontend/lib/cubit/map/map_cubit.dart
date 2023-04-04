@@ -49,6 +49,7 @@ class MapCubit extends Cubit<MapState> {
     // continue accessing the position of the device.
     Position position = await Geolocator.getCurrentPosition();
     currentLocation = LatLng(position.latitude, position.longitude);
+    initialCameraLocation = currentLocation;
     UserInfo.currentLatLng = currentLocation;
     emit(MapDisplay());
   }
