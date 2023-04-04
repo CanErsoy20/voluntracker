@@ -76,11 +76,9 @@ export class VolunteerTeamService {
     });
   }
 
-  async assignVolunteerAsLeaderToTeam(
-    volunteerTeamId: number,
-    volunteerId: number,
-    createVolunteerLeaderDto: CreateVolunteerLeaderDto,
-  ) {
+  async assignVolunteerAsLeaderToTeam(createVolunteerLeaderDto: CreateVolunteerLeaderDto) {
+    const { volunteerTeamId, volunteerId } = createVolunteerLeaderDto;
+
     const volunteerTeam = await this.prisma.volunteerTeam.findUnique({
       where: {
         id: volunteerTeamId,
@@ -131,7 +129,9 @@ export class VolunteerTeamService {
       },
       data: {
         teamLeader: {
-          create: createVolunteerLeaderDto,
+          create: {
+            volunteerId,
+          },
         },
       },
       include: {
@@ -140,5 +140,48 @@ export class VolunteerTeamService {
     });
     const userRole = await this.userRoleService.addUserRoleByVolunteerId(volunteerId, 'VolunteerTeamLeader');
     return userRole;
+  }
+
+  async removeVolunteerTeamLeaderFromTeam(volunteerTeamId: number, volunteerId: number) {
+    const volunteerTeam = await this.prisma.volunteerTeam.findUnique({
+      where: {
+        id: volunteerTeamId,
+      },
+      include: {
+        teamLeader: true,
+        helpCenter: true,
+      },
+    });
+    if (!volunteerTeam) {
+      throw new UniqueEntityNotFoundException(
+        'The volunteer team you are trying to remove a leader from to does not exist',
+      );
+    }
+    if (!volunteerTeam.teamLeader) {
+      throw new UniqueEntityAlreadyExistsException(
+        'The team does not have a team leader. Assign a team leader before trying to remove the leader.',
+      );
+    }
+    if (!volunteerTeam.helpCenter) {
+      throw new NotRelatedToHelpCenterException(
+        'No help center contains the team you are trying to assign a leader to.',
+      );
+    }
+
+    const team = await this.prisma.volunteerTeam.update({
+      where: {
+        id: volunteerTeam.id,
+      },
+      data: {
+        teamLeader: {
+          delete: true,
+        },
+      },
+      include: {
+        teamLeader: true,
+      },
+    });
+    await this.userRoleService.removeUserRoleByVolunteerId(volunteerId, 'VolunteerTeamLeader');
+    return team;
   }
 }

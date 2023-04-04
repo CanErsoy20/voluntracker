@@ -40,11 +40,9 @@ class _LoginScreenState extends State<LoginScreen> {
               } else if (state is LoginSuccess) {
                 CustomSnackbars.successSnackbar(
                     context, state.title, state.description);
-                context.read<HelpCenterCubit>().getHelpCenters();
-                if (UserInfo.loggedUser!.volunteer!.helpCenterId != null) {
-                  context.read<HelpCenterCubit>().getMyCenter();
-                }
-                Navigator.pushReplacementNamed(context, Routes.landingRoute);
+                context.read<HelpCenterCubit>().getHelpCenters().then((value) =>
+                    Navigator.pushReplacementNamed(
+                        context, Routes.landingRoute));
               }
             },
             builder: (context, state) {
@@ -130,8 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       tristate: true,
                       onChanged: (value) {
                         context.read<LoginCubit>().changeRememberMe();
-                        print(
-                            "changed to: ${context.read<LoginCubit>().rememberMe}");
                       }),
                 ),
                 TextButton(

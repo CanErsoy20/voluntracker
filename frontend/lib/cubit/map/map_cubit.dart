@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:voluntracker/models/user/user_info.dart';
 
 part 'map_state.dart';
 
@@ -48,6 +49,8 @@ class MapCubit extends Cubit<MapState> {
     // continue accessing the position of the device.
     Position position = await Geolocator.getCurrentPosition();
     currentLocation = LatLng(position.latitude, position.longitude);
+    initialCameraLocation = currentLocation;
+    UserInfo.currentLatLng = currentLocation;
     emit(MapDisplay());
   }
 

@@ -12,6 +12,7 @@ import '../../helper_functions.dart';
 import '../../models/help_center/help_center_model.dart';
 import '../../models/user/user_info.dart';
 import '../widgets/custom_need_card.dart';
+import '../widgets/custom_snackbars.dart';
 
 class HelpCenterDetailScreen extends StatelessWidget {
   const HelpCenterDetailScreen({super.key});
@@ -24,6 +25,7 @@ class HelpCenterDetailScreen extends StatelessWidget {
     } else {
       myCenter = context.read<HelpCenterCubit>().myCenter;
     }
+
     return WillPopScope(
       onWillPop: () async {
         context.read<HelpCenterCubit>().selectedCenter = null;
@@ -45,136 +47,187 @@ class HelpCenterDetailScreen extends StatelessWidget {
                       description:
                           "You are not assigned to a help center yet :("),
                 )
-              : DefaultTabController(
-                  length: 2,
-                  child: Column(
-                    children: [
-                      Text(
-                        myCenter.name!,
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                      ListTile(
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+              : BlocConsumer<HelpCenterCubit, HelpCenterState>(
+                  listener: (context, state) {
+                    if (state is HelpCenterSuccess) {
+                      CustomSnackbars.successSnackbar(
+                          context, state.title, state.description);
+                    } else if (state is HelpCenterError) {
+                      CustomSnackbars.errorSnackbar(
+                          context, state.title, state.description);
+                    }
+                  },
+                  builder: (context, state) {
+                    return DefaultTabController(
+                      length: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
                           children: [
-                            Text("${myCenter.contactInfo!.address}",
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.white)),
                             Text(
-                                "Last Updated At: ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.parse(myCenter.updatedAt!))}",
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.white)),
-                            Text("Additional Info: ${myCenter.additionalInfo}",
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.white))
-                          ],
-                        ),
-                        trailing: UserInfo.loggedUser == null
-                            ? SizedBox.shrink()
-                            : IconButton(
-                                onPressed: () {
-                                  // if not following rn
-                                  context
-                                      .read<HelpCenterCubit>()
-                                      .followHelpCenter(
-                                          UserInfo.loggedUser!.volunteer!.id!,
-                                          myCenter!.id!);
-                                  // else
-                                  // context
-                                  //     .read<HelpCenterCubit>()
-                                  //     .unfollowHelpCenter(
-                                  //         UserInfo.loggedUser!.volunteer!.id!,
-                                  //         myCenter!.id!);
-                                },
-                                icon: Icon(
-                                  Icons
-                                      .favorite_border_outlined, // : Icons.favorite
-                                  color: Colors.red,
-                                ),
+                              myCenter!.name!,
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                            ListTile(
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("${myCenter.contactInfo!.address}",
+                                      style: const TextStyle(
+                                          fontSize: 15, color: Colors.white)),
+                                  Text(
+                                      "Last Updated At: ${HelperFunctions.formatDateToDate(myCenter.updatedAt!)} ${HelperFunctions.formatDateToTime(myCenter.updatedAt!)}",
+                                      style: const TextStyle(
+                                          fontSize: 15, color: Colors.white)),
+                                  Text(
+                                      "Additional Info: ${myCenter.additionalInfo}",
+                                      style: const TextStyle(
+                                          fontSize: 15, color: Colors.white))
+                                ],
                               ),
-                      ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.green),
-                              onPressed: () {
-                                context.read<MapCubit>().getCurrentLocation();
-                                context.read<MapCubit>().initialCameraLocation =
-                                    LatLng(myCenter!.location!.lat!,
-                                        myCenter.location!.lon!);
-                                Navigator.pushNamed(context, Routes.mapRoute);
-                              },
-                              child: RichText(
-                                text: const TextSpan(
-                                  children: [
-                                    WidgetSpan(
-                                      child: Icon(
-                                        Icons.location_on,
-                                        size: 18,
-                                        color: Color.fromARGB(225, 27, 40, 55),
+                              trailing: UserInfo.loggedUser == null
+                                  ? const SizedBox.shrink()
+                                  : (UserInfo.loggedUser!.volunteer!
+                                                  .followedCenters !=
+                                              null &&
+                                          UserInfo.loggedUser!.volunteer!
+                                              .followedCenters!
+                                              .any((element) =>
+                                                  element.id! == myCenter!.id!))
+                                      ? IconButton(
+                                          onPressed: () {
+                                            context
+                                                .read<HelpCenterCubit>()
+                                                .unfollowHelpCenter(
+                                                    UserInfo.loggedUser!
+                                                        .volunteer!.id!,
+                                                    myCenter!.id!);
+                                            context
+                                                .read<HelpCenterCubit>()
+                                                .getFollowedHelpCenters(UserInfo
+                                                    .loggedUser!
+                                                    .volunteer!
+                                                    .id!);
+                                          },
+                                          icon: const Icon(
+                                            Icons.favorite,
+                                            color: Colors.red,
+                                          ),
+                                        )
+                                      : IconButton(
+                                          onPressed: () {
+                                            context
+                                                .read<HelpCenterCubit>()
+                                                .followHelpCenter(
+                                                    UserInfo.loggedUser!
+                                                        .volunteer!.id!,
+                                                    myCenter!.id!);
+                                            context
+                                                .read<HelpCenterCubit>()
+                                                .getFollowedHelpCenters(UserInfo
+                                                    .loggedUser!
+                                                    .volunteer!
+                                                    .id!);
+                                          },
+                                          icon: const Icon(
+                                            Icons.favorite_border_outlined,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                            ),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                        backgroundColor: Colors.green),
+                                    onPressed: () {
+                                      context
+                                          .read<MapCubit>()
+                                          .getCurrentLocation();
+                                      context
+                                              .read<MapCubit>()
+                                              .initialCameraLocation =
+                                          LatLng(myCenter!.location!.lat!,
+                                              myCenter.location!.lon!);
+                                      Navigator.pushNamed(
+                                          context, Routes.mapRoute);
+                                    },
+                                    child: RichText(
+                                      text: const TextSpan(
+                                        children: [
+                                          WidgetSpan(
+                                            child: Icon(
+                                              Icons.location_on,
+                                              size: 18,
+                                              color: Color.fromARGB(
+                                                  225, 27, 40, 55),
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: "See On Map",
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                // set text to bold
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromARGB(
+                                                    225, 27, 40, 55)),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    TextSpan(
-                                      text: "See On Map",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          // set text to bold
-                                          fontWeight: FontWeight.bold,
-                                          color:
-                                              Color.fromARGB(225, 27, 40, 55)),
-                                    ),
+                                  ),
+                                ]),
+                            ExpansionTile(
+                                collapsedIconColor: Colors.white,
+                                collapsedTextColor: Colors.white,
+                                title: const Text("Time Details"),
+                                expandedCrossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      "Help Center Opens - Closes: ${HelperFunctions.formatDateToTime(myCenter.openCloseInfo!.start!)} - ${HelperFunctions.formatDateToTime(myCenter.openCloseInfo!.end!)}"),
+                                  Text(
+                                      "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(myCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(myCenter.busiestHours!.end!)}"),
+                                ]),
+                            const Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: SizedBox(
+                                height: 50,
+                                child: TabBar(
+                                  indicatorPadding:
+                                      EdgeInsets.symmetric(horizontal: 5),
+                                  tabs: [
+                                    Tab(text: "Volunteer Needs"),
+                                    Tab(text: "Supply Needs")
                                   ],
                                 ),
                               ),
                             ),
-                          ]),
-                      ExpansionTile(
-                          collapsedIconColor: Colors.white,
-                          collapsedTextColor: Colors.white,
-                          title: const Text("Time Details"),
-                          expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                                "Help Center Opens - Closes: ${HelperFunctions.formatDateToTime(myCenter.openCloseInfo!.start!)} - ${HelperFunctions.formatDateToTime(myCenter.openCloseInfo!.end!)}"),
-                            Text(
-                                "Busy Hours Start - End: ${HelperFunctions.formatDateToTime(myCenter.busiestHours!.start!)} - ${HelperFunctions.formatDateToTime(myCenter.busiestHours!.end!)}"),
-                          ]),
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: SizedBox(
-                          height: 50,
-                          child: TabBar(
-                            indicatorPadding:
-                                EdgeInsets.symmetric(horizontal: 5),
-                            tabs: [
-                              Tab(text: "Volunteer Needs"),
-                              Tab(text: "Supply Needs")
-                            ],
-                          ),
+                            Expanded(
+                              child: TabBarView(children: [
+                                myCenter.neededVolunteerList == null ||
+                                        myCenter.neededVolunteerList!.isEmpty
+                                    ? NotFoundLottie(
+                                        title: "No Volunteer Needed",
+                                        description:
+                                            "Currently there is not any volunteer need at this help center")
+                                    : _buildVolunteerNeeds(myCenter),
+                                myCenter.neededSupplyList == null ||
+                                        myCenter.neededSupplyList!.isEmpty
+                                    ? NotFoundLottie(
+                                        title: "No Supply Needed",
+                                        description:
+                                            "Currently there is not any supply need at this help center")
+                                    : _buildSupplyNeeds(myCenter),
+                              ]),
+                            ),
+                          ],
                         ),
                       ),
-                      Expanded(
-                        child: TabBarView(children: [
-                          myCenter.neededVolunteerList == null ||
-                                  myCenter.neededVolunteerList!.isEmpty
-                              ? NotFoundLottie(
-                                  title: "No Volunteer Needed",
-                                  description:
-                                      "Currently there is not any volunteer need at this help center")
-                              : _buildVolunteerNeeds(myCenter),
-                          myCenter.neededSupplyList == null ||
-                                  myCenter.neededSupplyList!.isEmpty
-                              ? NotFoundLottie(
-                                  title: "No Supply Needed",
-                                  description:
-                                      "Currently there is not any supply need at this help center")
-                              : _buildSupplyNeeds(myCenter),
-                        ]),
-                      ),
-                    ],
-                  ),
+                    );
+                  },
                 )),
     );
   }

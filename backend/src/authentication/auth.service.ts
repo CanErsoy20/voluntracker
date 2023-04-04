@@ -41,7 +41,21 @@ export class AuthService {
       where: { email },
       include: {
         userRole: true,
-        volunteer: true,
+        volunteer: {
+          include: {
+            certificates: true,
+            followedHelpCenters: {
+              include: {
+                helpCenter: true,
+              },
+            },
+            helpCenter: true,
+            helpCenterCoordinator: true,
+            volunteerTeam: true,
+            volunteerTeamLeader: true,
+            volunteerType: true,
+          },
+        },
       },
     });
 

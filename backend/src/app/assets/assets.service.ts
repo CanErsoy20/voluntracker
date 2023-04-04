@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { UniqueEntityNotFoundException } from 'src/exceptions/unique-entity-not-found-exception.exception';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UserImageDto } from './dto/user-image.dto';
 
 @Injectable()
 export class AssetsService {
@@ -126,14 +127,16 @@ export class AssetsService {
     }
   }
 
-  async updateUsersProfilePicture(userId: number, newUrl: string) {
+  async updateUsersProfilePicture(userImageDto: UserImageDto) {
+    const { userId, imageUrl } = userImageDto;
+
     try {
       const user = await this.prisma.user.update({
         where: {
           id: userId,
         },
         data: {
-          profileImageUrl: newUrl,
+          profileImageUrl: imageUrl,
         },
       });
       return user.profileImageUrl;
@@ -149,7 +152,7 @@ export class AssetsService {
     }
   }
 
-  async deleteUsersProfilePicture(userId: number, imageUrl: string) {
+  async deleteUsersProfilePicture(userId: number) {
     try {
       const user = await this.prisma.user.update({
         where: {

@@ -49,7 +49,7 @@ class VolunteerTeamList extends StatelessWidget {
                               context.read<TeamCubit>().selectedTeamIndex =
                                   index;
                             },
-                            child: const Text("Add Member"))
+                            child: Text("Manage Team")),
                       ],
                     ),
                     children: (currentVolunteerTeam.volunteers != null &&
@@ -60,7 +60,7 @@ class VolunteerTeamList extends StatelessWidget {
                               "There are no volunteers in this team at the moment",
                               style: TextStyle(color: Colors.black),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             )
                           ],
@@ -82,7 +82,9 @@ class VolunteerTeamList extends StatelessWidget {
                 backgroundImage: volunteer.user!.profileImageUrl != ""
                     ? NetworkImage(volunteer.user!.profileImageUrl!)
                     : null,
-                child: const Icon(Icons.person),
+                child: volunteer.user!.profileImageUrl == ""
+                    ? const Icon(Icons.person)
+                    : null,
               ),
               title: Text(
                   "${volunteer.user?.firstname} ${volunteer.user?.surname}"),

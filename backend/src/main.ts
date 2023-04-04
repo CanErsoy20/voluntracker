@@ -16,17 +16,15 @@ async function bootstrap() {
 
   // Global prefix
   app.setGlobalPrefix('v1');
-  app.enableCors(
-    { 
-      origin: ['https://voluntracker.app', 
-      // 'https://localhost', 'http://localhost:3000', 
-              // 'https://localhost:3000', 'http://localhost',],
-      ],
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      // allowedHeaders: ['Content-Type', 'Authorization'],
-
-    }
-  );
+  app.enableCors({
+    origin: [
+      'https://voluntracker.app',
+      // 'https://localhost', 'http://localhost:3000',
+      // 'https://localhost:3000', 'http://localhost',],
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    // allowedHeaders: ['Content-Type', 'Authorization'],
+  });
 
   // ValidationPipeline setup
   // {

@@ -29,10 +29,11 @@ class ProfileScreen extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 40.0,
-                  backgroundImage:
-                      NetworkImage('https://picsum.photos/seed/picsum/200/300'),
+                  backgroundImage: UserInfo.loggedUser!.profileImageUrl != ""
+                      ? NetworkImage(UserInfo.loggedUser!.profileImageUrl!)
+                      : null,
                 ),
                 const SizedBox(width: 16.0),
                 Expanded(
