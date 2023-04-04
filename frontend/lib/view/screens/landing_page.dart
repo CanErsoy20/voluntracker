@@ -1,13 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:voluntracker/cubit/help_centers/help_center_cubit.dart';
 import 'package:voluntracker/cubit/map/map_cubit.dart';
 import 'package:voluntracker/models/user/user_info.dart';
 import 'package:voluntracker/router.dart';
 import 'package:voluntracker/view/widgets/custom_drawer.dart';
 import 'package:voluntracker/view/widgets/custom_menu_card.dart';
+import 'package:voluntracker/view/widgets/loading_widget.dart';
 import 'package:voluntracker/view/widgets/user_bar.dart';
 import 'package:flutter/material.dart';
+
+import '../../helper_functions.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -62,7 +66,6 @@ class LandingPage extends StatelessWidget {
             "Admin"
           ],
           onTap: () {
-            //context.read<HelpCenterCubit>().getHelpCenters();
             Navigator.pushNamed(context, Routes.followed);
           }),
       CustomMenuCard(
@@ -72,6 +75,7 @@ class LandingPage extends StatelessWidget {
             "HelpCenterCoordinator",
           ],
           onTap: () {
+            context.read<HelpCenterCubit>().getMyCenter();
             Navigator.pushNamed(context, Routes.volunteerTeams);
           }),
       CustomMenuCard(
@@ -176,6 +180,7 @@ class LandingPage extends StatelessWidget {
     } else if (UserInfo.loggedUser!.getHighestRole() == "Admin") {
       selectedCards = adminCards;
     }
+
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -187,122 +192,197 @@ class LandingPage extends StatelessWidget {
           centerTitle: true,
         ),
         endDrawer: CustomDrawer(loggedIn: UserInfo.loggedUser != null),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                UserBar(user: UserInfo.loggedUser!),
-                const SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: BlocBuilder<HelpCenterCubit, HelpCenterState>(
+          builder: (context, state) {
+            if (state is HelpCenterLoading) {
+              return const Center(
+                child: LoadingWidget(),
+              );
+            } else if (state is HelpCenterDisplay) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                child: SingleChildScrollView(
+                  child: Column(
                     children: [
-                      const Text(
-                        "Followed Help Centers",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                      const SizedBox(
+                        height: 10,
                       ),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, Routes.followed);
-                          },
-                          child: const Text(
-                            "See All (5)",
-                          ))
+                      UserBar(user: UserInfo.loggedUser!),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Followed Help Centers",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            UserInfo.loggedUser!.volunteer!.followedCenters !=
+                                        null &&
+                                    UserInfo.loggedUser!.volunteer!
+                                        .followedCenters!.isNotEmpty
+                                ? TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, Routes.followed);
+                                    },
+                                    child: Text(
+                                      "See All (${UserInfo.loggedUser!.volunteer!.followedCenters!.length})",
+                                    ))
+                                : SizedBox.shrink()
+                          ],
+                        ),
+                      ),
+                      // UserInfo.loggedUser!.volunteer!.followedCenters!.isEmpty
+                      //     ? const Text(
+                      //         "You are not following any help center yet... Please follow to get notified.")
+                      //     : CarouselSlider.builder(
+                      //         itemCount: UserInfo.loggedUser!.volunteer!
+                      //             .followedCenters!.length,
+                      //         itemBuilder: (context, index, realIndex) {
+                      //           return Card(
+                      //               shape: RoundedRectangleBorder(
+                      //                   borderRadius:
+                      //                       BorderRadius.circular(20)),
+                      //               elevation: 5,
+                      //               child: Padding(
+                      //                 padding: const EdgeInsets.all(8.0),
+                      //                 child: Column(
+                      //                   crossAxisAlignment:
+                      //                       CrossAxisAlignment.center,
+                      //                   mainAxisAlignment:
+                      //                       MainAxisAlignment.spaceBetween,
+                      //                   mainAxisSize: MainAxisSize.max,
+                      //                   children: [
+                      //                     // Flexible(
+                      //                     //   child: Center(
+                      //                     //     child: Text(
+                      //                     //       // "${context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.name}",
+                      //                     //       "${context.read<HelpCenterCubit>().followedCenters![index].name}",
+                      //                     //       style: const TextStyle(
+                      //                     //           color: Colors.black),
+                      //                     //       softWrap: true,
+                      //                     //       overflow: TextOverflow.clip,
+                      //                     //       maxLines: null,
+                      //                     //     ),
+                      //                     //   ),
+                      //                     // ),
+                      //                     // Text(
+                      //                     //   "Working Hours: ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.openCloseInfo!.start!)} - ${HelperFunctions.formatDateToTime(context.read<HelpCenterCubit>().allHelpCentersList!.where((element) => element.id == UserInfo.loggedUser!.volunteer!.followedCenters![index].helpCenterId).first.openCloseInfo!.end!)}",
+                      //                     //   style:
+                      //                     //       const TextStyle(color: Colors.black),
+                      //                     // ),
+                      //                     // Flexible(
+                      //                     //   child: RichText(
+                      //                     //     text: TextSpan(
+                      //                     //       children: [
+                      //                     //         const TextSpan(text: "Currently: "),
+                      //                     //         HelperFunctions.isOpen(
+                      //                     //                 DateFormat("yyyy-MM-dd hh:mm:ss").parse((context
+                      //                     //                     .read<HelpCenterCubit>()
+                      //                     //                     .allHelpCentersList!
+                      //                     //                     .where((element) =>
+                      //                     //                         element.id ==
+                      //                     //                         UserInfo
+                      //                     //                             .loggedUser!
+                      //                     //                             .volunteer!
+                      //                     //                             .followedCenters![
+                      //                     //                                 index]
+                      //                     //                             .helpCenterId)
+                      //                     //                     .first
+                      //                     //                     .openCloseInfo!
+                      //                     //                     .start!)),
+                      //                     //                 DateFormat("yyyy-MM-dd hh:mm:ss").parse((context
+                      //                     //                     .read<HelpCenterCubit>()
+                      //                     //                     .allHelpCentersList!
+                      //                     //                     .where((element) =>
+                      //                     //                         element.id ==
+                      //                     //                         UserInfo
+                      //                     //                             .loggedUser!
+                      //                     //                             .volunteer!
+                      //                     //                             .followedCenters![
+                      //                     //                                 index]
+                      //                     //                             .helpCenterId)
+                      //                     //                     .first
+                      //                     //                     .openCloseInfo!
+                      //                     //                     .end!)))
+                      //                     //             ? const TextSpan(
+                      //                     //                 text: "Open",
+                      //                     //                 style: TextStyle(
+                      //                     //                     color: Colors.green))
+                      //                     //             : const TextSpan(
+                      //                     //                 text: "Closed",
+                      //                     //                 style: TextStyle(
+                      //                     //                     color: Colors.red))
+                      //                     //       ],
+                      //                     //       style: const TextStyle(
+                      //                     //           color: Colors.black),
+                      //                     //     ),
+                      //                     //   ),
+                      //                     // ),
+                      //                     Flexible(
+                      //                       child: Center(
+                      //                         child: TextButton(
+                      //                             onPressed: () {
+                      //                               context
+                      //                                       .read<HelpCenterCubit>()
+                      //                                       .selectedCenter =
+                      //                                   context
+                      //                                       .read<
+                      //                                           HelpCenterCubit>()
+                      //                                       .allHelpCentersList!
+                      //                                       .where((element) =>
+                      //                                           element.id ==
+                      //                                           UserInfo
+                      //                                               .loggedUser!
+                      //                                               .volunteer!
+                      //                                               .followedCenters![
+                      //                                                   index]
+                      //                                               .helpCenterId)
+                      //                                       .first;
+                      //                               Navigator.pushNamed(
+                      //                                   context,
+                      //                                   Routes
+                      //                                       .helpCenterDetail);
+                      //                             },
+                      //                             child: const Text(
+                      //                               "See Details",
+                      //                             )),
+                      //                       ),
+                      //                     )
+                      //                   ],
+                      //                 ),
+                      //               ));
+                      //         },
+                      //         options: CarouselOptions(
+                      //             aspectRatio: 5 / 2,
+                      //             enlargeCenterPage: true,
+                      //             autoPlay: true,
+                      //             height: 150)),
+                      GridView.count(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 8.0,
+                        crossAxisSpacing: 8.0,
+                        childAspectRatio: 1.0,
+                        children: selectedCards,
+                      ),
                     ],
                   ),
                 ),
-                CarouselSlider.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, index, realIndex) {
-                      return Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          elevation: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const Flexible(
-                                  child: Center(
-                                    child: Text(
-                                      "Help Center",
-                                      style: TextStyle(color: Colors.black),
-                                      softWrap: true,
-                                      overflow: TextOverflow.clip,
-                                      maxLines: null,
-                                    ),
-                                  ),
-                                ),
-                                const Text(
-                                  "Working Hours: 12:30 - 17:30",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                Flexible(
-                                  child: RichText(
-                                    text: const TextSpan(
-                                      children: [
-                                        TextSpan(text: "Currently: "),
-                                        TextSpan(
-                                            text: "Open",
-                                            style:
-                                                TextStyle(color: Colors.green))
-                                      ],
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Center(
-                                    child: TextButton(
-                                        onPressed: () {
-                                          // TODO: seçilen center'la değiştir
-                                          context
-                                                  .read<HelpCenterCubit>()
-                                                  .selectedCenter =
-                                              context
-                                                  .read<HelpCenterCubit>()
-                                                  .allHelpCentersList![0];
-                                          Navigator.pushNamed(
-                                              context, Routes.helpCenterDetail);
-                                        },
-                                        child: const Text(
-                                          "See Details",
-                                        )),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ));
-                    },
-                    options: CarouselOptions(
-                        aspectRatio: 5 / 2,
-                        enlargeCenterPage: true,
-                        autoPlay: true,
-                        height: 150)),
-                GridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 8.0,
-                  crossAxisSpacing: 8.0,
-                  childAspectRatio: 1.0,
-                  children: selectedCards,
-                ),
-              ],
-            ),
-          ),
+              );
+            } else {
+              return Container(
+                child: Text("Something went wrong"),
+              );
+            }
+          },
         ),
       ),
     );
