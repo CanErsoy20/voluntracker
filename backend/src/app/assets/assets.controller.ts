@@ -38,7 +38,7 @@ export class AssetsController {
   }
 
   // Get profile image
-  @Get('/images/profile/users/:userId')
+  @Get('/images/users/:userId/profile')
   async getUserImage(@Param('userId') userId: string) {
     const imageUrl = await this.assetsService.getUsersProfilePicture(+userId);
     return new HttpResponse({ imageUrl }, 'Successfully fetched all the help center images', 200);
@@ -56,7 +56,7 @@ export class AssetsController {
   }
 
   // Delete profile image
-  @Delete('/images/profile/users/:userId')
+  @Delete('/images/users/:userId/profile')
   async deleteUserImage(@Param() userId: string) {
     const deletedProfileImage = await this.assetsService.deleteUsersProfilePicture(+userId);
     return new HttpResponse(
