@@ -129,7 +129,9 @@ export class VolunteerTeamService {
       },
       data: {
         teamLeader: {
-          create: createVolunteerLeaderDto,
+          connect: {
+            volunteerId,
+          },
         },
       },
       include: {
