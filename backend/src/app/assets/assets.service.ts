@@ -152,9 +152,7 @@ export class AssetsService {
     }
   }
 
-  async deleteUsersProfilePicture(userImageDto: UserImageDto) {
-    const { userId } = userImageDto;
-
+  async deleteUsersProfilePicture(userId: number) {
     try {
       const user = await this.prisma.user.update({
         where: {
