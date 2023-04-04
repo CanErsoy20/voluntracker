@@ -1,15 +1,22 @@
 # Voluntracker
+Voluntracker is a project aimed at providing efficient organization and coordination for community relief efforts during times of crisis, with a focus on Goal 11: Sustainable Cities and Communities and Target 11.b. The goal is to create a platform that brings community members together to effectively help each other during times of crisis, such as the devastating earthquakes that hit the Turkey-Syria region in February 2023.
 
+The earthquake's aftermath highlighted the lack of organization and coordination in the relief efforts, which led to inefficiencies in the distribution of volunteers and supplies to help centers. As volunteers in the earthquake relief efforts, the team members of Voluntracker experienced the challenges of tracking and managing the needs of multiple help centers, resulting in some centers being overwhelmed with volunteers while others struggled with insufficient support.
 
+To address this issue, Voluntracker aims to create an application that streamlines the organization efforts at help centers, making it easier for volunteers to find the right centers to help and for help centers to efficiently manage their needs for supplies, equipment, and physical labor. The platform will provide a central hub for communication and coordination among volunteers and help centers, reducing reliance on external tools like WhatsApp and Google Spreadsheets.
+
+By leveraging technology to improve the efficiency of community relief efforts, Voluntracker aims to make a positive impact in times of crisis and contribute towards achieving Goal 11 and Target 11.b of Sustainable Development Goals. The project is driven by first-hand experiences of the team members who have witnessed the challenges of relief efforts and aims to make a meaningful contribution towards more effective community response during times of crisis. Join us in our mission to create a more efficient and coordinated approach to community relief efforts with Voluntracker. Let's make a difference together!
 
 ## Table of Contents
 
-- [Google Technologies Used](#Google Technologies Used)
+- [Google Technologies Used](#google-tech-used)
+- [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
 - [Authors](#authors)
+- [Contact Us](#contact-us)
 
 ## Google Technologies Used
 
@@ -24,6 +31,9 @@
   - Cloud Build
   - Cloud SQL
   - Cloud Run
+
+
+## Screenshots
 
 ## Installation
 
@@ -64,6 +74,17 @@ Building a server is not mandatory, but if you are planning on building your ser
 
 4. Set up environment variables:
 
+   Place an .env file in the root directory of the project. The file should contain the following variables:
+
+   ```DATABASE_URL=
+      NODE_ENV=DEV
+      JWT_ACCESS_SECRET=
+      JWT_REFRESH_SECRET=
+      FIREBASE_PROJECT_ID=
+      FIREBASE_PRIVATE_KEY=
+      FIREBASE_CLIENT_EMAIL=
+      FIREBASE_DATABASE_URL=```
+
 
 
 5. Set up the database and start the development server:
@@ -86,7 +107,7 @@ As this is a Google Solution Challenge project, we do not allow third-party cont
 
 ## License
 
-This project is licensed under the MIT License.```
+This project is licensed under the MIT License.
 
 ## Authors
 
@@ -94,3 +115,7 @@ This project is licensed under the MIT License.```
 - Can Ersoy [📧](canersoy2002@gmail.com)[🌐]()[<img src="./icons/Github-Dark.svg" width="24">]()
 - Selim Can Güler [📧](mailto:cs.selim.guler@gmail.com)[🌐]()[<img src="./icons/Github-Dark.svg" width="24">]()
 - Tolga Özgün [📧](mailto:tolgaozgunn@gmail.com)[🌐](https://tolgaozgun.com)[<img src="./icons/Github-Dark.svg" width="24">](https://github.com/tolgaozgun)
+
+## Contact Us
+
+Feel free to contact us via contact@voluntracker.app or you can use our private emails listed above.
