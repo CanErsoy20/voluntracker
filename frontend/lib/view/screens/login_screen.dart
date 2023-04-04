@@ -40,9 +40,9 @@ class _LoginScreenState extends State<LoginScreen> {
               } else if (state is LoginSuccess) {
                 CustomSnackbars.successSnackbar(
                     context, state.title, state.description);
-                context.read<HelpCenterCubit>().getHelpCenters();
-
-                Navigator.pushReplacementNamed(context, Routes.landingRoute);
+                context.read<HelpCenterCubit>().getHelpCenters().then((value) =>
+                    Navigator.pushReplacementNamed(
+                        context, Routes.landingRoute));
               }
             },
             builder: (context, state) {
