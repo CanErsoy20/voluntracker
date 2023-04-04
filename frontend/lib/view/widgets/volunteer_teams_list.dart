@@ -78,7 +78,12 @@ class VolunteerTeamList extends StatelessWidget {
     if (volunteers.isNotEmpty) {
       return volunteers
           .map((volunteer) => ListTile(
-              leading: CircleAvatar(),
+              leading: CircleAvatar(
+                backgroundImage: volunteer.user!.profileImageUrl != ""
+                    ? NetworkImage(volunteer.user!.profileImageUrl!)
+                    : null,
+                child: const Icon(Icons.person),
+              ),
               title: Text(
                   "${volunteer.user?.firstname} ${volunteer.user?.surname}"),
               subtitle: Text("${volunteer.user?.getHighestRole()}"),

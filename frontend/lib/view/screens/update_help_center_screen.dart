@@ -243,7 +243,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ),
             CustomDropdownFormField(
               value: oldModel?.volunteerTypeCategory,
-              list: context.read<HelpCenterCubit>().volunteerTypeCategory,
+              list: context.read<HelpCenterCubit>().allVolunteerTypeCategory,
               label: "Category",
               onChanged: (value) {
                 context
@@ -254,7 +254,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ),
             CustomDropdownFormField(
               value: oldModel?.volunteerTypeName,
-              list: context.read<HelpCenterCubit>().volunteerTypeNames,
+              list: context.read<HelpCenterCubit>().allVolunteerTypeNames,
               label: "Name",
               onChanged: (value) {
                 context
@@ -319,7 +319,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ),
             CustomDropdownFormField(
               value: oldModel?.supplyTypeCategory,
-              list: context.read<HelpCenterCubit>().supplyTypeCategory,
+              list: context.read<HelpCenterCubit>().allSupplyTypeCategory,
               label: "Category",
               onChanged: (value) {
                 context
@@ -330,7 +330,7 @@ class _UpdateHelpCenterScreenState extends State<UpdateHelpCenterScreen> {
             ),
             CustomDropdownFormField(
               value: oldModel?.supplyTypeName,
-              list: context.read<HelpCenterCubit>().supplyTypeNames,
+              list: context.read<HelpCenterCubit>().allSupplyTypeNames,
               label: "Name",
               onChanged: (value) {
                 context.read<HelpCenterCubit>().newSupplyNeed.supplyTypeName =
