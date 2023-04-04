@@ -21,6 +21,8 @@ class CustomGoogleMap extends StatelessWidget {
     return Stack(
       children: [
         GoogleMap(
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
           initialCameraPosition: _initialCameraPosition,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);

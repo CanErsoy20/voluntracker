@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../cubit/help_centers/help_center_cubit.dart';
 import '../../cubit/map/map_cubit.dart';
 import '../../models/help_center/help_center_model.dart';
+import '../../models/user/user_info.dart';
 import '../../router.dart';
 
 class HelpCenterBriefCard extends StatelessWidget {
@@ -22,8 +23,24 @@ class HelpCenterBriefCard extends StatelessWidget {
       elevation: 5,
       child: ExpansionTile(
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Text(currentCenter.name!),
+            Flexible(flex: 4, child: Text(currentCenter.name!)),
+            SizedBox(
+              width: 5,
+            ),
+            UserInfo.currentLatLng != null
+                ? Flexible(
+                    flex: 1,
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
+                        "${currentCenter.distance} KM",
+                        maxLines: 1,
+                      ),
+                    ))
+                : const SizedBox.shrink(),
           ],
         ),
         children: [
