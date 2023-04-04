@@ -83,4 +83,17 @@ export class VolunteerController {
 
     return new HttpResponse(volunteer, 'Started following the help center.', 200);
   }
+
+  @Get(':volunteerId/followedHelpCenters')
+  async getFollowedHelpCenters(@Param('volunteerId') volunteerId: string) {
+    const helpCenters = await this.volunteerService.getFollowedHelpCenters(+volunteerId);
+
+    if (!helpCenters) {
+      throw new BadRequestException(
+        'Something went wrong while trying to access the followed help centers of the user.',
+      );
+    }
+
+    return new HttpResponse(helpCenters, 'Successfully fetched the followed help centers.', 200);
+  }
 }

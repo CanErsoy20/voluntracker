@@ -161,9 +161,6 @@ export class VolunteerService {
       where: {
         id: volunteerId,
       },
-      include: {
-        followedHelpCenters: true,
-      },
     });
 
     if (!volunteer) {
@@ -184,5 +181,26 @@ export class VolunteerService {
     });
 
     return updatedVolunteer;
+  }
+
+  async getFollowedHelpCenters(volunteerId: number) {
+    const volunteer = await this.prisma.volunteer.findUnique({
+      where: {
+        id: volunteerId,
+      },
+      include: {
+        followedHelpCenters: {
+          include: {
+            helpCenter: true,
+          },
+        },
+      },
+    });
+
+    if (!volunteer) {
+      throw new UniqueEntityNotFoundException(`Could not find the volunteer with id: ${volunteerId}`);
+    }
+
+    return volunteer.followedHelpCenters;
   }
 }

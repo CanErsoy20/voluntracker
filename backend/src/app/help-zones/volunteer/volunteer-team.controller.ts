@@ -122,24 +122,35 @@ export class VolunteerTeamController {
                 center's do not match; the volunteer is not in the same team that it is being assigned 
                 to as a team leader.`,
   })
-  @Post(':volunteerTeamId/volunteerLeader/:volunteerId')
-  async assignVolunteerAsLeaderToTeam(
-    @Param('volunteerTeamId') vtid: string,
-    @Param('volunteerId') vid: string,
-    @Body() createVolunteerLeaderDto: CreateVolunteerLeaderDto,
+  @Post('volunteerLeader')
+  async assignVolunteerAsLeaderToTeam(@Body() createVolunteerLeaderDto: CreateVolunteerLeaderDto) {
+    const vt = await this.volunteerTeamService.assignVolunteerAsLeaderToTeam(createVolunteerLeaderDto);
+
+    if (!vt) {
+      throw new BadRequestException(
+        'Something went wrong while assigning volunteer leader to volunteer team.',
+      );
+    }
+
+    return new HttpResponse(vt, 'Successfully assigned volunteer team leader to the team.', 200);
+  }
+
+  @Delete(':volunteerTeamId/volunteerLeader')
+  async removeVolunteerLeaderFromTeam(
+    @Param('volunteerTeamId') volunteerTeamId: string,
+    @Param('volunteerId') volunteerId: string,
   ) {
-    const vt = await this.volunteerTeamService.assignVolunteerAsLeaderToTeam(
-      +vtid,
-      +vid,
-      createVolunteerLeaderDto,
+    const vt = await this.volunteerTeamService.removeVolunteerTeamLeaderFromTeam(
+      +volunteerTeamId,
+      +volunteerId,
     );
 
     if (!vt) {
-      throw new BadRequestException('Something went wrong while fetching unassigned volunteer teams.');
+      throw new BadRequestException(
+        'Something went wrong while removing volunteer leader from volunteer team.',
+      );
     }
 
-    return new HttpResponse(vt, 'Successfully fetched the unassigned volunteer teams', 200);
+    return new HttpResponse(vt, 'Successfully removed the volunteer team leader from volunteer team', 200);
   }
-
-  /* Coordinator endpoints */
 }
