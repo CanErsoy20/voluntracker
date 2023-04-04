@@ -9,8 +9,14 @@ import { HttpExceptionFilter } from './filters/http-exception-filter.filter';
 import { PrismaClientExceptionFilter } from './filters/prisma-client-exception.filter';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
 
+console.log('Environment variables:');
+console.log(process.env);
+
+require("dotenv").config()
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
+  // Print environment variables
 
   app.use(helmet());
 

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import * as dotenv from 'dotenv';
 import * as admin from 'firebase-admin';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { NotificationDto } from './dto/NotificationDto';
@@ -7,7 +6,6 @@ import { NotificationDto } from './dto/NotificationDto';
 @Injectable()
 export class NotificationsService {
   constructor(private prisma: PrismaService) {
-    dotenv.config();
 
     const serviceAccount = {
       projectId: process.env.FIREBASE_PROJECT_ID,
@@ -31,19 +29,25 @@ export class NotificationsService {
     };
 
     try {
+      console.log('Sending message:', message);
       const response = await admin.messaging().send(message);
+      console.log("Response:", response);
       console.log('Successfully sent message:', response);
     } catch (error) {
       console.error('Error sending message:', error);
     }
 
-    await this.prisma.notification.create({
+    console.log("Notification create start");
+    let entity = await this.prisma.notification.create({
       data: {
         title: notificationDto.title,
         body: notificationDto.body,
         recipient: notificationDto.recipient,
       },
     });
+    console.log("Notification create finish");
+
+    return entity;
   }
 
   async getNotifications() {

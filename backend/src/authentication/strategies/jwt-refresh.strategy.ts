@@ -7,10 +7,13 @@ import { jwtConstants } from 'src/config';
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   private readonly logger: Logger = new Logger(JwtRefreshStrategy.name);
   constructor() {
+    console.log("JWT CONSTANTS");
+    console.log(jwtConstants);
+    console.log(process.env.JWT_REFRESH_SECRET);
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: jwtConstants.refreshSecret,
+      secretOrKey: process.env.JWT_REFRESH_SECRET,
       passReqToCallback: true,
     });
   }

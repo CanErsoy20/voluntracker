@@ -5,6 +5,7 @@ import { NotificationsModule } from './app/notifications/notifications.module';
 import { QrGeneratorModule } from './app/qr-generator/qr-generator.module';
 import { AuthModule } from './authentication/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AssetsModule } from './app/assets/assets.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PrismaModule } from './prisma/prisma.module';
     HelpZonesModule,
     NotificationsModule,
     QrGeneratorModule,
+    AssetsModule,
   ],
   controllers: [],
 })
