@@ -40,6 +40,30 @@ Our main product is our Android application, which you can find under releases, 
 
 ## Screenshots
 
+| Welcome Page | Signup Page | Login Page | Forgot Password Page |
+| ------------ | ------------ | ------------ | ------------ |
+| ![Welcome Page](screenshots/Welcome_Page.jpg) | ![Signup Page](screenshots/Signup_Page.jpg) | ![Login Page](screenshots/Login_Page.jpg) | ![Forgot Password Page](screenshots/Forgot_Password_Page.jpg) |
+| Volunteer Home Page | Help Centers List | Help Center Details | Profile |
+| ------------ | ------------ | ------------ | ------------ |
+| ![Volunteer Home Page](screenshots/Volunteer_Landing_Page.jpg) | ![Help Centers List](screenshots/Help_Center_list_page.jpg) | ![Help Center Details](screenshots/Help_Center_Details.jpg) | ![Profile](screenshots/Profile_Details_age.jpg) |
+| Edit Profile Page | Map | Map Help Center Details | Volunteer Teams List |
+| ------------ | ------------ | ------------ | ------------ |
+| ![Edit Profile Page](screenshots/Edit_Profile_Page.jpg) | ![Map](screenshots/MapView.jpg)  | ![Map Help Center Details](screenshots/Map_Help_Center_Details.jpg) | ![Volunteer Teams List](screenshots/Volunteer_Teams_List.jpg) |
+| Volunteer Team Details | Volunteer Team Detail Options | Assign Volunteer To Team | Assign Team Leader |
+| ------------ | ------------ | ------------ | ------------ |
+| ![Volunteer Team Details](screenshots/Volunteer_Team_Detail.jpg) | ![Volunteer Team Detail Options](screenshots/Volunteer_Teams_List_Options.jpg) | ![Assign Volunteer To Team](screenshots/Volunteer_Team_Add_Volunteer.jpg) | ![Assign Team Leader](screenshots/Volunteer_Team_Assign_Leader.jpg) |
+| Remove Volunteer | Create Help Center Page | Help Center Details | Needed Supply List |
+| ------------ | ------------ | ------------ | ------------ |
+| ![Remove Volunteer](screenshots/Volunteer_Team_Remove_Leader.jpg) | ![Create Help Center Screen](screenshots/Create_Help_Center_Page.jpg) | ![Help Center Details](screenshots/Help_Center_Details.jpg) | ![Needed Supply List](screenshots/Needed_Supply_List.jpg) |
+| Update Help Center Details | Needed Volunteers List | Needed Volunteer Creation | Needed Supply List |
+| ------------ | ------------ | ------------ | ------------ |
+|  ![Update Help Center Details](screenshots/Help_Center_Details_Update.jpg) | ![Needed Volunteers List](screenshots/Needed_Volunteers_List.jpg) | ![Needed Volunteer Creation](screenshots/Needed_Volunteer_Creation.jpg) | ![Needed Supply Creation](screenshots/Needed_Supply_List.jpg)|
+| Needed Supply Creation | | | |
+| ------------ | | | |
+| ![Needed Supply Creation](screenshots/Needed_Supply_Creation.jpg) | | | |
+
+
+
 ## Installation
 
 To get started with the project, please follow these steps:
