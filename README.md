@@ -12,6 +12,7 @@ Our main product is our Android application, which you can find under releases, 
 ## Table of Contents
 
 - [Google Technologies Used](#google-tech-used)
+- [Features](#features)
 - [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -38,7 +39,33 @@ Our main product is our Android application, which you can find under releases, 
   - Cloud SQL
   - Cloud Run
 
-## Screenshots
+## Features
+Voluntracker's role hierarchy is as follows: Admin > Help Center Coordinator > Team Leader > Volunteer. This means that Admins can do everything that Help Center Coordinators are able to do, Help Center Coordinators can do everything that Team Leaders can do, and Team Leaders can do everything Volunteers can do.
+
+### Volunteer Features
+  - See Help Center List: Volunteers can list the registered help centers, filter them by their name and city and sort them according to their name, city or distance to their location (if their GPS signal is on). 
+  - View Help Center Map: Volunteers are able to see the help centers on the map and they can get brief information about the help center by pressing the markers. 
+  - Follow Help Centers: Users can follow help centers which will appear on landing page so that they will access these centers quickly. Moreover, we plan to implement notification feature based on followed help centers.
+  - Upload Profile Picture: Users are able to upload a profile picture of their own which will be displayed to other users.
+  - See Help Center Needs: One of the most important features of Voluntracker is to allow the users to keep track of needed volunteer counts and needed suppyly counts of the help center in order to reduce miscommunication and increase coordination. Therefore, the users are able to see what needed are required at the help centers, how many, what is the urgency and when was the last time a need is updated.
+
+### Team Leader Features
+  - Assign Volunteer To Team: Team leaders can see volunteers that are assigned to their help centers and they can assign these volunteers to their team. 
+  - See Team Details: Team Leaders are able to see the details of their team and manage it.
+  
+### Help Center Coordinator Features
+  - Manage Teams: Coordinators are allowed to see a list of the teams of their help center and they can manage these teams such as assigning a volunteer to a team as well as assigning a team leader to this team. They are also allowed to created a new team as well.
+  - Update Help Center Needs: Coordinators can update needed volunteers and needed supplies at their help centers as well as creating new need requests. They can also update other details of their help center such as busiest hours and open close hours.
+
+### Admin Features:
+  - Create Help Center: Admins can create a new help center and add it to the database.
+  - Manage Users: Admins can assign coordinators and volunteers to the help centers.
+
+### Features that we plan to implement in the feature
+  - Certificate System: We are planning to allow the coordinators to give certificates to volunteers after they complete a set of training provided by the officials.
+  - Supply Truck Tracking System: After supplies are gathered at the help centers, they are distributed to required locations. We will implement a tracking system such that the officials will be able to which location will recieve how many supplies etc. 
+  - Registration with QR System: Currently volunteers are assigned by their emails or phone numbers and we plan to implement a QR system which allows the users to join to a team or a help center by directly scanning a QR code.
+  - Notification of New Needs: Currently the volunteers are able to follow help centers and we aim to add a notification feature such that whenever a new need (either supply or volunteer) is needed at one of the help centers the volunteer is following, they will receive a notification about it.
 
 ## Screenshots
 
