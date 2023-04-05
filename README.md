@@ -59,7 +59,17 @@ To get started with the project, please follow these steps:
    flutter pub get
 ```
 
-4. Follow the [official Flutter run instructions]() to run either on an emulator or a physical device. 
+4. Add Google Maps API Key
+
+   Navigate to: frontend\android\app\src\main\AndroidManifest.xml. Change API_KEY_HERE with your API key from Maps SDK for Android.
+
+```
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="API_KEY_HERE"/>
+
+```
+
+5. Follow the [official Flutter run instructions]() to run either on an emulator or a physical device. 
 Or you can build the project on following architectures:
 
 - [Android](https://docs.flutter.dev/deployment/android)
