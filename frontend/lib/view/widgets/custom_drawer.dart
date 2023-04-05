@@ -26,7 +26,9 @@ class CustomDrawer extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ProfileAvatar(),
+          ProfileAvatar(
+            url: UserInfo.loggedUser!.profileImageUrl,
+          ),
           const SizedBox(
             height: 20,
           ),

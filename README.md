@@ -18,6 +18,10 @@
   - Firebase Storage
   - Firebase Crashlytics
   - Firebase Analytics
+- Google ML Kit
+  - Face Detection
+  - Image Labeling
+  - Barcode Scanning
 - Flutter
 - Google Maps API
 - Google Cloud

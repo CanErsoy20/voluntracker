@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,7 +60,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   ? NetworkImage(
                                       UserInfo.loggedUser!.profileImageUrl!)
                                   : null,
-                          child: const Icon(Icons.person),
                         ),
                       ),
                       const SizedBox(height: 16.0),

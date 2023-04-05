@@ -72,7 +72,7 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                             )
                           ],
                         )),
-                    Divider(
+                    const Divider(
                       indent: 30,
                       endIndent: 30,
                       color: Colors.white,
@@ -90,7 +90,8 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                     context
                                 .read<TeamCubit>()
                                 .selectedTeam
-                                .volunteerTeamLeader !=
+                                .volunteerTeamLeader!
+                                .volunteerId !=
                             null
                         ? Card(
                             shape: RoundedRectangleBorder(
@@ -99,16 +100,27 @@ class _TeamDetailsScreenState extends State<TeamDetailsScreen> {
                             child: ListTile(
                                 leading: const CircleAvatar(),
                                 title: Text(
-                                    "${context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteer!.user!.firstname} ${context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteer!.user!.surname}"),
-                                //subtitle: Text("${context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteer!.user!.getHighestRole()}"),
+                                    "${context.read<TeamCubit>().selectedTeam.volunteers!.where((element) => element.id == context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteerId).first.user!.firstname} ${context.read<TeamCubit>().selectedTeam.volunteers!.where((element) => element.id == context.read<TeamCubit>().selectedTeam.volunteerTeamLeader!.volunteerId).first.user!.surname}"),
                                 trailing: PopupMenuButton(
                                   itemBuilder: (contex) {
                                     return [
                                       PopupMenuItem<int>(
                                         value: 0,
-                                        child: const Text("Remove from team"),
+                                        child: const Text(
+                                            "Remove from team leader"),
                                         onTap: () {
-                                          // remove isteği at
+                                          // context
+                                          //     .read<TeamCubit>()
+                                          //     .removeLeader(
+                                          //         context
+                                          //             .read<TeamCubit>()
+                                          //             .selectedTeam
+                                          //             .id!,
+                                          //         context
+                                          //             .read<TeamCubit>()
+                                          //             .selectedTeam
+                                          //             .volunteerTeamLeader!
+                                          //             .volunteerId!);
                                         },
                                       ),
                                     ];

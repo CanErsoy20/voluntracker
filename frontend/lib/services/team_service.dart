@@ -58,11 +58,26 @@ class TeamService {
   Future<VolunteerTeam?> assignLeader(AssignTeamLeaderModel bodyModel) async {
     try {
       Response? response;
-      //volunteerTeams/volunteerTeamId/volunteerLeader/:volunteerId
       response = await Api.instance.postRequest(
           ApiConstant.baseUrl,
-          "${ApiConstant.volunteerTeams}${bodyModel.volunteerTeamId}${ApiConstant.teamLeader}${bodyModel.volunteerId}",
+          "${ApiConstant.volunteerTeams}${ApiConstant.teamLeader}",
           jsonEncode(bodyModel.toJson()));
+      dynamic body = json.decode(response.body);
+      ResponseModel responseModel = ResponseModel.fromJson(body);
+      return VolunteerTeam.fromJson(responseModel.data);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<VolunteerTeam?> removeLeader(
+      int volunteerTeamId, int volunteerId) async {
+    try {
+      Response? response;
+      response = await Api.instance.deleteRequest(
+        ApiConstant.baseUrl,
+        "${ApiConstant.volunteerTeams}$volunteerTeamId/${ApiConstant.teamLeader}$volunteerId",
+      );
       dynamic body = json.decode(response.body);
       ResponseModel responseModel = ResponseModel.fromJson(body);
       return VolunteerTeam.fromJson(responseModel.data);

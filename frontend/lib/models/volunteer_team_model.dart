@@ -27,7 +27,7 @@ class VolunteerTeam {
     helpCenterId = json['helpCenterId'];
 
     volunteerTeamLeader = json['teamLeader'] != null
-        ? VolunteerTeamLeader.fromJson(json['volunteerTeamLeader'])
+        ? VolunteerTeamLeader.fromJson(json['teamLeader'])
         : null;
 
     if (json['volunteers'] != null) {
