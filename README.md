@@ -82,6 +82,8 @@ Voluntracker's role hierarchy is as follows: Admin > Help Center Coordinator > T
 | ![Remove Volunteer](screenshots/Volunteer_Team_Remove_Leader.jpg) | ![Create Help Center Screen](screenshots/Create_Help_Center_Page.jpg) | ![Help Center Details](screenshots/Help_Center_Details.jpg) | ![Needed Supply List](screenshots/Needed_Supply_List.jpg) |
 | Update Help Center Details | Needed Volunteers List | Needed Volunteer Creation | Needed Supply List |
 | ![Update Help Center Details](screenshots/Help_Center_Details_Update.jpg) | ![Needed Volunteers List](screenshots/Needed_Volunteers_List.jpg) | ![Needed Volunteer Creation](screenshots/Needed_Volunteer_Creation.jpg) | ![Needed Supply Creation](screenshots/Needed_Supply_Creation.jpg)|
+| Contact Us| About Us |
+| ![Contact Us](screenshots/Conctact_Us.jpg) | ![About Us](screenshots/About_Us.jpg)  | 
 
 
 
