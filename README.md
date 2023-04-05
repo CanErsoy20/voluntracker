@@ -107,6 +107,8 @@ Building a server is not mandatory, but if you are planning on building your ser
    ```
 
    For Firebase variables, you can check out [Firebase documentation](https://firebase.google.com/docs/admin/setup#initialize-sdk) or you can download the service account key from Firebase console.
+   
+   For JWT secret keys, using the [HMAC algorithm is recommended](https://jwt.io/introduction). Though, it will work with any kind of string.
 
 
 5. Set up the database and start the development server:
