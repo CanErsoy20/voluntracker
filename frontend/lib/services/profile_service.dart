@@ -4,7 +4,9 @@ import 'package:http/http.dart';
 import 'package:voluntracker/api.dart';
 import 'package:voluntracker/constants/api_constants.dart';
 import 'package:voluntracker/models/add_profile_pic.dart';
+import 'package:voluntracker/models/add_volunteer_response_model.dart';
 
+import '../models/add_picture_response_model.dart';
 import '../models/response_model.dart';
 import '../models/user/user_info.dart';
 
@@ -24,7 +26,8 @@ class ProfileService {
     }
   }
 
-  Future<String?> updateProfilePicture(AddProfileImageModel bodyModel) async {
+  Future<AddPictureResponseModel?> updateProfilePicture(
+      AddProfileImageModel bodyModel) async {
     try {
       Response? response;
       response = await Api.instance.patchRequest(
@@ -33,7 +36,8 @@ class ProfileService {
           jsonEncode(bodyModel.toJson()));
       dynamic body = json.decode(response.body);
       ResponseModel responseModel = ResponseModel.fromJson(body);
-      String? newImageUrl = responseModel.data;
+      AddPictureResponseModel? newImageUrl =
+          AddPictureResponseModel.fromJson(responseModel.data);
       return newImageUrl;
     } catch (e) {
       return null;

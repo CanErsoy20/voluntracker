@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:voluntracker/models/add_profile_pic.dart';
 import 'package:voluntracker/models/user/user_info.dart';
 
+import '../../models/add_picture_response_model.dart';
 import '../../services/profile_service.dart';
 
 part 'profile_state.dart';
@@ -21,29 +22,29 @@ class ProfileCubit extends Cubit<ProfileState> {
   File? imageFile;
   String? downloadUrl;
 
-  void showToast(String message){
-      Fluttertoast.showToast(
+  void showToast(String message) {
+    Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 2,
         backgroundColor: Colors.red,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
   }
 
   Future<String> pickImage() async {
-    File file = await picker.pickImage(source: ImageSource.gallery).then((value) {
+    File file =
+        await picker.pickImage(source: ImageSource.gallery).then((value) {
       return File(value!.path);
     });
-    if(file == null){
+    if (file == null) {
       print("File is null");
       showToast("File is not found");
       return "File is not found";
     }
     String message = await faceDetectImage(file);
-    if(imageFile == null){
+    if (imageFile == null) {
       showToast(message);
       return message;
     }
@@ -63,14 +64,14 @@ class ProfileCubit extends Cubit<ProfileState> {
     final options = FaceDetectorOptions();
     final faceDetector = FaceDetector(options: options);
     final List<Face> faces = await faceDetector.processImage(inputImage);
-    if(faces.length == 0){
+    if (faces.length == 0) {
       print("No faces detected");
       return "Error! No faces detected";
-    }else if(faces.length == 1){
+    } else if (faces.length == 1) {
       print("One face detected");
       imageFile = file;
       return "Success! One face detected";
-    }else {
+    } else {
       print("Error! More than one face detected");
       return "Error! More than one face detected";
     }
@@ -95,8 +96,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     AddProfileImageModel bodyModel = AddProfileImageModel();
     bodyModel.imageUrl = newUrl;
     bodyModel.userId = UserInfo.loggedUser!.id!;
-    String? response = await service.updateProfilePicture(bodyModel);
-    if (response == null || response == '') {
+    AddPictureResponseModel? response =
+        await service.updateProfilePicture(bodyModel);
+    if (response == null) {
       emit(ProfileError("Update Failed", "Could not update profile image"));
     } else {
       emit(ProfileSuccess(
