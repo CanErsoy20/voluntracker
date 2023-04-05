@@ -110,9 +110,4 @@ export class AuthController {
     const tokens = await this.authService.refreshTokens(userId, refreshToken);
     return new HttpResponse(tokens, 'Refresh successful', 200);
   }
-
-  @Get('dummy')
-  async dummy() {
-    throw new UniqueEntityAlreadyExistsException('Why is this not working');
-  }
 }
